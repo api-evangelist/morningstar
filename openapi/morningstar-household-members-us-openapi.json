@@ -1,0 +1,1399 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Household Members (US)",
+    "version": "1.0.0",
+    "description": "\nUse the Household Members API to retrieve household member lists and member profiles, and to update member and client profiles  for [Morningstar Office](https://www.morningstar.com/products/office). \n\nWith this API you can:\n* Get member list for a specific household.\n* Get a specific member's profile.\n* Update household client's and member's profiles.\n"
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/office/v1",
+      "description": "PROD"
+    },
+    {
+      "url": "https://www.us-uat-api.morningstar.com/office/v1",
+      "description": "UAT"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Office Members"
+    }
+  ],
+  "paths": {
+    "/households/{householdId}/members": {
+      "get": {
+        "tags": [
+          "Office Members"
+        ],
+        "summary": "Get household's member list",
+        "description": "Get list of all members for a household. </br></br> `householdId` can be  retrieved by using the <a href=\"https://developer.morningstar.com/apis/financial-planning/households-us/2.0.2\">Households API</a>.",
+        "operationId": "getMembers",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "householdId",
+            "in": "path",
+            "description": "Unique identifier of a household",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    },
+    "/households/{householdId}/members/{memberId}": {
+      "get": {
+        "tags": [
+          "Office Members"
+        ],
+        "summary": "Get member profile",
+        "description": "Get a specific member profile.",
+        "operationId": "getMember",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "householdId",
+            "in": "path",
+            "description": "Unique identifier of a household",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "description": "Unique identifier of a member",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Office Members"
+        ],
+        "summary": "Update member profile",
+        "description": "Updates a member profile. </br></br> `relationshipId` cannot be changed to or from 1. </br></br> \n`relationshipId` mapping:</br></br> `1` = Self</br> `3` = Spouse</br> `6` = Attorney</br> `7` = Accountant</br> `8` = Aunt</br> `38` = Beneficiary</br> `33` = Brother</br> `10` = Child</br> `11` = Cousin</br> `37` = Daughter</br> `4` = Dependent</br> `12` = Ex-Spouse</br> `13` = Father</br> `14` = Friend</br> `15` = Granddaughter</br> `16` = Grandparent</br> `17` = Grandson</br> `39` = Grantor</br> `34` = Insurance Agent</br> `18` = Mother</br> `19` = Niece</br> `30` = Nephew</br> `5` = Others</br> `40` = Partner</br> `31` = Sister</br> `36` = Son</br> `35` = Trustee</br> `32` = Uncle</br></br> `firstName` and `lastName` do not support these characters: ~!#^`[]{}|\\;\"<>?/",
+        "operationId": "updateMember",
+        "requestBody": {
+          "description": "The member to update.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateMemberProfile"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "householdId",
+            "in": "path",
+            "description": "Unique identifier of a household",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "memberId",
+            "in": "path",
+            "description": "Unique identifier of a member",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberPost400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/households/{householdId}/client": {
+      "get": {
+        "tags": [
+          "Office Client"
+        ],
+        "summary": "Get client profile",
+        "description": "Get a specific client profile.",
+        "operationId": "getClient",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "householdId",
+            "in": "path",
+            "description": "Unique identifier of a household",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Office Client"
+        ],
+        "summary": "Update client profile",
+        "description": "Updates a client profile </br></br> `clientName`, `firstName`, and `lastName` do not support these characters: ~!#^`[]{}|\\;\"<>?/",
+        "operationId": "updateClient",
+        "requestBody": {
+          "description": "The client to update.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/UpdateClientProfile"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "householdId",
+            "in": "path",
+            "description": "Unique identifier of a household",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientProfile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClientPost400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/households/{householdId}/institution": {
+      "get": {
+        "tags": [
+          "Office Institution Client"
+        ],
+        "summary": "Get Institution Client profile",
+        "description": "Get a specific institution client profile.",
+        "operationId": "getInstitution",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "householdId",
+            "in": "path",
+            "description": "Unique identifier of a household",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Institution"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Office Institution Client"
+        ],
+        "summary": "Update institution client profile",
+        "description": "Updates an Institution Client profile. </br></br> `institutionType` mapping:</br></br> `1` = Sole Proprietorship</br> `2` = Trust</br> `3` = Charitable Trust</br> `4` = Rovocable Trust</br> `5` = Corporation</br> `6` = Investment Club</br> `7` = Association</br> `8` = Non-Profit Organization</br> `9` = Partnership</br> `10` = Limited Partnership</br> `11` = Family Limited Partnership</br> `12` = LLP </br> `13` = LLC</br> `14` = Estate</br></br>  `isUSCorporation` = `1` or `0` </br></br> `taxIdType` = `ssn` or `tin` </br></br> `role` mapping: </br></br> `1` = Authorized Signer</br> `2` = Other</br> `3` = Trustee</br> `4` = Successor Trustee</br> `5` = Custodian</br></br> `institutionName`, `firstName`, and `lastName` do not support these characters: ~!#^`[]{}|\\;\"<>?/",
+        "operationId": "updateInstitution",
+        "requestBody": {
+          "description": "The Institution to update.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/updateInstitution"
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "householdId",
+            "in": "path",
+            "description": "Unique identifier of a household",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Institution"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstitutionPost400"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "MemberList": {
+        "type": "object",
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "members": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Member"
+            }
+          }
+        }
+      },
+      "Member": {
+        "type": "object",
+        "required": [
+          "memberId"
+        ],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Sample"
+          },
+          "lastName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Client"
+          },
+          "address1": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "22 W. Washington St."
+          },
+          "address2": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "FL 7"
+          },
+          "address3": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Rm. 700"
+          },
+          "city": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 30,
+            "example": "Chicago"
+          },
+          "state": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "IL"
+          },
+          "zipCode": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 10,
+            "example": 60602
+          },
+          "email": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 60
+          },
+          "memberId": {
+            "type": "string",
+            "format": "string",
+            "example": 1234567
+          },
+          "name": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 60,
+            "example": "Sample Client"
+          },
+          "relationshipId": {
+            "type": "string",
+            "format": "string",
+            "example": 1
+          },
+          "relationshipName": {
+            "type": "string",
+            "format": "string",
+            "example": "Self"
+          }
+        }
+      },
+      "MemberProfile": {
+        "type": "object",
+        "required": [
+          "householdId",
+          "memberId"
+        ],
+        "properties": {
+          "householdId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "memberId": {
+            "type": "string",
+            "format": "string",
+            "example": 1234567
+          },
+          "firstName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Sample"
+          },
+          "lastName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Client"
+          },
+          "socialSecurityNumber": {
+            "type": "string",
+            "format": "string",
+            "example": "********1234"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1989-12-31"
+          },
+          "desiredRetirementAge": {
+            "type": "string",
+            "format": "string",
+            "example": 75
+          },
+          "address1": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "22 W. Washington St."
+          },
+          "address2": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "FL 7"
+          },
+          "address3": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Rm. 700"
+          },
+          "city": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 30,
+            "example": "Chicago"
+          },
+          "state": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "IL"
+          },
+          "zipCode": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 10,
+            "example": 60602
+          },
+          "email": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 60
+          },
+          "homePhone": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "555-555555"
+          },
+          "workPhone": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "555-555555"
+          },
+          "relationshipId": {
+            "type": "string",
+            "format": "string",
+            "example": 1
+          },
+          "status": {
+            "type": "string",
+            "format": "string",
+            "example": null
+          }
+        }
+      },
+      "UpdateMemberProfile": {
+        "type": "object",
+        "required": [
+          "firstName",
+          "lastName",
+          "relationshipId"
+        ],
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Sample"
+          },
+          "lastName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Client"
+          },
+          "socialSecurityNumber": {
+            "type": "string",
+            "format": "string",
+            "example": "111-11-1234",
+            "description": "If not included, will default to empty."
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1989-12-31",
+            "description": "YYYY-MM-DD, if not included, will default to empty."
+          },
+          "desiredRetirementAge": {
+            "type": "string",
+            "format": "string",
+            "example": 75,
+            "description": "If not included, will default to empty."
+          },
+          "address1": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "22 W. Washington St.",
+            "description": "If not included, will default to empty."
+          },
+          "address2": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "FL 7",
+            "description": "If not included, will default to empty."
+          },
+          "address3": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Rm. 700",
+            "description": "If not included, will default to empty."
+          },
+          "city": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 30,
+            "example": "Chicago",
+            "description": "If not included, will default to empty."
+          },
+          "state": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "IL",
+            "description": "If not included, will default to empty."
+          },
+          "zipCode": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 10,
+            "example": 60602,
+            "description": "If not included, will default to empty."
+          },
+          "email": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 60,
+            "description": "If not included, will default to empty."
+          },
+          "homePhone": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "555-555555",
+            "description": "If not included, will default to empty."
+          },
+          "workPhone": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "555-555555",
+            "description": "If not included, will default to empty."
+          },
+          "relationshipId": {
+            "type": "string",
+            "format": "string",
+            "example": 1
+          }
+        }
+      },
+      "MemberPost400": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "format": "string",
+            "example": "Missing firstName property."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "ClientProfile": {
+        "type": "object",
+        "required": [
+          "householdId",
+          "clientName"
+        ],
+        "properties": {
+          "clientName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 60,
+            "example": "Sample"
+          },
+          "householdId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "firstName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Sample"
+          },
+          "lastName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Client"
+          },
+          "socialSecurityNumber": {
+            "type": "string",
+            "format": "string",
+            "example": "********1234"
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1989-12-31"
+          },
+          "desiredRetirementAge": {
+            "type": "string",
+            "format": "string",
+            "example": 75
+          },
+          "address1": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "22 W. Washington St."
+          },
+          "address2": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "FL 7"
+          },
+          "address3": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Rm. 700"
+          },
+          "city": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 30,
+            "example": "Chicago"
+          },
+          "state": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "IL"
+          },
+          "zipCode": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 10,
+            "example": 60602
+          },
+          "email": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 60
+          },
+          "homePhone": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "555-555555"
+          },
+          "workPhone": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "555-555555"
+          },
+          "reviewDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2021-12-31",
+            "description": "YYYY-MM-DD, if not included, will default to empty."
+          },
+          "status": {
+            "type": "string",
+            "format": "string",
+            "example": null
+          }
+        }
+      },
+      "UpdateClientProfile": {
+        "type": "object",
+        "required": [
+          "clientName",
+          "firstName",
+          "lastName"
+        ],
+        "properties": {
+          "clientName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 60,
+            "example": "Sample"
+          },
+          "firstName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Sample"
+          },
+          "lastName": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Client"
+          },
+          "socialSecurityNumber": {
+            "type": "string",
+            "format": "string",
+            "example": "111-11-1234",
+            "description": "If not included, will default to empty."
+          },
+          "dateOfBirth": {
+            "type": "string",
+            "format": "date",
+            "example": "1989-12-31",
+            "description": "YYYY-MM-DD, if not included, will default to empty."
+          },
+          "desiredRetirementAge": {
+            "type": "string",
+            "format": "string",
+            "example": 75,
+            "description": "If not included, will default to empty."
+          },
+          "address1": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "22 W. Washington St.",
+            "description": "If not included, will default to empty."
+          },
+          "address2": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "FL 7",
+            "description": "If not included, will default to empty."
+          },
+          "address3": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 50,
+            "example": "Rm. 700",
+            "description": "If not included, will default to empty."
+          },
+          "city": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 30,
+            "example": "Chicago",
+            "description": "If not included, will default to empty."
+          },
+          "state": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "IL",
+            "description": "If not included, will default to empty."
+          },
+          "zipCode": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 10,
+            "example": 60602,
+            "description": "If not included, will default to empty."
+          },
+          "email": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 60,
+            "description": "If not included, will default to empty."
+          },
+          "homePhone": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "555-555555",
+            "description": "If not included, will default to empty."
+          },
+          "workPhone": {
+            "type": "string",
+            "format": "string",
+            "maxLength": 20,
+            "example": "555-555555",
+            "description": "If not included, will default to empty."
+          },
+          "reviewDate": {
+            "type": "string",
+            "format": "date",
+            "example": "2021-12-31",
+            "description": "YYYY-MM-DD, if not included, will default to empty."
+          }
+        }
+      },
+      "ClientPost400": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "format": "string",
+            "example": "Missing firstName property."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      },
+      "Institution": {
+        "type": "object",
+        "required": [
+          "householdId"
+        ],
+        "properties": {
+          "profile": {
+            "type": "object",
+            "required": [
+              "householdId"
+            ],
+            "properties": {
+              "institutionName": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 60,
+                "example": "Sample"
+              },
+              "institutionType": {
+                "type": "string",
+                "format": "string",
+                "example": 2
+              },
+              "isUSCorporation": {
+                "type": "string",
+                "format": "string",
+                "example": 1
+              },
+              "institutionId": {
+                "type": "string",
+                "format": "string",
+                "example": "********1234"
+              },
+              "incorporationState": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "CA"
+              },
+              "dateOfIncorporation": {
+                "type": "string",
+                "format": "date",
+                "example": "1989-12-31"
+              },
+              "taxIdType": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 3,
+                "example": "ssn"
+              },
+              "address1": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "22 W. Washington St."
+              },
+              "address2": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "FL 7"
+              },
+              "address3": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "Rm. 700"
+              },
+              "city": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 30,
+                "example": "Chicago"
+              },
+              "state": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": "IL"
+              },
+              "zipCode": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 10,
+                "example": 60602
+              },
+              "phone": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": 123321
+              },
+              "fax": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": "555-555555"
+              }
+            }
+          },
+          "primaryContact": {
+            "type": "object",
+            "required": [
+              "firstName",
+              "lastName"
+            ],
+            "properties": {
+              "firstName": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "Sample"
+              },
+              "lastName": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "Client"
+              },
+              "title": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "Sample title"
+              },
+              "role": {
+                "type": "string",
+                "format": "string",
+                "example": 1
+              },
+              "dateOfBirth": {
+                "type": "string",
+                "format": "date",
+                "example": "1991-12-31",
+                "description": "YYYY-MM-DD."
+              },
+              "socialSecurityNumber": {
+                "type": "string",
+                "format": "string",
+                "example": "********1234"
+              },
+              "email": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 60
+              },
+              "workPhone": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": "555-44444"
+              },
+              "cellPhone": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": "555-555555"
+              }
+            }
+          }
+        }
+      },
+      "updateInstitution": {
+        "type": "object",
+        "required": [
+          "householdId"
+        ],
+        "properties": {
+          "profile": {
+            "type": "object",
+            "required": [
+              "institutionName",
+              "institutionType",
+              "institutionId",
+              "isUSCorporation",
+              "taxIdType"
+            ],
+            "properties": {
+              "institutionName": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 60,
+                "example": "Sample",
+                "description": "Is required."
+              },
+              "institutionType": {
+                "type": "string",
+                "format": "string",
+                "example": 2,
+                "description": "Is required."
+              },
+              "isUSCorporation": {
+                "type": "string",
+                "format": "string",
+                "example": 1,
+                "description": "Is required."
+              },
+              "institutionId": {
+                "type": "string",
+                "format": "string",
+                "example": "111-11-1234",
+                "description": "Can have 111-22-3333 or 123456789 format."
+              },
+              "dateOfIncorporation": {
+                "type": "string",
+                "format": "date",
+                "example": "1989-12-31",
+                "description": "YYYY-MM-DD, if not included, will default to empty."
+              },
+              "incorporationState": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "CA",
+                "description": "If not included, will default to empty."
+              },
+              "taxIdType": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 3,
+                "example": "ssn",
+                "description": "is required."
+              },
+              "address1": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "22 W. Washington St.",
+                "description": "If not included, will default to empty."
+              },
+              "address2": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "FL 7",
+                "description": "If not included, will default to empty."
+              },
+              "address3": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "Rm. 700",
+                "description": "If not included, will default to empty."
+              },
+              "city": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 30,
+                "example": "Chicago",
+                "description": "If not included, will default to empty."
+              },
+              "state": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": "IL",
+                "description": "If not included, will default to empty."
+              },
+              "zipCode": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 10,
+                "example": 60602,
+                "description": "If not included, will default to empty."
+              },
+              "phone": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": 123321,
+                "description": "If not included, will default to empty."
+              },
+              "fax": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": "555-555555",
+                "description": "If not included, will default to empty."
+              }
+            }
+          },
+          "primaryContact": {
+            "type": "object",
+            "required": [
+              "firstName",
+              "lastName",
+              "role"
+            ],
+            "properties": {
+              "firstName": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "Sample"
+              },
+              "lastName": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "Client"
+              },
+              "title": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 50,
+                "example": "Sample title",
+                "description": "If not included, will default to empty."
+              },
+              "role": {
+                "type": "string",
+                "format": "string",
+                "example": 1,
+                "description": "Is required."
+              },
+              "dateOfBirth": {
+                "type": "string",
+                "format": "date",
+                "example": "1991-12-31",
+                "description": "YYYY-MM-DD, if not included, will default to empty."
+              },
+              "socialSecurityNumber": {
+                "type": "string",
+                "format": "string",
+                "example": "111-11-1234",
+                "description": "If not included, will default to empty."
+              },
+              "email": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 60,
+                "description": "If not included, will default to empty."
+              },
+              "workPhone": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": "555-44444",
+                "description": "If not included, will default to empty."
+              },
+              "cellPhone": {
+                "type": "string",
+                "format": "string",
+                "maxLength": 20,
+                "example": "555-555555",
+                "description": "If not included, will default to empty."
+              }
+            }
+          }
+        }
+      },
+      "InstitutionPost400": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "format": "string",
+            "example": "Missing firstName property."
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        }
+      }
+    }
+  }
+}

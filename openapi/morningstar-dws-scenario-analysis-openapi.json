@@ -1,0 +1,2343 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Scenario Analysis API",
+    "description": "The Scenario Analysis API lets you retrieve risk model and scenario\ndetails, calculate returns for investments or portfolios based on\npredefined historical or hypothetical events, and generate performance\nmetrics across the full time period of a scenario.\n\nUse it to:\n- Retrieve the available risk models and the scenarios defined for each.\n- Calculate scenario returns for investments and portfolios.\n- Generate performance metrics — Alpha, Return, Max Drawdown, Standard\n  Deviation, and Tracking Error.\n\nMethodology documents:\n- [Morningstar Historical Scenario Analysis](https://developer.morningstar.com/content/hidden-from-navigation/morningstar-historical-scenario-analysis.pdf)\n- [Morningstar Market-Driven Scenario Analysis](https://developer.morningstar.com/content/hidden-from-navigation/morningstar-marketdriven-scenario-analysis.pdf)",
+    "version": "v1",
+    "x-changelog": [
+      {
+        "date": "2026-07-17",
+        "changes": [
+          {
+            "UPDATED": "Schema names for consistency with standards across DWS APIs."
+          }
+        ]
+      }
+    ]
+  },
+  "paths": {
+    "/direct-web-services/v1/scenario-analysis/risk-models": {
+      "get": {
+        "summary": "Get risk models",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ResponseGetRiskModels"
+          },
+          "400": {
+            "$ref": "#/components/responses/ResponseBadRequest"
+          }
+        },
+        "operationId": "getRiskModels",
+        "tags": [
+          "Scenario Analysis"
+        ],
+        "description": "Retrieves the list of available risk models. The response includes a risk model ID, which can be used to request the scenarios defined for that model."
+      }
+    },
+    "/direct-web-services/v1/scenario-analysis/scenarios": {
+      "get": {
+        "summary": "Get scenarios",
+        "parameters": [
+          {
+            "name": "riskModelId",
+            "in": "query",
+            "description": "Specifies the risk model to query.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "examples": {
+              "riskModelIdExample1": {
+                "summary": "Global Equity Proprietary Factor Model (USD)",
+                "value": "morn-glb-eq-usd"
+              }
+            }
+          },
+          {
+            "name": "scenarioType",
+            "in": "query",
+            "description": "Specifies the scenario type to filter results by.",
+            "schema": {
+              "$ref": "#/components/schemas/InputScenarioType",
+              "enum": [
+                "HistoricalEvent",
+                "MarketShock"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ResponseGetScenarios"
+          },
+          "400": {
+            "$ref": "#/components/responses/ResponseBadRequest"
+          }
+        },
+        "operationId": "getScenarios",
+        "tags": [
+          "Scenario Analysis"
+        ],
+        "description": "Retrieves the list of scenarios defined for the specified risk model.  The `HistoricalEvent`scenario type is returned by default. Use the optional `scenarioType` query parameter to override the default setting and return a different scenario type.\nThe response includes a scenario ID, which can be used to calculate returns or generate portfolio and investment metrics based on the conditions defined for the scenario."
+      }
+    },
+    "/direct-web-services/v1/scenario-analysis/returns": {
+      "post": {
+        "summary": "Calculate returns",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ResponseCalculateReturn"
+          },
+          "400": {
+            "$ref": "#/components/responses/ResponseBadRequest"
+          }
+        },
+        "operationId": "calculateReturns",
+        "tags": [
+          "Scenario Analysis"
+        ],
+        "description": "Calculates scenario returns for the specified investments and portfolios based on the conditions defined for one or more scenarios.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RequestCalculateReturn"
+        }
+      }
+    },
+    "/direct-web-services/v1/scenario-analysis/metrics": {
+      "post": {
+        "summary": "Generate metrics",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ResponseGenerateMetrics"
+          },
+          "400": {
+            "$ref": "#/components/responses/ResponseBadRequest"
+          }
+        },
+        "operationId": "generateMetrics",
+        "tags": [
+          "Scenario Analysis"
+        ],
+        "description": "Generates performance metrics for the specified portfolios and investments based on the conditions defined for one or more scenarios. Supported metrics include Alpha, Return, Max Drawdown, Standard Deviation, and Tracking Error.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RequestGenerateMetrics"
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RequestCalculateReturn": {
+        "type": "object",
+        "properties": {
+          "calculationType": {
+            "$ref": "#/components/schemas/InputCalculationType",
+            "description": "Sets how return is calculated.\n\n  - `Cumulative` - Calculates cumulative return.\n  - `Drawdown` - Measure of decline in an investment or fund from its peak to its trough over a period from the starting date.\n  - `Growth10k` - Cumulative return that highlights the change in value of an initial $10,000 investment.\n  - `Monthly` - Calculates monthly returns.\n  - `Period` - Calculates returns for different periods of 1 week, 1 month etc. "
+          },
+          "riskModelId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Risk model identifier."
+          },
+          "investments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputInvestment"
+            },
+            "description": "\r\nList of Investments.",
+            "nullable": true
+          },
+          "portfolios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputPortfolio"
+            },
+            "description": "\r\nList of portfolios with holdings.",
+            "nullable": true
+          },
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of scenarios to query.  At least one scenario must be passed in the request.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "calculationType",
+          "riskModelId",
+          "scenarios"
+        ]
+      },
+      "RequestGenerateMetrics": {
+        "type": "object",
+        "properties": {
+          "riskModelId": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Risk model identifier."
+          },
+          "investments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputInvestment"
+            },
+            "description": "\r\nList of Investments.",
+            "nullable": true
+          },
+          "portfolios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputPortfolio"
+            },
+            "description": "\r\nList of portfolios with holdings.",
+            "nullable": true
+          },
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Comma-separated list of scenarios to query.  At least one scenario must be passed in the request.",
+            "nullable": true
+          },
+          "benchmark": {
+            "$ref": "#/components/schemas/InputBenchmark"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "riskModelId",
+          "scenarios"
+        ]
+      },
+      "ResponseCalculateReturn": {
+        "type": "object",
+        "properties": {
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputReturnsScenario"
+            },
+            "nullable": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/OutputMetadata"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseErrorDetails": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status Code",
+            "format": "int32"
+          },
+          "errorCode": {
+            "type": "string",
+            "description": "Custom error code",
+            "nullable": true
+          },
+          "message": {
+            "type": "string",
+            "description": "Message",
+            "nullable": true
+          },
+          "requestId": {
+            "type": "string",
+            "description": "RequestId",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Error details"
+      },
+      "ResponseGenerateMetrics": {
+        "type": "object",
+        "properties": {
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputMetricsScenario"
+            },
+            "nullable": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/OutputMetadata"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseGetRiskModels": {
+        "type": "object",
+        "properties": {
+          "riskModels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputRiskModel"
+            },
+            "nullable": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/OutputMetadata"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseGetScenarios": {
+        "type": "object",
+        "properties": {
+          "scenarios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputScenario"
+            },
+            "nullable": true
+          },
+          "scenarioType": {
+            "type": "string",
+            "description": "\r\nScenarioType.",
+            "nullable": true
+          },
+          "scenarioTypeName": {
+            "type": "string",
+            "description": "\r\nScenarioTypeName.",
+            "nullable": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/OutputMetadata"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputBenchmark": {
+        "type": "object",
+        "properties": {
+          "securityId": {
+            "type": "string",
+            "description": "\r\nBenchmark is required to obtain Alpha and Tracking Error values.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputCalculationType": {
+        "enum": [
+          "Cumulative",
+          "Drawdown",
+          "Growth10k",
+          "Monthly",
+          "Period"
+        ],
+        "type": "string",
+        "description": "\r\nCalculationType defines the type of return in response.\r\n\r\nGrowth10k : A different way of showing cumulative return that highlights the change in value of an initial $10,000 investment\r\n\r\nperiod : Calculate the forecast returns of the scenario for different periods of 1 week, 1 month etc.\r\n\r\ncumulative : Cumulated returns.\r\n\r\ndrawdown : Drawdown of the return which is a measure of decline in an investment or fund from its peak to its trough over a period from the starting date.\r\n\r\nmonthly : Calculate the forecast returns of the scenario in monthly"
+      },
+      "InputHolding": {
+        "type": "object",
+        "properties": {
+          "weight": {
+            "type": "number",
+            "description": "Get or set the Weight\r\n1. min value = 0\r\n2. max value = 100",
+            "format": "double",
+            "nullable": true
+          },
+          "cusip": {
+            "type": "string",
+            "description": "Get or set the CUSIP",
+            "nullable": true
+          },
+          "fundCode": {
+            "type": "string",
+            "description": "Get or set the FundCode",
+            "nullable": true
+          },
+          "isin": {
+            "type": "string",
+            "description": "Get or set the ISIN",
+            "nullable": true
+          },
+          "performanceId": {
+            "type": "string",
+            "description": "Get or set the PerformanceId",
+            "nullable": true
+          },
+          "securityId": {
+            "type": "string",
+            "description": "Get or set the SecurityId",
+            "nullable": true
+          },
+          "tradingSymbol": {
+            "type": "string",
+            "description": "Get or set the TradingSymbol",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputInvestment": {
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Unique identifier of an investment."
+          },
+          "idType": {
+            "type": "string",
+            "description": "Identifier type.",
+            "default": "PerformanceId",
+            "nullable": true
+          },
+          "baseCurrency": {
+            "type": "string",
+            "description": "Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.",
+            "nullable": true
+          },
+          "domicile": {
+            "type": "string",
+            "description": "Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.",
+            "nullable": true
+          },
+          "exchangeCountry": {
+            "type": "string",
+            "description": "Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.",
+            "nullable": true
+          },
+          "exchangeId": {
+            "type": "string",
+            "description": "Exchange identifier to use for investment lookup. See [Exchange IDs](https://developer.morningstar.com/content/hidden-from-navigation/DwsApisExchangeIds.xlsx) document for list of valid values.",
+            "nullable": true,
+            "examples": {
+              "exchangeIdExample1": {
+                "summary": "NASDAQ - ALL Markets (NAS)",
+                "value": "EX$$$$XNAS"
+              },
+              "exchangeIdExample2": {
+                "summary": "London Stock Exchange (LSE)",
+                "value": "EX$$$$XLON"
+              }
+            }
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputPortfolio": {
+        "required": [
+          "holdings",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "holdings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputHolding"
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": "Get or set portfolio name",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputScenarioType": {
+        "enum": [
+          "HistoricalEvent",
+          "MacroShock",
+          "MarketShock"
+        ],
+        "type": "string"
+      },
+      "OutputHoldingMetadata": {
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "nullable": true
+          },
+          "identifierType": {
+            "$ref": "#/components/schemas/OutputIdentifierType"
+          },
+          "baseCurrency": {
+            "type": "string",
+            "nullable": true
+          },
+          "exchangeCountry": {
+            "type": "string",
+            "nullable": true
+          },
+          "domicile": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputIdentifierType": {
+        "enum": [
+          "SecurityId",
+          "CUSIP",
+          "TradingSymbol",
+          "FundCode",
+          "ISIN",
+          "PerformanceId",
+          "MSID",
+          "SEDOL",
+          "Ticker"
+        ],
+        "type": "string",
+        "description": "Security identifier type"
+      },
+      "OutputIdentifiers": {
+        "type": "object",
+        "properties": {
+          "performanceId": {
+            "type": "string",
+            "description": "Performance ID passed in the request or returned based on the values passed to identify an investment.",
+            "nullable": true
+          },
+          "securityId": {
+            "type": "string",
+            "description": "Morningstar security ID passed in the request used to look up investment identifiers.",
+            "nullable": true
+          },
+          "tradingSymbol": {
+            "type": "string",
+            "description": "Trading symbol passed in the request used to look up investment identifiers.",
+            "nullable": true
+          },
+          "fundCode": {
+            "type": "string",
+            "description": "Fund code passed in the request used to look up investment identifiers.",
+            "nullable": true
+          },
+          "isin": {
+            "type": "string",
+            "description": "ISIN passed in the request and used to look up investment identifiers.",
+            "nullable": true
+          },
+          "cusip": {
+            "type": "string",
+            "description": "CUSIP passed in the request used to look up investment identifiers.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "The ID and ID type passed in the request and the corresponding Morningstar investment identifiers are returned."
+      },
+      "OutputInvestmentMetadata": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "ID passed in request.",
+            "nullable": true
+          },
+          "idType": {
+            "type": "string",
+            "description": "\r\nID type passed in request.\r\n\r\nIdType value(s) - \"ISIN\", \"CUSIP\", \"PerformanceId\", \"SecurityId\", \"TradingSymbol\", \"FundCode\", \"MSID\"",
+            "nullable": true
+          },
+          "performanceId": {
+            "type": "string",
+            "description": "Performance ID (if not passed in request).",
+            "nullable": true
+          },
+          "companyId": {
+            "type": "string",
+            "description": "Company ID (if not passed in request).",
+            "nullable": true
+          },
+          "baseCurrency": {
+            "type": "string",
+            "description": "Input base currency used to look up Investment identifier",
+            "nullable": true
+          },
+          "domicile": {
+            "type": "string",
+            "description": "Input domicile used to look up Investment identifier.",
+            "nullable": true
+          },
+          "exchangeCountry": {
+            "type": "string",
+            "description": "Input exchange country used to look up Investment identifier.",
+            "nullable": true
+          },
+          "exchangeId": {
+            "type": "string",
+            "description": "Input exchange id used to look up Investment identifier.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents an investment that is considered invalid."
+      },
+      "OutputInvestmentReference": {
+        "type": "object",
+        "properties": {
+          "performanceId": {
+            "type": "string",
+            "description": "Morningstar Performance ID for the holding.",
+            "nullable": true
+          },
+          "securityId": {
+            "type": "string",
+            "description": "Morningstar Security ID for the holding.",
+            "nullable": true
+          },
+          "isin": {
+            "type": "string",
+            "description": "ISIN for the holding. Only present when the original request used ISIN as the identifier type.",
+            "nullable": true
+          },
+          "tradingSymbol": {
+            "type": "string",
+            "description": "Trading symbol for the holding.",
+            "nullable": true
+          },
+          "fundCode": {
+            "type": "string",
+            "description": "Fund code passed in the request used to look up investment identifiers.",
+            "nullable": true
+          },
+          "cusip": {
+            "type": "string",
+            "description": "CUSIP passed in the request used to look up investment identifiers.",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the investment.",
+            "nullable": true
+          },
+          "baseCurrency": {
+            "type": "string",
+            "description": "BaseCurrency of the investment.",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "Type of the investment.",
+            "nullable": true,
+            "$ref": "#/components/schemas/OutputSecurityType"
+          },
+          "inceptionDate": {
+            "type": "string",
+            "description": "InceptionDate of the investment.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents resolved identifier data for a valid investment or holding, returned in metadata."
+      },
+      "OutputLookupFilters": {
+        "type": "object",
+        "properties": {
+          "baseCurrency": {
+            "type": "string",
+            "description": "Input base currency used to look up Investment identifier",
+            "nullable": true
+          },
+          "domicile": {
+            "type": "string",
+            "description": "Input domicile used to look up Investment identifier.",
+            "nullable": true
+          },
+          "exchangeCountry": {
+            "type": "string",
+            "description": "Input exchange country used to look up Investment identifier.",
+            "nullable": true
+          },
+          "exchangeId": {
+            "type": "string",
+            "description": "Input exchange id used to look up Investment identifier.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Information passed in request and used to look up an investment's Morningstar Investment identifier."
+      },
+      "OutputMessage": {
+        "type": "object",
+        "properties": {
+          "investments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputInvestmentMetadata"
+            },
+            "description": "List of invalid holdings.",
+            "nullable": true
+          },
+          "portfolios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputPortfolioMetadata"
+            },
+            "nullable": true
+          },
+          "type": {
+            "$ref": "#/components/schemas/OutputMessageType"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message text.",
+            "nullable": true
+          },
+          "code": {
+            "type": "string",
+            "description": "Unique identifier of a message.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputMessageType": {
+        "enum": [
+          "Warning",
+          "Error"
+        ],
+        "type": "string",
+        "description": "MessageType"
+      },
+      "OutputMetadata": {
+        "type": "object",
+        "properties": {
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputMessage"
+            },
+            "description": "Get or set the list of messages in the response.",
+            "nullable": true
+          },
+          "securityReference": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputInvestmentReference"
+            },
+            "description": "Get or set the list of resolved identifiers for all valid investments in the request.",
+            "nullable": true
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Unique identifier of a request.",
+            "nullable": true
+          },
+          "time": {
+            "type": "string",
+            "description": "Indicates when the response was generated.",
+            "format": "date-time",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputMetricsInvestment": {
+        "type": "object",
+        "properties": {
+          "identifiers": {
+            "$ref": "#/components/schemas/OutputIdentifiers"
+          },
+          "performanceMetrics": {
+            "$ref": "#/components/schemas/OutputPerformanceMetrics"
+          },
+          "assetCoverage": {
+            "type": "integer",
+            "description": "\r\nThe holding weighted percentage of the applicable holdings for which a data point has been successfully calculated out of all the applicable holdings.",
+            "format": "int32"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/OutputLookupFilters"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputMetricsPortfolio": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "\r\nPortfolio Id.",
+            "nullable": true
+          },
+          "performanceMetrics": {
+            "$ref": "#/components/schemas/OutputPerformanceMetrics"
+          },
+          "assetCoverage": {
+            "type": "integer",
+            "description": "\r\nThe holding weighted percentage of the applicable holdings for which a data point has been successfully calculated out of all the applicable holdings.",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputMetricsScenario": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "\r\nScenario Id.",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "\r\nScenario Name.",
+            "nullable": true
+          },
+          "definition": {
+            "type": "string",
+            "description": "\r\nScenario Definition.",
+            "nullable": true
+          },
+          "shockDate": {
+            "type": "string",
+            "description": "\r\n\"shockDate\" indicates when the forecast of the scenario analysis would starts. It is the last month end of the risk premium data.",
+            "nullable": true
+          },
+          "duration": {
+            "type": "integer",
+            "description": "\r\nScenario Duration.",
+            "format": "int32"
+          },
+          "durationUnit": {
+            "type": "string",
+            "description": "\r\nScenario DurationUnit.",
+            "nullable": true
+          },
+          "investments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputMetricsInvestment"
+            },
+            "description": "\r\nList of Investments.",
+            "nullable": true
+          },
+          "portfolios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputMetricsPortfolio"
+            },
+            "description": "\r\nList of Portfolios.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputPerformanceMetrics": {
+        "type": "object",
+        "properties": {
+          "return": {
+            "type": "number",
+            "description": "\r\nForecasted returns of the scenario.",
+            "format": "double",
+            "nullable": true
+          },
+          "maxDrawdown": {
+            "type": "number",
+            "description": "\r\nMax Drawdown of the forecasted return of the scenario.",
+            "format": "double",
+            "nullable": true
+          },
+          "standardDeviation": {
+            "type": "number",
+            "description": "\r\nStandard Deviation of the for the forecasted return of the scenario.",
+            "format": "double",
+            "nullable": true
+          },
+          "trackingError": {
+            "type": "number",
+            "description": "\r\nTracking Error vs the benchmark for the forecasted return of the scenario.\r\n\r\nBenchmark is required to obtain Alpha and Tracking Error values.",
+            "format": "double",
+            "nullable": true
+          },
+          "alpha": {
+            "type": "number",
+            "description": "\r\nExcess return of the fund vs the benchmark for the forecasted return of the scenario.\r\n\r\nBenchmark is required to obtain Alpha and Tracking Error values.",
+            "format": "double",
+            "nullable": true
+          },
+          "peakofMaxDrawdownFromToday": {
+            "type": "integer",
+            "description": "\r\nPeak of the Max Drawdown.",
+            "format": "int32",
+            "nullable": true
+          },
+          "valleyofMaxDrawdownFromToday": {
+            "type": "integer",
+            "description": "\r\nValley of the Max Drawdown.",
+            "format": "int32",
+            "nullable": true
+          },
+          "maxDrawdownDuration": {
+            "type": "integer",
+            "description": "\r\nThe number of days from the peak to valley.",
+            "format": "int32",
+            "nullable": true
+          },
+          "recoveryDuration": {
+            "type": "integer",
+            "description": "\r\nThe number of days from valley back to positive cumulative return, could be NA if it never gets back to positive returns during the scenario period.",
+            "format": "int32",
+            "nullable": true
+          },
+          "recoveryFromToday": {
+            "type": "integer",
+            "description": "\r\nThe number of days from start date of the scenario back to positive cumulative return, could be NA if it never gets back to positive returns during the scenario period.",
+            "format": "int32",
+            "nullable": true
+          },
+          "var": {
+            "type": "number",
+            "description": "\r\nVaR is a measure of the potential of loss with a given probability.",
+            "format": "double",
+            "nullable": true
+          },
+          "cVAR": {
+            "type": "number",
+            "description": "\r\nCVaR is another risk measure that represents the mean loss of a portfolio occurring below the user-specified percentile.",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputPortfolioMetadata": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "nullable": true
+          },
+          "holdings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputHoldingMetadata"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputReturn": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "\r\nReturn Date.",
+            "nullable": true
+          },
+          "period": {
+            "type": "string",
+            "description": "\r\nReturn Period.",
+            "nullable": true
+          },
+          "value": {
+            "type": "number",
+            "description": "\r\nReturn Value.",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputReturnsInvestment": {
+        "type": "object",
+        "properties": {
+          "identifiers": {
+            "$ref": "#/components/schemas/OutputIdentifiers"
+          },
+          "returns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputReturn"
+            },
+            "description": "\r\nInvestment Returns.",
+            "nullable": true
+          },
+          "assetCoverage": {
+            "type": "number",
+            "description": "\r\nThe holding weighted percentage of the applicable holdings for which a data point has been successfully calculated out of all the applicable holdings.",
+            "format": "double"
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/OutputLookupFilters"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputReturnsPortfolio": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "\r\nPortfolio name.",
+            "nullable": true
+          },
+          "returns": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputReturn"
+            },
+            "description": "\r\nPortfolio List of Returns.",
+            "nullable": true
+          },
+          "assetCoverage": {
+            "type": "number",
+            "description": "\r\nThe holding weighted percentage of the applicable holdings for which a data point has been successfully calculated out of all the applicable holdings.",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputReturnsScenario": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of scenario applied in this calculation.",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of scenario applied in this calculation.",
+            "nullable": true
+          },
+          "definition": {
+            "type": "string",
+            "description": "Specification of the scenario — the market conditions applied in this calculation, such as the index, shock magnitude, and duration.",
+            "nullable": true
+          },
+          "calculateType": {
+            "type": "string",
+            "description": "Type of calculation performed for this scenario.",
+            "nullable": true
+          },
+          "shockDate": {
+            "type": "string",
+            "description": "Date on which the scenario analysis forecast begins. This is the last month end of the risk premium data.",
+            "format": "date"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Length of the scenario forecast, beginning at `shockDate`. Expressed in the unit given by `durationUnit`.",
+            "format": "int32"
+          },
+          "durationUnit": {
+            "type": "string",
+            "description": "Unit of time in which `duration` is expressed.",
+            "nullable": true
+          },
+          "investments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputReturnsInvestment"
+            },
+            "description": "Forecast results for each investment included in the request, calculated under this scenario.",
+            "nullable": true
+          },
+          "portfolios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputReturnsPortfolio"
+            },
+            "description": "Forecast results for each portfolio included in the request, calculated under this scenario.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputRiskModel": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "nullable": true,
+            "description": "Unique identifier of a risk model."
+          },
+          "name": {
+            "type": "string",
+            "nullable": true,
+            "description": "Display name of the risk model."
+          },
+          "legacyIds": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true,
+            "description": "Identifiers previously used for this risk model, retained so that requests issued against earlier versions of the API continue to resolve."
+          },
+          "currencyId": {
+            "type": "string",
+            "nullable": true,
+            "description": "Currency ID."
+          },
+          "currency": {
+            "type": "string",
+            "nullable": true,
+            "description": "Currency in which the risk model's results are expressed."
+          },
+          "defaultGroup": {
+            "type": "string",
+            "nullable": true,
+            "description": "Default risk model group."
+          },
+          "isPrimary": {
+            "type": "boolean"
+          },
+          "asset": {
+            "type": "string",
+            "nullable": true,
+            "description": "Asset class covered by the risk model."
+          },
+          "factorCount": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Number of risk factors in the model."
+          },
+          "startDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Earliest date for which the risk model has data available. Analysis cannot begin before this date."
+          },
+          "asOfDate": {
+            "type": "string",
+            "nullable": true,
+            "description": "Most recent date for which the risk model has data available."
+          },
+          "description": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the risk model."
+          },
+          "currencyDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Provides information about the currencies supported by the model. The `currency` field displays the default currency configured for the account."
+          },
+          "factorDescription": {
+            "type": "string",
+            "nullable": true,
+            "description": "Description of the risk factors used by the model."
+          },
+          "dataAvailability": {
+            "type": "string",
+            "nullable": true,
+            "description": "Range of dates for which the risk model has data available, bounded by `startDate` and `asOfDate`."
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputScenario": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier of a scenario.",
+            "nullable": true
+          },
+          "name": {
+            "type": "string",
+            "description": "Display name of the scenario.",
+            "nullable": true
+          },
+          "groupName": {
+            "type": "string",
+            "description": "Name of the group to which the scenario belongs.",
+            "nullable": true
+          },
+          "startDate": {
+            "type": "string",
+            "description": "Date on which the period represented by an historical event scenario begins.",
+            "nullable": true
+          },
+          "endDate": {
+            "type": "string",
+            "description": "Date on which the historical period represented by the scenario ends.",
+            "nullable": true
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "description": "Date on which the scenario was last modified.",
+            "nullable": true
+          },
+          "createdDate": {
+            "type": "string",
+            "description": "Date market shock scenario was created.",
+            "nullable": true
+          },
+          "definition": {
+            "type": "string",
+            "description": "Specification of the scenario — the market conditions it applies, such as the index, shock magnitude, and duration.",
+            "nullable": true
+          },
+          "shortDescription": {
+            "type": "string",
+            "description": "Brief description of the scenario, suitable for display alongside `name`.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputSecurityType": {
+        "type": "string",
+        "description": "The security type",
+        "enum": [
+          "BD",
+          "BK",
+          "CA",
+          "CASH",
+          "CIT",
+          "CP",
+          "CT",
+          "CU",
+          "CZ",
+          "DF",
+          "EI",
+          "FC",
+          "FE",
+          "FG",
+          "FH",
+          "FI",
+          "FM",
+          "FO",
+          "FV",
+          "GA",
+          "H1",
+          "HD",
+          "IF",
+          "LP",
+          "MG",
+          "MO",
+          "P1",
+          "PI",
+          "PO",
+          "PS",
+          "R1",
+          "S1",
+          "SA",
+          "SC",
+          "SP",
+          "ST",
+          "V1",
+          "VA",
+          "VH",
+          "VL",
+          "VP",
+          "VS",
+          "XI"
+        ],
+        "x-enumDescriptions": {
+          "BD": "Bonds",
+          "BK": "529 Benchmark",
+          "CA": "Category Average/SectorAverages",
+          "CASH": "Cash",
+          "CIT": "Collective Investment Trusts",
+          "CP": "College Saving Plans",
+          "CT": "College Saving Portfolios",
+          "CU": "Exchange Rates/Currency Exchange",
+          "CZ": "Collective Investment Trusts",
+          "DF": "Restricted Investors",
+          "EI": "Economics Series",
+          "FC": "Closed End Funds",
+          "FE": "Exchange Traded Funds",
+          "FG": "FG",
+          "FH": "Hedge Funds",
+          "FI": "Unit Investment Trust",
+          "FM": "Money Market Funds",
+          "FO": "Open End Fund",
+          "FV": "Insurance Product Fund",
+          "GA": "GRPA",
+          "H1": "HFR Hedge Fund",
+          "HD": "Australian Hybrid",
+          "IF": "IF",
+          "LP": "US Variable Life",
+          "MG": "Strategies",
+          "MO": "Models",
+          "P1": "UK Life and Pension Policies",
+          "PI": "Special Pooled Funds for Unregistered VA",
+          "PO": "MF Objective",
+          "PS": "European Pension/Life Fund Wrappers",
+          "R1": "Global Restricted Funds",
+          "S1": "UBS Separate Accounts",
+          "SA": "Separate Accounts",
+          "SC": "Custom Fund",
+          "SP": "Private Funds",
+          "ST": "Stocks",
+          "V1": "UK Life and Pension Funds",
+          "VA": "US Variable Annuity Subaccounts",
+          "VH": "VH",
+          "VL": "US Variable Life Subaccounts/VL Subaccount",
+          "VP": "US Variable Annuities/VA Policy",
+          "VS": "VS",
+          "XI": "Market Indexes"
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests."
+      }
+    },
+    "requestBodies": {
+      "RequestCalculateReturn": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestCalculateReturn"
+            },
+            "examples": {
+              "RequestCalculateReturnExample1": {
+                "$ref": "#/components/examples/RequestCalculateReturnExample1"
+              },
+              "RequestCalculateReturnExample2": {
+                "$ref": "#/components/examples/RequestCalculateReturnExample2"
+              },
+              "RequestCalculateReturnExample3": {
+                "$ref": "#/components/examples/RequestCalculateReturnExample3"
+              }
+            }
+          }
+        }
+      },
+      "RequestGenerateMetrics": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestGenerateMetrics"
+            },
+            "examples": {
+              "RequestGenerateMetricsExample1": {
+                "$ref": "#/components/examples/RequestGenerateMetricsExample1"
+              },
+              "RequestGenerateMetricsExample2": {
+                "$ref": "#/components/examples/RequestGenerateMetricsExample2"
+              },
+              "RequestGenerateMetricsExample3": {
+                "$ref": "#/components/examples/RequestGenerateMetricsExample3"
+              },
+              "RequestGenerateMetricsExample4": {
+                "$ref": "#/components/examples/RequestGenerateMetricsExample4"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "ResponseGetRiskModels": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseGetRiskModels"
+            },
+            "examples": {
+              "ResponseGetRiskModelsExample1": {
+                "$ref": "#/components/examples/ResponseGetRiskModelsExample1"
+              }
+            }
+          }
+        }
+      },
+      "ResponseGetScenarios": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseGetScenarios"
+            },
+            "examples": {
+              "ResponseGetScenariosExample1": {
+                "$ref": "#/components/examples/ResponseGetScenariosExample1"
+              }
+            }
+          }
+        }
+      },
+      "ResponseCalculateReturn": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseCalculateReturn"
+            },
+            "examples": {
+              "ResponseCalculateReturnExample1": {
+                "$ref": "#/components/examples/ResponseCalculateReturnExample1"
+              },
+              "ResponseCalculateReturnExample2": {
+                "$ref": "#/components/examples/ResponseCalculateReturnExample2"
+              }
+            }
+          }
+        }
+      },
+      "ResponseGenerateMetrics": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseGenerateMetrics"
+            },
+            "examples": {
+              "ResponseGenerateMetricsExample1": {
+                "$ref": "#/components/examples/ResponseGenerateMetricsExample1"
+              },
+              "ResponseGenerateMetricsExample2": {
+                "$ref": "#/components/examples/ResponseGenerateMetricsExample2"
+              },
+              "ResponseGenerateMetricsExample3": {
+                "$ref": "#/components/examples/ResponseGenerateMetricsExample3"
+              }
+            }
+          }
+        }
+      },
+      "ResponseBadRequest": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseErrorDetails"
+            },
+            "examples": {
+              "ResponseBadRequestExample1": {
+                "$ref": "#/components/examples/ResponseBadRequestExample1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "RequestCalculateReturnExample1": {
+        "summary": "Investments Only",
+        "value": {
+          "riskModelId": "morn-glb-eq-usd",
+          "calculationType": "cumulative",
+          "investments": [
+            {
+              "id": "0P0000K9KG",
+              "idType": "performanceId"
+            },
+            {
+              "id": "0P00002W78",
+              "idType": "performanceId"
+            }
+          ],
+          "scenarios": [
+            "scenario001",
+            "scenario002",
+            "scenario003"
+          ]
+        }
+      },
+      "RequestCalculateReturnExample2": {
+        "summary": "Portfolios Only",
+        "value": {
+          "riskModelId": "morn-glb-eq-usd",
+          "calculationType": "cumulative",
+          "portfolios": [
+            {
+              "name": "Portfolio1",
+              "holdings": [
+                {
+                  "performanceId": "0P00018MDC",
+                  "weight": 60
+                },
+                {
+                  "performanceId": "0P0000Z6OO",
+                  "weight": 40
+                }
+              ]
+            },
+            {
+              "name": "Portfolio2",
+              "holdings": [
+                {
+                  "performanceId": "0P0000GD33",
+                  "weight": 50
+                },
+                {
+                  "performanceId": "0P000001RB",
+                  "weight": 50
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            "scenario001",
+            "scenario002",
+            "scenario003"
+          ]
+        }
+      },
+      "RequestCalculateReturnExample3": {
+        "summary": "Investments and Portfolios",
+        "value": {
+          "riskModelId": "morn-glb-eq-usd",
+          "calculationType": "cumulative",
+          "investments": [
+            {
+              "id": "0P0000K9KG",
+              "idType": "performanceId"
+            },
+            {
+              "id": "0P00002W78",
+              "idType": "performanceId"
+            }
+          ],
+          "portfolios": [
+            {
+              "name": "Portfolio1",
+              "holdings": [
+                {
+                  "performanceId": "0P00018MDC",
+                  "weight": 60
+                },
+                {
+                  "performanceId": "0P0000Z6OO",
+                  "weight": 40
+                }
+              ]
+            },
+            {
+              "name": "Portfolio2",
+              "holdings": [
+                {
+                  "performanceId": "0P0000GD33",
+                  "weight": 50
+                },
+                {
+                  "performanceId": "0P000001RB",
+                  "weight": 50
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            "scenario001",
+            "scenario002",
+            "scenario003"
+          ]
+        }
+      },
+      "RequestGenerateMetricsExample1": {
+        "summary": "Investments Only",
+        "value": {
+          "riskModelId": "morn-glb-eq-usd",
+          "investments": [
+            {
+              "id": "0P0000K9KG",
+              "idType": "performanceId"
+            },
+            {
+              "id": "0P00002W78",
+              "idType": "performanceId"
+            }
+          ],
+          "scenarios": [
+            "scenario001",
+            "scenario002",
+            "scenario003"
+          ]
+        }
+      },
+      "RequestGenerateMetricsExample2": {
+        "summary": "Portfolios Only",
+        "value": {
+          "riskModelId": "morn-glb-eq-usd",
+          "portfolios": [
+            {
+              "name": "Portfolio1",
+              "holdings": [
+                {
+                  "performanceId": "0P00018MDC",
+                  "weight": 60
+                },
+                {
+                  "performanceId": "0P0000Z6OO",
+                  "weight": 40
+                }
+              ]
+            },
+            {
+              "name": "Portfolio2",
+              "holdings": [
+                {
+                  "performanceId": "0P0000GD33",
+                  "weight": 50
+                },
+                {
+                  "performanceId": "0P000001RB",
+                  "weight": 50
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            "scenario001",
+            "scenario002",
+            "scenario003"
+          ]
+        }
+      },
+      "RequestGenerateMetricsExample3": {
+        "summary": "Investments and Portfolios",
+        "value": {
+          "riskModelId": "morn-glb-eq-usd",
+          "investments": [
+            {
+              "id": "0P0000K9KG",
+              "idType": "performanceId"
+            },
+            {
+              "id": "0P00002W78",
+              "idType": "performanceId"
+            }
+          ],
+          "portfolios": [
+            {
+              "name": "Portfolio1",
+              "holdings": [
+                {
+                  "performanceId": "0P00018MDC",
+                  "weight": 60
+                },
+                {
+                  "performanceId": "0P0000Z6OO",
+                  "weight": 40
+                }
+              ]
+            },
+            {
+              "name": "Portfolio2",
+              "holdings": [
+                {
+                  "performanceId": "0P0000GD33",
+                  "weight": 50
+                },
+                {
+                  "performanceId": "0P000001RB",
+                  "weight": 50
+                }
+              ]
+            }
+          ],
+          "scenarios": [
+            "scenario001",
+            "scenario002",
+            "scenario003"
+          ]
+        }
+      },
+      "RequestGenerateMetricsExample4": {
+        "summary": "Include Benchmark to Return Alpha and Tracking Error",
+        "value": {
+          "riskModelId": "morn-glb-eq-usd",
+          "investments": [
+            {
+              "id": "0P0000K9KG",
+              "idType": "performanceId"
+            },
+            {
+              "id": "0P00002W78",
+              "idType": "performanceId"
+            }
+          ],
+          "portfolios": [
+            {
+              "name": "Portfolio1",
+              "holdings": [
+                {
+                  "performanceId": "0P00018MDC",
+                  "weight": 60
+                },
+                {
+                  "performanceId": "0P0000Z6OO",
+                  "weight": 40
+                }
+              ]
+            },
+            {
+              "name": "Portfolio2",
+              "holdings": [
+                {
+                  "performanceId": "0P0000GD33",
+                  "weight": 50
+                },
+                {
+                  "performanceId": "0P000001RB",
+                  "weight": 50
+                }
+              ]
+            }
+          ],
+          "benchmark": {
+            "securityId": "XIUSA04G92"
+          },
+          "scenarios": [
+            "scenario001",
+            "scenario002",
+            "scenario003"
+          ]
+        }
+      },
+      "ResponseGetRiskModelsExample1": {
+        "summary": "Get Risk Models Response",
+        "value": {
+          "riskModels": [
+            {
+              "id": "morn-std-glb-eq-usd",
+              "name": "Global Equity Model",
+              "legacyIds": [],
+              "currencyId": "29472",
+              "currency": "USD",
+              "defaultGroup": "Style",
+              "isPrimary": false,
+              "asset": "Equity",
+              "factorCount": 35,
+              "startDate": "2003-01-01",
+              "asOfDate": "2026-05-31",
+              "description": "The Morningstar Global Equity Model captures risk premiums across the global equity universe. It is defined by prevalent factors excluding Morningstar proprietary factors.",
+              "currencyDescription": "The model is available in five currencies: Australian dollar, British pound, Canadian dollar, Euro and U.S. dollar.",
+              "factorDescription": "The model is defined by 35 factors across style, sector, region, and currency.",
+              "dataAvailability": "The model generates daily data from 01/01/2003, to the present day."
+            },
+            {
+              "id": "morn-std-glb-eq-cad",
+              "name": "Global Equity Model",
+              "legacyIds": [],
+              "currencyId": "29437",
+              "currency": "CAD",
+              "defaultGroup": "Style",
+              "isPrimary": false,
+              "asset": "Equity",
+              "factorCount": 35,
+              "startDate": "2003-01-01",
+              "asOfDate": "2026-05-31",
+              "description": "The Morningstar Global Equity Model captures risk premiums across the global equity universe. It is defined by prevalent factors excluding Morningstar proprietary factors.",
+              "currencyDescription": "The model is available in five currencies: Australian dollar, British pound, Canadian dollar, Euro and U.S. dollar.",
+              "factorDescription": "The model is defined by 35 factors across style, sector, region, and currency.",
+              "dataAvailability": "The model generates daily data from 01/01/2003, to the present day."
+            }
+          ],
+          "metadata": {
+            "requestId": "ffffb8a7-f5a2-4633-bae9-a869b845a33f",
+            "time": "2026-07-20T08:27:51.9571307Z"
+          }
+        }
+      },
+      "ResponseGetScenariosExample1": {
+        "summary": "Get Scenarios Response",
+        "value": {
+          "scenarios": [
+            {
+              "id": "scenario001",
+              "name": "2003 Bond Selloff",
+              "groupName": "Global Macro",
+              "startDate": "2003-06-12",
+              "endDate": "2003-08-31",
+              "definition": "Bond markets had their largest selloff since 1994 in 2003. US dollar, Yen and Euro yields all increased sharply. Ten year US Treasury yields increased from 3.11% on the 13th of June to over 4.40%, Japanese government bond yields rose 50 basis points, and bunds rose 70 basis points. - Based on BIS quarterly review 2003.",
+              "shortDescription": "Bond markets had their largest selloff since 1994 in 2003. US dollar, Yen and Euro yields all increased sharply with little direct impact to equity markets over this timeframe."
+            },
+            {
+              "id": "scenario002",
+              "name": "2007 - 2008 Oil Price Rise",
+              "groupName": "Global Macro",
+              "startDate": "2007-01-18",
+              "endDate": "2008-06-27",
+              "definition": "Oil prices experienced a sustained rise from around $40/bbl in January 2007 to just less than $150/bbl on July 15, 2008. This rise coincided with substantial falls in global equity markets.",
+              "shortDescription": "Oil prices experienced a sustained rise from around $40/bbl in January 2007 to just less than $150/bbl on July 15, 2008."
+            }
+          ],
+          "scenarioType": "HistoricalEvent",
+          "scenarioTypeName": "Pre-defined Scenarios",
+          "metadata": {
+            "requestId": "4ef8a117-8e56-4c87-b2fc-1dad956b8c43",
+            "time": "2025-09-28T15:28:59.0658838Z"
+          }
+        }
+      },
+      "ResponseCalculateReturnExample1": {
+        "summary": "Success (No Messages)",
+        "description": "Response when all investment and portfolio holding identifiers passed in the request are valid.",
+        "value": {
+          "scenarios": [
+            {
+              "id": "scenario001",
+              "name": "2003 Bond Selloff",
+              "definition": "Bond markets had their largest selloff since 1994 in 2003.  US dollar, Yen and Euro yields all increased sharply.  Ten year US Treasury yields increased from 3.11% on the 13th of June to over 4.40%,Japanese government bond yields rose 50 basis points, and bunds rose 70 basis points.  Yields continued to rise at longer maturities until late August in Japan.  There was little direct impact on equity markets over this timeframe,and the relative price of financial institutions did not move substantially as compared to the rest of the equity market.  - Based on BIS quarterly review 2003.",
+              "calculateType": "cumulative",
+              "shockDate": "2026-05-31",
+              "duration": 81,
+              "durationUnit": "Days",
+              "investments": [
+                {
+                  "identifiers": {
+                    "performanceId": "0P0000K9KG"
+                  },
+                  "returns": [
+                    {
+                      "date": "2026-06-01",
+                      "value": 0
+                    },
+                    {
+                      "date": "2026-06-02",
+                      "value": 0.305384956800991
+                    },
+                    {
+                      "date": "2026-06-03",
+                      "value": -0.612313962725097
+                    }
+                  ],
+                  "assetCoverage": 94.17150115966797
+                },
+                {
+                  "identifiers": {
+                    "performanceId": "0P00002W78"
+                  },
+                  "returns": [
+                    {
+                      "date": "2026-06-01",
+                      "value": 0
+                    },
+                    {
+                      "date": "2026-06-02",
+                      "value": -0.037535779399001
+                    },
+                    {
+                      "date": "2026-06-03",
+                      "value": -1.702422890837796
+                    }
+                  ],
+                  "assetCoverage": 100
+                }
+              ],
+              "portfolios": [
+                {
+                  "name": "Portfolio1",
+                  "returns": [
+                    {
+                      "date": "2026-06-01",
+                      "value": 0
+                    },
+                    {
+                      "date": "2026-06-02",
+                      "value": 0.073910864659799
+                    },
+                    {
+                      "date": "2026-06-03",
+                      "value": -0.637526515305742
+                    }
+                  ],
+                  "assetCoverage": 60.000178527832034
+                }
+              ]
+            }
+          ],
+          "metadata": {
+            "securityReference": [
+              {
+                "performanceId": "0P0000K9KG",
+                "name": "American Beacon International Eq Y",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2009-08-03"
+              },
+              {
+                "performanceId": "0P00002W78",
+                "name": "PGIM Jennison Growth Z",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "1996-04-15"
+              },
+              {
+                "performanceId": "0P00018MDC",
+                "name": "Oakmark Institutional",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2016-11-30"
+              },
+              {
+                "performanceId": "0P0000Z6OO",
+                "name": "Payden Floating Rate Investor",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2013-11-11"
+              }
+            ],
+            "requestId": "19ee7903-2f4e-419a-8ee5-46698bb65aa3",
+            "time": "2026-07-16T09:22:13.83068Z"
+          }
+        }
+      },
+      "ResponseCalculateReturnExample2": {
+        "summary": "Success (With Messages)",
+        "description": "Response when data is not returned for some of the identifiers passed in the request. This may be because the identifier is invalid or the account is not entitled for the identifier.",
+        "value": {
+          "scenarios": [
+            {
+              "id": "scenario001",
+              "name": "2003 Bond Selloff",
+              "definition": "Bond markets had their largest selloff since 1994 in 2003.  US dollar, Yen and Euro yields all increased sharply.  Ten year US Treasury yields increased from 3.11% on the 13th of June to over 4.40%,Japanese government bond yields rose 50 basis points, and bunds rose 70 basis points.  Yields continued to rise at longer maturities until late August in Japan.  There was little direct impact on equity markets over this timeframe,and the relative price of financial institutions did not move substantially as compared to the rest of the equity market.  - Based on BIS quarterly review 2003.",
+              "calculateType": "cumulative",
+              "shockDate": "2026-05-31",
+              "duration": 81,
+              "durationUnit": "Days",
+              "investments": [
+                {
+                  "identifiers": {
+                    "performanceId": "0P00002W78"
+                  },
+                  "returns": [
+                    {
+                      "date": "2026-06-01",
+                      "value": 0
+                    },
+                    {
+                      "date": "2026-06-02",
+                      "value": -0.037535779399001
+                    },
+                    {
+                      "date": "2026-06-03",
+                      "value": -1.702422890837796
+                    }
+                  ],
+                  "assetCoverage": 100
+                }
+              ]
+            }
+          ],
+          "metadata": {
+            "messages": [
+              {
+                "investments": [
+                  {
+                    "id": "0P0000K9K",
+                    "idType": "performanceId"
+                  }
+                ],
+                "portfolios": [
+                  {
+                    "name": "Portfolio1",
+                    "holdings": [
+                      {
+                        "identifier": "0P00018MD",
+                        "identifierType": "PerformanceId"
+                      }
+                    ]
+                  }
+                ],
+                "type": "Warning",
+                "message": "Lookup : Invalid investments.",
+                "code": "404.common.125"
+              },
+              {
+                "portfolios": [
+                  {
+                    "name": "Portfolio1"
+                  }
+                ],
+                "type": "Warning",
+                "message": "Data is not available for this selection.",
+                "code": "400.api.006"
+              }
+            ],
+            "securityReference": [
+              {
+                "performanceId": "0P00002W78",
+                "name": "PGIM Jennison Growth Z",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "1996-04-15"
+              },
+              {
+                "performanceId": "0P0000Z6OO",
+                "name": "Payden Floating Rate Investor",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2013-11-11"
+              }
+            ],
+            "requestId": "3a4205f5-cdbb-483f-bacd-fbc510d689ef",
+            "time": "2026-07-16T09:25:12.4105935Z"
+          }
+        }
+      },
+      "ResponseGenerateMetricsExample1": {
+        "summary": "Success (No Messages)",
+        "description": "Response when all investment and portfolio holding identifiers passed in the request are valid. A benchmark was not specified in request, therefore Alpha and Tracking error were not returned.",
+        "value": {
+          "scenarios": [
+            {
+              "id": "scenario001",
+              "name": "2003 Bond Selloff",
+              "definition": "Bond markets had their largest selloff since 1994 in 2003.  US dollar, Yen and Euro yields all increased sharply.  Ten year US Treasury yields increased from 3.11% on the 13th of June to over 4.40%,Japanese government bond yields rose 50 basis points, and bunds rose 70 basis points.  Yields continued to rise at longer maturities until late August in Japan.  There was little direct impact on equity markets over this timeframe,and the relative price of financial institutions did not move substantially as compared to the rest of the equity market.  - Based on BIS quarterly review 2003.",
+              "shockDate": "2026-05-31",
+              "duration": 81,
+              "durationUnit": "Days",
+              "investments": [
+                {
+                  "identifiers": {
+                    "performanceId": "0P0000K9KG"
+                  },
+                  "performanceMetrics": {
+                    "return": 3.388971831602761,
+                    "maxDrawdown": -4.391533292763716,
+                    "standardDeviation": 10.945449828326424,
+                    "peakofMaxDrawdownFromToday": 5,
+                    "valleyofMaxDrawdownFromToday": 18,
+                    "maxDrawdownDuration": 13,
+                    "recoveryDuration": 25,
+                    "recoveryFromToday": 43
+                  },
+                  "assetCoverage": 94
+                },
+                {
+                  "identifiers": {
+                    "performanceId": "0P00002W78"
+                  },
+                  "performanceMetrics": {
+                    "return": 5.232881152614999,
+                    "maxDrawdown": -6.046317683947211,
+                    "standardDeviation": 18.94736327230838,
+                    "peakofMaxDrawdownFromToday": 33,
+                    "valleyofMaxDrawdownFromToday": 57,
+                    "maxDrawdownDuration": 24,
+                    "recoveryDuration": 10,
+                    "recoveryFromToday": 67
+                  },
+                  "assetCoverage": 100
+                }
+              ],
+              "portfolios": [
+                {
+                  "name": "Portfolio1",
+                  "performanceMetrics": {
+                    "return": 1.707928385768054,
+                    "maxDrawdown": -2.432267483640316,
+                    "standardDeviation": 8.315741097695101,
+                    "peakofMaxDrawdownFromToday": 32,
+                    "valleyofMaxDrawdownFromToday": 54,
+                    "maxDrawdownDuration": 22,
+                    "recoveryDuration": 9,
+                    "recoveryFromToday": 63
+                  },
+                  "assetCoverage": 60
+                }
+              ]
+            }
+          ],
+          "metadata": {
+            "securityReference": [
+              {
+                "performanceId": "0P0000K9KG",
+                "name": "American Beacon International Eq Y",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2009-08-03"
+              },
+              {
+                "performanceId": "0P00002W78",
+                "name": "PGIM Jennison Growth Z",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "1996-04-15"
+              },
+              {
+                "performanceId": "0P00018MDC",
+                "name": "Oakmark Institutional",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2016-11-30"
+              },
+              {
+                "performanceId": "0P0000Z6OO",
+                "name": "Payden Floating Rate Investor",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2013-11-11"
+              }
+            ],
+            "requestId": "d014f709-1bb2-490d-bd34-a578ec9d6ca2",
+            "time": "2026-07-16T09:43:14.9410341Z"
+          }
+        }
+      },
+      "ResponseGenerateMetricsExample2": {
+        "summary": "Success (With Messages)",
+        "description": "Response when data is not returned for some of the identifiers passed in the request. This may be because the identifier is invalid or the account is not entitled for the identifier. A benchmark was not specified in request, therefore Alpha and Tracking error were not returned.",
+        "value": {
+          "scenarios": [
+            {
+              "id": "scenario001",
+              "name": "2003 Bond Selloff",
+              "definition": "Bond markets had their largest selloff since 1994 in 2003.  US dollar, Yen and Euro yields all increased sharply.  Ten year US Treasury yields increased from 3.11% on the 13th of June to over 4.40%,Japanese government bond yields rose 50 basis points, and bunds rose 70 basis points.  Yields continued to rise at longer maturities until late August in Japan.  There was little direct impact on equity markets over this timeframe,and the relative price of financial institutions did not move substantially as compared to the rest of the equity market.  - Based on BIS quarterly review 2003.",
+              "shockDate": "2026-05-31",
+              "duration": 81,
+              "durationUnit": "Days",
+              "investments": [
+                {
+                  "identifiers": {
+                    "performanceId": "0P0000K9KG"
+                  },
+                  "performanceMetrics": {
+                    "return": 3.388971831602761,
+                    "maxDrawdown": -4.391533292763716,
+                    "standardDeviation": 10.945449828326424,
+                    "peakofMaxDrawdownFromToday": 5,
+                    "valleyofMaxDrawdownFromToday": 18,
+                    "maxDrawdownDuration": 13,
+                    "recoveryDuration": 25,
+                    "recoveryFromToday": 43
+                  },
+                  "assetCoverage": 94
+                }
+              ],
+              "portfolios": [
+                {
+                  "name": "Portfolio1",
+                  "performanceMetrics": {
+                    "return": 2.774644027400086,
+                    "maxDrawdown": -4.060516984609109,
+                    "standardDeviation": 13.859568496158502,
+                    "peakofMaxDrawdownFromToday": 4,
+                    "valleyofMaxDrawdownFromToday": 54,
+                    "maxDrawdownDuration": 50,
+                    "recoveryDuration": 10,
+                    "recoveryFromToday": 64
+                  },
+                  "assetCoverage": 100
+                },
+                {
+                  "name": "Portfolio2",
+                  "performanceMetrics": {
+                    "return": 4.341427122549546,
+                    "maxDrawdown": -3.459415075869288,
+                    "standardDeviation": 12.871086741556887,
+                    "peakofMaxDrawdownFromToday": 4,
+                    "valleyofMaxDrawdownFromToday": 54,
+                    "maxDrawdownDuration": 50,
+                    "recoveryDuration": 7,
+                    "recoveryFromToday": 61
+                  },
+                  "assetCoverage": 100
+                }
+              ]
+            }
+          ],
+          "metadata": {
+            "messages": [
+              {
+                "investments": [
+                  {
+                    "id": "0P00002W7",
+                    "idType": "PerformanceId"
+                  }
+                ],
+                "portfolios": [
+                  {
+                    "name": "Portfolio1",
+                    "holdings": [
+                      {
+                        "identifier": "0P0000Z6",
+                        "identifierType": "PerformanceId"
+                      }
+                    ]
+                  }
+                ],
+                "type": "Warning",
+                "message": "Lookup : Invalid investments.",
+                "code": "404.common.125"
+              }
+            ],
+            "securityReference": [
+              {
+                "performanceId": "0P0000K9KG",
+                "name": "American Beacon International Eq Y",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2009-08-03"
+              },
+              {
+                "performanceId": "0P00018MDC",
+                "name": "Oakmark Institutional",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2016-11-30"
+              },
+              {
+                "performanceId": "0P0000GD33",
+                "name": "American Funds American Mutual F-2",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2008-08-05"
+              },
+              {
+                "performanceId": "0P000001RB",
+                "name": "Donaldson Co Inc",
+                "baseCurrency": "USD",
+                "type": "ST"
+              }
+            ],
+            "requestId": "a8fc4e79-b665-4ff6-b509-b73f5efe3418",
+            "time": "2026-07-16T09:58:56.2072856Z"
+          }
+        }
+      },
+      "ResponseGenerateMetricsExample3": {
+        "summary": "Response when Benchmark Passed in Request",
+        "description": "A benchmark was specified in request, therefore Alpha and Tracking error were returned.",
+        "value": {
+          "scenarios": [
+            {
+              "id": "scenario001",
+              "name": "2003 Bond Selloff",
+              "definition": "Bond markets had their largest selloff since 1994 in 2003.  US dollar, Yen and Euro yields all increased sharply.  Ten year US Treasury yields increased from 3.11% on the 13th of June to over 4.40%,Japanese government bond yields rose 50 basis points, and bunds rose 70 basis points.  Yields continued to rise at longer maturities until late August in Japan.  There was little direct impact on equity markets over this timeframe,and the relative price of financial institutions did not move substantially as compared to the rest of the equity market.  - Based on BIS quarterly review 2003.",
+              "shockDate": "2026-05-31",
+              "duration": 81,
+              "durationUnit": "Days",
+              "investments": [
+                {
+                  "identifiers": {
+                    "performanceId": "0P0000K9KG"
+                  },
+                  "performanceMetrics": {
+                    "return": 3.388971831602761,
+                    "maxDrawdown": -4.391533292763716,
+                    "standardDeviation": 10.945449828326424,
+                    "trackingError": 10.656884363274786,
+                    "alpha": 1.369332573542059,
+                    "peakofMaxDrawdownFromToday": 5,
+                    "valleyofMaxDrawdownFromToday": 18,
+                    "maxDrawdownDuration": 13,
+                    "recoveryDuration": 25,
+                    "recoveryFromToday": 43
+                  },
+                  "assetCoverage": 94
+                },
+                {
+                  "identifiers": {
+                    "performanceId": "0P00002W78"
+                  },
+                  "performanceMetrics": {
+                    "return": 5.232881152614999,
+                    "maxDrawdown": -6.046317683947211,
+                    "standardDeviation": 18.94736327230838,
+                    "trackingError": 3.983231944891073,
+                    "alpha": 0.70477301073768,
+                    "peakofMaxDrawdownFromToday": 33,
+                    "valleyofMaxDrawdownFromToday": 57,
+                    "maxDrawdownDuration": 24,
+                    "recoveryDuration": 10,
+                    "recoveryFromToday": 67
+                  },
+                  "assetCoverage": 100
+                }
+              ],
+              "portfolios": [
+                {
+                  "name": "Portfolio1",
+                  "performanceMetrics": {
+                    "return": 1.707928385768054,
+                    "maxDrawdown": -2.432267483640316,
+                    "standardDeviation": 8.315741097695101,
+                    "trackingError": 8.535819472280373,
+                    "alpha": -0.256406604312875,
+                    "peakofMaxDrawdownFromToday": 32,
+                    "valleyofMaxDrawdownFromToday": 54,
+                    "maxDrawdownDuration": 22,
+                    "recoveryDuration": 9,
+                    "recoveryFromToday": 63
+                  },
+                  "assetCoverage": 60
+                }
+              ]
+            }
+          ],
+          "metadata": {
+            "securityReference": [
+              {
+                "performanceId": "0P0000K9KG",
+                "name": "American Beacon International Eq Y",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2009-08-03"
+              },
+              {
+                "performanceId": "0P00002W78",
+                "name": "PGIM Jennison Growth Z",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "1996-04-15"
+              },
+              {
+                "performanceId": "0P00018MDC",
+                "name": "Oakmark Institutional",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2016-11-30"
+              },
+              {
+                "performanceId": "0P0000Z6OO",
+                "name": "Payden Floating Rate Investor",
+                "baseCurrency": "USD",
+                "type": "FO",
+                "inceptionDate": "2013-11-11"
+              }
+            ],
+            "requestId": "d014f709-1bb2-490d-bd34-a578ec9d6ca2",
+            "time": "2026-07-16T09:43:14.9410341Z"
+          }
+        }
+      },
+      "ResponseBadRequestExample1": {
+        "summary": "Max Portfolios Exceeded",
+        "value": {
+          "statusCode": 400,
+          "errorCode": "413.scenarioAnalysis.002",
+          "message": "Scenario Analysis is only supported with 2 portfolios.",
+          "requestId": "c5f31dab-c8f5-4b28-9885-fddacd94b3c3"
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Scenario Analysis"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com",
+      "description": "Americas"
+    },
+    {
+      "url": "https://www.apac-api.morningstar.com",
+      "description": "APAC"
+    },
+    {
+      "url": "https://www.emea-api.morningstar.com",
+      "description": "EMEA"
+    }
+  ]
+}

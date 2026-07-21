@@ -1,0 +1,1915 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Risk Analytics",
+    "version": "1.0.0",
+    "description": "Use the API to:\n* Calculate performance attribution, risk attribution, and active exposure for investment(s) based on predefined risk models.\n* Forecast the impact on investments if market and macroeconomic events reoccur by using predefined and custom scenarios.\n* Retrieve scenario metadata including IDs that you use with other endpoints.\n\nTo retrieve the risk model IDs used with the endpoints in this API, use the [Risk Models API](/apis/investment-analysis/risk-models)."
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "attribution"
+    },
+    {
+      "name": "decomposition"
+    },
+    {
+      "name": "exposures"
+    },
+    {
+      "name": "scenario analysis"
+    },
+    {
+      "name": "macro shock scenarios"
+    },
+    {
+      "name": "market shock scenarios"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/risk-analytics/v1",
+      "description": "PROD"
+    },
+    {
+      "url": "https://www.us-uat-api.morningstar.com/risk-analytics/v1",
+      "description": "UAT"
+    },
+    {
+      "url": "https://www.emea-api.morningstar.com/risk-analytics/v1",
+      "description": "PROD"
+    },
+    {
+      "url": "https://www.emea-uat-api.morningstar.com/risk-analytics/v1",
+      "description": "UAT"
+    },
+    {
+      "url": "https://www.apac-api.morningstar.com/risk-analytics/v1",
+      "description": "PROD"
+    },
+    {
+      "url": "https://www.apac-uat-api.morningstar.com/risk-analytics/v1",
+      "description": "UAT"
+    }
+  ],
+  "paths": {
+    "/attribution/calculate": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate performance attribution for a portfolio over a defined time period",
+        "description": "Based on a specific risk model, calculate performance attribution for a specific portfolio or fund over a time period of between 3 months and 15 years.  The response enables you to attribute  returns to specific factors.",
+        "operationId": "post_attribution",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Attribution"
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": [
+          "attribution"
+        ]
+      }
+    },
+    "/decomposition/calculate-by-factors": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate risk attribution for a portfolio over a defined time period",
+        "description": "Based on a specific risk model, calculate risk attribution for a specific portfolio over a time period of between 3 months and 15 years.  The response enables you to attribute portfolio risk to specific factors.",
+        "operationId": "post_decomposition_by_factors",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculateByFactors"
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": [
+          "decomposition"
+        ]
+      }
+    },
+    "/decomposition/calculate-by-holdings": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate risk attribution for the individual holdings in a portfolio over a defined time period",
+        "description": "Based on a specific risk model, calculate risk attribution for a specific portfolio over a time period of between 3 months and 15 years.  The response enables you to attribute portfolio risk to specific holdings.",
+        "operationId": "post_decomposition_by_holdings",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculateByHoldings"
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": [
+          "decomposition"
+        ]
+      }
+    },
+    "/exposures/snapshot": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate active exposure for investment",
+        "description": "Based on a specific risk model, calculate active exposure for a specific investment or portfolio. The most recent data will be returned.",
+        "operationId": "post_snapshot",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExposureSnapshot"
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": [
+          "exposures"
+        ]
+      }
+    },
+    "/scenario-analysis/scenarios": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Get all predefined scenarios",
+        "description": "Get a list of all predefined scenarios. The response will include the unique ID for each scenario.  You use the ID with other endpoints to return information based on that scenario. Only scenarios that your account is enabled for will be returned.",
+        "operationId": "get_scenarios",
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Unique identifier of a risk model",
+            "name": "risk-model-id",
+            "schema": {
+              "type": "string",
+              "default": "morn-glb-eq-usd"
+            }
+          }
+        ],
+        "tags": [
+          "scenario analysis"
+        ]
+      }
+    },
+    "/scenario-analysis/calculate-cumulative-return": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate cumulative returns forecast for funds based on  predefined or custom macro schock scenarios",
+        "description": "Based on a specific risk model and predefined or custom macro shock scenarios, calculate daily cumulative returns forecast for funds.  You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request. The response enables you to understand the impact on fund cumulative returns if significant market events are repeated.",
+        "operationId": "post_cumulative",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ScenarioAnalysisModel"
+        },
+        "tags": [
+          "scenario analysis"
+        ]
+      }
+    },
+    "/scenario-analysis/calculate-drawdown": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate drawdown forecast for a fund based on a predefined or custom macro shock scenarios",
+        "description": "Based on a specific risk model and predefined or custom macro shock scenarios, calculate daily drawdown forecast for a fund. You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request. The response enables you to understand the impact on the fund drawdown if significant market events are repeated.",
+        "operationId": "post_drawdown",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ScenarioAnalysisModel"
+        },
+        "tags": [
+          "scenario analysis"
+        ]
+      }
+    },
+    "/scenario-analysis/calculate-metrics": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate metrics forecast for a fund based on predefined or custom macro shock scenarios",
+        "description": "Based on a specific risk model and predefined or custom macro shock scenarios, calculate metrics forecast for a fund. You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request. The response enables you to understand the impact on the fund metrics if significant market events are repeated.",
+        "operationId": "post_metrics",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Metrics"
+              }
+            }
+          },
+          "required": true
+        },
+        "tags": [
+          "scenario analysis"
+        ]
+      }
+    },
+    "/scenario-analysis/calculate-period-return": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate returns forecast for a fund based on predefined or custom macro shock scenarios",
+        "description": "Based on a specific risk model and predefined or custom macro shock scenarios, calculate  returns for a fund during different time periods.  You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request.  The response enables you to understand the impact on fund returns if significant market events are repeated.",
+        "operationId": "post_period_return",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ScenarioAnalysisModel"
+        },
+        "tags": [
+          "scenario analysis"
+        ]
+      }
+    },
+    "/scenario-analysis/calculate-ten-k-growth": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate growth forecast for a $10k investment in a fund based on a predefined or custom macro/market shock scenarios",
+        "description": "Based on a specific risk model and predefined or custom macro/market shock scenarios, calculate growth for a $10k investment in a fund. You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request. The response returns a series investment results forecasts. The forecast frequency depends on the type of scenario -  predefined (daily); macro shock (monthly) market shock (weekly).",
+        "operationId": "post_ten_k_growth",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ScenarioAnalysisModel"
+        },
+        "tags": [
+          "scenario analysis"
+        ]
+      }
+    },
+    "/macro-shock-scenarios": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Get all custom macro shock scenarios",
+        "description": "Get a list of all your custom macro shock scenarios, as well as custom scenarios that have been shared with you. The response will include the unique ID for each scenario.  You use the ID with other endpoints to return information based on that scenario.",
+        "operationId": "get_macro_shock_scenario",
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Unique identifier of a new scenario",
+            "name": "is-new",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "tags": [
+          "macro shock scenarios"
+        ]
+      }
+    },
+    "/macro-shock-scenarios/{scenario_id}": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Get details for a custom macro shock scenario",
+        "description": "Get details for a specific custom macro shock scenario. The response will return the scenario name, macrvariables, and shocked scale values.",
+        "operationId": "get_macro_shock_scenario_item",
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "description": "Unique identifier of a scenario",
+            "name": "scenario_id",
+            "schema": {
+              "type": "string",
+              "default": "MOPRE00000000000000001"
+            }
+          },
+          {
+            "required": false,
+            "in": "query",
+            "description": "Unique identifier of a risk model",
+            "name": "risk-model-id",
+            "schema": {
+              "type": "string",
+              "default": "morn-glb-eq-usd"
+            }
+          }
+        ],
+        "tags": [
+          "macro shock scenarios"
+        ]
+      }
+    },
+    "/macro-shock-scenarios/{scenario_id}/calculate-forecast-return": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "401": {
+            "description": "Authentication required."
+          },
+          "403": {
+            "description": "You do not have access permission.."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal server error."
+          }
+        },
+        "summary": "Calculate returns forecast for a fund based on a custom macro shock scenario",
+        "description": "Based on a specific risk model and custom macro shock scenario, calculate returns forecast for a fund. The response will include data for the historical returns, return during and after shock, and expected volatility.",
+        "operationId": "post_macro_forecast",
+        "parameters": [
+          {
+            "required": true,
+            "in": "path",
+            "description": "Unique identifier of a scenario",
+            "name": "scenario_id",
+            "schema": {
+              "type": "string",
+              "default": "MOPRE00000000000000001"
+            }
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ForecastReturnModel"
+        },
+        "tags": [
+          "macro shock scenarios"
+        ]
+      }
+    },
+    "/market-shock-scenarios": {
+      "get": {
+        "tags": [
+          "market shock scenarios"
+        ],
+        "summary": "Get all custom market shock scenarios",
+        "description": "Get a list of all your custom market shock scenarios. The response will include the unique ID for each scenario.  You use the ID with other endpoints to return information based on that scenario. ",
+        "operationId": "get_market_shock_scenario",
+        "parameters": [
+          {
+            "name": "is-new",
+            "in": "query",
+            "description": "Use new ID",
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          },
+          "401": {
+            "description": "The user is not authenticated.",
+            "content": {}
+          },
+          "403": {
+            "description": "The user don't have permission.",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found.",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/market-shock-scenarios/{scenario_id}": {
+      "get": {
+        "tags": [
+          "market shock scenarios"
+        ],
+        "summary": "Get details for a custom market shock scenario",
+        "description": "Get details for a specific custom market shock scenario. The response will return the  target market index and market movement number.",
+        "operationId": "get_market_shock_scenario_item",
+        "parameters": [
+          {
+            "name": "scenario_id",
+            "in": "path",
+            "description": "Unique identifier of a scenario",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "MA000000000000"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          },
+          "401": {
+            "description": "The user is not authenticated.",
+            "content": {}
+          },
+          "403": {
+            "description": "The user don't have permission.",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found.",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/market-shock-scenarios/{scenario_id}/calculate-forecast-return": {
+      "post": {
+        "tags": [
+          "market shock scenarios"
+        ],
+        "summary": "Calculate returns forecast for a fund based on a custom market shock scenario",
+        "description": "Based on a specific risk model and custom market shock scenario, calculate returns forecast for a fund.  The response will return the mean forecasted return, volatility, VaR and CVaR.",
+        "operationId": "post_market_forecast",
+        "parameters": [
+          {
+            "name": "scenario_id",
+            "in": "path",
+            "description": "Unique identifier of a scenario scenario.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "MAPRE00000000000000001"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForecastReturnModel"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {}
+          },
+          "401": {
+            "description": "The user is not authenticated.",
+            "content": {}
+          },
+          "403": {
+            "description": "The user don't have permission.",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found.",
+            "content": {}
+          },
+          "500": {
+            "description": "Internal Server Error.",
+            "content": {}
+          }
+        },
+        "x-codegen-request-body-name": "payload"
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "ParseError": {
+        "description": "When a mask can't be parsed"
+      },
+      "MaskError": {
+        "description": "When any error occurs on mask"
+      },
+      "RiskModelException": {
+        "description": "Don't remove this function"
+      }
+    },
+    "requestBodies": {
+      "ScenarioAnalysisModel": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ScenarioAnalysisModel"
+            }
+          }
+        },
+        "required": true
+      },
+      "ForecastReturnModel": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ForecastReturnModel"
+            }
+          }
+        },
+        "required": true
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Funds": {
+        "properties": {
+          "portfolios": {
+            "type": "array",
+            "example": [
+              {
+                "id": "test1",
+                "holdings": [
+                  {
+                    "id": "0P0000058R",
+                    "type": "PerformanceId",
+                    "weight": 60
+                  },
+                  {
+                    "id": "0P000001RB",
+                    "type": "PerformanceId",
+                    "weight": 40
+                  }
+                ]
+              },
+              {
+                "id": "test2",
+                "holdings": [
+                  {
+                    "id": "0P0000058R",
+                    "type": "PerformanceId",
+                    "weight": 50
+                  },
+                  {
+                    "id": "FOUSA00CFZ",
+                    "type": "SecurityId",
+                    "weight": 50
+                  }
+                ]
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Holdings"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "Holdings": {
+        "required": [
+          "id"
+        ],
+        "properties": {
+          "holdings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/holding"
+            }
+          },
+          "id": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "holding": {
+        "properties": {
+          "identifier": {
+            "type": "string"
+          },
+          "weight": {
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "CalculateByHoldings": {
+        "required": [
+          "benchmark",
+          "endDate",
+          "investment",
+          "startDate"
+        ],
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "The start date of the time period to perform the attribution analysis.",
+            "example": "2018-01-01T00:00:00.000Z"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "The end date of the time period to perform the attribution analysis.",
+            "example": "2018-06-30T00:00:00.000Z"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency of holdings",
+            "example": "USD"
+          },
+          "investment": {
+            "description": "",
+            "example": {
+              "id": "model-portfolio1",
+              "type": "portfolio"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/idType"
+              }
+            ]
+          },
+          "benchmark": {
+            "description": "",
+            "example": {
+              "id": "model-portfolio2",
+              "type": "portfolio"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/idType"
+              }
+            ]
+          },
+          "portfolios": {
+            "type": "array",
+            "example": [
+              {
+                "id": "model-portfolio1",
+                "holdings": [
+                  {
+                    "identifier": "0P0000058R",
+                    "identifierType": "PerformanceId",
+                    "weight": 60
+                  },
+                  {
+                    "identifier": "0P000001RB",
+                    "identifierType": "PerformanceId",
+                    "weight": 40
+                  }
+                ]
+              },
+              {
+                "id": "model-portfolio2",
+                "holdings": [
+                  {
+                    "identifier": "0P0000058R",
+                    "identifierType": "PerformanceId",
+                    "weight": 50
+                  },
+                  {
+                    "identifier": "0P000001RB",
+                    "identifierType": "PerformanceId",
+                    "weight": 50
+                  }
+                ]
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Holdings"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "idType": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "CalculateByFactors": {
+        "required": [
+          "benchmark",
+          "endDate",
+          "investment",
+          "riskModelId",
+          "startDate"
+        ],
+        "properties": {
+          "riskModelId": {
+            "type": "string",
+            "example": "morn-glb-eq-usd"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "The start date of the time period to perform the attribution analysis.",
+            "example": "2018-01-01T00:00:00.000Z"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "The end date of the time period to perform the attribution analysis.",
+            "example": "2018-06-30T00:00:00.000Z"
+          },
+          "assetClass": {
+            "type": "string",
+            "description": "Options of Risk Assets: allHoldings, allEquityHoldings, equityHoldingsWithRiskExposure.",
+            "example": "allHoldings"
+          },
+          "investment": {
+            "description": "",
+            "example": {
+              "id": "model-portfolio1",
+              "type": "portfolio"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/idType"
+              }
+            ]
+          },
+          "benchmark": {
+            "description": "",
+            "example": {
+              "id": "model-portfolio2",
+              "type": "portfolio"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/idType"
+              }
+            ]
+          },
+          "portfolios": {
+            "type": "array",
+            "example": [
+              {
+                "id": "model-portfolio1",
+                "holdings": [
+                  {
+                    "identifier": "0P0000058R",
+                    "identifierType": "PerformanceId",
+                    "weight": 60
+                  },
+                  {
+                    "identifier": "0P000001RB",
+                    "identifierType": "PerformanceId",
+                    "weight": 40
+                  }
+                ]
+              },
+              {
+                "id": "model-portfolio2",
+                "holdings": [
+                  {
+                    "identifier": "0P0000058R",
+                    "identifierType": "PerformanceId",
+                    "weight": 50
+                  },
+                  {
+                    "identifier": "0P000001RB",
+                    "identifierType": "PerformanceId",
+                    "weight": 50
+                  }
+                ]
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Holdings"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "Attribution": {
+        "required": [
+          "endDate",
+          "riskModelId",
+          "startDate"
+        ],
+        "properties": {
+          "riskModelId": {
+            "type": "string",
+            "example": "morn-glb-eq-usd"
+          },
+          "startDate": {
+            "type": "string",
+            "description": "The start date of the time period to perform the attribution analysis.",
+            "example": "2017-01-01T00:00:00.000Z"
+          },
+          "endDate": {
+            "type": "string",
+            "description": "The end date of the time period to perform the attribution analysis.",
+            "example": "2017-06-30T00:00:00.000Z"
+          },
+          "investment": {
+            "example": {
+              "id": "0P000001RB",
+              "type": ""
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/idType"
+              }
+            ]
+          },
+          "benchmark": {
+            "example": {
+              "id": "0P0000058R",
+              "type": ""
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/idType"
+              }
+            ]
+          },
+          "frequency": {
+            "type": "string",
+            "example": "single",
+            "enum": [
+              "single",
+              "monthly",
+              "quarterly",
+              "annually"
+            ]
+          },
+          "annualized": {
+            "type": "boolean"
+          }
+        },
+        "type": "object"
+      },
+      "Metrics": {
+        "required": [
+          "riskModelId",
+          "scenarios"
+        ],
+        "properties": {
+          "riskModelId": {
+            "type": "string",
+            "example": "morn-glb-eq-usd"
+          },
+          "investments": {
+            "type": "array",
+            "description": "Investment id refers to performance ids, identifying the funds to be analysis on, separated by \",\" when passing multiple.",
+            "example": [
+              {
+                "id": "0P0000058R",
+                "type": "PerformanceId"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/investment"
+            }
+          },
+          "scenarios": {
+            "type": "array",
+            "description": "Scenario id, internal pre-defined scenario identities(scenario001 ~ scenario009), separated by \",\" when passing multiple scenarios.",
+            "example": [
+              "scenario001",
+              "scenario002"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "benchmark": {
+            "description": "The benchmark's securityId for the analysing fund. Which will be required for calculating the alpha and tracking error.",
+            "example": {
+              "id": "NB"
+            },
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/benchmark"
+              }
+            ]
+          },
+          "portfolios": {
+            "type": "array",
+            "example": [
+              {
+                "id": "abc",
+                "holdings": [
+                  {
+                    "identifier": "0P0000058R",
+                    "weight": 60
+                  },
+                  {
+                    "identifier": "0P000001RB",
+                    "weight": 40
+                  }
+                ]
+              },
+              {
+                "id": "123",
+                "holdings": [
+                  {
+                    "identifier": "0P0000058R",
+                    "weight": 50
+                  },
+                  {
+                    "identifier": "0P000001RB",
+                    "weight": 50
+                  }
+                ]
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Holdings"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "investment": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "benchmark": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ScenarioAnalysisModel": {
+        "required": [
+          "riskModelId",
+          "scenarios"
+        ],
+        "properties": {
+          "riskModelId": {
+            "type": "string",
+            "example": "morn-glb-eq-usd"
+          },
+          "investments": {
+            "type": "array",
+            "description": "Investment id refers to performance ids, identifying the funds to be analysis on, separated by \",\" when passing multiple.",
+            "example": [
+              {
+                "id": "0P0000058R",
+                "type": "PerformanceId"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/investment"
+            }
+          },
+          "scenarios": {
+            "type": "array",
+            "description": "Scenario id, internal pre-defined scenario identities(scenario001 ~ scenario009), separated by \",\" when passing multiple scenarios.",
+            "example": [
+              "scenario001",
+              "scenario002"
+            ],
+            "items": {
+              "type": "string"
+            }
+          },
+          "portfolios": {
+            "type": "array",
+            "example": [
+              {
+                "id": "abc",
+                "holdings": [
+                  {
+                    "id": "0P0000058R",
+                    "weight": 60
+                  },
+                  {
+                    "id": "0P000001RB",
+                    "weight": 40
+                  }
+                ]
+              },
+              {
+                "id": "123",
+                "holdings": [
+                  {
+                    "id": "0P0000058R",
+                    "weight": 50
+                  },
+                  {
+                    "id": "0P000001RB",
+                    "weight": 50
+                  }
+                ]
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Holdings"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "MacroShockScenario": {
+        "required": [
+          "forecastMonth",
+          "macroVariables",
+          "riskModelId",
+          "scenarioName",
+          "shockLength"
+        ],
+        "properties": {
+          "riskModelId": {
+            "type": "string",
+            "example": "morn-glb-eq-usd"
+          },
+          "forecastMonth": {
+            "type": "integer",
+            "example": 12
+          },
+          "macroVariables": {
+            "type": "array",
+            "example": [
+              {
+                "id": "GDP",
+                "name": "GDP",
+                "shocked": true,
+                "values": [
+                  {
+                    "date": "2017-09-30T00:00:00.000Z",
+                    "value": 0.99
+                  },
+                  {
+                    "date": "2017-10-31T00:00:00.000Z",
+                    "value": 0.97
+                  },
+                  {
+                    "date": "2017-11-30T00:00:00.000Z",
+                    "value": 0.98
+                  }
+                ]
+              },
+              {
+                "id": "MCOILWTICO",
+                "name": "MCOILWTICO",
+                "shocked": true,
+                "values": [
+                  {
+                    "date": "2017-09-30T00:00:00.000Z",
+                    "value": 1.2
+                  },
+                  {
+                    "date": "2017-10-31T00:00:00.000Z",
+                    "value": 1.4
+                  },
+                  {
+                    "date": "2017-11-30T00:00:00.000Z",
+                    "value": 1.3
+                  }
+                ]
+              },
+              {
+                "id": "PCE",
+                "name": "PCE",
+                "shocked": false,
+                "values": []
+              },
+              {
+                "id": "INDPRO",
+                "name": "INDPRO",
+                "shocked": false,
+                "values": []
+              },
+              {
+                "id": "MVEONWMVBSNNCB",
+                "name": "MVEONWMVBSNNCB",
+                "shocked": false,
+                "values": []
+              },
+              {
+                "id": "NCBCMDPNWMV",
+                "name": "NCBCMDPNWMV",
+                "shocked": false,
+                "values": []
+              },
+              {
+                "id": "CPIAUCSL",
+                "name": "CPIAUCSL",
+                "shocked": false,
+                "values": []
+              },
+              {
+                "id": "CPIAUCSL",
+                "name": "CPIAUCSL",
+                "shocked": false,
+                "values": []
+              },
+              {
+                "id": "CPIAUCSL",
+                "name": "CPIAUCSL",
+                "shocked": false,
+                "values": []
+              },
+              {
+                "id": "CPIAUCSL",
+                "name": "CPIAUCSL",
+                "shocked": false,
+                "values": []
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/macroVariables"
+            }
+          },
+          "shockLength": {
+            "type": "integer",
+            "example": 3
+          },
+          "scenarioName": {
+            "type": "string",
+            "example": "scenario_test"
+          }
+        },
+        "type": "object"
+      },
+      "macroVariables": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "shocked": {
+            "type": "boolean"
+          },
+          "values": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/macroVariablesScales"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "macroVariablesScales": {
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "MarketShockScenario": {
+        "required": [
+          "indexId",
+          "indexName",
+          "indexTicker",
+          "movement",
+          "riskModelId",
+          "scenarioName",
+          "timeHorizonInWeeks"
+        ],
+        "properties": {
+          "riskModelId": {
+            "type": "string",
+            "example": "morn-glb-eq-usd"
+          },
+          "scenarioName": {
+            "type": "string",
+            "example": "scenario_test"
+          },
+          "movement": {
+            "type": "number",
+            "example": 0.3
+          },
+          "timeHorizonInWeeks": {
+            "type": "integer",
+            "example": 10
+          },
+          "indexId": {
+            "type": "string",
+            "example": "0P00001MK8"
+          },
+          "indexName": {
+            "type": "string",
+            "example": "SPDR® S&P 500 ETF"
+          },
+          "indexTicker": {
+            "type": "string",
+            "example": "SPY"
+          }
+        },
+        "type": "object"
+      },
+      "ForecastReturnModel": {
+        "required": [
+          "investments",
+          "riskModelId"
+        ],
+        "properties": {
+          "riskModelId": {
+            "type": "string",
+            "example": "morn-glb-eq-usd"
+          },
+          "investments": {
+            "type": "array",
+            "description": "Investment id refers to performance ids, identifying the funds to be analysis on, separated by \",\" when passing multiple.",
+            "example": [
+              {
+                "id": "0P000001RB",
+                "type": ""
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/idType"
+            }
+          },
+          "portfolios": {
+            "type": "array",
+            "example": [
+              {
+                "id": "model-portfolio1",
+                "holdings": [
+                  {
+                    "identifier": "0P0000058R",
+                    "identifierType": "PerformanceId",
+                    "weight": 60
+                  },
+                  {
+                    "identifier": "0P000001RB",
+                    "identifierType": "PerformanceId",
+                    "weight": 40
+                  }
+                ]
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/Holdings"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "fund": {
+        "properties": {
+          "0P00002RQE": {
+            "$ref": "#/components/schemas/fund_arg0"
+          },
+          "0P00002YGZ": {
+            "$ref": "#/components/schemas/fund_arg1"
+          },
+          "0P00002R14": {
+            "$ref": "#/components/schemas/fund_arg2"
+          },
+          "0P0000W983": {
+            "$ref": "#/components/schemas/fund_arg3"
+          },
+          "0P0000JRGE": {
+            "$ref": "#/components/schemas/fund_arg4"
+          },
+          "0P0000JSEF": {
+            "$ref": "#/components/schemas/fund_arg5"
+          },
+          "0P00002V9O": {
+            "$ref": "#/components/schemas/fund_arg6"
+          },
+          "0P00002PNA": {
+            "$ref": "#/components/schemas/fund_arg8"
+          },
+          "0P0000NR34": {
+            "$ref": "#/components/schemas/fund_arg10"
+          },
+          "0P00002RPI": {
+            "$ref": "#/components/schemas/fund_arg11"
+          },
+          "0P00002DB3": {
+            "$ref": "#/components/schemas/fund_arg12"
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg0": {
+        "properties": {
+          "minimum": {
+            "type": "number",
+            "example": 0.05
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.05
+          },
+          "minimumInitialInvestment": {
+            "type": "number",
+            "example": 0.025
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg1": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number",
+            "example": 0.01
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg2": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number",
+            "example": 0.002
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg3": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg4": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number",
+            "example": 0.0025
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg5": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number",
+            "example": 0.0025
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg6": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number",
+            "example": 0.05
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg8": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number",
+            "example": 0.025
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg10": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg11": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number",
+            "example": 0.025
+          }
+        },
+        "type": "object"
+      },
+      "fund_arg12": {
+        "properties": {
+          "minimum": {
+            "type": "number"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.2
+          },
+          "minimumInitialInvestment": {
+            "type": "number"
+          }
+        },
+        "type": "object"
+      },
+      "assetClasses": {
+        "properties": {
+          "0P00001GK1": {
+            "$ref": "#/components/schemas/asset_arg0"
+          },
+          "0P00001GK7": {
+            "$ref": "#/components/schemas/asset_arg1"
+          },
+          "0P000099ZL": {
+            "$ref": "#/components/schemas/asset_arg13"
+          }
+        },
+        "type": "object"
+      },
+      "asset_arg0": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Large Cap Growth Stocks"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.8
+          },
+          "minimum": {
+            "type": "number",
+            "example": 0.03
+          },
+          "targetAllocation": {
+            "type": "number",
+            "example": 0.5
+          }
+        },
+        "type": "object"
+      },
+      "asset_arg1": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Large Cap Value Stocks"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.7
+          },
+          "minimum": {
+            "type": "number",
+            "example": 0.03
+          },
+          "targetAllocation": {
+            "type": "number",
+            "example": 0.2
+          }
+        },
+        "type": "object"
+      },
+      "asset_arg13": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Cash Equivalents"
+          },
+          "maximum": {
+            "type": "number",
+            "example": 0.5
+          },
+          "minimum": {
+            "type": "number"
+          },
+          "targetAllocation": {
+            "type": "number",
+            "example": 0.3
+          }
+        },
+        "type": "object"
+      },
+      "constraints": {
+        "properties": {},
+        "type": "object"
+      },
+      "setting": {
+        "properties": {
+          "misfitAversion": {
+            "type": "integer",
+            "example": 1
+          },
+          "managerRiskAversion": {
+            "type": "integer",
+            "example": 1
+          },
+          "maximumTrackingError": {
+            "type": "number",
+            "example": 0.03
+          },
+          "roundingDecimalPlaces": {
+            "type": "integer",
+            "example": 9
+          }
+        },
+        "type": "object"
+      },
+      "ExposureSnapshot": {
+        "required": [
+          "benchmarkIds",
+          "investmentId",
+          "riskModelId"
+        ],
+        "properties": {
+          "riskModelId": {
+            "type": "string",
+            "example": "morn-glb-eq-usd"
+          },
+          "investmentId": {
+            "type": "string",
+            "example": "0P0000058R"
+          },
+          "benchmarkIds": {
+            "type": "array",
+            "example": [
+              "0P000001RB",
+              "0P00002Y8D"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "type": "object"
+      },
+      "APC_optimizer": {
+        "properties": {
+          "funds": {
+            "$ref": "#/components/schemas/fund"
+          },
+          "assetClasses": {
+            "$ref": "#/components/schemas/assetClasses"
+          },
+          "constraints": {
+            "$ref": "#/components/schemas/constraints"
+          },
+          "calculationCurrency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "returnPeriodStartDate": {
+            "type": "string",
+            "example": "2016-12-01T00:00:00.000Z"
+          },
+          "returnPeriodEndDate": {
+            "type": "string",
+            "example": "2019-12-01T00:00:00.000Z"
+          },
+          "settings": {
+            "$ref": "#/components/schemas/setting"
+          }
+        },
+        "type": "object"
+      },
+      "APC_Return_Base": {
+        "properties": {
+          "fundIds": {
+            "type": "array",
+            "example": [
+              {
+                "id": "0P00002RQE"
+              },
+              {
+                "id": "0P00002YGZ"
+              },
+              {
+                "id": "0P00002R14"
+              },
+              {
+                "id": "0P0000W983"
+              },
+              {
+                "id": "0P0000JRGE"
+              },
+              {
+                "id": "0P0000JSEF"
+              },
+              {
+                "id": "0P00002V9O"
+              },
+              {
+                "id": "0P00002PNA"
+              },
+              {
+                "id": "0P0000NR34"
+              },
+              {
+                "id": "0P00002RPI"
+              },
+              {
+                "id": "0P00002DB3"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/rbsa_fund"
+            }
+          },
+          "assetClassIds": {
+            "type": "array",
+            "example": [
+              {
+                "id": "0P00001GK1"
+              },
+              {
+                "id": "0P00001GK7"
+              },
+              {
+                "id": "0P000099ZL"
+              }
+            ],
+            "items": {
+              "$ref": "#/components/schemas/rbsa_fund"
+            }
+          },
+          "calculationCurrency": {
+            "type": "string",
+            "example": "USD"
+          },
+          "returnPeriodStartDate": {
+            "type": "string",
+            "example": "2016-12-01T00:00:00.000Z"
+          },
+          "returnPeriodEndDate": {
+            "type": "string",
+            "example": "2019-12-01T00:00:00.000Z"
+          }
+        },
+        "type": "object"
+      },
+      "rbsa_fund": {
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "type": "object"
+      }
+    }
+  }
+}

@@ -1,0 +1,383 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Morningstar Agent API",
+    "description": "The Morningstar Agent API makes it easy to retrieve answers from our content, without the need to build your own sync and ingestion pipelines. By connecting your generative AI application to the Morningstar Agent, you’ll be tapping into the same engine that powers Morningstar’s in-product generative AI capabilities to benefit from continuous enhancements implemented by our domain experts.",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/morningstar-agent/v1/status": {
+      "get": {
+        "tags": [
+          "Morningstar Agent"
+        ],
+        "summary": "Status",
+        "operationId": "status_morningstar_agent_v1_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/morningstar-agent/v1/ready": {
+      "get": {
+        "tags": [
+          "Morningstar Agent"
+        ],
+        "summary": "Ready",
+        "operationId": "ready_morningstar_agent_v1_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "additionalProperties": {
+                    "type": "string"
+                  },
+                  "type": "object",
+                  "title": "Response Ready Morningstar Agent V1 Ready Get"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/morningstar-agent/v1/run": {
+      "post": {
+        "tags": [
+          "Morningstar Agent"
+        ],
+        "summary": "Run",
+        "description": "Run the agent and return the final response (blocking).",
+        "operationId": "run_morningstar_agent_v1_run_post",
+        "parameters": [
+          {
+            "name": "x-session-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "UIM login session. Passed through to downstream requests, not created or managed by the agent.",
+              "title": "X-Session-Id"
+            },
+            "description": "UIM login session. Passed through to downstream requests, not created or managed by the agent."
+          },
+          {
+            "name": "x-context-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A thread of individual interactions representing a set of questions/instructions to the agent. Omit to start a new context.",
+              "title": "X-Context-Id"
+            },
+            "description": "A thread of individual interactions representing a set of questions/instructions to the agent. Omit to start a new context."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RunResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/morningstar-agent/v1/run/stream": {
+      "post": {
+        "tags": [
+          "Morningstar Agent"
+        ],
+        "summary": "Run Stream",
+        "description": "Run the agent and stream tokens back as SSE.",
+        "operationId": "run_stream_morningstar_agent_v1_run_stream_post",
+        "parameters": [
+          {
+            "name": "x-session-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "UIM login session. Passed through to downstream requests, not created or managed by the agent.",
+              "title": "X-Session-Id"
+            },
+            "description": "UIM login session. Passed through to downstream requests, not created or managed by the agent."
+          },
+          {
+            "name": "x-context-id",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "A thread of individual interactions representing a set of questions/instructions to the agent. Omit to start a new context.",
+              "title": "X-Context-Id"
+            },
+            "description": "A thread of individual interactions representing a set of questions/instructions to the agent. Omit to start a new context."
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RunRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "RunRequest": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "thinking_mode": {
+            "$ref": "#/components/schemas/ThinkingMode",
+            "default": "standard"
+          }
+        },
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "title": "RunRequest"
+      },
+      "RunResponse": {
+        "properties": {
+          "response": {
+            "type": "string",
+            "title": "Response"
+          },
+          "token_usage": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/TokenUsage"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "type": "object",
+        "required": [
+          "response"
+        ],
+        "title": "RunResponse"
+      },
+      "ThinkingMode": {
+        "type": "string",
+        "enum": [
+          "fast",
+          "standard",
+          "deep"
+        ],
+        "title": "ThinkingMode"
+      },
+      "TokenUsage": {
+        "properties": {
+          "input_tokens": {
+            "type": "integer",
+            "title": "Input Tokens",
+            "default": 0
+          },
+          "output_tokens": {
+            "type": "integer",
+            "title": "Output Tokens",
+            "default": 0
+          },
+          "total_tokens": {
+            "type": "integer",
+            "title": "Total Tokens",
+            "default": 0
+          },
+          "tools_called": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Tools Called",
+            "default": []
+          }
+        },
+        "type": "object",
+        "title": "TokenUsage"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://agents.morningstar.com"
+    }
+  ]
+}

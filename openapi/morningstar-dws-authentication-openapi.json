@@ -1,0 +1,162 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Authentication API",
+    "x-changelog": [
+      {
+        "date": "2026-05-14",
+        "changes": [
+          "Corrected error in EMEA server URL. Updated \"eu\" to \"emea\"."
+        ]
+      }
+    ],
+    "description": "API for authentication and token retrieval.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com",
+      "description": "Americas Production"
+    },
+    {
+      "url": "https://www.apac-api.morningstar.com",
+      "description": "APAC Production"
+    },
+    {
+      "url": "https://www.emea-api.morningstar.com",
+      "description": "EMEA Production"
+    }
+  ],
+  "paths": {
+    "/token/oauth": {
+      "post": {
+        "summary": "Generate a JSON Web Token (JWT)",
+        "description": "Authenticates a client using HTTP Basic Auth and returns a signed JWT\nbearer token for use in subsequent API requests.\n\nPass your credentials as a Base64-encoded `username:password` string in\nthe `Authorization` header. The returned `access_token` should be included\nas a `Bearer` token in the `Authorization` header of all authenticated requests.",
+        "operationId": "createToken",
+        "tags": [
+          "Token"
+        ],
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ResponseToken"
+          },
+          "401": {
+            "$ref": "#/components/responses/ErrorResponse401"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "responses": {
+      "ResponseToken": {
+        "description": "200: OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OutputToken"
+            },
+            "examples": {
+              "ResponseTokenExample1": {
+                "$ref": "#/components/examples/ResponseTokenExample1"
+              }
+            }
+          }
+        }
+      },
+      "ErrorResponse401": {
+        "description": "401: Unauthorized",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorResponse"
+            },
+            "examples": {
+              "ErrorResponseExample1": {
+                "$ref": "#/components/examples/ErrorResponseExample1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "basicAuth": {
+        "type": "http",
+        "scheme": "basic",
+        "description": "Base64-encoded `username:password` passed in the `Authorization` header."
+      }
+    },
+    "schemas": {
+      "OutputToken": {
+        "type": "object",
+        "description": "A successful authentication response containing a JWT bearer token.",
+        "required": [
+          "access_token",
+          "expires_in",
+          "token_type"
+        ],
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "description": "The signed JWT to use as a `Bearer` token in subsequent authenticated requests.",
+            "examples": [
+              "eyJhbGciOiJ example"
+            ]
+          },
+          "expires_in": {
+            "type": "integer",
+            "description": "The number of seconds until the token expires. After expiry, request a new token.",
+            "examples": [
+              3599
+            ]
+          },
+          "token_type": {
+            "type": "string",
+            "description": "The token type. Always `Bearer`.",
+            "examples": [
+              "Bearer"
+            ]
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "description": "A response body returned when an error occurs.",
+        "required": [
+          "error_message"
+        ],
+        "properties": {
+          "error_message": {
+            "type": "string",
+            "description": "A human-readable description of the error.",
+            "examples": [
+              "Incorrect username or password"
+            ]
+          }
+        }
+      }
+    },
+    "examples": {
+      "ResponseTokenExample1": {
+        "summary": "Output Authorization Token",
+        "value": {
+          "access_token": "Rhci5jb20vaW50ZXJuYWxfY29tcGFueV9pZCI6IkNsaWVudDAiLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9kYXRhX3JvbGUiOlsiU2VhcmNoLkFDSURfU2VydmljZSJdLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9jb25maWdfaWQiOiJnbG9iYWxfYWRtaW5fYXBpcy4wMDFkMDAwMDAweDU5YjcuMjA2OTg0MzZfd2twbGMxaDciLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9tc3Rhcl9pZCI6IkZFMTUzOEM4LTg0RDMtNDlCRC05MzNELTdGQkEyOERGODAzMyIsImh0dHBzOi8vbW9ybmluZ3N0YXIuY29tL2VtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaHR0cHM6Ly9tb3JuaW5nc3Rhci5jb20vcGFzc3dvcmRDaGFuZ2VSZXF1aXJlZCI6ZmFsc2UsImh0dHBzOi8vbW9ybmluZ3N0YXIuY29tL3VpbV9yb2xlcyI6IkVBTVMsSU5WRVNUTUVOVEFQSV9JTlRFUk5BTF9TRVJWSUNFX0FDQ09VTlQiLCJpc3MiOiJodHRwczovL2xvZ2luLXByb2QubW9ybmluZ3N0YXIuY29tLyIsInN1YiI6ImF1dGgwfEZFMTUzOEM4LTg0RDMtNDlCRC05MzNELTdGQkEyOERGODAzMyIsImF1ZCI6WyJodHRwczovL2F1dGgwLWF3c3By",
+          "expires_in": 3599,
+          "token_type": "Bearer"
+        }
+      },
+      "ErrorResponseExample1": {
+        "summary": "401: Unauthorized",
+        "value": {
+          "error_message": "Incorrect username or password"
+        }
+      }
+    }
+  }
+}

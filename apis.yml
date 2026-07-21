@@ -1,0 +1,426 @@
+aid: morningstar
+url: https://raw.githubusercontent.com/api-evangelist/morningstar/refs/heads/main/apis.yml
+name: Morningstar
+kind: company
+description: Morningstar, Inc. (Nasdaq MORN) is a Chicago-based investment research
+  and financial market data company selling fund and equity data, analyst research,
+  ratings, indexes, and portfolio analytics to advisors, asset managers, and fintechs.
+  Its developer portal at developer.morningstar.com documents two large API families
+  - Direct Web Services and Dynamic Services APIs - delivered as regional REST bases
+  (us/emea/apac-api.morningstar.com) secured with OAuth 2.0 tokens, plus a Market
+  Data Web Services API for real-time, delayed, and end-of-day pricing, a WebSocket
+  Streaming API for Level 1/Level 2 market data, ByAllAccounts account aggregation,
+  and an emerging MCP/agent surface. Documentation and OpenAPI 3.x specs are fully
+  public, but credentials are sales-gated through Morningstar onboarding - there is
+  no self-serve signup. Morningstar remains an independent public company and owns
+  PitchBook, DBRS (credit ratings), and ByAllAccounts.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Financial
+- Market Data
+- Investing
+- Stocks
+- Funds
+- Real-Time
+- Reference Data
+- Portfolio Analytics
+- Research
+- Indexes
+created: '2026-07-21'
+modified: '2026-07-21'
+specificationVersion: '0.19'
+apis:
+- aid: morningstar:morningstar-market-data-web-services-api
+  name: Morningstar Market Data Web Services API
+  tags:
+  - Market Data
+  - Real-Time
+  - End of Day
+  - Corporate Actions
+  - Indexes
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/apis/market-data/overview
+  properties:
+  - url: https://developer.morningstar.com/content/apis/market-data/overview/api-md-apis-overview.md
+    type: Documentation
+  - url: https://developer.morningstar.com/content/apis/market-data/price-quote/api-md-price-quotes.md
+    type: Documentation
+  - url: https://developer.morningstar.com/content/apis/market-data/time-sales/api-md-time-sales.md
+    type: Documentation
+  - url: https://developer.morningstar.com/content/apis/market-data/end-of-day-ohlcv/api-md-eod-ohlcv.md
+    type: Documentation
+  description: On-demand access to Morningstar's financial market data over HTTP in
+    XML and JSON - real-time, delayed, and end-of-day pricing, price and quote, time
+    and sales, price history, OHLCV, corporate actions, index constituents and statistics,
+    exchange information, new and delisted listings, alerts, and search. Authentication
+    is IP-allowlisted username/password on client-specific servers, so no public base
+    URL is documented; streaming is offered as an add-on service.
+- aid: morningstar:morningstar-authentication-api
+  name: Morningstar Authentication API
+  tags:
+  - Authentication
+  - OAuth
+  - Tokens
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/api-utilities/authentication-api/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/documentation/get-started/authentication/get-started-authentication.md
+    type: Documentation
+  - url: openapi/morningstar-dws-authentication-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-authorization-tokens-openapi.json
+    type: OpenAPI
+  description: OAuth 2.0 token issuance for all Morningstar APIs - POST /token/oauth
+    with Basic credentials returns a bearer token valid for 60 minutes, usable against
+    the regional Americas, EMEA, and APAC API bases.
+- aid: morningstar:morningstar-time-series-api
+  name: Morningstar Time Series API
+  tags:
+  - Time Series
+  - Prices
+  - Returns
+  - Historical Data
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/time-series---sync/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/time-series---sync/overview/time-series-sync-overview.md
+    type: Documentation
+  - url: openapi/morningstar-dws-time-series-sync-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-dws-time-series-async-openapi.json
+    type: OpenAPI
+  description: Direct Web Services time series data - historical prices, cumulative
+    return, growth, dividend, and other calculated series for securities and managed
+    investments, offered in synchronous and asynchronous request styles across regional
+    bases.
+- aid: morningstar:morningstar-screener-api
+  name: Morningstar Screener APIs
+  tags:
+  - Screener
+  - Equities
+  - Funds
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/screener---equities/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/screener---equities/overview/screener-equities-overview.md
+    type: Documentation
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/screener---managed-investments/overview/screener-managed-investments-overview.md
+    type: Documentation
+  - url: openapi/morningstar-dws-screener-equities-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-dws-screener-managed-investments-openapi.json
+    type: OpenAPI
+  description: Screen global equities and managed investments (funds, ETFs) against
+    Morningstar data points, ratings, and classifications, returning display-ready
+    result sets for advisor and investor applications.
+- aid: morningstar:morningstar-investment-details-api
+  name: Morningstar Investment Details APIs
+  tags:
+  - Securities
+  - Equities
+  - Funds
+  - Reference Data
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/investment-details---equities/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/investment-details---equities/overview/investment-details-sync-overview.md
+    type: Documentation
+  - url: openapi/morningstar-dws-investment-details-equities-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-dws-investment-details-managed-investments-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-dws-investment-details-equities-async-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-dws-investment-details-managed-investments-async-openapi.json
+    type: OpenAPI
+  description: Deep security-level data for equities and managed investments - profiles,
+    ratings, performance, holdings, fees, and hundreds of Morningstar data points -
+    in synchronous and asynchronous variants with very large published OpenAPI 3.1
+    contracts.
+- aid: morningstar:morningstar-investment-list-api
+  name: Morningstar Investment List API
+  tags:
+  - Lists
+  - Securities
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/investment-list/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/investment-list/overview/investment-list-api-overview.md
+    type: Documentation
+  - url: openapi/morningstar-dws-investment-list-openapi.json
+    type: OpenAPI
+  description: Retrieve curated and client-defined investment lists with associated
+    Morningstar data points for rendering list-driven experiences.
+- aid: morningstar:morningstar-portfolio-analysis-api
+  name: Morningstar Portfolio Analysis APIs
+  tags:
+  - Portfolio Analytics
+  - X-Ray
+  - Risk Score
+  - Performance
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/portfolio-x-ray/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/portfolio-x-ray/overview/x-ray-api-overview.md
+    type: Documentation
+  - url: openapi/morningstar-dws-portfolio-x-ray-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-dws-portfolio-performance-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-dws-portfolio-risk-score-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-dws-portfolio-optimizer-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-dws-portfolio-hypothetical-performance-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-portfolio-analysis-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-portfolio-risk-score-us-openapi.json
+    type: OpenAPI
+  description: Portfolio calculation engines as APIs - X-Ray decomposition, performance,
+    hypothetical performance, optimizer, and the Morningstar Portfolio Risk Score -
+    across Direct Web Services and the US Dynamic Services portfolio-analysis endpoints.
+- aid: morningstar:morningstar-ai-insights-api
+  name: Morningstar AI Insights API
+  tags:
+  - AI
+  - Insights
+  - Research
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/ai-insights/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/ai-insights/overview/ai-insights-overview.md
+    type: Documentation
+  - url: openapi/morningstar-dws-ai-insights-openapi.json
+    type: OpenAPI
+  description: Asynchronous generative summaries and insights over Morningstar data
+    and research, available in Americas and APAC/EMEA regions.
+- aid: morningstar:morningstar-scenario-analysis-api
+  name: Morningstar Scenario Analysis API
+  tags:
+  - Risk
+  - Scenarios
+  - Analytics
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/scenario-analysis/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/scenario-analysis/overview/scenario-analysis-overview.md
+    type: Documentation
+  - url: openapi/morningstar-dws-scenario-analysis-openapi.json
+    type: OpenAPI
+  description: Stress-test portfolios against historical and hypothetical market scenarios
+    using Morningstar risk engines.
+- aid: morningstar:morningstar-risk-profiler-api
+  name: Morningstar Risk Profiler API
+  tags:
+  - Risk
+  - Profiling
+  - FinaMetrica
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/risk-profiler/overview
+  baseURL: https://www.us-api.morningstar.com/risk-profiler
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/risk-profiler/overview/risk-profiler-overview-new.md
+    type: Documentation
+  - url: openapi/morningstar-dws-risk-profiler-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-risk-profiler-us-openapi.json
+    type: OpenAPI
+  description: Investor risk-tolerance profiling built on the FinaMetrica psychometric
+    methodology, returning risk scores and profiles for suitability workflows.
+- aid: morningstar:morningstar-universe-api
+  name: Morningstar Universe API
+  tags:
+  - Universe
+  - Reference Data
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/api-utilities/universe-api/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/api-utilities/universe-api/overview/utility-universe-overview.md
+    type: Documentation
+  - url: openapi/morningstar-dws-universe-openapi.json
+    type: OpenAPI
+  description: Utility API for resolving the investment universes and identifiers
+    available to an account across Direct Web Services.
+- aid: morningstar:morningstar-financial-planning-apis
+  name: Morningstar Financial Planning APIs
+  tags:
+  - Financial Planning
+  - Households
+  - Portfolios
+  - Retirement
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/apis/financial-planning/overview
+  baseURL: https://www.us-api.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/apis/financial-planning/overview/financial-planning-overview.md
+    type: Documentation
+  - url: openapi/morningstar-households-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-household-members-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-portfolios-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-retirement-plan-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-ocr-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-report-retrieval-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-report-files-manager-us-openapi.json
+    type: OpenAPI
+  description: US financial-planning building blocks from the Dynamic Services APIs
+    family - households, household members, portfolios, retirement plan lookup and
+    benchmark fees, statement OCR, and report retrieval/file management.
+- aid: morningstar:morningstar-investment-analysis-apis
+  name: Morningstar Investment Analysis APIs
+  tags:
+  - Securities
+  - Research
+  - Risk Analytics
+  - Screener
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/apis/investment-analysis/overview
+  baseURL: https://www.us-api.morningstar.com/ec/v1
+  properties:
+  - url: https://developer.morningstar.com/content/apis/investment-analysis/overview/investment-analysis-overview.md
+    type: Documentation
+  - url: openapi/morningstar-securities-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-securities-global-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-screener-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-autocomplete-us-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-research-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-investor-pulse-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-risk-analytics-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-risk-models-openapi.json
+    type: OpenAPI
+  - url: openapi/morningstar-usage-statistics-openapi.json
+    type: OpenAPI
+  description: Dynamic Services investment-analysis endpoints - securities data (US
+    and global ecint), screening, autocomplete, editorial research, Investor Pulse,
+    risk analytics, risk models, and enterprise-components usage statistics.
+- aid: morningstar:morningstar-byallaccounts-api
+  name: Morningstar ByAllAccounts API
+  tags:
+  - Account Aggregation
+  - Wealth
+  - Data Aggregation
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/apis/account-aggregation/byallaccounts/overview
+  baseURL: https://www.byallaccounts.net/api/v1
+  properties:
+  - url: https://developer.morningstar.com/content/apis/account-aggregation/byallaccounts/overview/BAA_RESTAPI_Overview_March_24_2022_PM.md
+    type: Documentation
+  - url: openapi/morningstar-byallaccounts-openapi.json
+    type: OpenAPI
+  description: REST account-aggregation API from Morningstar's ByAllAccounts business,
+    aggregating held-away investment account data for wealth platforms, also reachable
+    through the us-api.morningstar.com aggapi gateway.
+- aid: morningstar:morningstar-enterprise-component-apis
+  name: Morningstar Enterprise Component APIs
+  tags:
+  - Components
+  - Editorial
+  - Security Details
+  - Time Series
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/enterprise-component-apis/about
+  baseURL: https://www.us-api.morningstar.com/ec/v1
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/enterprise-component-apis/about/about-enterprise-component-apis.md
+    type: Documentation
+  - url: https://developer.morningstar.com/content/documentation/enterprise-component-apis/editorial/overview/editorial-overview.md
+    type: Documentation
+  - url: https://developer.morningstar.com/content/documentation/enterprise-component-apis/security-details/overview/security-details-overview.md
+    type: Documentation
+  description: APIs backing Morningstar's embeddable enterprise components - editorial
+    and news search, security details and comparison, investment screener and find-similar,
+    time series (price, dividend, growth, cumulative return), documents, cost calculator,
+    goal analysis, and APAC/EMEA X-Ray.
+- aid: morningstar:morningstar-streaming-api
+  name: Morningstar Streaming API
+  tags:
+  - Streaming
+  - WebSocket
+  - Real-Time
+  - Level 2
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://github.com/Morningstar/morningstar-streaming-client
+  properties:
+  - url: https://github.com/Morningstar/morningstar-streaming-client
+    type: SDK
+  description: WebSocket-based real-time market data streaming with Level 1 quote
+    and Level 2 market-by-price subscriptions, documented publicly through Morningstar's
+    official .NET streaming client library; endpoints are account-specific and provided
+    during onboarding.
+- aid: morningstar:morningstar-snapshot-api
+  name: Morningstar Snapshot API
+  tags:
+  - Market Data
+  - Snapshots
+  - Real-Time
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://github.com/Morningstar/morningstar-snapshot-client
+  properties:
+  - url: https://github.com/Morningstar/morningstar-snapshot-client
+    type: SDK
+  description: On-demand Level 1 market data snapshots over HTTPS with OAuth 2.0,
+    documented publicly through Morningstar's official .NET snapshot client library;
+    endpoints are account-specific and provided during onboarding.
+- aid: morningstar:morningstar-agent-api
+  name: Morningstar Agent API
+  tags:
+  - AI
+  - Agents
+  - MCP
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://developer.morningstar.com/direct-web-services/documentation/morningstar-ai-integrations/morningstar-agent/overview
+  baseURL: https://agents.morningstar.com
+  properties:
+  - url: https://developer.morningstar.com/content/documentation/morningstar-ai-integrations/morningstar-agent/overview/morningstar-agent-overview.md
+    type: Documentation
+  - url: https://developer.morningstar.com/content/documentation/morningstar-ai-integrations/morningstar-mcp-server/overview/morningstar-mcp-server.md
+    type: Documentation
+  - url: openapi/morningstar-agent-openapi.json
+    type: OpenAPI
+  description: Morningstar's AI integration surface - the Morningstar Agent API at
+    agents.morningstar.com plus an MCP server exposing datapoint lookup and editorial
+    research tools to AI agents, with a published agent design playbook.
+common:
+- type: Website
+  url: https://www.morningstar.com/
+- type: Portal
+  url: https://developer.morningstar.com
+- type: Documentation
+  url: https://developer.morningstar.com/direct-web-services
+- type: GitHubOrganization
+  url: https://github.com/Morningstar
+- type: LinkedIn
+  url: https://www.linkedin.com/company/morningstar
+- type: TermsOfService
+  url: https://www.morningstar.com/user-agreement
+- type: PrivacyPolicy
+  url: https://www.morningstar.com/company/privacy-policy
+- type: StatusPage
+  url: https://status.morningstar.com/
+- type: Support
+  url: https://www.morningstar.com/business/products/direct-web-services/contact
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

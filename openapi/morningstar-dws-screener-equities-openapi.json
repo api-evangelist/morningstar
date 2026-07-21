@@ -1,0 +1,3727 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "1.0",
+    "x-changelog": [
+      {
+        "date": "2026-07-06",
+        "changes": [
+          "Updated schemas to point to data dictionary for input data point values instead of listing all available data points as enums."
+        ]
+      },
+      {
+        "date": "2026-04-20",
+        "changes": [
+          "Added base URL for Americas to list of servers."
+        ]
+      }
+    ],
+    "title": "Screener - Equities",
+    "description": "\n## Overview\n\nThe Screener API for equities is designed to support advanced, criteria-based screening. It enables you to retrieve highly-tailored datasets quickly and efficiently.\n\n\n## Request Limits\n\nMaximum of **100 data points** per request.\n\n\n## Authentication\n\nRetrieve tokens required to authorize calls to the API. See [documentation](https://developer.morningstar.com/direct-web-services/documentation/api-utilities/authentication-api/overview)."
+  },
+  "tags": [
+    {
+      "name": "Screener"
+    },
+    {
+      "name": "Data Points"
+    }
+  ],
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com",
+      "description": "Americas"
+    },
+    {
+      "url": "https://www.apac-api.morningstar.com",
+      "description": "APAC"
+    },
+    {
+      "url": "https://www.emea-api.morningstar.com",
+      "description": "EMEA"
+    }
+  ],
+  "paths": {
+    "/direct-web-services/v1/screeners/equities": {
+      "post": {
+        "summary": "Query equity investments and return selected data points.",
+        "operationId": "queryEquityInvestments",
+        "tags": [
+          "Screener"
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/ScreenerRequest"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ScreenerResponse"
+          },
+          "400": {
+            "$ref": "#/components/responses/ResponseStatus400ResponseScreener"
+          },
+          "500": {
+            "$ref": "#/components/responses/ResponseStatus500ResponseScreener"
+          }
+        }
+      }
+    },
+    "/direct-web-services/v1/screeners/equities/data-points": {
+      "get": {
+        "operationId": "listEquityDataPoints",
+        "tags": [
+          "Data Points"
+        ],
+        "summary": "List all equity data points.",
+        "description": "Returns the list of equity data points supported for screener queries. Metadata returned for each entry includes the operators supported.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ResponseDataPoints"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests."
+      }
+    },
+    "requestBodies": {
+      "ScreenerRequest": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestEquitiesScreener"
+            },
+            "examples": {
+              "Basic Query - Equals": {
+                "$ref": "#/components/examples/ScreenerRequestExample1"
+              },
+              "Basic Query - In": {
+                "$ref": "#/components/examples/ScreenerRequestExample2"
+              },
+              "Basic Query - Date Range": {
+                "$ref": "#/components/examples/ScreenerRequestExample3"
+              },
+              "Basic Query Number Range": {
+                "$ref": "#/components/examples/ScreenerRequestExample4"
+              },
+              "Compound Query - AND": {
+                "$ref": "#/components/examples/ScreenerRequestExample5"
+              },
+              "Compound Query - OR": {
+                "$ref": "#/components/examples/ScreenerRequestExample6"
+              },
+              "Compound Query - NOT": {
+                "$ref": "#/components/examples/ScreenerRequestExample7"
+              },
+              "Nested Compound Query - OR then AND": {
+                "$ref": "#/components/examples/ScreenerRequestExample8"
+              },
+              "Nested Compound Query - OR then AND Deeply Nested": {
+                "$ref": "#/components/examples/ScreenerRequestExample9"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "ScreenerResponse": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseEquitiesScreener"
+            },
+            "examples": {
+              "Basic Query - Equals": {
+                "$ref": "#/components/examples/ScreenerResponseExample1"
+              },
+              "Basic Query - In": {
+                "$ref": "#/components/examples/ScreenerResponseExample2"
+              },
+              "Basic Query - Date Range": {
+                "$ref": "#/components/examples/ScreenerResponseExample3"
+              },
+              "Basic Query - Number Range": {
+                "$ref": "#/components/examples/ScreenerResponseExample4"
+              },
+              "Compound Query - AND": {
+                "$ref": "#/components/examples/ScreenerResponseExample5"
+              },
+              "Compound Query - OR": {
+                "$ref": "#/components/examples/ScreenerResponseExample6"
+              },
+              "Compound Query - NOT": {
+                "$ref": "#/components/examples/ScreenerResponseExample7"
+              },
+              "Nested Compound Query - OR then AND": {
+                "$ref": "#/components/examples/ScreenerResponseExample8"
+              },
+              "Nested Compound Query - OR then AND Deeply Nested": {
+                "$ref": "#/components/examples/ScreenerResponseExample9"
+              }
+            }
+          }
+        }
+      },
+      "ResponseDataPoints": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseDataPoints"
+            },
+            "examples": {
+              "Equities Data Points": {
+                "$ref": "#/components/examples/DataPointsResponseExample1"
+              }
+            }
+          }
+        }
+      },
+      "ResponseStatus400ResponseScreener": {
+        "description": "400: Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OutputError"
+            },
+            "examples": {
+              "Example1": {
+                "$ref": "#/components/examples/ResponseStatus400ScreenerExample1"
+              }
+            }
+          }
+        }
+      },
+      "ResponseStatus500ResponseScreener": {
+        "description": "500: Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OutputError"
+            },
+            "examples": {
+              "Example1": {
+                "$ref": "#/components/examples/ResponseStatus500ScreenerExample1"
+              }
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "ScreenerRequestExample1": {
+        "summary": "Basic Query - Equals",
+        "value": {
+          "scope": {
+            "shareclassInformation.exchangeCode": "XPAR"
+          },
+          "query": {
+            "shareClassInformation.symbol": "MSES"
+          },
+          "dataPoints": [
+            "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+            "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+            "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+            "shortInterest.percentageChanged",
+            "companyInformation.sic",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+            "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+            "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+            "monthlyStandardDeviation.arithmeticMean24Month",
+            "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+            "dividendResidualRiskAndReturnSensitivity.beta24Month",
+            "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+            "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+            "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+            "shareClassInformation.symbol",
+            "factorProfile.styleFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+            "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+            "shareClassInformation.investmentStatus",
+            "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+            "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+            "dividendResidualRiskAndReturnSensitivity.beta120Month",
+            "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+            "trailingReturn.trailing10YearReturn",
+            "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr",
+            "pricesMostRecent.avgVolumeInMil9MoDaily",
+            "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr",
+            "pricesMostRecent.totalVolumeInMil2WkDaily",
+            "marketCapital.asOfDate",
+            "quantitativeFairValues.quantitativeMoat",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+            "factorProfile.realEstateFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr",
+            "dividendResidualRiskAndReturnSensitivity.rSquare60Month",
+            "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType"
+          ],
+          "pagination": {
+            "pageSize": 10
+          },
+          "sort": [
+            {
+              "datapoint": "marketCapital.asOfDate"
+            }
+          ]
+        }
+      },
+      "ScreenerRequestExample2": {
+        "summary": "Basic Query - In",
+        "value": {
+          "scope": {
+            "shareclassInformation.exchangeCode": "XPAR"
+          },
+          "query": {
+            "shareClassInformation.symbol": [
+              "CA40",
+              "MSES"
+            ]
+          },
+          "dataPoints": [
+            "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+            "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+            "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+            "shortInterest.percentageChanged",
+            "companyInformation.sic",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+            "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+            "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+            "monthlyStandardDeviation.arithmeticMean24Month",
+            "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+            "dividendResidualRiskAndReturnSensitivity.beta24Month",
+            "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+            "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+            "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+            "shareClassInformation.symbol",
+            "factorProfile.styleFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+            "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+            "shareClassInformation.investmentStatus",
+            "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+            "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+            "dividendResidualRiskAndReturnSensitivity.beta120Month",
+            "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+            "trailingReturn.trailing10YearReturn",
+            "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr",
+            "pricesMostRecent.avgVolumeInMil9MoDaily",
+            "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr",
+            "pricesMostRecent.totalVolumeInMil2WkDaily",
+            "marketCapital.asOfDate",
+            "quantitativeFairValues.quantitativeMoat",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+            "factorProfile.realEstateFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr",
+            "dividendResidualRiskAndReturnSensitivity.rSquare60Month",
+            "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType"
+          ],
+          "pagination": {
+            "pageSize": 10
+          },
+          "sort": [
+            {
+              "datapoint": "marketCapital.asOfDate"
+            }
+          ]
+        }
+      },
+      "ScreenerRequestExample3": {
+        "summary": "Basic Query - Date Range",
+        "value": {
+          "scope": {
+            "shareclassInformation.exchangeCode": "XPAR"
+          },
+          "query": {
+            "marketCapital.asOfDate": {
+              "gt": "2020-01-01",
+              "lt": "2024-03-31"
+            }
+          },
+          "dataPoints": [
+            "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+            "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+            "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+            "shortInterest.percentageChanged",
+            "companyInformation.sic",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+            "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+            "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+            "monthlyStandardDeviation.arithmeticMean24Month",
+            "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+            "dividendResidualRiskAndReturnSensitivity.beta24Month",
+            "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+            "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+            "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+            "shareClassInformation.symbol",
+            "factorProfile.styleFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+            "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+            "shareClassInformation.investmentStatus",
+            "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+            "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+            "dividendResidualRiskAndReturnSensitivity.beta120Month",
+            "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+            "trailingReturn.trailing10YearReturn",
+            "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr",
+            "pricesMostRecent.avgVolumeInMil9MoDaily",
+            "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr",
+            "pricesMostRecent.totalVolumeInMil2WkDaily",
+            "marketCapital.asOfDate",
+            "quantitativeFairValues.quantitativeMoat",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+            "factorProfile.realEstateFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr",
+            "dividendResidualRiskAndReturnSensitivity.rSquare60Month",
+            "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType"
+          ],
+          "pagination": {
+            "pageSize": 10
+          },
+          "sort": [
+            {
+              "datapoint": "marketCapital.asOfDate"
+            }
+          ]
+        }
+      },
+      "ScreenerRequestExample4": {
+        "summary": "Basic Query - Number Range",
+        "value": {
+          "scope": {
+            "shareclassInformation.exchangeCode": "XPAR"
+          },
+          "query": {
+            "dividendResidualRiskAndReturnSensitivity.beta24Month": {
+              "gt": 4,
+              "lt": 10
+            }
+          },
+          "dataPoints": [
+            "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+            "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+            "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+            "shortInterest.percentageChanged",
+            "companyInformation.sic",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+            "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+            "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+            "monthlyStandardDeviation.arithmeticMean24Month",
+            "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+            "dividendResidualRiskAndReturnSensitivity.beta24Month",
+            "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+            "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+            "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+            "shareClassInformation.symbol",
+            "factorProfile.styleFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+            "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+            "shareClassInformation.investmentStatus",
+            "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+            "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+            "dividendResidualRiskAndReturnSensitivity.beta120Month",
+            "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+            "trailingReturn.trailing10YearReturn",
+            "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr",
+            "pricesMostRecent.avgVolumeInMil9MoDaily",
+            "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr",
+            "pricesMostRecent.totalVolumeInMil2WkDaily",
+            "marketCapital.asOfDate",
+            "quantitativeFairValues.quantitativeMoat",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+            "factorProfile.realEstateFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr",
+            "dividendResidualRiskAndReturnSensitivity.rSquare60Month",
+            "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType"
+          ],
+          "pagination": {
+            "pageSize": 50
+          },
+          "sort": [
+            {
+              "datapoint": "marketCapital.asOfDate"
+            }
+          ]
+        }
+      },
+      "ScreenerRequestExample5": {
+        "summary": "Compound Query - AND",
+        "value": {
+          "scope": {
+            "shareclassInformation.exchangeCode": "XPAR"
+          },
+          "query": {
+            "and": [
+              {
+                "instrumentIdentifiers.performanceId": [
+                  "0P0001VK70",
+                  "0P0001VK71",
+                  "0P0001VK72"
+                ]
+              },
+              {
+                "shareClassInformation.symbol": [
+                  "CA40",
+                  "MSES"
+                ]
+              }
+            ]
+          },
+          "dataPoints": [
+            "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+            "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+            "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+            "shortInterest.percentageChanged",
+            "companyInformation.sic",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+            "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+            "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+            "monthlyStandardDeviation.arithmeticMean24Month",
+            "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+            "dividendResidualRiskAndReturnSensitivity.beta24Month",
+            "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+            "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+            "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+            "shareClassInformation.symbol",
+            "factorProfile.styleFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+            "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+            "shareClassInformation.investmentStatus",
+            "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+            "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+            "dividendResidualRiskAndReturnSensitivity.beta120Month",
+            "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+            "trailingReturn.trailing10YearReturn",
+            "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr",
+            "pricesMostRecent.avgVolumeInMil9MoDaily",
+            "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr",
+            "pricesMostRecent.totalVolumeInMil2WkDaily",
+            "marketCapital.asOfDate",
+            "quantitativeFairValues.quantitativeMoat",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+            "factorProfile.realEstateFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr",
+            "dividendResidualRiskAndReturnSensitivity.rSquare60Month",
+            "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType"
+          ],
+          "pagination": {
+            "pageSize": 50
+          }
+        }
+      },
+      "ScreenerRequestExample6": {
+        "summary": "Compound Query - OR",
+        "value": {
+          "scope": {
+            "shareclassInformation.exchangeCode": "XPAR"
+          },
+          "query": {
+            "or": [
+              {
+                "instrumentIdentifiers.performanceId": "0P0001VK70"
+              },
+              {
+                "shareClassInformation.symbol": [
+                  "FM28",
+                  "MSES"
+                ]
+              }
+            ]
+          },
+          "dataPoints": [
+            "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+            "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+            "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+            "shortInterest.percentageChanged",
+            "companyInformation.sic",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+            "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+            "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+            "monthlyStandardDeviation.arithmeticMean24Month",
+            "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+            "dividendResidualRiskAndReturnSensitivity.beta24Month",
+            "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+            "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+            "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+            "shareClassInformation.symbol",
+            "factorProfile.styleFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+            "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+            "shareClassInformation.investmentStatus",
+            "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+            "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+            "dividendResidualRiskAndReturnSensitivity.beta120Month",
+            "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+            "trailingReturn.trailing10YearReturn",
+            "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr",
+            "pricesMostRecent.avgVolumeInMil9MoDaily",
+            "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr",
+            "pricesMostRecent.totalVolumeInMil2WkDaily",
+            "marketCapital.asOfDate",
+            "quantitativeFairValues.quantitativeMoat",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+            "factorProfile.realEstateFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr",
+            "dividendResidualRiskAndReturnSensitivity.rSquare60Month",
+            "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType"
+          ],
+          "pagination": {
+            "pageSize": 10
+          },
+          "sort": [
+            {
+              "datapoint": "marketCapital.asOfDate"
+            }
+          ]
+        }
+      },
+      "ScreenerRequestExample7": {
+        "summary": "Compound Query - NOT",
+        "value": {
+          "scope": {
+            "shareclassInformation.exchangeCode": "XPAR"
+          },
+          "query": {
+            "not": [
+              {
+                "shareClassInformation.investmentStatus": 1
+              },
+              {
+                "shareClassInformation.symbol": "USSM"
+              }
+            ]
+          },
+          "dataPoints": [
+            "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+            "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+            "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+            "shortInterest.percentageChanged",
+            "companyInformation.sic",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+            "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+            "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+            "monthlyStandardDeviation.arithmeticMean24Month",
+            "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+            "dividendResidualRiskAndReturnSensitivity.beta24Month",
+            "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+            "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+            "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+            "shareClassInformation.symbol",
+            "factorProfile.styleFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+            "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+            "shareClassInformation.investmentStatus",
+            "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+            "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+            "dividendResidualRiskAndReturnSensitivity.beta120Month",
+            "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+            "trailingReturn.trailing10YearReturn",
+            "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr",
+            "pricesMostRecent.avgVolumeInMil9MoDaily",
+            "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr",
+            "pricesMostRecent.totalVolumeInMil2WkDaily",
+            "marketCapital.asOfDate",
+            "quantitativeFairValues.quantitativeMoat",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+            "factorProfile.realEstateFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr",
+            "dividendResidualRiskAndReturnSensitivity.rSquare60Month",
+            "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType"
+          ],
+          "pagination": {
+            "pageSize": 50
+          },
+          "sort": [
+            {
+              "datapoint": "marketCapital.asOfDate"
+            }
+          ]
+        }
+      },
+      "ScreenerRequestExample8": {
+        "summary": "Nested Compound Query - OR then AND",
+        "value": {
+          "scope": {
+            "shareclassInformation.exchangeCode": "XPAR"
+          },
+          "query": {
+            "OR": [
+              {
+                "AND": [
+                  {
+                    "shareClassInformation.symbol": [
+                      "ALMIL"
+                    ]
+                  },
+                  {
+                    "marketCapital.asOfDate": [
+                      "2025-01-06"
+                    ]
+                  }
+                ]
+              },
+              {
+                "instrumentIdentifiers.performanceId": [
+                  "0P0001DIM8"
+                ]
+              }
+            ]
+          },
+          "dataPoints": [
+            "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+            "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+            "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+            "shortInterest.percentageChanged",
+            "companyInformation.sic",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+            "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+            "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+            "monthlyStandardDeviation.arithmeticMean24Month",
+            "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+            "dividendResidualRiskAndReturnSensitivity.beta24Month",
+            "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+            "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+            "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+            "shareClassInformation.symbol",
+            "factorProfile.styleFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+            "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+            "shareClassInformation.investmentStatus",
+            "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+            "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+            "dividendResidualRiskAndReturnSensitivity.beta120Month",
+            "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+            "trailingReturn.trailing10YearReturn",
+            "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr",
+            "pricesMostRecent.avgVolumeInMil9MoDaily",
+            "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr",
+            "pricesMostRecent.totalVolumeInMil2WkDaily",
+            "marketCapital.asOfDate",
+            "quantitativeFairValues.quantitativeMoat",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+            "factorProfile.realEstateFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr",
+            "dividendResidualRiskAndReturnSensitivity.rSquare60Month",
+            "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType"
+          ],
+          "sort": [
+            {
+              "datapoint": "marketCapital.asOfDate"
+            }
+          ]
+        }
+      },
+      "ScreenerRequestExample9": {
+        "summary": "Nested Compound Query - OR then AND Deeply Nested",
+        "value": {
+          "scope": {
+            "shareclassInformation.exchangeCode": "XPAR"
+          },
+          "query": {
+            "OR": [
+              {
+                "AND": [
+                  {
+                    "instrumentIdentifiers.performanceId": [
+                      "0P0000DKX2"
+                    ]
+                  },
+                  {
+                    "shareClassInformation.symbol": [
+                      "ALMIL"
+                    ]
+                  }
+                ]
+              },
+              {
+                "AND": [
+                  {
+                    "marketCapital.asOfDate": [
+                      "2050-01-06"
+                    ]
+                  },
+                  {
+                    "trailingReturn.trailing10YearReturn": 0.453506
+                  }
+                ]
+              }
+            ]
+          },
+          "dataPoints": [
+            "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+            "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+            "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+            "shortInterest.percentageChanged",
+            "companyInformation.sic",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+            "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+            "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+            "monthlyStandardDeviation.arithmeticMean24Month",
+            "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+            "dividendResidualRiskAndReturnSensitivity.beta24Month",
+            "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+            "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+            "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+            "shareClassInformation.symbol",
+            "factorProfile.styleFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+            "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+            "shareClassInformation.investmentStatus",
+            "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+            "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+            "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+            "dividendResidualRiskAndReturnSensitivity.beta120Month",
+            "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+            "trailingReturn.trailing10YearReturn",
+            "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr",
+            "pricesMostRecent.avgVolumeInMil9MoDaily",
+            "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType",
+            "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr",
+            "pricesMostRecent.totalVolumeInMil2WkDaily",
+            "marketCapital.asOfDate",
+            "quantitativeFairValues.quantitativeMoat",
+            "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+            "factorProfile.realEstateFactorMultiAssetModel",
+            "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus",
+            "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr",
+            "dividendResidualRiskAndReturnSensitivity.rSquare60Month",
+            "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType"
+          ],
+          "sort": [
+            {
+              "datapoint": "marketCapital.asOfDate"
+            }
+          ]
+        }
+      },
+      "ScreenerResponseExample1": {
+        "summary": "Basic Query - Equals",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001VK71",
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0013,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.019826,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.000357,
+              "factorProfile.styleFactorMultiAssetModel": 0.110014,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "MSES"
+            }
+          ],
+          "metadata": {
+            "totalCount": 1,
+            "messages": [
+              {
+                "investments": [
+                  {
+                    "status": "Data points are not entitled for 0P0001VK71 security",
+                    "dataPoints": [
+                      "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+                      "quantitativeFairValues.quantitativeMoat",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth"
+                    ],
+                    "errorCode": "403",
+                    "id": "0P0001VK71"
+                  }
+                ],
+                "type": "Warning"
+              }
+            ],
+            "requestId": "092fa93b-d63d-4b6e-a53b-d7ace50473ff",
+            "time": "2025-10-03T17:48:16.0302555Z"
+          }
+        }
+      },
+      "ScreenerResponseExample2": {
+        "summary": "Basic Query - In",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001VK70",
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0091,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.004238,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.003375,
+              "factorProfile.styleFactorMultiAssetModel": -0.086788,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "CA40"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001VK71",
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0013,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.019826,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.000357,
+              "factorProfile.styleFactorMultiAssetModel": 0.110014,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "MSES"
+            }
+          ],
+          "metadata": {
+            "totalCount": 2,
+            "messages": [
+              {
+                "investments": [
+                  {
+                    "status": "Data points are not entitled for 0P0001VK70 security",
+                    "dataPoints": [
+                      "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+                      "quantitativeFairValues.quantitativeMoat",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth"
+                    ],
+                    "errorCode": "403",
+                    "id": "0P0001VK70"
+                  },
+                  {
+                    "status": "Data points are not entitled for 0P0001VK71 security",
+                    "dataPoints": [
+                      "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+                      "quantitativeFairValues.quantitativeMoat",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth"
+                    ],
+                    "errorCode": "403",
+                    "id": "0P0001VK71"
+                  }
+                ],
+                "type": "Warning"
+              }
+            ],
+            "requestId": "d9e864d7-c97e-4d2a-9988-648dfbec5761",
+            "time": "2025-10-03T17:53:46.8668179Z"
+          }
+        }
+      },
+      "ScreenerResponseExample3": {
+        "summary": "Basic Query - Date Range",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P00009W9Z",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0024,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0019,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.1222,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.0165,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0022,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.453183,
+              "marketCapital.asOfDate": "2020-01-10",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.599134,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.201814,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 2.958147,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.524188,
+              "trailingReturn.trailing10YearReturn": 10.087686,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "AFO"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000DKWR",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0039,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0036,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.1099,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.1682,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0039,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.137914,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.296562,
+              "factorProfile.styleFactorMultiAssetModel": -0.471692,
+              "marketCapital.asOfDate": "2020-01-20",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.27427,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.577988,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 3.721263,
+              "monthlyStandardDeviation.arithmeticMean24Month": -1.581913,
+              "trailingReturn.trailing10YearReturn": -2.261189,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "ALVEL"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000NIZG",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0001,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8954,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "marketCapital.asOfDate": "2020-01-24",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -1.370331,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.373671,
+              "monthlyStandardDeviation.arithmeticMean24Month": 4.767815,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MLGES"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000DKRC",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0016,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0019,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0111,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.7176,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0034,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -1.002631,
+              "marketCapital.asOfDate": "2020-01-29",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.209118,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.683599,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.005125,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0.955025,
+              "trailingReturn.trailing10YearReturn": -2.80721,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ALTRA"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WRN",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0044,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0066,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.9343,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0354,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.189473,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -1.846655,
+              "marketCapital.asOfDate": "2020-02-11",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.431667,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.411035,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.069133,
+              "monthlyStandardDeviation.arithmeticMean24Month": -5.994658,
+              "trailingReturn.trailing10YearReturn": -13.531273,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "TOU"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000DKXR",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0018,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0018,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.4898,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8848,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0054,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.438146,
+              "marketCapital.asOfDate": "2020-02-21",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 1.013019,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.287358,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 2.662224,
+              "monthlyStandardDeviation.arithmeticMean24Month": -1.273831,
+              "trailingReturn.trailing10YearReturn": -2.304959,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ALWEB"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000YXUZ",
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.438146,
+              "marketCapital.asOfDate": "2020-02-21",
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "WEBNV"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P000155VR",
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.438146,
+              "marketCapital.asOfDate": "2020-02-21",
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "WEBNV"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P000178FQ",
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.438146,
+              "marketCapital.asOfDate": "2020-02-21",
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "WEBNV"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001BOZ7",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0316,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0329,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 4.0278,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.066,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.26515,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 1.825064,
+              "marketCapital.asOfDate": "2020-02-25",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 1.415547,
+              "monthlyStandardDeviation.arithmeticMean24Month": -11.95761,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "BUP"
+            }
+          ],
+          "metadata": {
+            "paginationTokenNext": "CJjBOxoJKQCspHlwAQAAGgw6CmJpb20ndXAgc2EaDDoKMHAwMDAxYm96NyIMOgowUDAwMDFCT1o3",
+            "totalCount": 1043,
+            "requestId": "9c5b991d-dccf-4188-9402-d41d6b2acaea",
+            "time": "2025-10-03T18:00:20.0806591Z"
+          }
+        }
+      },
+      "ScreenerResponseExample4": {
+        "summary": "Basic Query - Number Range",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WEV",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0018,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue": 0,
+              "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr": "0",
+              "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference": 2025,
+              "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType": "Reported",
+              "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus": "Researched",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.325473,
+              "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory": "D",
+              "esgCompanyLevel2DataCarbonEmissions.carbonIntensity": 4.35,
+              "marketCapital.asOfDate": "2017-02-01",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 129.416075,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 25.319998,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.000351,
+              "monthlyStandardDeviation.arithmeticMean24Month": 4162.5,
+              "trailingReturn.trailing10YearReturn": 75.163038,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "DEXB"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00016CUM",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0007,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0008,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "marketCapital.asOfDate": "2017-11-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 4.286487,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.255464,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MLMLT"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000YB10",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.3939,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "marketCapital.asOfDate": "2019-01-03",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 29.374776,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.069607,
+              "monthlyStandardDeviation.arithmeticMean24Month": 299.555495,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MLJAN"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000HYAR",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0005,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0001,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8573,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0001,
+              "marketCapital.asOfDate": "2019-01-03",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 8.830188,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": -15.659829,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 1.185367,
+              "monthlyStandardDeviation.arithmeticMean24Month": 22.925976,
+              "trailingReturn.trailing10YearReturn": -9.581948,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MLVOP"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000NINH",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0016,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0013,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8418,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0006,
+              "marketCapital.asOfDate": "2019-01-03",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 6.305182,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.582609,
+              "monthlyStandardDeviation.arithmeticMean24Month": 16.714317,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MLTMT"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00017Y0H",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0083,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0084,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.1408,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0148,
+              "marketCapital.asOfDate": "2019-06-24",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 21.708458,
+              "monthlyStandardDeviation.arithmeticMean24Month": 80.322132,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MLSFI"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00016F9G",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.7786,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "marketCapital.asOfDate": "2019-08-06",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 6.871808,
+              "monthlyStandardDeviation.arithmeticMean24Month": 4.841587,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MLIFE"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000DKZS",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "marketCapital.asOfDate": "2020-06-23",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 37.24909,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 8.919766,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 2.562927,
+              "monthlyStandardDeviation.arithmeticMean24Month": 207.016503,
+              "trailingReturn.trailing10YearReturn": -16.328433,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MLARI"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WPP",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0003,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0003,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.9125,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0009,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.223187,
+              "factorProfile.styleFactorMultiAssetModel": -1.969177,
+              "marketCapital.asOfDate": "2021-06-23",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 7.872111,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 3.075768,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 23.533161,
+              "monthlyStandardDeviation.arithmeticMean24Month": 9.038605,
+              "trailingReturn.trailing10YearReturn": -21.763908,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ALSIP"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000DKYZ",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0008,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0012,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.7182,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0016,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.725694,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.195914,
+              "factorProfile.styleFactorMultiAssetModel": -1.786143,
+              "marketCapital.asOfDate": "2024-02-12",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 4.157751,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 1.075787,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 10.349173,
+              "monthlyStandardDeviation.arithmeticMean24Month": 14.778468,
+              "trailingReturn.trailing10YearReturn": 1.729069,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MLBAT"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WO4",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.1713,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.2263,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.670293,
+              "factorProfile.styleFactorMultiAssetModel": -2.176199,
+              "marketCapital.asOfDate": "2025-07-14",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 10.938723,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 2.783648,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 9.779772,
+              "monthlyStandardDeviation.arithmeticMean24Month": 6.175561,
+              "trailingReturn.trailing10YearReturn": -13.448391,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "RAL"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001DIM8",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0601,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0702,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 4.4302,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.5581,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.2223,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.458664,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 8.286211,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 9.604659,
+              "monthlyStandardDeviation.arithmeticMean24Month": 17.835292,
+              "quantitativeFairValues.quantitativeMoat": 0.276,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "AL2SI"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000NQNE",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.1328,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.1414,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 1.4535,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.0797,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.1888,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.13769,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 4.188729,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 1.024761,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 9.427169,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0.101998,
+              "trailingReturn.trailing10YearReturn": -20.168612,
+              "quantitativeFairValues.quantitativeMoat": 0.324,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "AB"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001MR2A",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0285,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0285,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.104,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8386,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0394,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.208274,
+              "factorProfile.styleFactorMultiAssetModel": -1.639069,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 4.117866,
+              "monthlyStandardDeviation.arithmeticMean24Month": 7.271069,
+              "quantitativeFairValues.quantitativeMoat": 0.2955,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "ALAMA"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001KJH0",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.152758,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.454144,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 21.484482,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 1.500243,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.012148,
+              "monthlyStandardDeviation.arithmeticMean24Month": 256.667784,
+              "trailingReturn.trailing10YearReturn": 8.577988,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "MLARO"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WEH",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 19.3917,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 38.8591,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 546.0576,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.9667,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 185.5871,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.024202,
+              "factorProfile.styleFactorMultiAssetModel": -0.750127,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 5.640346,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 1.199,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 1.618604,
+              "monthlyStandardDeviation.arithmeticMean24Month": -4.662561,
+              "trailingReturn.trailing10YearReturn": -92.921859,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "ALIBR"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000DKYK",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.1268,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.1585,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 8.5608,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.7122,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.226,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 0.11831,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 6.096596,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 2.134119,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 12.119058,
+              "monthlyStandardDeviation.arithmeticMean24Month": 7.762877,
+              "trailingReturn.trailing10YearReturn": -19.14327,
+              "quantitativeFairValues.quantitativeMoat": 0.208,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "ALCLS"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000RVVZ",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0001,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0001,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.6007,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0003,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 5.105932,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 1.587553,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 3.055099,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0.793735,
+              "trailingReturn.trailing10YearReturn": 7.177346,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "MLCLP"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P000148AM",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 2.0623,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 4.1295,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 57.7596,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.7545,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 19.1615,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.346234,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -3.028223,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 19.584136,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.650867,
+              "monthlyStandardDeviation.arithmeticMean24Month": 71.506941,
+              "quantitativeFairValues.quantitativeMoat": 0.234,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "ALTD"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000DKYH",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0098,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0192,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.2343,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.1166,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0293,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.045209,
+              "factorProfile.styleFactorMultiAssetModel": 1.029099,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 10.644305,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.401498,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.00063,
+              "monthlyStandardDeviation.arithmeticMean24Month": 28.405849,
+              "trailingReturn.trailing10YearReturn": 10.071366,
+              "quantitativeFairValues.quantitativeMoat": 0.358,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "ALENT"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00017Q78",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0286,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0505,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 4.4998,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.654,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.2056,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -1.758265,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 6.667288,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 10.941392,
+              "monthlyStandardDeviation.arithmeticMean24Month": -2.980521,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "GNRO"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001R7PA",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0078,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0078,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0485,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.5536,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0098,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.49061,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -1.755782,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 5.746776,
+              "monthlyStandardDeviation.arithmeticMean24Month": -2.797842,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "ALWTR"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00015A1N",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.1735,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.2242,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 3.6291,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.0736,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.7264,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 1.587513,
+              "marketCapital.asOfDate": "2025-10-02",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 5.447379,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 1.622474,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 10.223557,
+              "monthlyStandardDeviation.arithmeticMean24Month": 5.913959,
+              "trailingReturn.trailing10YearReturn": -25.703108,
+              "quantitativeFairValues.quantitativeMoat": 0.289,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "POXEL"
+            }
+          ],
+          "metadata": {
+            "totalCount": 23,
+            "requestId": "e4cd1bc2-89ca-416f-bb6f-2ffe832f4774",
+            "time": "2025-10-03T18:06:53.4543888Z"
+          }
+        }
+      },
+      "ScreenerResponseExample5": {
+        "summary": "Compound Query - AND",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001VK70",
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.009,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.004238,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.003375,
+              "factorProfile.styleFactorMultiAssetModel": -0.086788,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "CA40"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001VK71",
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0013,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.019826,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.000357,
+              "factorProfile.styleFactorMultiAssetModel": 0.110014,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "MSES"
+            }
+          ],
+          "metadata": {
+            "totalCount": 2,
+            "messages": [
+              {
+                "investments": [
+                  {
+                    "status": "Data points are not entitled for 0P0001VK70 security",
+                    "dataPoints": [
+                      "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+                      "quantitativeFairValues.quantitativeMoat",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth"
+                    ],
+                    "errorCode": "403",
+                    "id": "0P0001VK70"
+                  },
+                  {
+                    "status": "Data points are not entitled for 0P0001VK71 security",
+                    "dataPoints": [
+                      "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+                      "quantitativeFairValues.quantitativeMoat",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth"
+                    ],
+                    "errorCode": "403",
+                    "id": "0P0001VK71"
+                  }
+                ],
+                "type": "Warning"
+              }
+            ],
+            "requestId": "1354c656-2095-4dd6-a07a-4ea386c55b1b",
+            "time": "2025-10-06T15:00:56.3309709Z"
+          }
+        }
+      },
+      "ScreenerResponseExample6": {
+        "summary": "Compound Query - OR",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001SUCI",
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0023,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "FM28"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001VK70",
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.009,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.004238,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.003375,
+              "factorProfile.styleFactorMultiAssetModel": -0.086788,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "CA40"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001VK71",
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0013,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.019826,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.000357,
+              "factorProfile.styleFactorMultiAssetModel": 0.110014,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "MSES"
+            }
+          ],
+          "metadata": {
+            "totalCount": 3,
+            "messages": [
+              {
+                "investments": [
+                  {
+                    "status": "Data points are not entitled for 0P0001VK70 security",
+                    "dataPoints": [
+                      "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+                      "quantitativeFairValues.quantitativeMoat",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth"
+                    ],
+                    "errorCode": "403",
+                    "id": "0P0001VK70"
+                  },
+                  {
+                    "status": "Data points are not entitled for 0P0001SUCI security",
+                    "dataPoints": [
+                      "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+                      "quantitativeFairValues.quantitativeMoat",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth"
+                    ],
+                    "errorCode": "403",
+                    "id": "0P0001SUCI"
+                  },
+                  {
+                    "status": "Data points are not entitled for 0P0001VK71 security",
+                    "dataPoints": [
+                      "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+                      "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations",
+                      "quantitativeFairValues.quantitativeMoat",
+                      "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth"
+                    ],
+                    "errorCode": "403",
+                    "id": "0P0001VK71"
+                  }
+                ],
+                "type": "Warning"
+              }
+            ],
+            "requestId": "3cc96347-7390-469a-8a39-7ed33be0f815",
+            "time": "2025-10-06T15:10:59.3818568Z"
+          }
+        }
+      },
+      "ScreenerResponseExample7": {
+        "summary": "Compound Query - NOT",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WA0",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.4493,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.4147,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.6998,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.9446,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.6204,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -1.082047,
+              "marketCapital.asOfDate": "2007-06-12",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.812319,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 72.334336,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.823949,
+              "trailingReturn.trailing10YearReturn": 16.2089,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "AGF"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WE4",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0004,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0004,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0006,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.4505,
+              "marketCapital.asOfDate": "2009-11-23",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.215523,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.140461,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.871305,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "CRCL"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000HVFZ",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.437335,
+              "marketCapital.asOfDate": "2010-12-31",
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ATINV"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WAR",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0174,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0314,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.9478,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.418431,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.583302,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 16.64252,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0.724597,
+              "trailingReturn.trailing10YearReturn": -26.827942,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ARB"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009X0G",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0285,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0355,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.002,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8647,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue": 0.02,
+              "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr": "0",
+              "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference": 2025,
+              "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType": "Reported",
+              "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr": 50,
+              "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus": "Researched",
+              "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd": 18626821996.78,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.000003,
+              "factorProfile.styleFactorMultiAssetModel": -3.254445,
+              "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory": "B-",
+              "esgCompanyLevel2DataCarbonEmissions.carbonIntensity": 92.8,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.011229,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.46039,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 10.742493,
+              "monthlyStandardDeviation.arithmeticMean24Month": 1.456231,
+              "trailingReturn.trailing10YearReturn": -2.437819,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "CK"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WDH",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0046,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0052,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0015,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.6413,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.055674,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 0.942373,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.258959,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.133422,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.138919,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "CMD"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WAM",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0002,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0001,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0451,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.2593,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.136607,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.086429,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 1.074669,
+              "monthlyStandardDeviation.arithmeticMean24Month": -0.94271,
+              "trailingReturn.trailing10YearReturn": 10.090737,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "IAT"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WDT",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0021,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0032,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0054,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.0209,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.192375,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.160788,
+              "factorProfile.styleFactorMultiAssetModel": -2.773902,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.211793,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.423463,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 14.498978,
+              "monthlyStandardDeviation.arithmeticMean24Month": 3.43583,
+              "trailingReturn.trailing10YearReturn": 2.950978,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MILU"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WDU",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0207,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0249,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0002,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.107593,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 1.695958,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.248894,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 9.491934,
+              "monthlyStandardDeviation.arithmeticMean24Month": -0.323744,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "CPT"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WDV",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.024568,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.360233,
+              "factorProfile.styleFactorMultiAssetModel": -1.332497,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.131081,
+              "monthlyStandardDeviation.arithmeticMean24Month": 1.121712,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "CORA"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WDY",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0035,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0042,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.9967,
+              "marketCapital.asOfDate": "2010-12-31",
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "YACHT"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WE5",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0028,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0035,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0307,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.4595,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.110865,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.171823,
+              "factorProfile.styleFactorMultiAssetModel": -0.619703,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.817762,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.330778,
+              "monthlyStandardDeviation.arithmeticMean24Month": 7.367806,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "GNI"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WEG",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.138,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.2172,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.9748,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.2864,
+              "factorProfile.styleFactorMultiAssetModel": 0.262011,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.777261,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 1.658671,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 19.95014,
+              "monthlyStandardDeviation.arithmeticMean24Month": 1.08877,
+              "trailingReturn.trailing10YearReturn": -25.845255,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "CBD"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WEZ",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0014,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0009,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0284,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.861,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.076603,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 0.589228,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.822101,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 37.741673,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.809284,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "DAB"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WRR",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0001,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0001,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0001,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8678,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.413609,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.17522,
+              "factorProfile.styleFactorMultiAssetModel": -0.584613,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.259761,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.448607,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 11.583882,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0.036895,
+              "trailingReturn.trailing10YearReturn": 1.157339,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "PIER"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WG8",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0012,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0013,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8227,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.095798,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.070106,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 1.349009,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.855098,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 24.244334,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.854022,
+              "trailingReturn.trailing10YearReturn": -3.372268,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "GYO"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WHC",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0006,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0004,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0009,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.3839,
+              "factorProfile.styleFactorMultiAssetModel": -2.261099,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.692328,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.436876,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 1.118568,
+              "monthlyStandardDeviation.arithmeticMean24Month": 7.482127,
+              "trailingReturn.trailing10YearReturn": -20.495331,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "GANT"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WQO",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 4.013,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 4.0184,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0349,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.0638,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue": 0.03,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 1.02939,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.810703,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.937237,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 36.126532,
+              "monthlyStandardDeviation.arithmeticMean24Month": -0.707148,
+              "trailingReturn.trailing10YearReturn": -4.696003,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "SZE"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WHU",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0084,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0081,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0471,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.5865,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.000002,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.000003,
+              "factorProfile.styleFactorMultiAssetModel": -0.698769,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.920481,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 21.018269,
+              "monthlyStandardDeviation.arithmeticMean24Month": 5.053997,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "GNG"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WI0",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.1462,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.2895,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 2.2452,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.4635,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.072508,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -1.702905,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.129521,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 1.313404,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 6.295636,
+              "monthlyStandardDeviation.arithmeticMean24Month": -5.005193,
+              "trailingReturn.trailing10YearReturn": -32.976402,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ARE"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WJK",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0029,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0055,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0043,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.9613,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.490856,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": -0.171859,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.831205,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0.444223,
+              "trailingReturn.trailing10YearReturn": 1.096876,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "INIT"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WJS",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0002,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0001,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0256,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.4781,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.083313,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.403337,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 3.687451,
+              "monthlyStandardDeviation.arithmeticMean24Month": 5.224629,
+              "trailingReturn.trailing10YearReturn": 9.112433,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "IPOA"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WK0",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0025,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0035,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0034,
+              "factorProfile.styleFactorMultiAssetModel": -1.900448,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.007458,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.708933,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 12.947455,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0.993709,
+              "trailingReturn.trailing10YearReturn": 11.978893,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "JCQ"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WL4",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.1388,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.2038,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 4.7827,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.1094,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.096442,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.976847,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.329757,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 20.17902,
+              "monthlyStandardDeviation.arithmeticMean24Month": -0.245485,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "LCY"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WKT",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0056,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0056,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.9957,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.106983,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.434373,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.018388,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0.048375,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "LEON"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WHM",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0455,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0739,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 2.7639,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.864,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.01161,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -3.026491,
+              "marketCapital.asOfDate": "2010-12-31",
+              "companyInformation.sic": 6719,
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.084365,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 2.25194,
+              "monthlyStandardDeviation.arithmeticMean24Month": -9.831222,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "MTLQ"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WPN",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0044,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.005,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.103,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.7708,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.175583,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.508569,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0.642224,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "GRS"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WMT",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0067,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0086,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0011,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.7148,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.080877,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.655498,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.012504,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ONA"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000EO5X",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0009,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0009,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.0724,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue": 0,
+              "esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr": "0",
+              "esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType": "Reported",
+              "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference": 2025,
+              "esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType": "Reported",
+              "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus": "Researched",
+              "esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus": "Researched",
+              "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd": 2056314969.64,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.455089,
+              "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory": "A",
+              "esgCompanyLevel2DataCarbonEmissions.carbonIntensity": 32.47,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.007136,
+              "monthlyStandardDeviation.arithmeticMean24Month": -0.66234,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "FTNV9"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WN2",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0054,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0059,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.9364,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.487512,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.553349,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.689323,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.32063,
+              "trailingReturn.trailing10YearReturn": 13.998125,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ALOTO"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WN9",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0196,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0201,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.1901,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.9502,
+              "factorProfile.styleFactorMultiAssetModel": -1.213283,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.471337,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.230219,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "PRI"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WYX",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0067,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0093,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": -0.005518,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 0.00736,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0,
+              "trailingReturn.trailing10YearReturn": -0.270306,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "PTSN"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WNX",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0218,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0171,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.7221,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.038983,
+              "factorProfile.styleFactorMultiAssetModel": -0.544394,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.08542,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 11.25826,
+              "monthlyStandardDeviation.arithmeticMean24Month": 3.406539,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "VIM"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WOT",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0092,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0116,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0021,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.6017,
+              "factorProfile.styleFactorMultiAssetModel": 0.040602,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.984264,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 1.587795,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.928197,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "SAGA"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WP4",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0035,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0056,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0241,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.0878,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.320358,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.325081,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 1.675784,
+              "monthlyStandardDeviation.arithmeticMean24Month": 1.327818,
+              "trailingReturn.trailing10YearReturn": -10.61238,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "SDRB"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WPF",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0002,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0002,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 9.291921,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "SETF"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WK3",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0108,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0085,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0063,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.9708,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.037383,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.531812,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 8.965977,
+              "monthlyStandardDeviation.arithmeticMean24Month": 1.015108,
+              "trailingReturn.trailing10YearReturn": -20.092302,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "JET"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WPQ",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0014,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0008,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 2.548096,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "SOR"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WQD",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0178,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0247,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.1074,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.6639,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.156735,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0.763014,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.900599,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 13.527611,
+              "monthlyStandardDeviation.arithmeticMean24Month": 6.354103,
+              "trailingReturn.trailing10YearReturn": 4.33831,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "SPR"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000A6ZT",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0104,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0208,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.9902,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8618,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 1.494667,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 2.061914,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 15.489642,
+              "monthlyStandardDeviation.arithmeticMean24Month": 3.113323,
+              "trailingReturn.trailing10YearReturn": -41.35769,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "TIPA"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WRH",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 7.6631,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 2.062,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1.785,
+              "marketCapital.asOfDate": "2010-12-31",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 1.186053,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 1.750139,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 8.302389,
+              "monthlyStandardDeviation.arithmeticMean24Month": -2.594697,
+              "trailingReturn.trailing10YearReturn": -37.270848,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "TNPLC"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000HXBL",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0002,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0002,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0.0163,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.549,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.062558,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 1.089989,
+              "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory": "A",
+              "marketCapital.asOfDate": "2011-01-11",
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ZCNV"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WA6",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0084,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0056,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.069685,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 0.356089,
+              "marketCapital.asOfDate": "2011-01-20",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "AAF"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WAE",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0173,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.008,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.079547,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 0.61912,
+              "marketCapital.asOfDate": "2011-01-20",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ALD"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WAI",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0021,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0022,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "marketCapital.asOfDate": "2011-01-20",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 3.925977,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0,
+              "trailingReturn.trailing10YearReturn": 10.981318,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "LTI"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WAQ",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0002,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0001,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "marketCapital.asOfDate": "2011-01-20",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "AULU"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WAY",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0033,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -1.493139,
+              "marketCapital.asOfDate": "2011-01-20",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 1.432306,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0,
+              "trailingReturn.trailing10YearReturn": -18.285095,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "STH"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000PP3Z",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 1.100478,
+              "marketCapital.asOfDate": "2011-01-20",
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ATANV"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0000NR0D",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.036826,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": 0.251604,
+              "marketCapital.asOfDate": "2011-01-20",
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "OSINV"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P00009WB9",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0056,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0058,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 1,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.99307,
+              "marketCapital.asOfDate": "2011-01-20",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 0,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 27.071347,
+              "monthlyStandardDeviation.arithmeticMean24Month": 0,
+              "trailingReturn.trailing10YearReturn": -19.265696,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "OMA"
+            }
+          ],
+          "metadata": {
+            "paginationTokenNext": "CLShORoJKQB4uKAtAQAAGg06C2F1dG9tYS10ZWNoGgw6CjBwMDAwMDl3YjkiDDoKMFAwMDAwOVdCOQ==",
+            "totalCount": 1213,
+            "requestId": "544e78d8-4974-4e84-9f2a-25a85d59f68b",
+            "time": "2025-10-06T15:15:48.3256389Z"
+          }
+        }
+      },
+      "ScreenerResponseExample8": {
+        "summary": "Nested Compound Query - OR then AND",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0000DKX2",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0017,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0012,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8863,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0022,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.000001,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.09284,
+              "factorProfile.styleFactorMultiAssetModel": 0.298316,
+              "marketCapital.asOfDate": "2025-01-06",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.151184,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.491438,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 9.643232,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.059133,
+              "trailingReturn.trailing10YearReturn": 0.453506,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ALMIL"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001DIM8",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0601,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0702,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 5.0964,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.5581,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.2261,
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0,
+              "factorProfile.realEstateFactorMultiAssetModel": 0,
+              "factorProfile.styleFactorMultiAssetModel": -0.458664,
+              "marketCapital.asOfDate": "2025-10-03",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": 8.286211,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 9.604659,
+              "monthlyStandardDeviation.arithmeticMean24Month": 17.835292,
+              "quantitativeFairValues.quantitativeMoat": 0.276,
+              "shareClassInformation.investmentStatus": 1,
+              "shareClassInformation.symbol": "AL2SI"
+            }
+          ],
+          "metadata": {
+            "totalCount": 2,
+            "requestId": "ee2ce928-75a6-4a4c-9475-b6f1c74d25a6",
+            "time": "2025-10-06T15:22:26.0786813Z"
+          }
+        }
+      },
+      "ScreenerResponseExample9": {
+        "summary": "Nested Compound Query - OR then AND Deeply Nested",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0000DKX2",
+              "pricesMostRecent.avgVolumeInMil10YrMoEnd": 0.0017,
+              "pricesMostRecent.avgVolumeInMil5YrQtrEnd": 0.0012,
+              "pricesMostRecent.totalVolumeInMil2WkDaily": 0,
+              "indexLevelsPrice.closeAsMovingAvg200DayMoEnd": 0.8863,
+              "pricesMostRecent.avgVolumeInMil9MoDaily": 0.0022,
+              "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate": "2025-09-08",
+              "factorProfile.emergingAsiaPacificFactorMultiAssetModel": 0.000001,
+              "factorProfile.realEstateFactorMultiAssetModel": 0.09284,
+              "factorProfile.styleFactorMultiAssetModel": 0.298316,
+              "marketCapital.asOfDate": "2025-01-06",
+              "dividendResidualRiskAndReturnSensitivity.beta24Month": -0.151184,
+              "dividendResidualRiskAndReturnSensitivity.beta120Month": 0.491438,
+              "dividendResidualRiskAndReturnSensitivity.rSquare60Month": 9.643232,
+              "monthlyStandardDeviation.arithmeticMean24Month": 2.059133,
+              "trailingReturn.trailing10YearReturn": 0.453506,
+              "shareClassInformation.investmentStatus": 0,
+              "shareClassInformation.symbol": "ALMIL"
+            }
+          ],
+          "metadata": {
+            "totalCount": 1,
+            "requestId": "719d36b6-3b73-46ca-8029-7cb8800fb670",
+            "time": "2025-10-06T15:41:05.9460985Z"
+          }
+        }
+      },
+      "DataPointsResponseExample1": {
+        "summary": "Equities Data Points",
+        "value": {
+          "dataPoints": [
+            {
+              "type": "decimal",
+              "name": "esgCompanyLevel2DataCarbonEmissions.carbonIntensity",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "factorProfile.emergingAsiaPacificFactorMultiAssetModel",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "bool",
+              "name": "esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "indexLevelsPrice.closeAsMovingAvg200DayMoEnd",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "shortInterest.percentageChanged",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "int",
+              "name": "companyInformation.sic",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "int",
+              "name": "esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "monthlyStandardDeviation.arithmeticMean24Month",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "dividendResidualRiskAndReturnSensitivity.beta24Month",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "pricesMostRecent.avgVolumeInMil5YrQtrEnd",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "shareClassInformation.symbol",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "factorProfile.styleFactorMultiAssetModel",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "int",
+              "name": "esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "int",
+              "name": "shareClassInformation.investmentStatus",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "pricesMostRecent.avgVolumeInMil10YrMoEnd",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "earningReport.commonDividendPerShareValueFY",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "int",
+              "name": "esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "dividendResidualRiskAndReturnSensitivity.beta120Month",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "string",
+              "name": "esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": true
+            },
+            {
+              "type": "decimal",
+              "name": "trailingReturn.trailing10YearReturn",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": true,
+              "isLanguageDependent": false,
+              "isSortable": true
+            }
+          ],
+          "metadata": {
+            "requestId": "f2e6ec6a-3f90-4b3c-a951-7558607a8d20",
+            "time": "2025-09-29T13:04:51.190876Z"
+          }
+        }
+      },
+      "ResponseStatus400ScreenerExample1": {
+        "summary": "400 - Invalid Data Point Names",
+        "value": {
+          "statusCode": 400,
+          "errorCode": "400.screener.005",
+          "message": "Invalid dataPoint names {0}. Provide valid values.",
+          "requestId": "5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9"
+        }
+      },
+      "ResponseStatus500ScreenerExample1": {
+        "summary": "500 - Internal Server Error",
+        "value": {
+          "statusCode": 500,
+          "errorCode": "500.screener.001",
+          "message": "TBC",
+          "requestId": "5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9"
+        }
+      }
+    },
+    "schemas": {
+      "RequestEquitiesScreener": {
+        "title": "RequestEquitiesScreener",
+        "description": "Screener request body. All fields are optional, however either `scope` or `query` must be provided.",
+        "type": "object",
+        "properties": {
+          "scope": {
+            "description": "Defines the starting universe of investments. For equities, the scoping data point is `shareClassInformation.exchangeCode`. \nCompound and nested compound queries are supported. Each branch of the query must contain the scoping data point.",
+            "$ref": "#/components/schemas/InputQueryOptions"
+          },
+          "query": {
+            "$ref": "#/components/schemas/InputQueryOptions"
+          },
+          "dataPoints": {
+            "$ref": "#/components/schemas/InputDataPoints"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/InputPaginationOptions"
+          },
+          "sort": {
+            "description": "Specifies one or more data points to sort results by. If multiple values are provided, they are applied in the order listed in the array (the first value is the primary sort key, the second value is the secondary key, and so on).\nData points specified must correspond to a value passed in the `dataPoints` array.\nIf not provided, results will be sorted by `investmentIdentfiers.performanceId`.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputSortOption"
+            },
+            "nullable": true
+          },
+          "languageId": {
+            "description": "Specifies the language code used to filter language-dependent results.",
+            "type": "string",
+            "default": "ENG",
+            "example": "JPN",
+            "enum": [
+              "ARA",
+              "CHI",
+              "DAN",
+              "DUT",
+              "ENG",
+              "FIN",
+              "FRE",
+              "GER",
+              "HEB",
+              "ITA",
+              "JPN",
+              "KOR",
+              "NOR",
+              "POR",
+              "SPA",
+              "SWE",
+              "THA",
+              "ZHO"
+            ],
+            "x-enumDescriptions": [
+              "ARA (Arabic)",
+              "CHI or ZHO (Chinese)",
+              "DAN (Danish)",
+              "DUT (Dutch)",
+              "ENG (English)",
+              "FIN (Finnish)",
+              "FRE (French)",
+              "GER (German)",
+              "HEB (Hebrew)",
+              "ITA (Italian)",
+              "JPN (Japanese)",
+              "KOR (Korean)",
+              "NOR (Norwegian)",
+              "POR (Portuguese)",
+              "SPA (Spanish)",
+              "SWE (Swedish)",
+              "THA (Thai)"
+            ],
+            "nullable": true
+          },
+          "currencyId": {
+            "description": "Specifies the currency code used to filter currency-dependent results. Accepts ISO 4217 currency codes.",
+            "type": "string",
+            "example": "EUR",
+            "default": "USD",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseEquitiesScreener": {
+        "title": "ResponseEquitiesScreener",
+        "description": "Screener response including results and metadata.",
+        "type": "object",
+        "properties": {
+          "investments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputInvestment"
+            },
+            "nullable": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/OutputScreenerMetadata"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseDataPoints": {
+        "title": "ResponseDataPoints",
+        "description": "Data points and operators supported for equities screening.",
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/OutputDataPointsMetadata"
+          },
+          "dataPoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputDataPoints"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputQueryOptions": {
+        "title": "InputQueryOptions",
+        "description": "Filters investments using `field:value` conditions or compound logic. For example:\n* Basic query - \"equals\": `{ \"shareClassInformation.symbol\": \"MSES\" }`\n* Basic query - \"in\": `{ \"shareClassInformation.symbol\": [\"MSES\", \"CA40\"] }`\n* Basic query - \"range\": `{ \"marketCapital.asOfDate\": { \"gt\": \"2020-01-01\", \"lt\": \"2024-01-01\" } }`\n* Compound query: `{ \"and\": [ { \"field1\": \"value1\" }, { \"field2\": \"value2\" } ] }`\n* Nested compound query: `{ \"or\": [ { \"and\": [ ... ] }, { \"field\": \"value\" } ] }`",
+        "type": "object",
+        "properties": {
+          "and": {
+            "description": "All conditions must match (logical AND). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputQueryOptions"
+            }
+          },
+          "or": {
+            "description": "At least one condition must match (logical OR). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputQueryOptions"
+            }
+          },
+          "not": {
+            "description": "All conditions must not match (logical NOT). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputQueryOptions"
+            }
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/InputFilterOptions"
+        },
+        "propertyNames": {
+          "description": "Data points supported for filtering and sorting in screener queries. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/equities/data-points`, or browse the full reference in the data dictionary.",
+          "type": "string",
+          "example": "companyInformation.domicileCountryCode",
+          "externalDocs": {
+            "description": "Data dictionary (Excel)",
+            "url": "https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx"
+          }
+        }
+      },
+      "InputDataPoints": {
+        "title": "InputDataPoints",
+        "description": "Lists data points to return. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/equities/data-points`, or browse the full reference in the data dictionary.",
+        "type": "array",
+        "maxItems": 100,
+        "items": {
+          "type": "string"
+        },
+        "example": [
+          "companyInformation.cik",
+          "companyInformation.legalName",
+          "companyInformation.morningstarSectorCode",
+          "balanceSheet.totalAssetsValueFY",
+          "basicReference.isin"
+        ],
+        "externalDocs": {
+          "description": "Data dictionary (Excel)",
+          "url": "https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx"
+        }
+      },
+      "InputPaginationOptions": {
+        "title": "InputPaginationOptions",
+        "description": "Determines how results are paginated.",
+        "type": "object",
+        "properties": {
+          "paginationTokenNext": {
+            "description": "Specifies the target of the next API call.",
+            "type": "string",
+            "example": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK",
+            "nullable": true
+          },
+          "paginationTokenPrevious": {
+            "description": "Specifies the target of the next API call.",
+            "type": "string",
+            "example": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK",
+            "nullable": true
+          },
+          "pageSize": {
+            "description": "Specifies the maximum number of results per page. The default value is 50.",
+            "type": "integer",
+            "format": "int32",
+            "example": 50,
+            "default": 50,
+            "maximum": 50
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputSortOption": {
+        "title": "InputSortOption",
+        "description": "The data point and sort direction. The data point must correspond to a value passed in the `dataPoints` array.",
+        "type": "object",
+        "properties": {
+          "dataPoint": {
+            "description": "Data point name.",
+            "example": "shareClassInformation.exchangeCode",
+            "default": "performanceId",
+            "type": "string",
+            "nullable": true
+          },
+          "orderBy": {
+            "description": "Sort direction.",
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "x-enumDescriptions": [
+              "asc (Ascending)",
+              "desc (Descending)"
+            ],
+            "default": "asc",
+            "example": "desc"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputFilterOptions": {
+        "title": "InputFilterOptions",
+        "description": "Supported operators for data point filtering.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/InputFieldValueFilter"
+          },
+          {
+            "$ref": "#/components/schemas/InputFieldValueFilterFuzzy"
+          },
+          {
+            "$ref": "#/components/schemas/InputFieldValueComparitorFilter"
+          }
+        ]
+      },
+      "InputFieldValueComparitorFilter": {
+        "title": "InputFieldValueComparitorFilter",
+        "description": "Filters for values within a range or based on a comparator condition. Supports numeric, integer, and date string data types.",
+        "type": "object",
+        "additionalProperties": false,
+        "minProperties": 1,
+        "properties": {
+          "gt": {
+            "description": "Greater than",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "gte": {
+            "description": "Greater than or equal",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "lt": {
+            "description": "Less than",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "lte": {
+            "description": "Less than or equal",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          }
+        }
+      },
+      "InputFieldValueFilter": {
+        "title": "InputFieldValueFilter",
+        "description": "Filters for exact matches to value or a match to a value in a list. Supports string, number, integer, boolean, date and array data types.",
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string",
+                  "format": "date"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "InputFieldValueFilterFuzzy": {
+        "title": "InputFieldValueFilterFuzzy",
+        "type": "object",
+        "description": "Filters text string data type using fuzzy text matching.",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "fuzzy": {
+            "type": "boolean",
+            "description": "Enable fuzzy text matching. Text string data types only."
+          }
+        }
+      },
+      "OutputDataPoints": {
+        "description": "Data point filter options.",
+        "type": "object",
+        "title": "OutputDataPoints",
+        "properties": {
+          "name": {
+            "description": "Data points supported for filtering and sorting in screener queries. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/equities/data-points`, or browse the full reference in the data dictionary.",
+            "type": "string",
+            "example": "companyInformation.domicileCountryCode",
+            "externalDocs": {
+              "description": "Data dictionary (Excel)",
+              "url": "https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx"
+            }
+          },
+          "type": {
+            "description": "Indicates the data type.",
+            "type": "string",
+            "enum": [
+              "boolean",
+              "date",
+              "number",
+              "string"
+            ],
+            "x-enumDescriptions": [
+              "boolean (Supports eq operator.)",
+              "date (Supports range operators, and equals and in queries. )",
+              "number (Supports range operators, and equals and in queries. )",
+              "string (Supports equals and in queries. Supports fuzzy searches for some data points.)"
+            ],
+            "example": "boolean",
+            "nullable": true
+          },
+          "operators": {
+            "description": "Indicates the range and compound operators supported by the data point.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "eq",
+                "and",
+                "or",
+                "not"
+              ],
+              "x-enumDescriptions": [
+                "gt (Greater than. Numbers or dates.)",
+                "gte (Greater than or equal to. Numbers or dates.)",
+                "lt (Less than. Numbers or dates.)",
+                "lte (Less than or equals. Supported by number and date data types.)",
+                "eq (Equals. Supported by boolean, date, number, and string data types.)",
+                "and (And. Compound operator.)",
+                "or (Or. Compound operator.)",
+                "not (Not. Compound operator)"
+              ],
+              "example": [
+                "gt",
+                "lt"
+              ]
+            },
+            "nullable": true
+          },
+          "isSortable": {
+            "description": "When true, indicates that data point can be used to sort results.",
+            "type": "boolean",
+            "nullable": true
+          },
+          "isLanguageDependent": {
+            "description": "When true, indicates the data point is language-dependent.",
+            "type": "boolean",
+            "nullable": true
+          },
+          "isCurrencyDependent": {
+            "description": "When true, indicates the data point is currency-dependent.",
+            "type": "boolean",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputInvestment": {
+        "title": "OutputInvestment",
+        "description": "Data points and corresponding values returned for each result. Keys are data point names in the format `<dataGroup>.<fieldName>`. Values may be string, number, integer, or boolean depending on the data point. Use the discovery endpoint to determine the type for each data point.",
+        "type": "object",
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "nullable": true
+        },
+        "example": {
+          "instrumentIdentifiers.performanceId": "0P0001VK71",
+          "shareClassInformation.symbol": "MSES",
+          "shareClassInformation.investmentStatus": 1,
+          "marketCapital.asOfDate": "2025-10-02",
+          "marketCapital.companyLevelMarketCapital": 145230000,
+          "trailingReturn.trailing1YearReturn": 12.45,
+          "esgCompanyLevel2DataCarbonEmissions.carbonIntensity": 92.8,
+          "companyInformation.sic": 6719
+        }
+      },
+      "OutputInvalidInvestment": {
+        "title": "OutputInvalidInvestment",
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "Provides information about an investment returned.",
+            "example": "Data points are not entitled for 0P0001VK70 security.",
+            "type": "string",
+            "nullable": true
+          },
+          "dataPoints": {
+            "description": "Indicates the data points that could not be returned for the investment.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "companyInformation.cik",
+                "balanceSheet.totalAssetsValueFY",
+                "basicReference.isin"
+              ],
+              "externalDocs": {
+                "description": "Data dictionary (Excel)",
+                "url": "https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx"
+              }
+            }
+          },
+          "errorCode": {
+            "description": "Indicates error code.",
+            "example": 403,
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "description": "Indicates the investment for which no data was returned.",
+            "example": "0P0001VK70",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputScreenerMetadata": {
+        "description": "Metadata returned in response to requests to `POST /screeners/equities` endpoint. Includes information about data points not returned for results.",
+        "title": "OutputScreenerMetadata",
+        "type": "object",
+        "properties": {
+          "paginationTokenNext": {
+            "type": "string",
+            "description": "Indicates token to fetch next page of results.",
+            "example": "CNOAQhoJKQBIuTktAQAAGhU6E3RlYW0gcGFydG5lcnMgZ3JvdXAaDDoKMHAwMDAwYTZ6dCIMOgowUDAwMDBBNlpU",
+            "nullable": true
+          },
+          "paginationTokenPrevious": {
+            "type": "string",
+            "description": "Indicates token to fetch previous page of results.",
+            "example": "CKDjNhoJKQBIuTktAQAAGg06C2dkZiBzdWV6IHNhGgw6CjBwMDAwMDl3cW8iDDoKMFAwMDAwOVdRTw==",
+            "nullable": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "Indicates the total number of results found.",
+            "example": 2162,
+            "format": "int32",
+            "nullable": true
+          },
+          "messages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputMessage"
+            },
+            "nullable": true
+          },
+          "requestId": {
+            "description": "Indicates request identifier.",
+            "example": "c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c",
+            "type": "string"
+          },
+          "time": {
+            "description": "Indicates time response was returned.",
+            "example": "2025-10-02T10:54:36.9161062Z",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputDataPointsMetadata": {
+        "description": "Metadata returned in response to requests to `GET /screeners/equities/data-points` endpoint.",
+        "title": "OutputDataPointsMetadata",
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "description": "Indicates request identifier.",
+            "example": "c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c",
+            "type": "string"
+          },
+          "time": {
+            "description": "Indicates time response was returned.",
+            "example": "2025-10-02T10:54:36.9161062Z",
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputMessage": {
+        "title": "OutputMessage",
+        "description": "Indicates why specific data points were not returned for a result.",
+        "type": "object",
+        "properties": {
+          "investments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputInvalidInvestment"
+            }
+          },
+          "type": {
+            "description": "Indicates the type of the message.",
+            "example": "Warning",
+            "type": "string"
+          },
+          "message": {
+            "description": "Message text.",
+            "example": "Data points are not entitled for 0P0002OW20 security",
+            "type": "string"
+          },
+          "code": {
+            "description": "Indicates the message code.",
+            "example": 403,
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputError": {
+        "title": "OutputError",
+        "description": "Error message and status code.",
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "string",
+            "description": "Indicates the HTTP status code.",
+            "example": 400
+          },
+          "errorCode": {
+            "type": "string",
+            "description": "Indicates the unique error identifier.",
+            "example": "400.screener.006"
+          },
+          "message": {
+            "type": "string",
+            "description": "Description of the errror.",
+            "example": "Please provide valid sort option."
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Indicates the unique request identifier.",
+            "example": "6631c374-2331-4c7e-b6f2-d0c0079f6ee"
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}

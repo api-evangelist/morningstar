@@ -1,0 +1,4763 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "FinaMetrica Profiler",
+    "description": "Get questions and response options for risk tolerance, experience, and know your client questionnaires. Submit questionnaire responses to get data that can be used to calculate suitability scores for a client. Get a specific questionnaire response or the entire response history for a client. Submit new and access existing professional judgement matrices.",
+    "version": "v1"
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/finametrica-profiler/v1",
+      "variables": {}
+    }
+  ],
+  "paths": {
+    "/questionnaires/risk-questionnaires/{questionnaireId}": {
+      "get": {
+        "summary": "Get risk tolerance questionnaire",
+        "description": "Get questions and possible options for the Risk Tolerance questionnaire.",
+        "tags": [
+          "questionnaires"
+        ],
+        "operationId": "requestRiskQuestionnaire",
+        "parameters": [
+          {
+            "name": "questionnaireId",
+            "in": "path",
+            "description": "Unique identifier of a questionnaire",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "FM10S30",
+                "FM25V30"
+              ]
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "en-AU",
+                "en-IN",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Questionnaire"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/generate-id": {
+      "post": {
+        "summary": "Create unique identifier for a client",
+        "description": "Create a unique identifier for a client. You use this alphanumeric ID to identify your client within FinaMetrica. You must include the ID when submitting and retrieving a client's responses. The ID is generated based on the `externalId` (for example, client's email address) that is sent in the request. If your client already has an ID, you do not need to generate a new one. The ID will never expire.",
+        "tags": [
+          "clients"
+        ],
+        "operationId": "generateClientId",
+        "parameters": [
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GenerateIdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseGuidPayload"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/risks/questionnaires": {
+      "post": {
+        "summary": "Submit risk tolerance response",
+        "description": "Submit a client’s responses to the risk tolerance questionnaire and return a risk tolerance score. In the response, a unique identifier for the questionnaire will be returned. The identifier can be used to retrieve the answers at any time in the future.",
+        "tags": [
+          "clients"
+        ],
+        "operationId": "submitRiskQuestionnaireResponse",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "en-AU",
+                "en-IN",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/QuestionnaireRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAndScorePayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get risk tolerance responses history",
+        "description": "Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the responses the client has given to past questionnaires.",
+        "tags": [
+          "clients"
+        ],
+        "operationId": "getRiskQuestionnaireResponseHistory",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "query",
+            "description": "Unique identifier of a client",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoryPayload"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/risks/questionnaires/{responseId}": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get risk tolerance response and score",
+        "description": "Get a specific risk questionnaire response and score for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted.",
+        "operationId": "getRiskQuestionnaireResponse",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "query",
+            "description": "Unique identifier of a client",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "responseId",
+            "in": "path",
+            "description": "Unique identifier of a response to a questionnaire",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "en-AU",
+                "en-IN",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseAndScorePayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/risks/questionnaires/{responseId}/agreed-score": {
+      "patch": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Submit risk tolerance agreed score",
+        "description": "Submit a client’s agreed score. Before submitting a score, it must be discussed with the client and the client must agree with the score.",
+        "operationId": "submitRiskQuestionnaireAgreedScore",
+        "parameters": [
+          {
+            "name": "responseId",
+            "in": "path",
+            "description": "Unique identifier of a response to a questionnaire",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AgreedRPRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AgreedRPPayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/solutions/calculate-suitability-score": {
+      "post": {
+        "summary": "Calculate suitability score",
+        "description": "Using the Professional Judgment Matrix (PJM) framework, calculates the suitability score and score constraints of an investment/portfolio.",
+        "tags": [
+          "clients"
+        ],
+        "operationId": "calculateSuitabilityScore",
+        "parameters": [
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CalculateSuitabilityScoreRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalculateSuitabilityScoreResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/solutions/comfort-ranges": {
+      "get": {
+        "summary": "Get comfort growth or comfort score ranges for a given portfolio risk score",
+        "description": "Get comfort growth or comfort score ranges for a given portfolio risk score.",
+        "tags": [
+          "clients"
+        ],
+        "operationId": "getComfortRanges",
+        "parameters": [
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "rangeType",
+            "in": "query",
+            "description": "Comfort range type.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "GROWTH",
+                "SCORE"
+              ]
+            }
+          },
+          {
+            "name": "score",
+            "in": "query",
+            "description": "Score value. Value must be in the range 0 - 110.",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "region",
+            "in": "query",
+            "description": "Region or country value.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "AU",
+                "CA",
+                "EUR",
+                "IN",
+                "NZ",
+                "UK",
+                "USA"
+              ]
+            }
+          },
+          {
+            "name": "version",
+            "in": "query",
+            "description": "Version of the Comfort score ranges",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "V3"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ComfortRangesPayloadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/investment-profiles/{profileId}": {
+      "get": {
+        "summary": "Get investment profiles",
+        "description": "Get investment profiles that can be used to select an asset allocation for an investment/portfolio depending on the client’s suitability score.",
+        "tags": [
+          "investment profiles"
+        ],
+        "operationId": "getInvestmentProfiles",
+        "parameters": [
+          {
+            "name": "profileId",
+            "in": "path",
+            "description": "Unique identifier of an investment profile",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestmentProfilesPayloadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/investment-profiles": {
+      "post": {
+        "summary": "Create investment profile",
+        "description": "Create an investment profile that can be used to customize asset allocation.",
+        "tags": [
+          "investment profiles"
+        ],
+        "operationId": "postInvestmentProfiles",
+        "parameters": [
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InvestmentProfilesPayloadRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvestmentProfilesPayloadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Best fit score data not found for an investment policy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse422"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/questionnaires/experience-questionnaires/{questionnaireId}": {
+      "get": {
+        "summary": "Get experience questionnaire",
+        "description": "Get questions and possible options for the Experience questionnaire.",
+        "tags": [
+          "questionnaires"
+        ],
+        "operationId": "requestExperienceQuestionnaire",
+        "parameters": [
+          {
+            "name": "questionnaireId",
+            "in": "path",
+            "description": "Unique identifier of a questionnaire",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "EXP10"
+              ]
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Questionnaire"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/experience/questionnaires": {
+      "get": {
+        "summary": "Get experience responses history",
+        "description": "Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the responses the client has given to past questionnaires.",
+        "tags": [
+          "clients"
+        ],
+        "operationId": "getExperienceQuestionnaireResponseHistory",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "query",
+            "description": "Unique identifier of a client",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoryPayload"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Submit experience response",
+        "description": "Submit a client’s responses to the experience questionnaire. In the response, a unique identifier for the questionnaire will be returned. The identifier can be used to retrieve the answers at any time in the future.",
+        "tags": [
+          "clients"
+        ],
+        "operationId": "submitExperienceQuestionnaireResponse",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "en-AU",
+                "en-IN",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "questionnarieRequired",
+            "in": "query",
+            "description": "Flag to change the nature of the questions in the Experience questionnaire",
+            "example": "true",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExperienceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseGuidPayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/experience/questionnaires/{responseId}": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get experience response",
+        "description": "Get a specific experience questionnaire response for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted.",
+        "operationId": "getExperienceQuestionnaireResponse",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "query",
+            "description": "Unique identifier of a client",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "responseId",
+            "in": "path",
+            "description": "Unique identifier of a response to a questionnaire",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "en-AU",
+                "en-IN",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseAnswerResponsePayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/questionnaires/kyc-questionnaires/{questionnaireId}": {
+      "get": {
+        "summary": "Get know your client questionnaire",
+        "description": "Get questions and possible options for the Know Your Client questionnaire.",
+        "tags": [
+          "questionnaires"
+        ],
+        "operationId": "requestKycQuestionnaire",
+        "parameters": [
+          {
+            "name": "questionnaireId",
+            "in": "path",
+            "description": "Unique identifier of a questionnaire",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "KYC10"
+              ]
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "en-AU",
+                "en-IN",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Questionnaire"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/kyc/questionnaires": {
+      "get": {
+        "summary": "Get know your client responses history",
+        "description": "Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the responses the client has given to past questionnaires.",
+        "tags": [
+          "clients"
+        ],
+        "operationId": "getKycQuestionnaireResponseHistory",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "query",
+            "description": "Unique identifier of a client",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoryPayload"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Submit know your client response",
+        "description": "Submit a client’s responses to the know your client questionnaire. In the response, a unique identifier for the questionnaire will be returned. The identifier can be used to retrieve the answers at any time in the future.",
+        "tags": [
+          "clients"
+        ],
+        "operationId": "submitKycQuestionnaireResponse",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "en-AU",
+                "en-IN",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KYCRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseGuidPayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/clients/kyc/questionnaires/{responseId}": {
+      "get": {
+        "tags": [
+          "clients"
+        ],
+        "summary": "Get know your client response",
+        "description": "Get a specific know your client questionnaire response for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted.",
+        "operationId": "getKycQuestionnaireResponse",
+        "parameters": [
+          {
+            "name": "clientId",
+            "in": "query",
+            "description": "Unique identifier of a client",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "responseId",
+            "in": "path",
+            "description": "Unique identifier of a response to a questionnaire",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BaseAnswerResponsePayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pjm": {
+      "post": {
+        "summary": "Submit new professional judgement matrix configuration",
+        "description": "Submit new professional judgement matrix configuration. In the response, a unique identifier `pjmId` for the configuration will be returned. The identifier can be used to retrieve the configuration at any time in the future.",
+        "tags": [
+          "professional judgement matrices"
+        ],
+        "operationId": "submitPjmConfiguration",
+        "parameters": [
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PjmRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PjmResponsePayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pjm/{pjmId}": {
+      "get": {
+        "tags": [
+          "professional judgement matrices"
+        ],
+        "summary": "Get professional judgement matrix configuration",
+        "description": "Get a specific professional judgement matrix configuration. The configuration is identified by the value in the `pjmId` parameter. This ID was returned in the response when the configuration was created.",
+        "operationId": "getPjmConfiguration",
+        "parameters": [
+          {
+            "name": "pjmId",
+            "in": "path",
+            "description": "Unique identifier of a professional judgement matrix configuration",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PjmWithHistoryResponsePayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update existing professional judgement matrix configuration",
+        "description": "Update existing professional judgement matrix configuration. In the response, a unique identifier `pjmId` for the configuration will be returned. The identifier can be used to retrieve the configuration at any time in the future.",
+        "tags": [
+          "professional judgement matrices"
+        ],
+        "operationId": "updatePjmConfiguration",
+        "parameters": [
+          {
+            "name": "pjmId",
+            "in": "path",
+            "description": "Unique identifier of a professional judgement matrix configuration",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Payload",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PjmRequestPayload"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PjmUpdateResponsePayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/risks/{responseId}": {
+      "get": {
+        "summary": "Get the content of a specific response to a questionnaire",
+        "description": "Get the content of a specific response to a questionnaire, including the static text, risk tolerance responses, and footnotes. In the `ignoreSections` parameter, specify any sections you do not want returned in the response.",
+        "tags": [
+          "reports"
+        ],
+        "operationId": "getRiskReport",
+        "parameters": [
+          {
+            "name": "responseId",
+            "in": "path",
+            "description": "Unique identifier of a response to a questionnaire",
+            "required": true,
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "clientId",
+            "in": "query",
+            "description": "Unique identifier of a client",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "ignoreSections",
+            "in": "query",
+            "description": "Define the sections you do NOT want to include in the report. It must be a comma separated string with the specific sections to ignore in the response. If not specified, all the sections will be included.",
+            "required": false,
+            "example": "RISK_TOLERANCE,USING_YOUR_PROFILE,RISK_TOLERANCE_SCORE,RISK_GROUP,YOUR_DIFFERENCES,FOOTNOTES",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US"
+              ]
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportResponsePayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reports/data-points": {
+      "get": {
+        "summary": "Extract clients data in csv format.",
+        "description": "Extract client data with questionnaire answers and suitability score calculations.",
+        "tags": [
+          "reports"
+        ],
+        "operationId": "getDataPointReport",
+        "parameters": [
+          {
+            "name": "startDate",
+            "in": "query",
+            "description": "Date to start fetching records.",
+            "example": "20200601",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "endDate",
+            "in": "query",
+            "description": "Date to limit fetching record.",
+            "example": "20200228",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "File download.",
+            "content": {
+              "application/csv": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            },
+            "headers": {
+              "Content-Disposition": {
+                "description": "attachment; filename=data-points-20200601-20200228.csv",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/portfolios/investments": {
+      "get": {
+        "summary": "Get the content of the mix of investments matrix",
+        "description": "Get the content of the mix of investments matrix with the set of portfolios and their high, medium, low percentage of return.",
+        "tags": [
+          "portfolios"
+        ],
+        "operationId": "getMixInvestments",
+        "parameters": [
+          {
+            "name": "X-API-RequestId",
+            "in": "header",
+            "description": "Initial request identifier",
+            "example": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Indicate the locale for the request. e.g. en-US, fr-CA",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "en-GB",
+                "fr-CA"
+              ]
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "Bearer access token authorization",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MixInvestmentsPayload"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse400"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse404"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse500"
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Internal server communication failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse502"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Paragraph": {
+        "type": "object",
+        "title": "Paragraph",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Paragraph text",
+            "example": "Compared to others, how do you rate your willingness to take financial risks?"
+          },
+          "htmlMarkup": {
+            "type": "boolean",
+            "example": false,
+            "description": "True if the text field is an HTML markup, otherwise text field is plain text"
+          },
+          "image": {
+            "type": "boolean",
+            "example": true,
+            "description": "True if the paragraph is an image, otherwise is text"
+          },
+          "imageHref": {
+            "type": "string",
+            "example": "https://www.morningstart.com/finametrica/images/risk.png",
+            "description": "Image URL"
+          }
+        }
+      },
+      "Option": {
+        "type": "object",
+        "title": "Option",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "FM10-1-1",
+            "description": "Option unique identifier"
+          },
+          "text": {
+            "type": "string",
+            "example": "Extremely low risk taker.",
+            "description": "Option text"
+          },
+          "displayOrder": {
+            "type": "integer",
+            "example": "1",
+            "description": "Question display order"
+          },
+          "htmlMarkup": {
+            "type": "boolean",
+            "example": false,
+            "description": "True if the text field is an HTML markup, otherwise text field is plain text"
+          },
+          "image": {
+            "type": "boolean",
+            "example": false,
+            "description": "True if the option is an image, otherwise is text"
+          },
+          "imageHref": {
+            "type": "string",
+            "example": "https://www.morningstart.com/finametrica/images/risk.png",
+            "description": "Image URL"
+          }
+        }
+      },
+      "Question": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "FM10-1",
+            "description": "Question unique identifier"
+          },
+          "titleText": {
+            "type": "string",
+            "description": "Question title text",
+            "example": "Self-Rating"
+          },
+          "multipleSelect": {
+            "type": "boolean",
+            "description": "Multiple selections for the question, if this is true the question allows multiple answers",
+            "example": false
+          },
+          "displayOrder": {
+            "type": "integer",
+            "description": "Question display order",
+            "example": "1"
+          },
+          "paragraphs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Paragraph"
+            }
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Option"
+            }
+          }
+        }
+      },
+      "Questionnaire": {
+        "type": "object",
+        "title": "Questionnaire",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Questionnaire title",
+            "example": "FinaMetrica 10"
+          },
+          "id": {
+            "type": "string",
+            "description": "Questionnaire unique identifier",
+            "example": "FM10S30"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Question"
+            }
+          }
+        }
+      },
+      "QuestionRequest": {
+        "type": "object",
+        "title": "QuestionRequest",
+        "properties": {
+          "answers": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "FM10-1-4",
+              "description": "Answer unique identifier"
+            }
+          },
+          "id": {
+            "type": "string",
+            "description": "Question unique identifier",
+            "example": "FM10-1"
+          }
+        }
+      },
+      "GenerateIdRequest": {
+        "type": "object",
+        "title": "GenerateIdRequest",
+        "properties": {
+          "externalId": {
+            "type": "string",
+            "description": "External unique identifier",
+            "example": "Email ID"
+          }
+        }
+      },
+      "QuestionnaireRequest": {
+        "type": "object",
+        "title": "QuestionnaireRequest",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Client unique identifier",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de"
+          },
+          "questionnaire": {
+            "type": "string",
+            "description": "Questionnaire unique identifier",
+            "example": "FM10S30"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionRequest"
+            },
+            "example": [
+              {
+                "id": "FM10-1",
+                "answers": [
+                  "FM10-1-1"
+                ]
+              },
+              {
+                "id": "FM10-2",
+                "answers": [
+                  "FM10-2-4"
+                ]
+              },
+              {
+                "id": "FM10-3",
+                "answers": [
+                  "FM10-3-1"
+                ]
+              },
+              {
+                "id": "FM10-4",
+                "answers": [
+                  "FM10-4-4"
+                ]
+              },
+              {
+                "id": "FM10-5",
+                "answers": [
+                  "FM10-5-1"
+                ]
+              },
+              {
+                "id": "FM10-6",
+                "answers": [
+                  "FM10-6-5"
+                ]
+              },
+              {
+                "id": "FM10-7",
+                "answers": [
+                  "FM10-7-1"
+                ]
+              },
+              {
+                "id": "FM10-8",
+                "answers": [
+                  "FM10-8-7"
+                ]
+              },
+              {
+                "id": "FM10-9",
+                "answers": [
+                  "FM10-9-1"
+                ]
+              },
+              {
+                "id": "FM10-10",
+                "answers": [
+                  "FM10-10-6"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "ExperienceRequest": {
+        "type": "object",
+        "title": "ExperienceRequest",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Client unique identifier",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de"
+          },
+          "advisorId": {
+            "type": "string",
+            "description": "Advisor identifier",
+            "example": "aa68dab3-4445-40c5-8295-5a816c6cd5de"
+          },
+          "questionnaire": {
+            "type": "string",
+            "description": "Questionnaire unique identifier",
+            "example": "FM10S30"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionRequest"
+            },
+            "example": [
+              {
+                "id": "FM10-1",
+                "answers": [
+                  "FM10-1-1"
+                ]
+              },
+              {
+                "id": "FM10-2",
+                "answers": [
+                  "FM10-2-4"
+                ]
+              },
+              {
+                "id": "FM10-3",
+                "answers": [
+                  "FM10-3-1"
+                ]
+              },
+              {
+                "id": "FM10-4",
+                "answers": [
+                  "FM10-4-4"
+                ]
+              },
+              {
+                "id": "FM10-5",
+                "answers": [
+                  "FM10-5-1"
+                ]
+              },
+              {
+                "id": "FM10-6",
+                "answers": [
+                  "FM10-6-5"
+                ]
+              },
+              {
+                "id": "FM10-7",
+                "answers": [
+                  "FM10-7-1"
+                ]
+              },
+              {
+                "id": "FM10-8",
+                "answers": [
+                  "FM10-8-7"
+                ]
+              },
+              {
+                "id": "FM10-9",
+                "answers": [
+                  "FM10-9-1"
+                ]
+              },
+              {
+                "id": "FM10-10",
+                "answers": [
+                  "FM10-10-6"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "KYCRequest": {
+        "type": "object",
+        "title": "KYCRequest",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Client unique identifier",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de"
+          },
+          "advisorId": {
+            "type": "string",
+            "description": "Advisor identifier",
+            "example": "aa68dab3-4445-40c5-8295-5a816c6cd5de"
+          },
+          "questionnaire": {
+            "type": "string",
+            "description": "Questionnaire unique identifier",
+            "example": "FM10S30"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionRequest"
+            },
+            "example": [
+              {
+                "id": "FM10-1",
+                "answers": [
+                  "FM10-1-1"
+                ]
+              },
+              {
+                "id": "FM10-2",
+                "answers": [
+                  "FM10-2-4"
+                ]
+              },
+              {
+                "id": "FM10-3",
+                "answers": [
+                  "FM10-3-1"
+                ]
+              },
+              {
+                "id": "FM10-4",
+                "answers": [
+                  "FM10-4-4"
+                ]
+              },
+              {
+                "id": "FM10-5",
+                "answers": [
+                  "FM10-5-1"
+                ]
+              },
+              {
+                "id": "FM10-6",
+                "answers": [
+                  "FM10-6-5"
+                ]
+              },
+              {
+                "id": "FM10-7",
+                "answers": [
+                  "FM10-7-1"
+                ]
+              },
+              {
+                "id": "FM10-8",
+                "answers": [
+                  "FM10-8-7"
+                ]
+              },
+              {
+                "id": "FM10-9",
+                "answers": [
+                  "FM10-9-1"
+                ]
+              },
+              {
+                "id": "FM10-10",
+                "answers": [
+                  "FM10-10-6"
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "OptionPayload": {
+        "type": "object",
+        "title": "OptionPayload",
+        "properties": {
+          "displayOrder": {
+            "type": "integer",
+            "example": 1,
+            "description": "Option display order"
+          },
+          "id": {
+            "type": "string",
+            "example": 1,
+            "description": "Option unique identifier"
+          },
+          "text": {
+            "type": "string",
+            "example": "Extremely low risk taker",
+            "description": "Option text"
+          },
+          "selected": {
+            "type": "boolean",
+            "example": true,
+            "description": "True if the option is selected by the client, false otherwise"
+          }
+        }
+      },
+      "QuestionPayload": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Question unique identifier",
+            "example": "FM10-1"
+          },
+          "title": {
+            "type": "string",
+            "example": "Willingness to take financial risk",
+            "description": "Question title"
+          },
+          "text": {
+            "type": "string",
+            "example": "Compared to others, how do you rate your willingness to take financial risks?",
+            "description": "Question text"
+          },
+          "displayOrder": {
+            "type": "integer",
+            "description": "Question display order",
+            "example": 1
+          },
+          "multipleSelect": {
+            "type": "boolean",
+            "example": false,
+            "description": "Multiple selections for the question, if this is true the question allows multiple answers"
+          },
+          "options": {
+            "type": "array",
+            "description": "List of options for question",
+            "items": {
+              "$ref": "#/components/schemas/OptionPayload"
+            }
+          }
+        },
+        "title": "QuestionPayload"
+      },
+      "QuestionnairePayload": {
+        "type": "object",
+        "title": "QuestionnairePayload",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Questionnaire unique identifier",
+            "example": "FM10S30"
+          },
+          "title": {
+            "type": "string",
+            "example": "Finametrica 10",
+            "description": "Questionnaire title"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionPayload"
+            }
+          }
+        }
+      },
+      "AgreedRPPayload": {
+        "type": "object",
+        "title": "AgreedRPPayload",
+        "properties": {
+          "agreedRPChange": {
+            "type": "boolean",
+            "example": true,
+            "description": "True if the risk profile changed, otherwise false"
+          },
+          "agreedScore": {
+            "type": "integer",
+            "example": 80,
+            "description": "Score value"
+          },
+          "changeDate": {
+            "type": "string",
+            "example": "2018/09/15",
+            "description": "Score changed date"
+          },
+          "comment": {
+            "type": "string",
+            "example": "This is a comment",
+            "description": "Comment"
+          }
+        }
+      },
+      "RiskFullPayload": {
+        "type": "object",
+        "title": "RiskFullPayload",
+        "properties": {
+          "agreedChangedDate": {
+            "type": "string",
+            "example": "2020-05-28",
+            "description": "Score changed date (yyyy-mm-dd)"
+          },
+          "agreedRiskGroup": {
+            "type": "string",
+            "example": "FM12",
+            "description": "Client agreed risk group"
+          },
+          "agreedRiskHistory": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AgreedRPPayload"
+            }
+          },
+          "agreedScore": {
+            "type": "integer",
+            "example": 37,
+            "description": "Client agreed risk score"
+          },
+          "answers": {
+            "type": "string",
+            "example": "{ \"FM10-1\": \"1\" }",
+            "description": "Client answers in JSON format"
+          },
+          "calculatedRiskGroup": {
+            "type": "string",
+            "example": "Low",
+            "description": "Client risk group"
+          },
+          "calculatedRiskGroupValue": {
+            "type": "string",
+            "example": "LOW",
+            "description": "Client risk group code (VERY_LOW, LOW, AVERAGE, HIGH, VERY_HIGH)"
+          },
+          "calculatedScore": {
+            "type": "integer",
+            "example": 40,
+            "description": "Client risk score"
+          },
+          "comments": {
+            "type": "string",
+            "example": "This is a comment",
+            "description": "Client comment"
+          },
+          "completed": {
+            "type": "boolean",
+            "example": true,
+            "description": "Is risk questionnaire completed"
+          },
+          "completedDate": {
+            "type": "string",
+            "example": "2020-05-28",
+            "description": "Questionnaire complete date (yyyy-mm-dd)"
+          },
+          "defaultQuestionnaireType": {
+            "type": "boolean",
+            "example": true,
+            "description": "Default questionnaire type"
+          },
+          "disappointmentsText": {
+            "type": "string",
+            "example": "When things go wrong financially they are as likely...",
+            "description": "Financial disappointments section"
+          },
+          "employmentText": {
+            "type": "string",
+            "example": "They would be slightly more likely to choose more...",
+            "description": "Employment section"
+          },
+          "financialDecisions": {
+            "type": "string",
+            "example": "Investors in the High risk group are only prepared",
+            "description": "Risk group description"
+          },
+          "financialPastText": {
+            "type": "string",
+            "example": "They have taken a small to medium degree of risk...",
+            "description": "Financial past section"
+          },
+          "govBenefitsText": {
+            "type": "string",
+            "example": "So long as there was only a small chance...",
+            "description": "Government benefits and Tax advantages section"
+          },
+          "groupOverview": {
+            "type": "string",
+            "example": "The description of the High risk group which follows provides...",
+            "description": "Risk group overview"
+          },
+          "inconsistent": {
+            "type": "boolean",
+            "example": true,
+            "description": "If the profile is inconsistent"
+          },
+          "inconsistentHeading": {
+            "type": "string",
+            "example": "Review your differences",
+            "description": "Inconsistency score heading"
+          },
+          "inconsistentMessage": {
+            "type": "string",
+            "example": "Based on how your answers differed, we recommend...",
+            "description": "Inconsistency score message"
+          },
+          "adjustedHeading": {
+            "type": "string",
+            "example": "Suggested Score",
+            "description": "Adjusted score heading"
+          },
+          "adjustedMessage": {
+            "type": "string",
+            "example": "Based on how your answers differed, we recommend...",
+            "description": "Adjusted score message"
+          },
+          "investmentText": {
+            "type": "string",
+            "example": "It is somewhat more important that the value of...",
+            "description": "Investment section"
+          },
+          "person": {
+            "type": "string",
+            "example": "John Smith",
+            "description": "Client Name"
+          },
+          "riskTolerancePercentText": {
+            "type": "string",
+            "example": "This is a higher-than-average score, higher than 77% of all scores.",
+            "description": "Client percent text in para 1"
+          },
+          "selfEstimateScore": {
+            "type": "integer",
+            "example": 40,
+            "description": "Client estimated score. The answer to questionnaire FM25V30 question 25"
+          },
+          "selfEstimateScoreText": {
+            "type": "string",
+            "example": "Congratulations! You were close. Most people under-estimate their score by a few points.",
+            "description": "Client estimated score text calculated using the answer to questionnaire FM25V30 question 25"
+          },
+          "questionDifferences": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            },
+            "example": {
+              "FM25-10": "You are prepared to take only a small degree of risk with your financial decisions",
+              "FM25-2": "When things go wrong financially you usually adapt very easily."
+            }
+          },
+          "categoryLabels": {
+            "type": "array",
+            "description": "List of categories with their labels",
+            "items": {
+              "$ref": "#/components/schemas/CategoryLabel"
+            }
+          }
+        }
+      },
+      "ResponseAndScorePayload": {
+        "type": "object",
+        "title": "ResponseAndScorePayload",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Record creation dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          },
+          "id": {
+            "type": "string",
+            "description": "Record unique identifier",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          },
+          "questionnaire": {
+            "$ref": "#/components/schemas/QuestionnaireResponsePayload"
+          },
+          "score": {
+            "$ref": "#/components/schemas/RiskFullPayload"
+          }
+        }
+      },
+      "HistoryPayload": {
+        "type": "object",
+        "title": "HistoryPayload",
+        "properties": {
+          "completedDate": {
+            "type": "string",
+            "example": "2020-08-04",
+            "description": "Questionnaire response completed date (yyyy-mm-dd)"
+          },
+          "createdAt": {
+            "type": "string",
+            "example": "2020-08-04T20:07:36+0000",
+            "description": "Questionnaire response datetime UTC"
+          },
+          "id": {
+            "type": "string",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a",
+            "description": "Questionnaire response unique identifier"
+          },
+          "person": {
+            "type": "string",
+            "example": "Jhon Wiss",
+            "description": "User name"
+          },
+          "type": {
+            "type": "string",
+            "example": "FM10S30",
+            "description": "Questionnaire type"
+          }
+        }
+      },
+      "AgreedRPRequest": {
+        "type": "object",
+        "title": "AgreedRPRequest",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "Client unique identifier",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de"
+          },
+          "agreedScore": {
+            "type": "integer",
+            "example": 70,
+            "description": "Agreed score"
+          },
+          "comment": {
+            "type": "string",
+            "example": "This is a comment",
+            "description": "Comment for agreed score"
+          }
+        }
+      },
+      "CalculateSuitabilityScoreRequest": {
+        "type": "object",
+        "title": "CalculateSuitabilityScoreRequest",
+        "properties": {
+          "pjmId": {
+            "type": "string",
+            "example": "PJM1",
+            "description": "PJM configuration. Optional"
+          },
+          "clientId": {
+            "type": "string",
+            "description": "Client unique identifier. Optional",
+            "example": "3168dab3-4445-40c5-8295-5a816c6cd5de"
+          },
+          "timeHorizon": {
+            "type": "integer",
+            "example": 3,
+            "description": "Time Horizon in years, When do you expect to need to withdraw a significant part (1/3 or more) of the money in your investment portfolio?"
+          },
+          "riskToleranceScore": {
+            "type": "integer",
+            "example": 20,
+            "description": "Risk tolerance score"
+          },
+          "knowledge": {
+            "type": "integer",
+            "example": 3,
+            "description": "How knowledgeable are you about investing?"
+          },
+          "experience": {
+            "type": "integer",
+            "example": 3,
+            "description": "What types of investments have you held in the past or currently hold?"
+          },
+          "composure": {
+            "type": "integer",
+            "example": 3,
+            "description": "Composure is a measure of your emotional state when markets go up and down in value"
+          },
+          "guid": {
+            "type": "string",
+            "description": "Unique identifier",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Record creation dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          }
+        }
+      },
+      "CalculateSuitabilityScoreResponse": {
+        "type": "object",
+        "title": "CalculateSuitabilityScoreResponse",
+        "properties": {
+          "suitabilityScore": {
+            "type": "integer",
+            "example": 20,
+            "description": "Suitability score result"
+          },
+          "scoreConstraints": {
+            "type": "string",
+            "example": "Suitability score suggested limit is 68 due to investment knowledge and financial composure.",
+            "description": "Reason for suitability score cap"
+          },
+          "experienceConstraints": {
+            "type": "string",
+            "example": "Investor's experience is unknown.",
+            "description": "Text when the experience value is unknown."
+          },
+          "composureConstraints": {
+            "type": "string",
+            "example": "Investor's composure is unknown.",
+            "description": "Text when the composure value is unknown."
+          },
+          "knowledgeConstraints": {
+            "type": "string",
+            "example": "Investor's knowledge is unknown.",
+            "description": "Text when the knowledge value is unknown."
+          }
+        }
+      },
+      "ResponseGuidPayload": {
+        "type": "object",
+        "title": "ResponseGuidPayload",
+        "properties": {
+          "guid": {
+            "type": "string",
+            "description": "Unique identifier",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          }
+        }
+      },
+      "AssetClassPayload": {
+        "type": "object",
+        "title": "AssetClassPayload",
+        "properties": {
+          "label": {
+            "type": "string",
+            "description": "Asset label",
+            "example": "US Stocks"
+          },
+          "count": {
+            "type": "number",
+            "description": "Asset value",
+            "example": 24
+          },
+          "category": {
+            "type": "string",
+            "description": "Asset category",
+            "example": "Bond"
+          }
+        }
+      },
+      "InvestmentPolicyPayload": {
+        "type": "object",
+        "title": "InvestmentPolicyPayload",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          },
+          "title": {
+            "type": "string",
+            "description": "Investment policy title",
+            "example": "Conservative"
+          },
+          "text": {
+            "type": "string",
+            "description": "Investment policy text",
+            "example": "As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities."
+          },
+          "min": {
+            "type": "integer",
+            "description": "Minimum score range",
+            "example": 10
+          },
+          "max": {
+            "type": "integer",
+            "description": "Maximum score range",
+            "example": 30
+          },
+          "profileRiskScore": {
+            "type": "integer",
+            "description": "Portfolio Risk Score value. Value must be in the range 0 - 110.",
+            "example": 30
+          },
+          "assetClass": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssetClassPayload"
+            }
+          },
+          "comfortScoreRanges": {
+            "$ref": "#/components/schemas/ComfortRangesPayloadResponse"
+          }
+        }
+      },
+      "InvestmentProfilesPayloadResponse": {
+        "type": "object",
+        "title": "InvestmentProfilesPayloadResponse",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Record unique identifie",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Record creation dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          },
+          "region": {
+            "type": "string",
+            "description": "Investment profile region",
+            "enum": [
+              "USA",
+              "CA",
+              "UK",
+              "EUR"
+            ]
+          },
+          "investmentPolicies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvestmentPolicyPayload"
+            }
+          }
+        }
+      },
+      "BaseAnswerResponsePayload": {
+        "type": "object",
+        "title": "BaseAnswerResponsePayload",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Record creation dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          },
+          "id": {
+            "type": "string",
+            "description": "Record unique identifier",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          },
+          "title": {
+            "type": "string",
+            "description": "Questionnaire title",
+            "example": "Experience"
+          },
+          "questionnaire": {
+            "$ref": "#/components/schemas/QuestionnairePayload"
+          }
+        }
+      },
+      "TimeHorizonPayload": {
+        "type": "object",
+        "title": "TimeHorizonPayload",
+        "description": "Configurable to set the maximum score depending on the selection provided up a maximum of 22 options",
+        "properties": {
+          "less1": {
+            "type": "integer",
+            "description": "Less than 1 year",
+            "example": 0
+          },
+          "year1": {
+            "type": "integer",
+            "description": "1 year",
+            "example": 1
+          },
+          "year2": {
+            "type": "integer",
+            "description": "2 years",
+            "example": 2
+          },
+          "year3": {
+            "type": "integer",
+            "description": "3 years",
+            "example": 3
+          },
+          "year4": {
+            "type": "integer",
+            "description": "4 years",
+            "example": 4
+          },
+          "year5": {
+            "type": "integer",
+            "description": "5 years",
+            "example": 5
+          },
+          "year6": {
+            "type": "integer",
+            "description": "6 years",
+            "example": 6
+          },
+          "year7": {
+            "type": "integer",
+            "description": "7 years",
+            "example": 7
+          },
+          "year8": {
+            "type": "integer",
+            "description": "8 years",
+            "example": 8
+          },
+          "year9": {
+            "type": "integer",
+            "description": "9 years",
+            "example": 9
+          },
+          "year10": {
+            "type": "integer",
+            "description": "10 years",
+            "example": 10
+          },
+          "year11": {
+            "type": "integer",
+            "description": "11 years",
+            "example": 11
+          },
+          "year12": {
+            "type": "integer",
+            "description": "12 years",
+            "example": 12
+          },
+          "year13": {
+            "type": "integer",
+            "description": "13 years",
+            "example": 13
+          },
+          "year14": {
+            "type": "integer",
+            "description": "14 years",
+            "example": 14
+          },
+          "year15": {
+            "type": "integer",
+            "description": "15 years",
+            "example": 15
+          },
+          "year16": {
+            "type": "integer",
+            "description": "16 years",
+            "example": 16
+          },
+          "year17": {
+            "type": "integer",
+            "description": "17 years",
+            "example": 17
+          },
+          "year18": {
+            "type": "integer",
+            "description": "18 years",
+            "example": 18
+          },
+          "year19": {
+            "type": "integer",
+            "description": "19 years",
+            "example": 19
+          },
+          "year20": {
+            "type": "integer",
+            "description": "20 years",
+            "example": 20
+          },
+          "more20": {
+            "type": "integer",
+            "description": "More than 20 years",
+            "example": 50
+          }
+        }
+      },
+      "KnowledgePayload": {
+        "type": "object",
+        "title": "KnowledgePayload",
+        "description": "Configurable to cap the max score based on the 3 possible responses",
+        "properties": {
+          "basicKnowledge": {
+            "type": "integer",
+            "description": "Don't have or very little knowledge about investing",
+            "example": 50
+          },
+          "moderateKnowledge": {
+            "type": "integer",
+            "description": "Have basic to moderate knowledge about investing",
+            "example": 60
+          },
+          "veryKnowledge": {
+            "type": "integer",
+            "description": "Very knowledgeable about investing",
+            "example": 90
+          },
+          "unknown": {
+            "type": "integer",
+            "description": "Unknown",
+            "example": 100
+          }
+        }
+      },
+      "ExperiencePayload": {
+        "type": "object",
+        "title": "ExperiencePayload",
+        "description": "Configurable to cap the max score based on the 2 possible responses",
+        "properties": {
+          "noPrior": {
+            "type": "integer",
+            "description": "No prior equity investment experience",
+            "example": 68
+          },
+          "prior": {
+            "type": "integer",
+            "description": "Prior equity investment experience",
+            "example": 90
+          },
+          "unknown": {
+            "type": "integer",
+            "description": "Unknown",
+            "example": 100
+          }
+        }
+      },
+      "ComposurePayload": {
+        "type": "object",
+        "title": "ComposurePayload",
+        "description": "Configurable to cap the max score based on the 4 possible responses",
+        "properties": {
+          "never": {
+            "type": "integer",
+            "description": "Not experienced a financial downturn",
+            "example": 50
+          },
+          "noImpact": {
+            "type": "integer",
+            "description": "No impact, Didn't make any changes to the investment plan.",
+            "example": 60
+          },
+          "boughtShares": {
+            "type": "integer",
+            "description": "Saw an opportunity and bought more shares",
+            "example": 90
+          },
+          "soldShares": {
+            "type": "integer",
+            "description": "Was nervous and sold shares",
+            "example": 90
+          },
+          "unknown": {
+            "type": "integer",
+            "description": "Unknown",
+            "example": 100
+          }
+        }
+      },
+      "PjmHistoryPayload": {
+        "type": "object",
+        "title": "PjmHistoryPayload",
+        "properties": {
+          "timeHorizon": {
+            "$ref": "#/components/schemas/TimeHorizonPayload"
+          },
+          "knowledge": {
+            "$ref": "#/components/schemas/KnowledgePayload"
+          },
+          "experience": {
+            "$ref": "#/components/schemas/ExperiencePayload"
+          },
+          "composure": {
+            "$ref": "#/components/schemas/ComposurePayload"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Record creation dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          }
+        }
+      },
+      "PjmRequestPayload": {
+        "type": "object",
+        "title": "PjmRequestPayload",
+        "properties": {
+          "timeHorizon": {
+            "$ref": "#/components/schemas/TimeHorizonPayload"
+          },
+          "knowledge": {
+            "$ref": "#/components/schemas/KnowledgePayload"
+          },
+          "experience": {
+            "$ref": "#/components/schemas/ExperiencePayload"
+          },
+          "composure": {
+            "$ref": "#/components/schemas/ComposurePayload"
+          }
+        }
+      },
+      "PjmResponsePayload": {
+        "type": "object",
+        "title": "PjmResponsePayload",
+        "properties": {
+          "pjmId": {
+            "type": "string",
+            "description": "Record unique identifier",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Record creation dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Record Update dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          },
+          "timeHorizon": {
+            "$ref": "#/components/schemas/TimeHorizonPayload"
+          },
+          "knowledge": {
+            "$ref": "#/components/schemas/KnowledgePayload"
+          },
+          "experience": {
+            "$ref": "#/components/schemas/ExperiencePayload"
+          },
+          "composure": {
+            "$ref": "#/components/schemas/ComposurePayload"
+          }
+        }
+      },
+      "PjmWithHistoryResponsePayload": {
+        "type": "object",
+        "title": "PjmWithHistoryResponsePayload",
+        "properties": {
+          "pjmId": {
+            "type": "string",
+            "description": "Record unique identifier",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Record creation dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Record Update dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          },
+          "timeHorizon": {
+            "$ref": "#/components/schemas/TimeHorizonPayload"
+          },
+          "knowledge": {
+            "$ref": "#/components/schemas/KnowledgePayload"
+          },
+          "experience": {
+            "$ref": "#/components/schemas/ExperiencePayload"
+          },
+          "composure": {
+            "$ref": "#/components/schemas/ComposurePayload"
+          },
+          "history": {
+            "type": "array",
+            "description": "List of PJM history configurations",
+            "items": {
+              "$ref": "#/components/schemas/PjmHistoryPayload"
+            }
+          }
+        }
+      },
+      "PjmUpdateResponsePayload": {
+        "type": "object",
+        "title": "PjmUpdateResponsePayload",
+        "properties": {
+          "pjmId": {
+            "type": "string",
+            "description": "Record unique identifier",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Record creation dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Record update dateTime UTC",
+            "example": "2020-08-04T20:07:36+0000"
+          },
+          "timeHorizon": {
+            "$ref": "#/components/schemas/TimeHorizonPayload"
+          },
+          "knowledge": {
+            "$ref": "#/components/schemas/KnowledgePayload"
+          },
+          "experience": {
+            "$ref": "#/components/schemas/ExperiencePayload"
+          },
+          "composure": {
+            "$ref": "#/components/schemas/ComposurePayload"
+          }
+        }
+      },
+      "AssetClassPayloadRequest": {
+        "type": "object",
+        "title": "AssetClassPayloadRequest",
+        "properties": {
+          "localMarket": {
+            "type": "number",
+            "description": "Local Markets (US Equity, CA Equity, UK Equity, DEU Equity)",
+            "example": 20.5
+          },
+          "localSecondaryMarket": {
+            "type": "number",
+            "description": "Local Markets (US Equity, DEU Equity ex UK)",
+            "example": 20.5
+          },
+          "developedMarkets": {
+            "type": "number",
+            "description": "Developed Markets (DM ex US, DM ex NA, DM ex EUR, DM ex EUR)",
+            "example": 10.5
+          },
+          "emergingMarkets": {
+            "type": "number",
+            "description": "Emerging Markets (EM Equity)",
+            "example": 20.5
+          },
+          "coreBond": {
+            "type": "number",
+            "description": "Core Bond (US Bond, CA Bond, UK Bond, EU Bond)",
+            "example": 15.0
+          },
+          "exCoreBond": {
+            "type": "number",
+            "description": "Ex Core Bond (Non-US Bond, Non-CA Bond, Non-UK Bond, Non-EU Bond)",
+            "example": 15.0
+          },
+          "cash": {
+            "type": "number",
+            "description": "Cash",
+            "example": 40.9
+          }
+        }
+      },
+      "InvestmentPolicyPayloadRequest": {
+        "type": "object",
+        "title": "InvestmentPolicyPayloadRequest",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Investment policy title. Value must be alphanumeric",
+            "example": "Conservative",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "text": {
+            "type": "string",
+            "description": "Investment policy text",
+            "example": "As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "profileRiskScore": {
+            "type": "integer",
+            "description": "Portfolio Risk Score value. Value must be in the range 0 - 110.",
+            "example": 30
+          },
+          "assetClass": {
+            "$ref": "#/components/schemas/AssetClassPayloadRequest"
+          }
+        }
+      },
+      "CustomAssetClassLabel": {
+        "type": "object",
+        "title": "CustomAssetClassLabel",
+        "properties": {
+          "localMarket": {
+            "type": "string",
+            "description": "Local Markets custom label",
+            "example": "Custom Local Markets"
+          },
+          "localSecondaryMarket": {
+            "type": "string",
+            "description": "Local Markets custom label",
+            "example": "Custom Local Secondary Markets"
+          },
+          "developedMarkets": {
+            "type": "string",
+            "description": "Developed Markets custom label",
+            "example": "Custom Developed Markets"
+          },
+          "emergingMarkets": {
+            "type": "string",
+            "description": "Emerging Markets custom label",
+            "example": "Custom Emerging Markets"
+          },
+          "coreBond": {
+            "type": "string",
+            "description": "Core Bond custom label",
+            "example": "Custom Core Bond"
+          },
+          "exCoreBond": {
+            "type": "string",
+            "description": "Ex Core Bond custom label",
+            "example": "Custom Ex Core Bond"
+          },
+          "cash": {
+            "type": "string",
+            "description": "Cash custom label",
+            "example": "Custom Cash"
+          },
+          "gold": {
+            "type": "string",
+            "description": "Gold custom label",
+            "example": "Custom Gold"
+          },
+          "coreRealEstate": {
+            "type": "string",
+            "description": "Core Real Estate custom label",
+            "example": "Custom Core Real Estate"
+          },
+          "exCoreRealEstate": {
+            "type": "string",
+            "description": "Ex Core Real Estate custom label",
+            "example": "Custom Ex Core Real Estate"
+          },
+          "alternatives": {
+            "type": "string",
+            "description": "Alternatives custom label",
+            "example": "Custom Alternatives"
+          }
+        }
+      },
+      "InvestmentProfilesPayloadRequest": {
+        "type": "object",
+        "title": "InvestmentProfilesPayloadRequest",
+        "properties": {
+          "region": {
+            "type": "string",
+            "description": "Asset class region",
+            "enum": [
+              "USA",
+              "CA",
+              "UK",
+              "EUR",
+              "IN",
+              "AU",
+              "IPT",
+              "NZ"
+            ]
+          },
+          "version": {
+            "type": "string",
+            "description": "Version Risk Tolerance files",
+            "example": "v3"
+          },
+          "customAssetClassLabel": {
+            "$ref": "#/components/schemas/CustomAssetClassLabel"
+          },
+          "investmentPolicies": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 7,
+            "items": {
+              "$ref": "#/components/schemas/InvestmentPolicyPayloadRequest"
+            }
+          }
+        }
+      },
+      "Ranges": {
+        "type": "object",
+        "title": "Range",
+        "properties": {
+          "low": {
+            "type": "integer",
+            "description": "Low range",
+            "example": 10
+          },
+          "high": {
+            "type": "integer",
+            "description": "High range",
+            "example": 30
+          }
+        }
+      },
+      "ComfortRangesPayloadResponse": {
+        "type": "object",
+        "title": "ComfortRangesPayload",
+        "properties": {
+          "tooMuchRisk": {
+            "$ref": "#/components/schemas/Ranges"
+          },
+          "marginalUpper": {
+            "$ref": "#/components/schemas/Ranges"
+          },
+          "okRisk": {
+            "$ref": "#/components/schemas/Ranges"
+          },
+          "marginalLower": {
+            "$ref": "#/components/schemas/Ranges"
+          },
+          "tooLittleRisk": {
+            "$ref": "#/components/schemas/Ranges"
+          }
+        }
+      },
+      "ReportResponsePayload": {
+        "type": "object",
+        "title": "ReportResponsePayload",
+        "description": "Content of the risk tolerance report with sections for static text, questionnaire responses, score values and footnotes.",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "report's main title",
+            "example": "Risk Tolerance Results"
+          },
+          "completedDate": {
+            "type": "string",
+            "example": "2020-05-28",
+            "description": "Questionnaire complete date (yyyy-mm-dd)"
+          },
+          "sectionRiskTolerance": {
+            "$ref": "#/components/schemas/SectionPayload"
+          },
+          "sectionUsingYourProfile": {
+            "$ref": "#/components/schemas/SectionPayload"
+          },
+          "sectionRiskToleranceScore": {
+            "$ref": "#/components/schemas/SectionRiskToleranceScorePayload"
+          },
+          "sectionRiskGroup": {
+            "$ref": "#/components/schemas/SectionRiskGroupPayload"
+          },
+          "sectionYourDifferences": {
+            "$ref": "#/components/schemas/SectionYourDifferencesPayload"
+          },
+          "sectionSuitabilityScore": {
+            "$ref": "#/components/schemas/SectionSuitabilityScorePayload"
+          },
+          "sectionFooter": {
+            "$ref": "#/components/schemas/SectionPayload"
+          }
+        }
+      },
+      "SectionPayload": {
+        "type": "object",
+        "title": "SectionPayload",
+        "description": "Section that contains id, header, array of paragraphs that are going to be part of the report",
+        "properties": {
+          "header": {
+            "type": "string",
+            "description": "header of the section",
+            "example": "About Risk Tolerance"
+          },
+          "paragraphs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParagraphReport"
+            }
+          }
+        }
+      },
+      "SectionRiskToleranceScorePayload": {
+        "type": "object",
+        "title": "SectionRiskToleranceScorePayload",
+        "description": "Section with risk tolerance score information",
+        "properties": {
+          "header": {
+            "type": "string",
+            "description": "header of the section",
+            "example": "Here’s how you scored compared to other investors."
+          },
+          "paragraphs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParagraphReport"
+            }
+          },
+          "payloadComparedToInvestors": {
+            "$ref": "#/components/schemas/ComparedToInvestorsPayload"
+          }
+        }
+      },
+      "ComparedToInvestorsPayload": {
+        "type": "object",
+        "title": "ComparedToInvestorsPayload",
+        "description": "Payload with information about the comparison with other investors.",
+        "properties": {
+          "calculatedScore": {
+            "type": "integer",
+            "description": "Calculated score",
+            "example": 52
+          },
+          "agreedScore": {
+            "type": "integer",
+            "description": "Agreed Score",
+            "example": 52
+          },
+          "calculatedRiskGroup": {
+            "type": "string",
+            "description": "Calculated risk group",
+            "example": "Average"
+          },
+          "calculatedRiskGroupValue": {
+            "type": "string",
+            "description": "Calculated risk group code",
+            "example": "AVERAGE"
+          },
+          "agreedRiskGroup": {
+            "type": "string",
+            "description": "Agreed risk group",
+            "example": "Average"
+          },
+          "agreedChangedDate": {
+            "type": "string",
+            "description": "Agreed change date",
+            "example": "2020-06-01"
+          },
+          "completedDate": {
+            "type": "string",
+            "description": "Calculated date",
+            "example": "2020-06-01"
+          },
+          "inconsistencyHeading": {
+            "type": "string",
+            "description": "Inconsistency heading",
+            "example": "Review Your Differences"
+          },
+          "inconsistencyMessage": {
+            "type": "string",
+            "description": "Inconsistency message",
+            "example": "Based on how your answers differed, we recommend discussing your risk tolerance further with a financial professional."
+          },
+          "adjustedHeading": {
+            "type": "string",
+            "description": "Adjusted heading",
+            "example": "Suggested Score."
+          },
+          "adjustedMessage": {
+            "type": "string",
+            "description": "Adjusted message",
+            "example": "Based on how some of your answers differed from others in your risk group, it is recommended that your risk score be adjusted from 42 to 46."
+          },
+          "adjustedScore": {
+            "type": "integer",
+            "description": "Adjusted score",
+            "example": 42
+          },
+          "adjustedRiskGroup": {
+            "type": "string",
+            "description": "Adjusted risk group",
+            "example": "Low"
+          },
+          "riskGroupLabels": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RiskGroupLabel"
+            }
+          }
+        }
+      },
+      "SectionRiskGroupPayload": {
+        "type": "object",
+        "title": "SectionRiskGroupPayload",
+        "description": "Section with risk group information",
+        "properties": {
+          "header": {
+            "type": "string",
+            "description": "header of the section",
+            "example": "About Your Risk Group"
+          },
+          "paragraphs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParagraphReport"
+            }
+          },
+          "payloadRiskGroup": {
+            "$ref": "#/components/schemas/RiskGroupPayload"
+          }
+        }
+      },
+      "RiskGroupPayload": {
+        "type": "object",
+        "title": "RiskGroupPayload",
+        "description": "Payload with risk group information containing a representation of a portfolio's table",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the mix investments table",
+            "example": "Mix of Investments in Portfolio"
+          },
+          "header": {
+            "$ref": "#/components/schemas/MixInvestmentsHeader"
+          },
+          "mixInvestmentsPortfolio": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvestmentPortfolio"
+            },
+            "example": [
+              {
+                "portfolio": "Portfolio 1",
+                "highRisk": 0,
+                "mediumRisk": 0,
+                "lowRisk": 100
+              },
+              {
+                "portfolio": "Portfolio 2",
+                "highRisk": 0,
+                "mediumRisk": 30,
+                "lowRisk": 70
+              }
+            ]
+          },
+          "riskGroupCategories": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RiskGroupCategory"
+            },
+            "example": [
+              {
+                "code": "FINANCIAL_DECISIONS",
+                "label": "Making Financial Decisions",
+                "questionDifferences": [
+                  {
+                    "questionId": "FM25-10",
+                    "message": "You are prepared to take only a small degree of risk with your financial decisions."
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "InvestmentPortfolio": {
+        "type": "object",
+        "title": "InvestmentPortfolio",
+        "description": "Investment portfolio object that represents the mix of investments in portfolio",
+        "properties": {
+          "portfolio": {
+            "type": "string",
+            "description": "portfolio's name",
+            "example": "Portfolio 1"
+          },
+          "highRisk": {
+            "type": "integer",
+            "description": "High risk value",
+            "example": 1
+          },
+          "mediumRisk": {
+            "type": "integer",
+            "description": "Medium risk value",
+            "example": 0
+          },
+          "lowRisk": {
+            "type": "integer",
+            "description": "Low risk value",
+            "example": 100
+          }
+        }
+      },
+      "SectionYourDifferencesPayload": {
+        "type": "object",
+        "title": "SectionYourDifferencesPayload",
+        "description": "Section with your differences information",
+        "properties": {
+          "header": {
+            "type": "string",
+            "description": "header of the section",
+            "example": "Your Differences"
+          },
+          "paragraphs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParagraphReport"
+            }
+          },
+          "payloadYourDifferences": {
+            "$ref": "#/components/schemas/YourDifferencesPayload"
+          }
+        }
+      },
+      "YourDifferencesPayload": {
+        "type": "object",
+        "title": "YourDifferencesPayload",
+        "description": "Information for your differences details",
+        "properties": {
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionReport"
+            }
+          }
+        }
+      },
+      "QuestionReport": {
+        "type": "object",
+        "title": "QuestionReport",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Question title text",
+            "example": "Self-Rating"
+          },
+          "text": {
+            "type": "string",
+            "description": "Option text",
+            "example": "Compared to others, how do you rate your willingness to take financial risks?"
+          },
+          "displayOrder": {
+            "type": "integer",
+            "description": "Question display order",
+            "example": 1
+          },
+          "options": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OptionReport"
+            }
+          },
+          "difference": {
+            "$ref": "#/components/schemas/DifferencePayload"
+          }
+        }
+      },
+      "OptionReport": {
+        "type": "object",
+        "title": "Option for report",
+        "properties": {
+          "text": {
+            "type": "string",
+            "description": "Option text",
+            "example": "Extremely low risk taker."
+          },
+          "displayOrder": {
+            "type": "integer",
+            "description": "Question display order",
+            "example": 1
+          },
+          "selected": {
+            "type": "boolean",
+            "description": "True if the option was selected in stored responses",
+            "example": false
+          }
+        }
+      },
+      "ParagraphReport": {
+        "type": "object",
+        "title": "ParagraphReport",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "Paragraph text",
+            "example": "Compared to others, how do you rate your willingness to take financial risks?"
+          },
+          "isHtml": {
+            "type": "boolean",
+            "example": false,
+            "description": "True if the text field is an HTML markup, otherwise text field is plain text"
+          },
+          "isImage": {
+            "type": "boolean",
+            "example": true,
+            "description": "True if the `content` field is a base64 encoded image, otherwise is regular text"
+          },
+          "displayOrder": {
+            "type": "integer",
+            "example": 1,
+            "description": "Paragraph display order"
+          }
+        }
+      },
+      "SectionSuitabilityScorePayload": {
+        "type": "object",
+        "title": "SectionSuitabilityScorePayload",
+        "description": "Section for suitability score",
+        "properties": {
+          "header": {
+            "type": "string",
+            "description": "header of the section",
+            "example": "Portfolio Suitability"
+          },
+          "paragraphs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ParagraphReport"
+            }
+          },
+          "payloadSuitabilityScore": {
+            "$ref": "#/components/schemas/SuitabilityScorePayload"
+          }
+        }
+      },
+      "SuitabilityScorePayload": {
+        "type": "object",
+        "title": "SuitabilityScorePayload",
+        "description": "Information for your suitability score",
+        "properties": {
+          "suitabilityScore": {
+            "type": "integer",
+            "description": "suitability core number",
+            "example": 52
+          },
+          "investmentPolicies": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvestmentPolicyReport"
+            }
+          }
+        }
+      },
+      "InvestmentPolicyReport": {
+        "type": "object",
+        "title": "InvestmentPolicyReport",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier",
+            "example": "95000cf-9f72-4au7-811b-35dc66dd95a"
+          },
+          "title": {
+            "type": "string",
+            "description": "Investment policy title",
+            "example": "Conservative"
+          },
+          "text": {
+            "type": "string",
+            "description": "Investment policy text",
+            "example": "As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities."
+          },
+          "min": {
+            "type": "integer",
+            "description": "Minimum score range",
+            "example": 10
+          },
+          "max": {
+            "type": "integer",
+            "description": "Maximum score range",
+            "example": 30
+          },
+          "assetClass": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AssetClassPayload"
+            }
+          }
+        }
+      },
+      "RiskGroupLabel": {
+        "type": "object",
+        "title": "RiskGroupLabel",
+        "properties": {
+          "groupName": {
+            "type": "string",
+            "description": "Name of the risk group",
+            "example": "Average"
+          },
+          "range": {
+            "type": "string",
+            "description": "Range of the score within the risk group",
+            "example": "45-54"
+          }
+        }
+      },
+      "MixInvestmentsPayload": {
+        "type": "object",
+        "title": "MixInvestmentsPayload",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the mix investments table",
+            "example": "Mix of Investments in Portfolio"
+          },
+          "headers": {
+            "$ref": "#/components/schemas/MixInvestmentsHeader"
+          },
+          "mixInvestmentsPortfolio": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvestmentPortfolio"
+            },
+            "example": [
+              {
+                "portfolio": "Portfolio 1",
+                "highRisk": 0,
+                "mediumRisk": 0,
+                "lowRisk": 100
+              },
+              {
+                "portfolio": "Portfolio 2",
+                "highRisk": 0,
+                "mediumRisk": 30,
+                "lowRisk": 70
+              }
+            ]
+          }
+        }
+      },
+      "MixInvestmentsHeader": {
+        "type": "object",
+        "title": "MixInvestmentsHeader",
+        "properties": {
+          "portfolio": {
+            "type": "string",
+            "description": "Header of the column for portfolio information.",
+            "example": "Portfolio"
+          },
+          "highRisk": {
+            "type": "string",
+            "description": "Header of the column for high risk information.",
+            "example": "High Risk/Return %"
+          },
+          "mediumRisk": {
+            "type": "string",
+            "description": "Header of the column for medium risk information.",
+            "example": "Medium Risk/Return %"
+          },
+          "lowRisk": {
+            "type": "string",
+            "description": "Header of the column for low risk information.",
+            "example": "Low Risk/Return %"
+          }
+        }
+      },
+      "DifferencePayload": {
+        "type": "object",
+        "title": "DifferencePayload",
+        "properties": {
+          "group": {
+            "type": "string",
+            "description": "Question risk group column by key difference map. (VERY_LOW, LOW, AVERAGE, HIGH, VERY_HIGH)",
+            "example": "VERY_LOW"
+          },
+          "type": {
+            "type": "string",
+            "description": "Difference type. (STANDARD, RISKIER, LESS_RISKY)",
+            "example": "STANDARD"
+          },
+          "value": {
+            "type": "integer",
+            "description": "Difference value from key difference map.",
+            "example": "-1"
+          },
+          "text": {
+            "type": "string",
+            "description": "Text that describe if the question is riskier or less risky than the Very High/Very Low risk group.",
+            "example": "Your answer was actually riskier than the most risky typically given by those in risk group."
+          },
+          "category": {
+            "type": "string",
+            "description": "Category of the question. (FINANCIAL_DECISIONS, EMPLOYMENT, FINANCIAL_DISAPPOINTMENTS, FINANCIAL_PAST, INVESTMENT, GOVERNMENT_BENEFITS_TAXES)",
+            "example": "FINANCIAL_DECISIONS"
+          }
+        }
+      },
+      "QuestionDifferencePayload": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Question unique identifier",
+            "example": "FM10-1"
+          },
+          "title": {
+            "type": "string",
+            "example": "Willingness to take financial risk",
+            "description": "Question title"
+          },
+          "text": {
+            "type": "string",
+            "example": "Compared to others, how do you rate your willingness to take financial risks?",
+            "description": "Question text"
+          },
+          "displayOrder": {
+            "type": "integer",
+            "description": "Question display order",
+            "example": 1
+          },
+          "multipleSelect": {
+            "type": "boolean",
+            "example": false,
+            "description": "Multiple selections for the question, if this is true the question allows multiple answers"
+          },
+          "options": {
+            "type": "array",
+            "description": "List of options for question",
+            "items": {
+              "$ref": "#/components/schemas/OptionPayload"
+            }
+          },
+          "difference": {
+            "$ref": "#/components/schemas/DifferencePayload"
+          }
+        },
+        "title": "QuestionDifferencePayload"
+      },
+      "QuestionnaireResponsePayload": {
+        "type": "object",
+        "title": "QuestionnaireResponsePayload",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Questionnaire unique identifier",
+            "example": "FM10S30"
+          },
+          "title": {
+            "type": "string",
+            "example": "Finametrica 10",
+            "description": "Questionnaire title"
+          },
+          "questions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/QuestionDifferencePayload"
+            }
+          }
+        }
+      },
+      "CategoryLabel": {
+        "type": "object",
+        "title": "CategoryLabel",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Category of the question. (FINANCIAL_DECISIONS, EMPLOYMENT, FINANCIAL_DISAPPOINTMENTS, FINANCIAL_PAST, INVESTMENT, GOVERNMENT_BENEFITS_TAXES)",
+            "example": "FINANCIAL_DECISIONS"
+          },
+          "label": {
+            "type": "string",
+            "description": "Category description",
+            "example": "Making Financial Decisions"
+          }
+        }
+      },
+      "RiskGroupCategory": {
+        "type": "object",
+        "title": "RiskGroupCategory",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Category of the question. (FINANCIAL_DECISIONS, EMPLOYMENT, FINANCIAL_DISAPPOINTMENTS, FINANCIAL_PAST, INVESTMENT, GOVERNMENT_BENEFITS_TAXES)",
+            "example": "FINANCIAL_DECISIONS"
+          },
+          "label": {
+            "type": "string",
+            "description": "Category description",
+            "example": "Making Financial Decisions"
+          },
+          "questionDifferences": {
+            "type": "array",
+            "description": "List of question differences",
+            "items": {
+              "$ref": "#/components/schemas/QuestionDifference"
+            }
+          }
+        }
+      },
+      "QuestionDifference": {
+        "type": "object",
+        "title": "QuestionDifference",
+        "properties": {
+          "questionId": {
+            "type": "string",
+            "description": "Question Id",
+            "example": "FM25-10"
+          },
+          "message": {
+            "type": "string",
+            "description": "Message",
+            "example": "You are prepared to take only a small degree of risk with your financial decisions."
+          }
+        }
+      },
+      "ErrorResponse400": {
+        "type": "object",
+        "title": "ErrorResponse",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Server cannot or will not process the request due to something that is perceived to be a client error",
+            "description": "Error Message"
+          },
+          "status": {
+            "type": "string",
+            "example": "BAD_REQUEST",
+            "description": "Error Status"
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2020-08-05T13:40:25+0000",
+            "description": "Error Timestamp"
+          }
+        }
+      },
+      "ErrorResponse404": {
+        "type": "object",
+        "title": "ErrorResponse",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Server can't find the requested resource",
+            "description": "Error Message"
+          },
+          "status": {
+            "type": "string",
+            "example": "NOT_FOUND",
+            "description": "Error Status"
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2020-08-05T13:40:25+0000",
+            "description": "Error Timestamp"
+          }
+        }
+      },
+      "ErrorResponse422": {
+        "type": "object",
+        "title": "ErrorResponse",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Unprocessable Entity",
+            "description": "Error Message"
+          },
+          "status": {
+            "type": "string",
+            "example": "UNPROCESSABLE_ENTITY",
+            "description": "Error Status"
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2020-08-05T13:40:25+0000",
+            "description": "Error Timestamp"
+          }
+        }
+      },
+      "ErrorResponse500": {
+        "type": "object",
+        "title": "ErrorResponse",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Internal Server Error",
+            "description": "Error Message"
+          },
+          "status": {
+            "type": "string",
+            "example": "INTERNAL_SERVER_ERROR",
+            "description": "Error Status"
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2020-08-05T13:40:25+0000",
+            "description": "Error Timestamp"
+          }
+        }
+      },
+      "ErrorResponse502": {
+        "type": "object",
+        "title": "ErrorResponse",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Received an invalid response from the upstream server",
+            "description": "Error Message"
+          },
+          "status": {
+            "type": "string",
+            "example": "BAD_GATEWAY",
+            "description": "Error Status"
+          },
+          "timestamp": {
+            "type": "string",
+            "example": "2020-08-05T13:40:25+0000",
+            "description": "Error Timestamp"
+          }
+        }
+      }
+    }
+  }
+}

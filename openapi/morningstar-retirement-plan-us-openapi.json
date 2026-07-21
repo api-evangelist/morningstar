@@ -1,0 +1,839 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Retirement Plan (US)",
+    "version": "1.0.0",
+    "description": "Use the Retirement Plan API to:\n\n- Get details, including plan lineups, for over 600,000 United States employer retirement plans based on form 404a-5 and form 5500 filings.\n- Get a list of standard retirement plan benchmark fees. \n\nThe API queries the following resources:\n\n|Resource|Description|\n|:-----|:------|\n|`PlanNames`|Objects that represent retirement plan metadata including names and IDs. **Note:** Some of the fields returned in the response are currently not used and are placeholders for future development. See the endpoint description for more details. |\n|`Plan`|Objects that represent a retirement plan.|\n|`BenchmarkFees`|Objects that represent a benchmark fee model.|\n\n**Get Plan Data**\n\nTo retrieve plan data, make an initial call to the `PlanNames` endpoint to retrieve a list of plans that match the query string in the `q` parameter. \n\nTake the name of the plan you want to retrieve data for and make a call to the `Plan` endpoint, passing the complete URL-encoded plan name in the `id` parameter. The response will return details about the plan, including the securities offered in the plan lineup.\n\n**Get List of Retirement Plan Benchmarks**\n\nMorningstar provides a set of retirement plan benchmarks based on plan size which can be used in place of, or in addition to, the data provided for an individual plan. Each benchmark includes a typical plan-level fee and average investment expenses.\n\n  Make a call to the `BenchmarkFees` endpoint to retrieve benchmark information."
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/ec",
+      "description": "PROD"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "PlanNames"
+    },
+    {
+      "name": "Plan"
+    },
+    {
+      "name": "BenchmarkFees"
+    }
+  ],
+  "paths": {
+    "/v1/retirementplan/BenchmarkFees": {
+      "get": {
+        "tags": [
+          "BenchmarkFees"
+        ],
+        "summary": "Get retirement plan benchmark fees",
+        "description": "Get a list of standard retirement plan benchmark fees. The response will return a list of all benchmark fee models the user is entitled for. No parameters are required to be passed for this API.",
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BenchmarkFeeModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BenchmarkFeeModel"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BenchmarkFeeModel"
+                  }
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BenchmarkFeeModel"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v2/retirementplan/Plan": {
+      "get": {
+        "tags": [
+          "Plan"
+        ],
+        "summary": "Get plan details",
+        "description": "Get information about the plan specified in the `id` parameter. The value must be URL-encoded and match the name returned in the response to the call to the `PlanNames` endpoint. For example, `THE SCOTT FETZER RETIREMENT SAVINGS PLAN`.</br></br>You can specify a plan list source to query. The following values are available: </br></br> - `RP` - Retirement plans from Morningstar's plan list</br> - `BM` - Benchmark</br> - `DB` - Database for saved plans</br>",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Unique name of a retirement plan",
+            "schema": {
+              "type": "string",
+              "nullable": true,
+              "example": "THE%20SCOTT%20FETZER%20RETIREMENT%20SAVINGS%20PLAN"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "description": "The source to request plan from",
+            "schema": {
+              "type": "string",
+              "description": "Set to ‘RP’ to request retirement plan from Morningstar plan list",
+              "enum": [
+                "RP",
+                "BM",
+                "DB"
+              ],
+              "default": "RP",
+              "nullable": true,
+              "example": "RP"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanDetailModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanDetailModel"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanDetailModel"
+                  }
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanDetailModel"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/retirementplan/PlanNames": {
+      "get": {
+        "tags": [
+          "PlanNames"
+        ],
+        "summary": "Get plan names",
+        "description": "Get a list of plan names. Enter a search string in the `q` parameter. The response will return a list of plan names that contain the search string.</br></br>You can filter the results returned in the response by specifying an advisor ID and/or the plan list source to query. The following `source` values are available: </br></br> - `RP` - Retirement plans from Morningstar's plan list</br> - `BM`- Benchmark</br> - `DB` - Database for saved plans </br></br>You can also specify a maximum number of results to return via pageSize.</br></br> **Note:** The following fields are returned in the response but are not currently used. These are placeholders for future development.</br></br> - `planId`</br> - `externalPlanId`</br> - `lastModifiedDate`",
+        "parameters": [
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Search string to query",
+            "schema": {
+              "type": "string",
+              "nullable": true,
+              "example": "pruden"
+            }
+          },
+          {
+            "name": "advisorid",
+            "in": "query",
+            "description": "Unique identifier of an advisor",
+            "schema": {
+              "type": "string",
+              "description": "Advisor Id",
+              "nullable": true,
+              "example": "11133123"
+            }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "description": "The source to request plan from",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "RP",
+                "BM",
+                "DB"
+              ],
+              "default": "RP",
+              "nullable": true,
+              "example": "RP"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Maximum number of plan names to return",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "nullable": true,
+              "example": 20
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanNamesModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanNamesModel"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanNamesModel"
+                  }
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlanNamesModel"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "BenchmarkFeeModel": {
+        "type": "object",
+        "properties": {
+          "benchmarkName": {
+            "type": "string",
+            "description": "Name of the benchmark, including applicable plan size dollar amount range",
+            "nullable": true
+          },
+          "benchmarkFeeRatio": {
+            "type": "number",
+            "description": "Typical plan-level fee for a retirement plan of this size",
+            "format": "double"
+          },
+          "benchmarkFeeandExpenseAvg": {
+            "type": "number",
+            "description": "Average investment expenses for a retirement plan of this size",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Benchmark Fee Model"
+      },
+      "ErrorDetails": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BusinessCode": {
+        "type": "object",
+        "properties": {
+          "businessCode": {
+            "type": "string",
+            "description": "businessCode",
+            "nullable": true
+          },
+          "year": {
+            "type": "string",
+            "description": "year",
+            "nullable": true
+          },
+          "description": {
+            "type": "string",
+            "description": "description",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "BusinessCode"
+      },
+      "VendorCodeMap": {
+        "type": "object",
+        "properties": {
+          "noname": {
+            "type": "string",
+            "description": "noname",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "VendorCodeMap"
+      },
+      "Vendor": {
+        "type": "object",
+        "properties": {
+          "vendorId": {
+            "type": "integer",
+            "description": "vendorId",
+            "format": "int64"
+          },
+          "vendorCodeMap": {
+            "$ref": "#/components/schemas/VendorCodeMap"
+          },
+          "name": {
+            "type": "string",
+            "description": "name",
+            "nullable": true
+          },
+          "fixedName": {
+            "type": "string",
+            "description": "fixedName",
+            "nullable": true
+          },
+          "ein": {
+            "type": "integer",
+            "description": "ein",
+            "format": "int32"
+          },
+          "fixedEin": {
+            "type": "integer",
+            "description": "fixedEin",
+            "format": "int32"
+          },
+          "value": {
+            "type": "number",
+            "description": "value",
+            "format": "double"
+          },
+          "stability": {
+            "type": "string",
+            "description": "stability",
+            "nullable": true
+          },
+          "planDetailsid": {
+            "type": "integer",
+            "description": "planDetailsid",
+            "format": "int64"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Vendor"
+      },
+      "YearValue": {
+        "type": "object",
+        "properties": {
+          "year": {
+            "type": "string",
+            "description": "year",
+            "nullable": true
+          },
+          "value": {
+            "type": "string",
+            "description": "value",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "YearValue"
+      },
+      "Investment": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "name",
+            "nullable": true
+          },
+          "vendorName": {
+            "type": "string",
+            "description": "vendorName",
+            "nullable": true
+          },
+          "type": {
+            "type": "string",
+            "description": "type",
+            "nullable": true
+          },
+          "typeDescription": {
+            "type": "string",
+            "description": "typeDescription",
+            "nullable": true
+          },
+          "secId": {
+            "type": "string",
+            "description": "Morningstar unique security identifier",
+            "nullable": true
+          },
+          "yearValuesV1": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/YearValue"
+            },
+            "description": "yearValuesV1",
+            "nullable": true
+          },
+          "cusip": {
+            "type": "string",
+            "description": "CUSIP",
+            "nullable": true
+          },
+          "securityName": {
+            "type": "string",
+            "description": "Name of the security",
+            "nullable": true
+          },
+          "ticker": {
+            "type": "string",
+            "description": "Security's ticker symbol",
+            "nullable": true
+          },
+          "category": {
+            "type": "string",
+            "description": "Morningstar category the security is assigned to",
+            "nullable": true
+          },
+          "securityType": {
+            "type": "string",
+            "description": "securityType",
+            "nullable": true
+          },
+          "starRating": {
+            "type": "string",
+            "description": "Morningstar proprietary star rating",
+            "nullable": true
+          },
+          "analystRating": {
+            "type": "string",
+            "description": "Morningstar analyst rating. Gold (7), Silver (6), Bronze (5), Neutral (4), Negative (3), Under Review (2), Not Ratable (1)",
+            "nullable": true
+          },
+          "styleBox": {
+            "type": "string",
+            "description": "styleBox",
+            "nullable": true
+          },
+          "netExpRatio": {
+            "type": "string",
+            "description": "Prospectus net expense ratio",
+            "nullable": true
+          },
+          "investmentStatus": {
+            "type": "integer",
+            "description": "InvestmentStatus",
+            "format": "int32"
+          },
+          "isRemoved": {
+            "type": "boolean",
+            "description": "IsRemoved"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Investment"
+      },
+      "PlanDetailModel": {
+        "type": "object",
+        "properties": {
+          "planDetailsId": {
+            "type": "integer",
+            "description": "planDetailsId",
+            "format": "int64"
+          },
+          "planId": {
+            "type": "string",
+            "description": "planId",
+            "nullable": true
+          },
+          "ackId": {
+            "type": "string",
+            "description": "ackId",
+            "nullable": true
+          },
+          "ein": {
+            "type": "string",
+            "description": "Employer identification number",
+            "nullable": true
+          },
+          "planNumber": {
+            "type": "string",
+            "description": "planNumber",
+            "nullable": true
+          },
+          "sponsorName": {
+            "type": "string",
+            "description": "Name of the plan sponsor (employer)",
+            "nullable": true
+          },
+          "planName": {
+            "type": "string",
+            "description": "Full name of the plan (should match name used to retrieve plan details)",
+            "nullable": true
+          },
+          "numberOfUnidentifiedInvestments": {
+            "type": "integer",
+            "description": "Number of plan lineup investments which were not able to be matched with Morningstar’s database",
+            "format": "int32",
+            "nullable": true
+          },
+          "planLineupSource": {
+            "type": "string",
+            "description": "Which form the plan lineup is sourced from",
+            "nullable": true
+          },
+          "businessCode": {
+            "$ref": "#/components/schemas/BusinessCode"
+          },
+          "state": {
+            "type": "string",
+            "description": "U.S. state in which plan sponsor is located",
+            "nullable": true
+          },
+          "assetSize": {
+            "type": "number",
+            "description": "Total assets in the plan (USD)",
+            "format": "double",
+            "nullable": true
+          },
+          "avgAccountBalance": {
+            "type": "number",
+            "description": "Average participant account balance",
+            "format": "double"
+          },
+          "totalContributions": {
+            "type": "number",
+            "description": "Total plan contributions",
+            "format": "double"
+          },
+          "planCode": {
+            "type": "string",
+            "description": "planCode",
+            "nullable": true
+          },
+          "priorYearReturn": {
+            "type": "number",
+            "description": "priorYearReturn",
+            "format": "double"
+          },
+          "adminName": {
+            "type": "string",
+            "description": "Name of plan administrator",
+            "nullable": true
+          },
+          "participants": {
+            "type": "integer",
+            "description": "Total number of plan participants",
+            "format": "int32"
+          },
+          "planType": {
+            "type": "string",
+            "description": "Type of retirement plan, e.g. DC",
+            "nullable": true
+          },
+          "filingType": {
+            "type": "string",
+            "description": "filingType",
+            "nullable": true
+          },
+          "benifitPaymentsDuringYear": {
+            "type": "number",
+            "description": "Amount of benefit payments made by plan during prior year",
+            "format": "double"
+          },
+          "vendors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Vendor"
+            },
+            "description": "vendors",
+            "nullable": true
+          },
+          "zipcode": {
+            "type": "string",
+            "description": "Zip code of plan sponsor location",
+            "nullable": true
+          },
+          "totalVendorFee": {
+            "type": "number",
+            "description": "Vendor fee if available",
+            "format": "double"
+          },
+          "planFeeRatio": {
+            "type": "number",
+            "description": "Actual plan-level fee if av",
+            "format": "double",
+            "nullable": true
+          },
+          "planFeeRatioEstimate": {
+            "type": "number",
+            "description": "Actual plan investment expenses if available",
+            "format": "double",
+            "nullable": true
+          },
+          "benchmarkFeeRatio": {
+            "type": "number",
+            "description": "Typical plan-level fee based on benchmark",
+            "format": "double",
+            "nullable": true
+          },
+          "benchmarkInvestmentExpenses": {
+            "type": "number",
+            "description": "Average investment expenses based on benchmark",
+            "format": "double",
+            "nullable": true
+          },
+          "benchmarkTotalAverage": {
+            "type": "number",
+            "description": "Sum of benchmark plan-level fee and investment expense",
+            "format": "double",
+            "nullable": true
+          },
+          "benchmarkPlanSizeName": {
+            "type": "string",
+            "description": "Name of the Morningstar benchmark applicable to this plan based on its size",
+            "nullable": true
+          },
+          "ecPlanId": {
+            "type": "integer",
+            "description": "ecPlanId",
+            "format": "int64"
+          },
+          "createDate": {
+            "type": "string",
+            "description": "When the plan was created in the database (not the date on which the plan started)",
+            "format": "date-time"
+          },
+          "planVersion": {
+            "type": "integer",
+            "description": "PlanVersion",
+            "format": "int32"
+          },
+          "externalPlanId": {
+            "type": "string",
+            "description": "ExternalPlanId",
+            "nullable": true
+          },
+          "clientId": {
+            "type": "string",
+            "description": "ClientId",
+            "nullable": true
+          },
+          "advisorId": {
+            "type": "string",
+            "description": "AdvisorId",
+            "nullable": true
+          },
+          "asofYear": {
+            "type": "string",
+            "description": "AsofYear",
+            "nullable": true
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "description": "LastModifiedDate",
+            "format": "date-time",
+            "nullable": true
+          },
+          "investments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Investment"
+            },
+            "description": "List of investments offered by the plan",
+            "nullable": true
+          },
+          "planTaxPrd": {
+            "type": "string",
+            "description": "PlanTaxPrd",
+            "nullable": true
+          },
+          "avgNetExpRatio": {
+            "type": "string",
+            "description": "AvgNetExpRatio",
+            "nullable": true
+          },
+          "benchmarkAvgNumberOfInvestments": {
+            "type": "string",
+            "description": "benchmarkAvgNumberOfInvestments",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "PlanDetailModel"
+      },
+      "PlanNamesModel": {
+        "type": "object",
+        "properties": {
+          "planId": {
+            "type": "integer",
+            "description": "Id unique to the specific plan",
+            "format": "int64"
+          },
+          "planName": {
+            "type": "string",
+            "description": "Full name of retirement plan",
+            "nullable": true
+          },
+          "externalPlanId": {
+            "type": "string",
+            "description": "ExternalPlanId",
+            "nullable": true
+          },
+          "lastModifiedDate": {
+            "type": "string",
+            "description": "LastModifiedDate",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "PlanNamesModel"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

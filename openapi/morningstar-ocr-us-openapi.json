@@ -1,0 +1,212 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Optical Character Recognition",
+    "description": "The Optical Character Recognition API enables you to extract information from portfolio statements that are formatted as PDFs or images. \nUsing the API, you can retrieve the following details from a portfolio statement:\n* Names of securities.\n* Ticker symbols.\n* Share quantities.\n* Market value.\n\nThe API works asynchronously. A statement PDF or image is uploaded to the API using an initial POST call to  the `statement-details` endpoint. This call returns a unique job ID which is appended to the URL of subsequent GET calls to the same endpoint. These GET calls return the holdings information parsed from the statement.\n\nWhen uploading a statement for processing, you need to identify the custodian that the statement was received from.  You use the `custodians` endpoint to retrieve identifiers for supported custodians.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": " https://www.us-api.morningstar.com/optical-character-recognition/v1"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/custodians": {
+      "get": {
+        "tags": [
+          "custodians"
+        ],
+        "summary": "Get custodians",
+        "description": "Get all custodians for the language and region specified in the `Accept-Language` header.</br></br>The response returns the unique `documentName` and `documentShortName` values that identify custodians. At least one of these values is required when making a POST request to the `statement-details` endpoint. </br></br>The response separates the supported custodians into two lists. The `mainCustodians` list contains custodians for whom specific processing logic has been written.  The `others` list contains custodians for whom common processing logic is used and may therefore produce results with a lower degree of accuracy.",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Language and locale",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "fr-CA"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "404": {
+            "description": "Accept-Language header values not valid."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/statement-details": {
+      "post": {
+        "tags": [
+          "statement details"
+        ],
+        "summary": "Extract statement details",
+        "description": "Extract portfolio statement information from the base64-encoded PDF/image sent in the request. Information is extracted based on the logic defined, where available, for the custodian specified in the `documentShortName` or `documentName` values in the request body.</br></br>The request supports the following file types:</br></br> -JPG </br> -JPEG</br> - PNG </br> - PDF </br></br>When sending a PDF, you can specify the page numbers to extract information from. For example, `1,3,6,9` or `1,3,6,8-11`. If you do not specify `pageNumbers` values, the whole document will be considered. If you pass a `0` value, it will be considered as `1`. When specifying a range, for example `8-11`, the first number must be smaller than the second number. </br></br>The response contains an `id` which you use to retrieve the results of the request. The `id` can also be used to track the request.",
+        "parameters": [
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Language and locale",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "en-US",
+                "en-CA",
+                "fr-CA"
+              ]
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "fileName",
+                  "pageNumbers",
+                  "documentType",
+                  "documentName",
+                  "documentShortName",
+                  "data"
+                ],
+                "type": "object",
+                "properties": {
+                  "fileName": {
+                    "type": "string",
+                    "description": "Name of file used to store image/pdf object",
+                    "nullable": false
+                  },
+                  "pageNumbers": {
+                    "type": "string",
+                    "description": "Comma-separated list of PDF page numbers to process",
+                    "nullable": true
+                  },
+                  "documentType": {
+                    "type": "string",
+                    "description": "Document type. Currently supports 'CUSTODIAN' only.",
+                    "nullable": false
+                  },
+                  "documentName": {
+                    "type": "string",
+                    "description": "Custodian name (label) from custodian list",
+                    "nullable": false
+                  },
+                  "documentShortName": {
+                    "type": "string",
+                    "description": "Short name of a custodian. If not present, passes to 'DEFAULT'.",
+                    "default": "DEFAULT"
+                  },
+                  "data": {
+                    "type": "string",
+                    "description": "Base64-encoded image/pdf file",
+                    "format": "byte"
+                  }
+                }
+              },
+              "encoding": {
+                "fileName": {
+                  "style": "form"
+                },
+                "pageNumbers": {
+                  "style": "form"
+                },
+                "documentType": {
+                  "style": "form"
+                },
+                "documentName": {
+                  "style": "form"
+                },
+                "documentShortName": {
+                  "style": "form"
+                },
+                "data": {
+                  "style": "form"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "OK"
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/statement-details/{id}": {
+      "get": {
+        "tags": [
+          "statement details"
+        ],
+        "summary": "Get statement details",
+        "description": "Get the portfolio statement information extracted by the `POST /statement-details` request. </br></br>The unique job ID returned by the POST request is automatically included in this GET request's URL. \n</br></br>The response contains a JSON obect with an array of security details such as ticker, name, market value, and so on.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of request",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "abc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "example": {
+                    "jobId": "a44fa75bd070402f9ae92b60397049a11615377437152"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Resource you requested is not found."
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

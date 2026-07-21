@@ -1,0 +1,892 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Research API",
+    "description": "\nThe Research API provides on-demand access to Morningstar’s repository of equity and fund research. \n [Research on thousands of global companies and managed products](https://www.morningstar.com/products/research) is available, as well as thematic research spanning entire sectors or industry groups.</br></br>\n **Note:** The API provides access to research content in PDF or Excel file\n format. If you require research content packaged as JSON or XML, you can use\n the Research Publishing System API service.\n\n\n \n **Equity Research Endpoints**</br></br>\n Requests to the `equity` endpoints of the Research API return the following research\n documents:\n\n   * Company Report (PDF)\n   * Company Valuation Model (Excel)\n   * Moat Framework Report (PDF)\n   * Quantitative Company Report (PDF)\n   * Enhanced Quantitative Company Report (PDF)     \n   * Stock Analyst Notes (PDF)\n   * Thematic Research (PDF)\n\n **Fund Research Endpoints**</br></br>\n Requests to the `fund` endpoints of the Research API return the following reports: \n\n   * Carbon Report (PDF)\n   * Environmental, Social, and Governance (ESG) Report (PDF)\n   * Managed Investment Report (PDF)\n   * Target-Date Series Report (PDF)\n\n **Requests**</br>\n \n Reports are updated throughout the day, so to ensure that you always have the most up-to-date version, you should make a new request every time you want to download a report.</br></br>\n\n **Response**</br>\n A URL returned in the response is used to access the document file (PDF or\n Excel). You should not cache this URL because the link expires within a few\n minutes. ",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/research"
+    }
+  ],
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "equity - company research"
+    },
+    {
+      "name": "equity - moat framework"
+    },
+    {
+      "name": "equity - rps document"
+    },
+    {
+      "name": "equity reports - quant and enhanced quant"
+    },
+    {
+      "name": "fund reports - carbon report"
+    },
+    {
+      "name": "fund reports - esg"
+    },
+    {
+      "name": "fund reports - managed investment report"
+    },
+    {
+      "name": "fund reports - target date series"
+    }
+  ],
+  "paths": {
+    "/equity/v1/{companyIdentifier}/{reportType}/{reportView}": {
+      "get": {
+        "tags": [
+          "equity - company research"
+        ],
+        "summary": "Get a company-related report",
+        "description": "Get the **most recent** version of a company-related report for the company specified in the `companyIdentifier` parameter. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>  The following document types can be retrieved using this endpoint:\n  </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br>- Thematic Research</br></br>A URL returned in the response is used to access the document file.\n  </br></br>**Note** To get current and historical company-related research documents, use\n  the **equity - rps document** endpoints.",
+        "operationId": "Get",
+        "parameters": [
+          {
+            "name": "companyIdentifier",
+            "in": "path",
+            "description": "Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "0P000003MH"
+            }
+          },
+          {
+            "name": "reportType",
+            "in": "path",
+            "description": "Type of report",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "company_report",
+              "enum": [
+                "company_report",
+                "stock_analyst_note",
+                "valuation_model"
+              ]
+            }
+          },
+          {
+            "name": "reportView",
+            "in": "path",
+            "description": "View of report. Currently, only `latest` is supported.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "latest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/equity/v1/company/{companyIdentifier}/report_type/{reportType}/{reportView}": {
+      "get": {
+        "tags": [
+          "equity - company research"
+        ],
+        "summary": "Get a company-related report",
+        "description": "Get the **most recent** version of a company-related report for the company specified in the `companyIdentifier` parameter. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br> The following document types can be retrieved using this endpoint:\n  </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br>- Thematic Research</br></br>A URL returned in the response is used to access the document file.\n  </br></br>**Note** To get current and historical company-related research documents, use\n  the **equity - rps document** endpoints.",
+        "operationId": "Get2",
+        "parameters": [
+          {
+            "name": "companyIdentifier",
+            "in": "path",
+            "description": "Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "0P000003MH"
+            }
+          },
+          {
+            "name": "reportType",
+            "in": "path",
+            "description": "Type of report",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "company_report",
+              "enum": [
+                "company_report",
+                "stock_analyst_note",
+                "valuation_model"
+              ]
+            }
+          },
+          {
+            "name": "reportView",
+            "in": "path",
+            "description": "View of report. Currently, only `latest` is supported.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "latest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/equity/v1/moat_framework/{moatType}/{reportView}": {
+      "get": {
+        "tags": [
+          "equity - moat framework"
+        ],
+        "summary": "Get a Moat Framework Report",
+        "description": "Get a Moat Framework Report for the industry group specified in the `moatType` parameter. For a full list of moat types, see the [Documentation](/apis/investment-analysis/research/overview#moat-type-id) page.</br></br>A URL returned in the response is used to access the document file.",
+        "operationId": "MoatGet",
+        "parameters": [
+          {
+            "name": "moatType",
+            "in": "path",
+            "description": "Unique identifier of a moat type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "aerospace_defense"
+            }
+          },
+          {
+            "name": "reportView",
+            "in": "path",
+            "description": "View of report. Currently, only `latest` is supported.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "latest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/equity/v1/moat_framework/moat_type/{moatType}/{reportView}": {
+      "get": {
+        "tags": [
+          "equity - moat framework"
+        ],
+        "summary": "Get a Moat Framework Report",
+        "description": "Get a Moat Framework Report for the industry group specified in the `moatType` parameter. For a full list of moat types, see the [Documentation](/apis/investment-analysis/research/overview#moat-type-id) page.</br></br>A URL returned in the response is used to access the document file.",
+        "operationId": "MoatGet2",
+        "parameters": [
+          {
+            "name": "moatType",
+            "in": "path",
+            "description": "Unique identifier of a moat type",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "aerospace_defense"
+            }
+          },
+          {
+            "name": "reportView",
+            "in": "path",
+            "description": "View of report. Currently, only `latest` is supported.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "latest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/equity/v1/research_document/{documentId}/{reportView}": {
+      "get": {
+        "tags": [
+          "equity - rps document"
+        ],
+        "summary": "Get a Research Publishing System (RPS) document",
+        "description": "Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.</br></br>**Note** The three **equity - rps document** endpoints return almost the same content. In addition to the content also returned by the other two endpoints, this endpoint must be used for Thematic Research documents, as this research is not associated with any specific company. We recommend you use this endpoint as it is the simplest and returns all document types including thematic research.</br></br>The following document types can be retrieved using this endpoint: </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br>- Thematic Research</br></br>A URL returned in the response is used to access the document file. ",
+        "operationId": "GetRpsDocument3",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "description": "Unique Research Publishing System (RPS) identifier for a document.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "901224"
+            }
+          },
+          {
+            "name": "reportView",
+            "in": "path",
+            "description": "View of report. Currently, only `download` is supported.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "download"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/equity/v1/company/{companyIdentifier}/report_type/rps_document/{documentId}/{reportView}": {
+      "get": {
+        "tags": [
+          "equity - rps document"
+        ],
+        "summary": "Get a Research Publishing System (RPS) document",
+        "description": "Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.</br></br>You must enter a `companyIdentifier` value when using this endpoint. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>The following document types can be retrieved using this endpoint\\: </br></br> - Company Report</br> - Stock Analyst Notes</br>- Valuation Model</br></br>**Note** To retrieve Thematic Research, use the `/equity/v1/research_document/{documentId}/{reportView}` endpoint.",
+        "operationId": "GetRpsDocument",
+        "parameters": [
+          {
+            "name": "companyIdentifier",
+            "in": "path",
+            "description": "Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "0P00000246"
+            }
+          },
+          {
+            "name": "documentId",
+            "in": "path",
+            "description": "Unique Research Publishing System (RPS) identifier for a document",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "901224"
+            }
+          },
+          {
+            "name": "reportView",
+            "in": "path",
+            "description": "View of report. Currently, only `download` is supported.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "download"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "properties": {}
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {}
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/equity/v1/{companyIdentifier}/rps_document/{documentId}/{reportView}": {
+      "get": {
+        "tags": [
+          "equity - rps document"
+        ],
+        "summary": "Get a Research Publishing System (RPS) document",
+        "description": "Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.</br></br>You must enter a `companyIdentifier` value when using this endpoint. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>The following document types can be retrieved using this endpoint\\: </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br></br>**Note** To retrieve Thematic Research, use the `/equity/v1/research_document/{documentId}/{reportView}` endpoint.",
+        "operationId": "GetRpsDocument2",
+        "parameters": [
+          {
+            "name": "companyIdentifier",
+            "in": "path",
+            "description": "Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "0P00000246"
+            }
+          },
+          {
+            "name": "documentId",
+            "in": "path",
+            "description": "Unique Research Publishing System (RPS) identifier for a document",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "901224"
+            }
+          },
+          {
+            "name": "reportView",
+            "in": "path",
+            "description": "View of report. Currently, only `download` is supported.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "download"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/equity/v1/reports/quant/{companyIdentifier}": {
+      "get": {
+        "tags": [
+          "equity reports - quant and enhanced quant"
+        ],
+        "summary": "Get a Quantitative Report",
+        "description": "Get a Quantitative Report for the company specified in the `companyIdentifier` parameter. Quantitative Reports provide a detailed assessment of a company based on a quantitative analysis using a variety of company financial data and other data inputs. </br></br>You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter. </br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br> A URL returned in the response is used to access the document file.",
+        "operationId": "QuantReport",
+        "parameters": [
+          {
+            "name": "companyIdentifier",
+            "in": "path",
+            "description": "Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "0P000003MH"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Page size of output PDF",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "Letter",
+              "enum": [
+                "Letter",
+                "A4"
+              ]
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language and locale, for example, en-US",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en-US",
+              "enum": [
+                "en-US",
+                "en-GB",
+                "en-AU",
+                "en-NZ",
+                "fr-FR",
+                "de-DE",
+                "it-IT",
+                "es-ES",
+                "fi-Fi",
+                "nb-NO",
+                "nl-NL",
+                "sv-SE"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/equity/v1/reports/enhanced-quant/{companyIdentifier}": {
+      "get": {
+        "tags": [
+          "equity reports - quant and enhanced quant"
+        ],
+        "summary": "Get an Enhanced Quantative Report",
+        "description": "Get an Enhanced Quantitative Report for the company specified in the `companyIdentifier` parameter. Enhanced Quantitative Reports provide a detailed assessment of a company based on a quantitative analysis using a variety of company financial data and other data inputs, as well as additional commentary on the company.</br></br> You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`) .</br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter. </br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br> A URL returned in the response is used to access the document file.",
+        "operationId": "EnhancedQuantReport",
+        "parameters": [
+          {
+            "name": "companyIdentifier",
+            "in": "path",
+            "description": "Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "default": "0P000003MH"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Page size of output PDF",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "Letter",
+              "enum": [
+                "Letter",
+                "A4"
+              ]
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language and locale, for example, en-US",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en-US",
+              "enum": [
+                "en-US",
+                "en-GB",
+                "en-AU",
+                "en-NZ",
+                "fr-FR",
+                "de-DE",
+                "it-IT",
+                "es-ES",
+                "fi-Fi",
+                "nb-NO",
+                "nl-NL",
+                "sv-SE"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/fund/v1/reports/esg/{fundshareclassId}": {
+      "get": {
+        "tags": [
+          "fund reports - esg"
+        ],
+        "summary": "Get an Environmental, Social, and Governance (ESG) Report",
+        "description": "Get an ESG Report for the fund shareclass specified in the `fundshareclassId` parameter.</br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter. </br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br>If a report exists, a presigned URL from which you can download the PDF is returned in the response.",
+        "operationId": "ESGReport",
+        "parameters": [
+          {
+            "name": "fundshareclassId",
+            "in": "path",
+            "description": "Unique identifier of a fund shareclass",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "default": "F00000UPC2"
+            }
+          },
+          {
+            "name": "analyst-rating",
+            "in": "query",
+            "description": "Include Morningstar Analyst Ratings data point in report",
+            "required": false,
+            "explode": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "enum": [
+                0,
+                1
+              ]
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Page size of output PDF",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "Letter",
+              "enum": [
+                "Letter",
+                "A4"
+              ]
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language and locale, for example, en-US",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en-US",
+              "enum": [
+                "en-US",
+                "en-GB",
+                "en-AU",
+                "en-NZ",
+                "fr-FR",
+                "de-DE",
+                "it-IT",
+                "es-ES",
+                "fi-Fi",
+                "nb-NO",
+                "nl-NL",
+                "sv-SE"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/fund/v1/reports/global-fund-report/{FundIdentifier}": {
+      "get": {
+        "tags": [
+          "fund reports - managed investment report"
+        ],
+        "summary": "Get a Managed Investment Report",
+        "description": "Get a Managed Investment Report for the fund specified in the `FundIdentifier` parameter.</br></br> Managed Investments Reports provide a qualitative assessment  of a fund carried out by Morningstar Research Analysts.</br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br>If a report exists, a presigned URL from which you can download the PDF is returned in the response.",
+        "operationId": "ManagedInvestmentsReport",
+        "parameters": [
+          {
+            "name": "FundIdentifier",
+            "in": "path",
+            "description": "Unique identifier of a fund",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "default": "FOUSA00J4N"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Page size of output PDF",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "Letter",
+              "enum": [
+                "Letter",
+                "A4"
+              ]
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language and locale, for example, en-US",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en-US",
+              "enum": [
+                "en-US"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/fund/v1/reports/target-date-series/{StrategyId}": {
+      "get": {
+        "tags": [
+          "fund reports - target date series"
+        ],
+        "summary": "Get a Target Date Series Report",
+        "description": "Get a Target Date Series Report for the fund specified in the `StrategyId` parameter.</br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter.</br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter`.</br></br>If a report exists, a presigned URL from which you can download the PDF is returned in the response.",
+        "operationId": "TargetDateSeriesReport",
+        "parameters": [
+          {
+            "name": "StrategyId",
+            "in": "path",
+            "description": "A unique identifier for a specific fund. For example, STUSA04D0O",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "default": "STUSA04D0O"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language and locale, for example, en-US",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en-US",
+              "enum": [
+                "en-US",
+                "en-GB",
+                "en-AU",
+                "en-NZ",
+                "fr-FR",
+                "de-DE",
+                "it-IT",
+                "es-ES",
+                "fi-Fi",
+                "nb-NO",
+                "nl-NL",
+                "sv-SE"
+              ]
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Page size of output PDF",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "Letter",
+              "enum": [
+                "Letter"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/fund/v1/reports/carbon-report/{FundIdentifier}": {
+      "get": {
+        "tags": [
+          "fund reports - carbon report"
+        ],
+        "summary": "Get a Carbon Report",
+        "description": "Get an Carbon Report for the fund specified in the `FundIdentifier` parameter.</br></br>\n Carbon Reports provide an investment level analysis of a fund’s carbon risk. The report uses Morningstar’s Portfolio Carbon Metrics to provide an overview of how well a portfolio is managing transition risk and other key \n carbon-related information, such as carbon intensity and fossil fuel exposure. You can use these metrics to identify and evaluate lower carbon-risk alternatives to funds or assess how well sustainable funds meet their stated mandates.\n</br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br>If a report exists, a presigned URL from which you can download the PDF is returned in the response.",
+        "operationId": "CarbonReport",
+        "parameters": [
+          {
+            "name": "FundIdentifier",
+            "in": "path",
+            "description": "Unique identifier of a fund",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string",
+              "default": "FOUSA00J4N"
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Page size of output PDF",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "A4"
+            }
+          },
+          {
+            "name": "locale",
+            "in": "query",
+            "description": "Language and locale, for example, en-US",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en-US",
+              "enum": [
+                "en-US"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {}
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+				"type": "http",
+				"scheme": "bearer"
+      }
+    }
+  }
+}

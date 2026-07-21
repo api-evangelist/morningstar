@@ -1,0 +1,125 @@
+aid: morningstar
+name: Morningstar
+review:
+  question: Does Morningstar expose a documented public API surface, and what is its posture?
+  answer: true
+  date: '2026-07-21'
+  reviewer: API Evangelist
+findings:
+  summary: |
+    Morningstar runs a substantial, genuinely public developer portal at
+    developer.morningstar.com covering two API families - Direct Web Services
+    (investment data, research, screening, time series, portfolio analytics)
+    and Dynamic Services APIs (financial planning, investment analysis,
+    account aggregation) - plus a Market Data Web Services API and a
+    WebSocket Streaming API for Level 1/Level 2 market data. Documentation
+    and 41 OpenAPI 3.0/3.1 specifications are downloadable without any login.
+    The commercial posture is sales-gated: there is no self-serve signup or
+    public pricing; credentials are provisioned during Morningstar onboarding
+    (username/password exchanged for a 60-minute OAuth 2.0 bearer token via
+    POST /token/oauth), and Market Data Web Services additionally requires
+    client IP allowlisting on client-specific hosts. An AI surface is
+    emerging: a Morningstar MCP Server (docs on the portal; original GitHub
+    repo archived), a Morningstar Agent API at agents.morningstar.com, and
+    the DWS MCP Server. Morningstar is an independent public company
+    (Nasdaq MORN) and owns PitchBook, DBRS, and ByAllAccounts.
+  developerPortal: https://developer.morningstar.com
+  selfServe: false
+  salesGated: true
+  publicPricing: false
+  authModel: |
+    OAuth 2.0 bearer tokens (60-minute TTL) obtained from POST /token/oauth
+    with Basic (Base64 username:password) credentials issued at onboarding.
+    Market Data Web Services uses username/password query parameters plus
+    client IP allowlisting on client-assigned servers. Streaming/Snapshot
+    market data clients use OAuth 2.0 with account-specific endpoints.
+  deliveryChannels:
+    - REST (regional bases us/emea/apac-api.morningstar.com, JSON)
+    - WebSocket (Streaming API, Level 1 and Level 2 market-by-price)
+    - HTTP XML/JSON query services (Market Data Web Services, gzip)
+    - Async request/poll pattern (DWS async APIs, AI Insights)
+    - MCP (Morningstar MCP Server and DWS MCP Server for AI agents)
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://www.us-api.morningstar.com
+      documented: true
+      note: Regional bases also documented at https://www.emea-api.morningstar.com and https://www.apac-api.morningstar.com.
+    - protocol: WebSocket
+      scheme: wss
+      documented: true
+      note: Morningstar Streaming API for Level 1/Level 2 market data, documented via the official Morningstar/morningstar-streaming-client GitHub library; endpoints are account-specific and not publicly listed.
+    - protocol: FIX
+      documented: false
+      note: No public FIX, SBE/ITCH multicast, or flat-file/cloud-share delivery documentation was found during this review.
+  specProvenance: |
+    All 41 files in openapi/ were downloaded verbatim on 2026-07-21 from
+    developer.morningstar.com's own content store, whose URLs are published
+    in the portal's public navigation manifests:
+    https://developer.morningstar.com/site-navigation/documentation-navigation-public.json
+    (Direct Web Services + utilities + Morningstar Agent API) and
+    https://developer.morningstar.com/site-navigation/apis-navigation-public.json
+    (Dynamic Services APIs, ByAllAccounts, financial planning, investment
+    analysis). Every file parsed as valid JSON and declares OpenAPI 3.0.x or
+    3.1.0. Nothing was authored or modified.
+  probes:
+    - url: https://developer.morningstar.com
+      status: 200
+    - url: https://developer.morningstar.com/direct-web-services
+      status: 200
+    - url: https://developer.morningstar.com/dynamic-services-apis
+      status: 200
+    - url: https://www.morningstar.com/
+      status: 200
+    - url: https://github.com/Morningstar
+      status: 200
+    - url: https://status.morningstar.com/
+      status: 200
+      note: Real Statuspage - "Morningstar Product Status".
+    - url: https://www.morningstar.com/user-agreement
+      status: 200
+    - url: https://www.morningstar.com/company/privacy-policy
+      status: 202
+      note: morningstar.com corporate pages sit behind bot protection that answers 202 to non-browser clients; the page is linked from the developer portal footer.
+    - url: https://www.morningstar.com/business/products/direct-web-services/contact
+      status: 202
+      note: Sales contact form; 202 from bot protection.
+    - url: https://apicenter.morningstar.com/login
+      status: 200
+      note: Separate login-walled API Center for entitled customers.
+    - url: https://developer.morningstar.com/nonsense-xyz-9999
+      status: 200
+      note: Control probe - the portal is a single-page app that returns 200 for any route, so 200s on deep links are not proof of a page; deep links used in apis.yml were taken from the portal's own navigation JSON and in-page hrefs instead.
+sources:
+  - url: https://developer.morningstar.com/content/documentation/documentation/get-started/base-urls/regional-base-urls.md
+    type: Documentation
+    note: Documents the three regional REST base URLs.
+  - url: https://developer.morningstar.com/content/documentation/documentation/get-started/authentication/get-started-authentication.md
+    type: Documentation
+    note: Documents OAuth 2.0 token flow, 60-minute TTL, POST /token/oauth, onboarding-issued credentials.
+  - url: https://developer.morningstar.com/content/apis/market-data/overview/api-md-apis-overview.md
+    type: Documentation
+    note: Market Data Web Services API - services list, XML/JSON, username/password plus IP allowlisting, streaming as add-on.
+  - url: https://developer.morningstar.com/content/documentation/direct-web-services/about/dws-about.md
+    type: Documentation
+    note: Regional availability matrix for all Direct Web Services APIs.
+  - url: https://github.com/Morningstar/morningstar-streaming-client
+    type: SDK
+    note: Official .NET library confirming WebSocket streaming with Level 1 and Level 2 market-by-price subscriptions.
+  - url: https://github.com/Morningstar/morningstar-snapshot-client
+    type: SDK
+    note: Official .NET library confirming on-demand Level 1 snapshot API with OAuth 2.0.
+  - url: https://github.com/Morningstar/morningstar-mcp-server
+    type: Repository
+    note: Archived MCP server repo; auth tokens and dedicated endpoints obtained by contacting Morningstar sales.
+actions:
+  openapiHarvested: 41
+  openapiDirectory: openapi/
+  apisYmlUpdated: true
+  reason: |
+    Bootstrap capture of Morningstar's public API surface: identity in
+    apis.yml with 18 API entries grouped by product family, and a verbatim
+    harvest of all 41 publicly downloadable OpenAPI specifications. The
+    honest posture finding is public-docs/sales-gated-credentials: an
+    enterprise platform with unusually open documentation for the
+    institutional market data category.

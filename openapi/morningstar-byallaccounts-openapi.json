@@ -1,0 +1,2670 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "ByAllAccounts",
+    "version": "v1.0"
+  },
+  "tags": [
+    {
+      "name": "Accounts"
+    },
+    {
+      "name": "Activities"
+    },
+    {
+      "name": "Credentials"
+    },
+    {
+      "name": "Persons"
+    },
+    {
+      "name": "Positions"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://www.byallaccounts.net/api/v1",
+      "description": "SSO using DataConnect API"
+    },
+    {
+      "url": "https://www.us-api.morningstar.com/aggapi/v1",
+      "description": "SSO using Morningstar Authentication"
+    }
+  ],
+  "paths": {
+    "/accounts/aggregate": {
+      "post": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Request aggregation of accounts for an authenticated investor user",
+        "description": "Initiate demand aggregation  of accounts for the authenticated investor from a financial institution. Use the `class` parameter to restrict which accounts to aggregate by specifying one or more class values: investment, noninvestment, or other. </br></br>Aggregation gathers holdings and transactions for the accounts from associated Financial Institutions. It does not discover new accounts that are available to the user from those financial institutions. The request will not attempt to aggregate any account that is disabled due to a login error as repeated retries with incorrect credentials could cause an account to be locked out.</br></br>Aggregation runs asynchronously. This endpoint validates inputs and locates target accounts for aggregation. If either of these operations fails, an error code is returned. If both operations succeed, the aggregation is submitted.  </br></br>Aggregation progress can be observed and monitored using the following endpoints:</br>`GET /activities/summary`</br>`GET /credentials/accounts`",
+        "operationId": "aggregateAccountsUsingPOST",
+        "parameters": [
+          {
+            "name": "class",
+            "in": "query",
+            "description": "Class of an account. If no class is specified, then all types are returned. </br></br>List of one or more of the following classes of investor accounts: </br><span>&#8226;</span> **investment** which includes BAA account types prefixed with INVESTMENT_ and INSURANCE_  </br><span>&#8226;</span> **nonInvestment** which includes BAA account types CREDITCARD and all those prefixed with BANKING_, HEALTHACCOUNT_, and LOAN_</br><span>&#8226;</span> **other** which includes BAA account types:OTHER, UNKNOWN, and NULL",
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "investment",
+                "noninvestment",
+                "other"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/accounts/{id}": {
+      "delete": {
+        "tags": [
+          "Accounts"
+        ],
+        "summary": "Delete an account",
+        "description": "Delete the account identified by the `id` parameter. ",
+        "operationId": "deleteUsingDELETE",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "Unique identifier of an account",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/activities/summary": {
+      "get": {
+        "tags": [
+          "Activities"
+        ],
+        "summary": "Monitor the status of asynchronous authentication or aggregation activities",
+        "description": "Determine if asynchronous activities are in progress for the  authenticated  investor. The endpoint can monitor activities for just the current session, or it can include other sessions of the user depending  on the `scope` parameter setting.  Asynchronous activities include:  </br>  </br><span>&#8226;</span> authenticating credentials </br>  <span>&#8226;</span> discovering, adding, and aggregating accounts</br>  <span>&#8226;</span> aggregating accounts </br></br>This endpoint  returns a single Boolean value for *activityInProgress* that indicates whether asynchronous activities are in progress for the user.  </br></br>The applicable scope of this endpoint is always a single authenticated investor.  This endpoint can provide information on asynchronous activity for the current session or for all activity in thesystem. Use the `scope` parameter with value `session` to request information about activity initiated during the current session.  Use the `scope` parameter with value `global` to request information for all activity in the system.  When `scope` is `global`, asynchronous activity progress will be available for terminated sessions up to 15 minutes after completion of that activity.  If the `scope` parameter is not provided, the endpoint will report on activity for the current session if there is one.  If there is no current session (Morningstar Authentication) then it will report on all activity for the authenticated investor.   </br></br>**Response discussion** </br>The JSON response for the endpoint is one of the following, depending on whether there is activity in progress or not: </br><span>&#8226;</span>  {\"activityInProgress\":false} </br>OR</br><span>&#8226;</span> {\"activityInProgress\":true}</br>If `scope` is not set or is set to `session`, the value is true if any asynchronous activity is in progress for the session for at least one credential. If `scope` is set to `global`, the value is true if any asynchronous activity is in progress for the session for at least one credential or if authenticate or discovery/add/aggregate is in progress for accounts aggregating for at least one credential outside the current session. When all activity completes then the value of activityInProgress will be false. ",
+        "operationId": "getSummaryUsingGET",
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "description": "Scope of activity. Value can be *session*, to include only session-specific activity progress, or *global* to also include activity progress from other sessions for this user. Cannot be set to *session* for users autheticated with Morningtar Authentication.  The default is *session* for  session-based users and *global* for users authenticated by Morningstar Authentication.</br></br>Note: the *global* setting currently does not return status for accounts aggregating outside the current session.",
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string",
+              "default": "session"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok </br>See Response discussion above.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ActivitiesDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/credentials/accounts": {
+      "get": {
+        "tags": [
+          "Credentials"
+        ],
+        "summary": "Get credentials and account information",
+        "description": "Get credentials and any associated accounts in a single list. Credentials that have no associated accounts will also be included.  This response also includes information about asynchronous activities for the credentials and accounts.  Use the `limitToProgressAfter` parameter to request that information for asynchronous activities in the response should be limited to those initiated after the specified point in time.  </br></br>The applicable scope of this endpoint is always a single authenticated investor. This endpoint can provide information on asynchronous activity for the current session or for all activity in the system. Use the scope parameter with value session to request information about activity initiated during the current session. Use the `scope` parameter with value global to request information for all activity in the system. When `scope` is `global`, asynchronous activity progress will be available for terminated sessions up to 15 minutes after completion of that activity. If the `scope` parameter is not provided then the endpoint will report on activity for the current session, if there is one. If there is no current session (UIM) then it will report on all activity for the authenticated investor. </br></br>You can specify the number of the page to return and the number of records per page. </br>\n </br>**Response Model**  - Special situations for Credentials and Accounts</br>\n Credentials and accounts in the aggregation system are complex objects for which the following statements are true: </br></br><span>&#8226;</span> Credentials or accounts can be incomplete, meaning they do not contain enough information to access data from the Financial Institution.  This situation can occur if the user has not yet provided all necessary information (e.g. has not yet provided their password or completed OAUTH authorization) </br></br><span>&#8226;</span> The aggregation system may encounter a variety of errors when attempting to use a credential or an account to access data from a Financial Institution. These errors can occur because the information in the object is incorrect (e.g. a wrong password), problems with the aggregation system’s support (e.g. Financial Institution web site has changed and we need to update our support), or problems at the Financial Institution (e.g. site not available). </br></br>These conditions are not errors from an application perspective, instead they are “normal” things that can happen in the day-to-day of aggregation activities.  It is important to properly represent these conditions to the end user and, whenever possible, help the user to understand when they must take action to resolve the condition or when the solution is not under their control.  Due to the complexity of these error conditions, it is not always possible to make the condition clear to the user.  ByAllAccounts continues to work to improve the clarity of these error conditions.  </br></br>In addition to these situations, the system may be asynchronously performing activities that the user requested, directly or indirectly, on credentials and accounts.  For example, if a request was made to obtain the latest data for an account then an asynchronous aggregation process is going on in the background and we want the end user to understand that it is in process and when that process completes.  This endpoint includes information at the individual object level (credential or account) as well as the summary level (for the collection) to aid in the presentation of this information to the user.  Note also that any asynchronous activity can result in the clearing of an error condition or the encountering of a new condition, so that information should be queried and redisplayed upon completion of the asynchronous activity.  </br></br>For Supplemental Response Model Information including Account and Credential Error Information and Activity in Progress information, refer to the [Overview](/apis/account-aggregation/byallaccounts/overview) page. ",
+        "operationId": "getAccountUsingGET_1",
+        "parameters": [
+          {
+            "name": "limitToProgressAfter",
+            "in": "query",
+            "description": "Show only credentials/accounts authenticated/aggregated by the user after the specified date. If not specified will return the full list of credentials/accounts. </br></br>date-time ISO 8601 JSON format yyyy-mm-ddThh:mm:ss.nnnnnn+|-hh:mm Local time relative to GMT. For example: 2019-08-22T15:16:33.045-04:00 ",
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "description": "Scope of activity for the authenticated user. Values can be `session`, to include only session-specific information, or `global` to also include information from other sessions for this user.  Default is `session` for session-based users and `global` for users authenticated by Morningstar Authentication.",
+            "allowEmptyValue": false,
+            "schema": {
+              "type": "string",
+              "default": "session or global"
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Number of records per page",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 25
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page«Credential-Account Pair,DefaultSummaryDto»"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/credentials/{id}": {
+      "delete": {
+        "tags": [
+          "Credentials"
+        ],
+        "summary": "Delete a credential and all associated accounts from the system",
+        "description": "Delete the credentials specified by the `id` parameter. All accounts associated with the credentials are also deleted from the system.  ",
+        "operationId": "deleteUsingDELETE_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the credential to delete",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/persons": {
+      "post": {
+        "tags": [
+          "Persons"
+        ],
+        "summary": "Register a new user",
+        "description": "Add an Investor Person to the system and associate it to a Firm and optionally to an Advisor. Registering a new Person does not require prior authentication. </br> <span>&#8226;</span> The Firm to which the Person is to be added must have the \"Investor self-signup\" feature enabled.  </br> <span>&#8226;</span> The user is created as SSO, non-SSO, or UIM JWT as determined by the Firm’s configuration for creating new “clients”.  </br></br>**Request Headers**</br>Registering a new Person does not require prior authentication, so JSESSIONID or CSRF-TOKEN are not required. </br></br>A UIM Admin JWT can optionally be submitted to this endpoint using the Authorization header with the header value \"Bearer <token-value>\".  The UIM Admin JWT holds a Service Administrator level authentication context  and the uimGuid for the user to be created must be provided in the post body. The endpoint will validate the JWT, extract the UIM Guid, and store the UIM Guid on the Person. The UIM Guid must be unique across the ByAllAccounts system (across all Persons). If not, then the Person is not created and HTTP 409 Conflict is returned with the person URI.</br></br>The POST body parameters listed in Model below are to be submitted in in JSON format as shown in the Example Value. </br></br>**Response Body**</br>Location header:  URI to new resource. For example:</br>\n  {\n   \"uri\": \"https://www.byallaccounts.net/api/v1/persons/12345\"\n  }\n  </br>Where 12345 is the BAA Person Id for the new Person. ",
+        "operationId": "postPersonsUsingPOST",
+        "requestBody": {
+          "description": "param1",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonPost"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DataRecord"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request. </br>Possible causes:</br> <span>&#8226;</span> The *field name* field is missing </br> <span>&#8226;</span> Missing required value </br> <span>&#8226;</span> The *field name* cannot exceed *max value* </br> <span>&#8226;</span> Invalid Role value </br> <span>&#8226;</span> Email addresses must be in the form x@x.x and cannot contain spaces  </br> <span>&#8226;</span> Firm *firm* not found </br> <span>&#8226;</span> Advisor not found </br> </br>One of these is set on the Firm to be required but is not found:</br> <span>&#8226;</span> taxId  </br> <span>&#8226;</span> firmTag1 </br> <span>&#8226;</span> firmTag2  </br> <span>&#8226;</span> firmTag3  "
+          },
+          "401": {
+            "description": "Not Authorized. </br>Possible causes:</br> <span>&#8226;</span> Investor self-signup not allowed </br><span>&#8226;</span> UIM JWT not valid"
+          },
+          "409": {
+            "description": "Conflict. </br>Possible causes:</br><span>&#8226;</span>  UIM Guid must be unique (from UIM JWT) </br><span>&#8226;</span> firmTag1 must be unique"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "deprecated": false,
+        "x-codegen-request-body-name": "param1"
+      }
+    },
+    "/persons/{id}": {
+      "get": {
+        "tags": [
+          "Persons"
+        ],
+        "summary": "Get profile data for a user",
+        "description": "Fetch the profile data of a Person specified by the `id` parameter.   ",
+        "operationId": "getPersonUsingGET_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The unique identifier of the person requested",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PersonDto"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized </br> </br> Possible reasons:</br><span>&#8226;</span> Invalid JSESSIONID and/or CSRF-TOKEN</br><span>&#8226;</span>  Expired UIM JWT "
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "deprecated": false
+      }
+    },
+    "/positions": {
+      "get": {
+        "tags": [
+          "Positions"
+        ],
+        "summary": "Get a collection of all positions",
+        "description": "Get a collection of all positions. You can specify the number of the page to return and the number of records per page.",
+        "operationId": "getPositionsUsingGET",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 0
+            }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "description": "Number of records per page",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 25
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Ok",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page«Position,DefaultSummaryDto»"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Not Authorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Account": {
+        "title": "Account",
+        "required": [
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "accountNumber": {
+            "type": "string",
+            "description": "The account number at this financial institution",
+            "example": "ABC123456789"
+          },
+          "accountNumber2": {
+            "type": "string",
+            "description": "The optional account number at this financial institution",
+            "example": "XYZ123456"
+          },
+          "accountType": {
+            "type": "string",
+            "example": "CREDITCARD"
+          },
+          "aggregationStatusErrorCode": {
+            "type": "integer",
+            "description": "Error code from latest aggregation attempt. This field can be ignored. Instead, refer to unifiedStatusInfoType",
+            "format": "int64",
+            "example": 1005
+          },
+          "id": {
+            "type": "integer",
+            "description": "An account identifier assigned by the service",
+            "format": "int64",
+            "example": 11223344
+          },
+          "lastUpdated": {
+            "type": "string",
+            "description": "Date and time stamp of last update",
+            "format": "date-time"
+          },
+          "marketValue": {
+            "$ref": "#/components/schemas/CurrencyValue"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the account",
+            "example": "BofA Checking Account"
+          }
+        }
+      },
+      "AccountDto": {
+        "title": "AccountDto",
+        "required": [
+          "accountComplete",
+          "dataBasis",
+          "externalServiceLevel",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique ID of this Account",
+            "format": "int64",
+            "example": 5566
+          },
+          "credentialId": {
+            "type": "integer",
+            "description": "ID of the credential associated with this account",
+            "format": "int64",
+            "example": 1234
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of this Account",
+            "example": "AccountName"
+          },
+          "accountNumber": {
+            "type": "string",
+            "description": "The Account Number for this Account",
+            "example": "1234-ABCD"
+          },
+          "accountNumber2": {
+            "type": "string",
+            "description": "The second Account Number for this Account",
+            "example": "9876-ZYXW"
+          },
+          "externalServiceLevel": {
+            "type": "string",
+            "description": "Indicator whether Account is Positional or Transactional",
+            "example": "5566"
+          },
+          "dataBasis": {
+            "type": "string",
+            "description": "Indicator whether Account is Trade or Settlement",
+            "example": "trade"
+          },
+          "endDateLastTx": {
+            "$ref": "#/components/schemas/DateNoTime"
+          },
+          "accountComplete": {
+            "type": "boolean",
+            "description": "True if and only if the Account is 'complete'. To be complete there must be a related credential which is complete, and there must be an account number, and if the related financial institution requires an Account Number 2 this must also be present",
+            "example": true
+          }
+        }
+      },
+      "AccountPatch": {
+        "title": "AccountPatch",
+        "type": "object",
+        "properties": {
+          "accountNumber": {
+            "type": "string",
+            "description": "123456789",
+            "example": "Account Number"
+          },
+          "accountNumber2": {
+            "type": "string",
+            "description": "123456789",
+            "example": "Second Account Number"
+          },
+          "name": {
+            "type": "string",
+            "description": "123456789",
+            "example": "Account name"
+          }
+        }
+      },
+      "AccountPost": {
+        "title": "AccountPost",
+        "type": "object",
+        "properties": {
+          "accountNumber": {
+            "type": "string",
+            "description": "The account number. This field is required for successful account aggregation, but is not required (accounts without an account number will be considered 'not complete'",
+            "example": "12345678"
+          },
+          "accountNumber2": {
+            "type": "string",
+            "description": "The second account number (not necessary for aggregation at most financial institutions)",
+            "example": "ZXY-WVU"
+          }
+        }
+      },
+      "ActivitiesDto": {
+        "title": "ActivitiesDto",
+        "type": "object",
+        "properties": {
+          "activityInProgress": {
+            "type": "boolean",
+            "description": "If true, aggregation is in-progress for atleast one credential",
+            "example": false
+          }
+        }
+      },
+      "ActivitySummary": {
+        "title": "ActivitySummary",
+        "type": "object",
+        "properties": {
+          "activityInProgress": {
+            "type": "boolean",
+            "description": "If scope=`session` (or not set), then true indicates aggregation or authentication is in-progress for at least one credential in the session. If scope=`global`, then true indicates aggregation or authentication is in-progress for at least one credential in the session or authentication or discover/add/aggregate is in progress for at least one credential outside the current session. true, then aggregation is in-progress for atleast one credential",
+            "example": false
+          }
+        }
+      },
+      "AggregationAccountResult": {
+        "title": "AggregationAccountResult",
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Account ID",
+            "format": "int64",
+            "readOnly": true,
+            "example": 123456
+          },
+          "name": {
+            "type": "string",
+            "description": "Account name",
+            "readOnly": true,
+            "example": "My Account"
+          },
+          "accountUpdateStatusErrcode": {
+            "type": "integer",
+            "description": "Status code for this account (1005 indicates success)",
+            "format": "int64",
+            "readOnly": true,
+            "example": 1005
+          },
+          "accountUpdateStatusInfo": {
+            "type": "string",
+            "description": "Status info for this account (null on success)",
+            "readOnly": true
+          },
+          "lastUpdated": {
+            "type": "string",
+            "description": "Date and time stamp of last successful update",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "lastUpdateAttempt": {
+            "type": "string",
+            "description": "Timestamp of the last update attempt",
+            "format": "date-time",
+            "readOnly": true
+          },
+          "marketValue": {
+            "$ref": "#/components/schemas/CurrencyValue"
+          }
+        }
+      },
+      "ApplicationConfiguration": {
+        "title": "ApplicationConfiguration",
+        "required": [
+          "exitURL",
+          "fiLogoList",
+          "isCUI2OnDemandDiscoEnabled",
+          "isCUI2SelectDiscoAccountsEnabled",
+          "isCreateAccountsEnabled",
+          "isDeleteAccountsEnabled",
+          "isDeleteCredentialsEnabled",
+          "isEditAccountsEnabled",
+          "isEditSelfEnabled",
+          "isFIRequestsEnabled",
+          "isInvestorSsnRequired",
+          "isLoginEditable",
+          "isLogoutLinkShown",
+          "isReloginEnabled",
+          "isUserAgreementRequired",
+          "logoURL",
+          "logoutLinkType",
+          "passwordRequirements",
+          "productLicenseList",
+          "recaptchaSiteKey",
+          "sessionTimeoutURL"
+        ],
+        "type": "object",
+        "properties": {
+          "isFIRequestsEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether creation of FI requests is enabled for this user",
+            "example": true
+          },
+          "isInvestorSsnRequired": {
+            "type": "boolean",
+            "description": "Indicates whether user account SSO is required or not",
+            "example": true
+          },
+          "isCreateAccountsEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether user account creation is enabled (will be true only for RW investors)",
+            "example": true
+          },
+          "isDeleteAccountsEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether user account deletion is enabled (will be true only for RW investors)",
+            "example": true
+          },
+          "isEditAccountsEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether user account editing is enabled (will be true for RW and CW investors)",
+            "example": true
+          },
+          "isDeleteCredentialsEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether user credential with no accounts deletion is enabled (will be true only for RW investors)",
+            "example": true
+          },
+          "isEditSelfEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether the user editing of themselves is enabled",
+            "example": true
+          },
+          "isLoginEditable": {
+            "type": "boolean",
+            "description": "Indicates whether login can be edited (will be false for SSO users)",
+            "example": true
+          },
+          "isReloginEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether the user should be prompted for re-login when the session times out (will be false during SSO sessions)",
+            "example": true
+          },
+          "isLogoutLinkShown": {
+            "type": "boolean",
+            "description": "Indicates whether logout/exit link should be shown (incorporates SSO and vendor setting)",
+            "example": true
+          },
+          "isCUI2SelectDiscoAccountsEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether adding choice of accounts is enabled",
+            "example": true
+          },
+          "isCUI2OnDemandDiscoEnabled": {
+            "type": "boolean",
+            "description": "Indicates whether incremental account discovery is enabled",
+            "example": true
+          },
+          "loginURL": {
+            "type": "string",
+            "description": "The absolute login URL. Null if no vendor-specific login URL set.",
+            "example": "https://www.byallaccounts.net/BAAWebAppCUI2/login"
+          },
+          "exitURL": {
+            "type": "string",
+            "description": "Exit URL to navigate to when exiting the app",
+            "example": "https://www.byallaccounts.net/BAAWebApp/BAALogin.html"
+          },
+          "logoURL": {
+            "type": "string",
+            "description": "The absolute URL of the vendor-specific logo. Null if there is no vendor-specific logo.",
+            "example": "https://www.byallaccounts.net/WebPortfolio/vendorResources/Default/medium/logo.png"
+          },
+          "sessionTimeoutURL": {
+            "type": "string",
+            "description": "URL to navigate to in event of session timeout",
+            "example": "https://www.byallaccounts.net/BAAWebApp/BAALogin.html"
+          },
+          "uiConfigURL": {
+            "type": "string",
+            "description": "The absolute URL of the vendor specific UI configuration file. Null if no vendor-specific UI configuration file found.",
+            "example": "https://www.byallaccounts.net/WebPortfolio/vendorResources/ABCDEFGH/ui-config.json"
+          },
+          "overrideCSSURL": {
+            "type": "string",
+            "description": "The absolute URL of the vendor specific CSS file. Null if no vendor-specific CSS file found.",
+            "example": "https://www.byallaccounts.net/WebPortfolio/vendorResources/ABCDEFGH/override.css"
+          },
+          "i18nURL": {
+            "type": "string",
+            "description": "The absolute URL of the vendor specific internationalization folder. Null if no vendor-specific internationalization folder found.",
+            "example": "https://www.byallaccounts.net/WebPortfolio/vendorResources/ABCDEFGH/i18n"
+          },
+          "logoutLinkType": {
+            "type": "string",
+            "description": "Either 'logout' or 'exit' depending on whether this is an SSO session",
+            "example": "logout",
+            "enum": [
+              "logout",
+              "exit"
+            ]
+          },
+          "passwordRequirements": {
+            "type": "string",
+            "description": "Password requirements string in HTML format",
+            "example": "example not provided"
+          },
+          "recaptchaSiteKey": {
+            "type": "string",
+            "description": "The reCAPTCHA site key",
+            "example": "example not provided"
+          },
+          "isUserAgreementRequired": {
+            "type": "boolean",
+            "description": "Indicates whether the user agreement is required",
+            "example": true
+          },
+          "userAgreementHtmlURL": {
+            "type": "string",
+            "description": "URL to HTML version of the user agreement",
+            "example": "/WPDemo/vendorResources/Default/wpUserAgreement.html"
+          },
+          "userAgreementPdfURL": {
+            "type": "string",
+            "description": "URL to PDF version of the user agreement",
+            "example": "https://www.byallaccounts.net/WPDemo/vendorResources/Default/wpUserAgreement.pdf"
+          },
+          "privacyPdfURL": {
+            "type": "string",
+            "description": "URL to PDF version of the privacy policy",
+            "example": "https://www.byallaccounts.net/WebPortfolio/vendorResources/Default/wpPrivacy.pdf"
+          },
+          "productLicenseList": {
+            "type": "array",
+            "description": "A list of available product Licenses",
+            "items": {
+              "$ref": "#/components/schemas/ProductLicense"
+            }
+          },
+          "fiLogoList": {
+            "type": "array",
+            "description": "A list of the most popular financial institutions and their logos",
+            "items": {
+              "$ref": "#/components/schemas/FILogo"
+            }
+          }
+        }
+      },
+      "ApploginsDto": {
+        "title": "ApploginsDto",
+        "required": [
+          "personId"
+        ],
+        "type": "object",
+        "properties": {
+          "personId": {
+            "type": "integer",
+            "description": "ID of the Person",
+            "format": "int64",
+            "example": 778899
+          },
+          "login": {
+            "type": "string",
+            "description": "Application login",
+            "example": "av-adv-accountview"
+          }
+        },
+        "description": "Application login"
+      },
+      "Authentication": {
+        "title": "Authentication",
+        "required": [
+          "login",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "login": {
+            "type": "string",
+            "description": "BAA Login",
+            "example": "joesmith123"
+          },
+          "password": {
+            "type": "string",
+            "description": "BAA Password",
+            "example": "mypassword123"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "BAA new Password",
+            "example": "mynewpassword123"
+          },
+          "recaptchaToken": {
+            "type": "string",
+            "description": "reCAPTCHA Token",
+            "example": "example not provided"
+          }
+        },
+        "description": "Authentication credentials used to establish a session with the BAA REST API"
+      },
+      "AuthenticationResult": {
+        "title": "AuthenticationResult",
+        "required": [
+          "credentialId",
+          "status",
+          "statusTimestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "authenticationStatusErrorCode": {
+            "type": "integer",
+            "description": "Status code from the authentication operation; 1006 indicates success",
+            "format": "int64",
+            "example": 1007
+          },
+          "authenticationStatusInfo": {
+            "type": "string",
+            "description": "Status info from the authentication operation (populated only if an error occurrd)",
+            "example": "WebPortfolio could not determine an answer for the security question: 'In what city did you meet your spouse for the first again."
+          },
+          "authenticationStatusInfoType": {
+            "type": "string",
+            "description": "Type of status information from the latest authentication attempt",
+            "example": "cannotConnectMissingLoginPW"
+          },
+          "credentialId": {
+            "type": "integer",
+            "description": "Account Credential ID associated with this authentication",
+            "format": "int64",
+            "example": 5566
+          },
+          "lastAuthenticationAttempt": {
+            "type": "string",
+            "description": "Date of the last authentication attempt",
+            "format": "date-time"
+          },
+          "next": {
+            "$ref": "#/components/schemas/UriElement"
+          },
+          "oauthExpirationTime": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "oauthMicrositeURL": {
+            "$ref": "#/components/schemas/UriElement"
+          },
+          "sqa": {
+            "type": "array",
+            "description": "Security question that requires updating. Only included if a SQA issue caused an error.",
+            "items": {
+              "$ref": "#/components/schemas/SQA"
+            }
+          },
+          "status": {
+            "type": "string",
+            "description": "Account Credential ID associated with this authentication",
+            "example": "In Progress"
+          },
+          "statusTimestamp": {
+            "type": "string",
+            "description": "Status timestamp",
+            "format": "date-time"
+          },
+          "userInput": {
+            "type": "array",
+            "description": "User Input Prompt; only valued if status is 'Waiting for User Input'",
+            "items": {
+              "$ref": "#/components/schemas/UserInput"
+            }
+          },
+          "userInputExpirationTime": {
+            "type": "string",
+            "description": "User Input Expiration Time is the time after which ISAC will timeout regardless of whether it has been kept alive with keep alive requests. Only valued if status is 'Waiting for User Input'",
+            "format": "date-time"
+          },
+          "userInputTimeoutInterval": {
+            "type": "integer",
+            "description": "User Input Timeout Interval is the interval of time in seconds in which a keep alive request or the user input result should be submitted. Only valued if status is 'Waiting for User Input'",
+            "format": "int64"
+          },
+          "userInputURI": {
+            "$ref": "#/components/schemas/UriElement"
+          }
+        },
+        "description": "Credential Authentication final result object"
+      },
+      "Credential": {
+        "title": "Credential",
+        "required": [
+          "authType",
+          "hasAccounts",
+          "id",
+          "isCredentialComplete",
+          "name",
+          "oauthTokenId",
+          "profileId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID of the Account Credential",
+            "format": "int64",
+            "example": 778899
+          },
+          "profileId": {
+            "type": "integer",
+            "description": "Financial profile ID of the credential owner",
+            "format": "int64",
+            "example": 5566
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the Account Credential",
+            "example": "DataConnect Account Credential Test FI 001 - No SQA 151"
+          },
+          "fiId": {
+            "type": "integer",
+            "description": "ID of the financial institution. Either the fiId field or the fiRequestName field was must be provided (and not both).",
+            "format": "int64",
+            "example": 12484
+          },
+          "firequestName": {
+            "type": "string",
+            "description": "The name of the requested FI. Either the fiId field or the fiRequestName field was must be provided (and not both)",
+            "example": "DataConnect Account Credential Test FI 001 - (requested fi)"
+          },
+          "firequestURL": {
+            "type": "string",
+            "description": "The URL of the requested FI. May only be provided when the fiRequestName is provided (and the fiId field is not provided)."
+          },
+          "accountLogin": {
+            "type": "string",
+            "description": "Account Login",
+            "example": "username"
+          },
+          "accountLogin2": {
+            "type": "string",
+            "description": "Account Login 2",
+            "example": "username"
+          },
+          "accountPinPresent": {
+            "type": "boolean",
+            "description": "Account Pin Present = true or false",
+            "example": true
+          },
+          "accountSecondPinPresent": {
+            "type": "boolean",
+            "description": "Account Second Pin Present = true or false",
+            "example": true
+          },
+          "authType": {
+            "type": "string",
+            "description": "Indicates whether Oauth authentication is supported at this Financial Institution",
+            "example": "Oauth"
+          },
+          "oauthTokenId": {
+            "type": "string",
+            "description": "Indicates whether Oauth authentication is supported at this Financial Institution",
+            "example": "Oauth"
+          },
+          "isCredentialComplete": {
+            "type": "boolean",
+            "description": "Credential complete = true or false",
+            "example": true
+          },
+          "lastAuthenticationAttempt": {
+            "type": "string",
+            "description": "Date of the last authentication attempt",
+            "format": "date-time"
+          },
+          "authenticationStatusErrorCode": {
+            "type": "integer",
+            "description": "Error code from the latest authentication attempt",
+            "format": "int64",
+            "example": 1006
+          },
+          "authenticationStatusInfoType": {
+            "type": "string",
+            "description": "Type of status information from the latest authentication attempt",
+            "example": "cannotConnectMissingLoginPW"
+          },
+          "authenticationStatusInfo": {
+            "type": "string",
+            "description": "Status information from the latest authentication attempt (simplified)",
+            "example": "Cannot connect. Missing Login or Password."
+          },
+          "hasAccounts": {
+            "type": "boolean",
+            "description": "Indicates whether this account credential has any associated accounts",
+            "example": true
+          }
+        },
+        "description": "Credentials provided to BAA for authentication to a third party Financial Institution. The credential may be linked to an established 3rd party financial institution by providing the appropriate fiId, or the fiRequestName and fiRequestURL fields may be provided to request support for a new financial institution. "
+      },
+      "Credential-Account Pair": {
+        "title": "Credential-Account Pair",
+        "required": [
+          "alarm",
+          "credentialComplete",
+          "id"
+        ],
+        "type": "object",
+        "properties": {
+          "account": {
+            "$ref": "#/components/schemas/Account"
+          },
+          "activityInProgressStatus": {
+            "type": "string",
+            "description": "Status of authentication or aggregation. Values are either \"In Progress\" or \"Complete\". ",
+            "example": "In Progress"
+          },
+          "alarm": {
+            "type": "boolean",
+            "description": "If true, credential requires attention from user. This field can be ignored. Instead, refer to unifiedStatusInfoType.",
+            "example": false
+          },
+          "authenticationStatusErrorCode": {
+            "type": "integer",
+            "description": "Error code from the latest authentication attempt. Can be ignored. Instead, refer to unifiedStatusInfoType",
+            "format": "int64",
+            "example": 1006
+          },
+          "credentialComplete": {
+            "type": "boolean",
+            "description": "Indicates whether the credential contains sufficient information to perform authentication. This field can be ignored. Instead, refer to unifiedStatusInfoType",
+            "example": true
+          },
+          "financialInstitution": {
+            "$ref": "#/components/schemas/FinancialInstitution"
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID of the Account Credential",
+            "format": "int64",
+            "example": 778899
+          },
+          "unifiedStatusInfoMsg": {
+            "type": "string",
+            "description": "Status information from the latest the combination of the latest authentication and aggregation attempt",
+            "example": "Cannot connect. Missing Login or Password."
+          },
+          "unifiedStatusInfoType": {
+            "type": "string",
+            "description": "Type of status information from the combination of the latest authentication and aggregation attempt",
+            "example": "cannotConnectMissingLoginPW"
+          },
+          "unifiedStatusInfoShortMsg": {
+            "type": "string",
+            "description": "Deprecated. Status information from the latest authentication attempt (simplified)",
+            "example": "Cannot connect. Missing Login or Password."
+          },
+          "unifiedStatusInfoShortType": {
+            "type": "string",
+            "description": "Deprecated. Type of status information from the latest authentication attempt (simplified)",
+            "example": "cannotConnectMissingLoginPW"
+          }
+        },
+        "description": "Either an account and its related credential or a credential that has no accounts associated with it."
+      },
+      "CredentialAggregationResult": {
+        "title": "CredentialAggregationResult",
+        "required": [
+          "accountDiscoveryStatusErrcode",
+          "accountDiscoveryStatusInfo",
+          "accountDiscoveryStatusTimestamp",
+          "id",
+          "status",
+          "statusTimestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "accountDiscoveryStatusErrcode": {
+            "type": "integer",
+            "description": "Status code for the account discovery operation; will be null (absent) if account discovery not performed",
+            "format": "int64",
+            "example": 1005
+          },
+          "accountDiscoveryStatusInfo": {
+            "type": "string",
+            "description": "Status info for the account discovery operation; will be null (absent) if account discovery not performed",
+            "example": "Account disocvery successful"
+          },
+          "accountDiscoveryStatusTimestamp": {
+            "type": "string",
+            "description": "Status info for the account discovery operation; will be null (absent) if account discovery not performed",
+            "format": "date-time"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Account credential ID",
+            "format": "int64",
+            "readOnly": true,
+            "example": 12345
+          },
+          "status": {
+            "type": "string",
+            "description": "Account Credential ID associated with this authentication",
+            "example": "In Progress"
+          },
+          "statusTimestamp": {
+            "type": "string",
+            "description": "Status timestamp",
+            "format": "date-time"
+          },
+          "accounts": {
+            "type": "array",
+            "description": "List of aggregated accounts associated with this credential",
+            "readOnly": true,
+            "items": {
+              "$ref": "#/components/schemas/AggregationAccountResult"
+            }
+          }
+        },
+        "description": "The result of a credential aggregation, which will incorporate status information from individual accounts"
+      },
+      "CredentialPatch": {
+        "title": "CredentialPatch",
+        "type": "object",
+        "properties": {
+          "accountPinPresent": {
+            "type": "boolean"
+          },
+          "accountSecondPinPresent": {
+            "type": "boolean"
+          },
+          "isCredentialComplete": {
+            "type": "boolean"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the Account Credential",
+            "example": "DataConnect Account Credential Test FI 001 - No SQA 151"
+          },
+          "fiId": {
+            "type": "integer",
+            "description": "ID of the financial institution. Either the fiId field or the fiRequestName field was must be provided (and not both).",
+            "format": "int64",
+            "example": 12484
+          },
+          "firequestName": {
+            "type": "string",
+            "description": "The name of the requested FI. Either the fiId field or the fiRequestName field was must be provided (and not both)",
+            "example": "DataConnect Account Credential Test FI 001 - (requested fi)"
+          },
+          "firequestURL": {
+            "type": "string",
+            "description": "The URL of the requested FI. May only be provided when the fiRequestName is provided (and the fiId field is not provided)."
+          },
+          "accountLogin": {
+            "type": "string",
+            "description": "Account Login",
+            "example": "username"
+          },
+          "accountLogin2": {
+            "type": "string",
+            "description": "Account Login 2",
+            "example": "username"
+          },
+          "accountPin": {
+            "type": "string",
+            "description": "Account Pin",
+            "example": "pin"
+          },
+          "accountSecondPin": {
+            "type": "string",
+            "description": "Account Second Pin",
+            "example": "pin2"
+          }
+        },
+        "description": "Credentials provided to BAA for authentication to a third party Financial Institution. The credential may be linked to an established 3rd party financial institution by providing the appropriate fiId, or the fiRequestName and fiRequestURL fields may be provided to request support for a new financial institution. "
+      },
+      "CredentialPost": {
+        "title": "CredentialPost",
+        "required": [
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Name of the Account Credential",
+            "example": "DataConnect Account Credential Test FI 001 - No SQA 151"
+          },
+          "fiId": {
+            "type": "integer",
+            "description": "ID of the financial institution. Either the fiId field or the fiRequestName field was must be provided (and not both).",
+            "format": "int64",
+            "example": 12484
+          },
+          "firequestName": {
+            "type": "string",
+            "description": "The name of the requested FI. Either the fiId field or the fiRequestName field was must be provided (and not both)",
+            "example": "DataConnect Account Credential Test FI 001 - (requested fi)"
+          },
+          "firequestURL": {
+            "type": "string",
+            "description": "The URL of the requested FI. May only be provided when the fiRequestName is provided (and the fiId field is not provided)."
+          },
+          "accountLogin": {
+            "type": "string",
+            "description": "Account Login",
+            "example": "username"
+          },
+          "accountLogin2": {
+            "type": "string",
+            "description": "Account Login 2",
+            "example": "username"
+          },
+          "accountPin": {
+            "type": "string",
+            "description": "Account Pin",
+            "example": "pin"
+          },
+          "accountSecondPin": {
+            "type": "string",
+            "description": "Account Second Pin",
+            "example": "pin2"
+          },
+          "accountNumber": {
+            "type": "string",
+            "description": "Account Number",
+            "example": "ACCTNUM1"
+          },
+          "accountNumber2": {
+            "type": "string",
+            "description": "Account Number 2",
+            "example": "ACCTNUM2"
+          }
+        },
+        "description": "Credentials provided to BAA for authentication to a third party Financial Institution. The credential may be linked to an established 3rd party financial institution by providing the appropriate fiId, or the fiRequestName and fiRequestURL fields may be provided to request support for a new financial institution. "
+      },
+      "CurrencyValue": {
+        "title": "CurrencyValue",
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "readOnly": true,
+            "example": 2078.34
+          },
+          "currencyCode": {
+            "type": "string",
+            "description": "ISO 4217 currency code",
+            "readOnly": true,
+            "example": "USD"
+          }
+        }
+      },
+      "DataRecord": {
+        "title": "DataRecord",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "DateNoTime": {
+        "title": "DateNoTime",
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "DefaultSummaryDto": {
+        "title": "DefaultSummaryDto",
+        "type": "object"
+      },
+      "DiscoveredAccount": {
+        "title": "DiscoveredAccount",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID of the discovered account",
+            "format": "int64",
+            "example": 12484
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the discovered account",
+            "example": "Chase"
+          }
+        }
+      },
+      "DiscoveredAccountPostDto": {
+        "title": "DiscoveredAccountPostDto",
+        "required": [
+          "discoveryTicket"
+        ],
+        "type": "object",
+        "properties": {
+          "discoveredAccount": {
+            "$ref": "#/components/schemas/DiscoveredAccount"
+          },
+          "discoveryTicket": {
+            "type": "string",
+            "description": "add all accounts associated with a specific discovery ticket",
+            "example": "8652308551851687000"
+          },
+          "id": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string"
+          },
+          "discoveredAccounts": {
+            "type": "array",
+            "description": "add only a specific subset of accounts associated with a specific discovery ticket:",
+            "items": {
+              "$ref": "#/components/schemas/DiscoveredAccount"
+            }
+          }
+        }
+      },
+      "DiscoveryDto": {
+        "title": "DiscoveryDto",
+        "required": [
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "Unique ID of this Account",
+            "format": "int64",
+            "example": 5566
+          },
+          "name": {
+            "type": "string",
+            "description": "The name of this Account",
+            "example": "AccountName"
+          },
+          "accountNumber": {
+            "type": "string",
+            "description": "The Account Number for this Account",
+            "example": "1234-ABCD"
+          },
+          "accountNumber2": {
+            "type": "string",
+            "description": "The second Account Number for this Account",
+            "example": "9876-ZYXW"
+          }
+        }
+      },
+      "DiscoverySummaryDto": {
+        "title": "DiscoverySummaryDto",
+        "required": [
+          "accountDiscoveryStatusErrcode",
+          "accountDiscoveryStatusTimestamp",
+          "credentialId",
+          "status",
+          "statusTimestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Account Credential ID associated with this authentication",
+            "example": "In Progress"
+          },
+          "statusTimestamp": {
+            "type": "string",
+            "description": "Status timestamp",
+            "format": "date-time"
+          },
+          "accountDiscoveryStatusErrcode": {
+            "type": "integer",
+            "description": "Status code for the account discovery operation; will be null (absent) if account discovery not performed",
+            "format": "int64",
+            "example": 1005
+          },
+          "unifiedStatusInfoType": {
+            "type": "string",
+            "description": "Type of status information from the latest authentication attempt",
+            "example": "cannotConnectMissingLoginPW"
+          },
+          "unifiedStatusInfoMsg": {
+            "type": "string",
+            "description": "Status information from the latest authentication attempt",
+            "example": "Cannot connect. Missing Login or Password."
+          },
+          "accountDiscoveryStatusTimestamp": {
+            "type": "string",
+            "description": "Status info for the account discovery operation; will be null (absent) if account discovery not performed",
+            "format": "date-time"
+          },
+          "credentialId": {
+            "type": "integer",
+            "description": "ID of the Account Credential",
+            "format": "int64",
+            "example": 778899
+          }
+        }
+      },
+      "FILogo": {
+        "title": "FILogo",
+        "required": [
+          "fiName",
+          "financialInstitutionId",
+          "logoURL"
+        ],
+        "type": "object",
+        "properties": {
+          "fiName": {
+            "type": "string",
+            "description": "Name of the financial institution",
+            "example": "Chase"
+          },
+          "financialInstitutionId": {
+            "type": "integer",
+            "description": "ID of the financial institution",
+            "format": "int64",
+            "example": 12484
+          },
+          "logoURL": {
+            "type": "string",
+            "description": "Absolute location of the financial institution's logo",
+            "example": "http://www.byallaccounts.net/WebPortfolio/vendorResources/Default/assets/fi/logos/ChaseOnlineLogo.PNG"
+          }
+        }
+      },
+      "Financial Institution list": {
+        "title": "Financial Institution List",
+        "required": [
+          "accessInstructions",
+          "accountNumberTerm",
+          "accountNumberTermDetails",
+          "id",
+          "loginTerm",
+          "loginTermDetails",
+          "name",
+          "popularity",
+          "popularityConsumer",
+          "pwTerm",
+          "pwTermDetails",
+          "requiresInSessionActivation",
+          "requiresSQA",
+          "requiresSecondPW",
+          "supportsAccountDiscovery",
+          "supportsOAuth",
+          "supportsTestCredential",
+          "userLoginURL"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID of the financial institution",
+            "format": "int64",
+            "example": 12484
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the financial institution",
+            "example": "Chase Online"
+          },
+          "userLoginURL": {
+            "type": "string",
+            "description": "User login URL of the financial institution",
+            "example": "https://chaseonline.chase.com/Logon.aspx?LOB=COLLogin"
+          },
+          "websiteURL": {
+            "type": "string",
+            "description": "User login URL of the financial institution",
+            "example": "https://chaseonline.chase.com/Logon.aspx?LOB=COLLogin"
+          },
+          "popularity": {
+            "type": "integer",
+            "description": "Popularity of the financial institution, with larger values indicating higher popularity level (currently always either 0 or 1, but other values possible in the future)",
+            "format": "int32",
+            "example": 1
+          },
+          "popularityConsumer": {
+            "type": "integer",
+            "description": "Popularity of the financial institution at Consumer UI, with larger values indicating higher popularity level (currently always either 0 or 1, but other values possible in the future)",
+            "format": "int32",
+            "example": 1
+          },
+          "loginTerm": {
+            "type": "string",
+            "description": "The term used for login at the financial institution",
+            "example": "User ID"
+          },
+          "login2Term": {
+            "type": "string",
+            "description": "The term used for the optional second login at this financial institution"
+          },
+          "pwTerm": {
+            "type": "string",
+            "description": "The term used for PIN at the financial institution",
+            "example": "Password"
+          },
+          "pw2Term": {
+            "type": "string",
+            "description": "The term used for second PIN at the financial institution"
+          },
+          "accountNumberTerm": {
+            "type": "string",
+            "description": "The term used for Account Number at the financial institution",
+            "example": "Account Number"
+          },
+          "accountNumber2Term": {
+            "type": "string",
+            "description": "The term used for second Account Number at the financial institution"
+          },
+          "loginTermDetails": {
+            "type": "string",
+            "description": "Detailed instructions for the login field at this financial institution",
+            "example": "The User ID used to access this service"
+          },
+          "login2TermDetails": {
+            "type": "string",
+            "description": "Detailed instructions for the second login field at this financial institution"
+          },
+          "pwTermDetails": {
+            "type": "string",
+            "description": "Detailed instructions for the PIN field at this financial institution",
+            "example": "The password used to access this service"
+          },
+          "pw2TermDetails": {
+            "type": "string",
+            "description": "Detailed instructions for the second PIN field at this financial institution"
+          },
+          "accountNumberTermDetails": {
+            "type": "string",
+            "description": "Detailed instructions for the Account Number field at this financial institution",
+            "example": "Enter the account number as shown on the Portfolio Summary page. If the account number shown is not unique, enter the account name. If the account name is not unique, give it a unique nickname."
+          },
+          "accountNumber2TermDetails": {
+            "type": "string",
+            "description": "Detailed instructions for the second Account Number at this financial institution"
+          },
+          "accessInstructions": {
+            "type": "string",
+            "description": "Detailed general access instructions for this financial institution",
+            "example": "This service uses Chase Online to retrieve your financial information..."
+          },
+          "supportsAccountDiscovery": {
+            "type": "boolean",
+            "description": "Indicates whether the financial institution supports automatic discovery of accounts at the financial institution.",
+            "example": true
+          },
+          "supportsOAuth": {
+            "type": "boolean",
+            "description": "Indicates whether the financial institution supports OAuth authentication.",
+            "example": true
+          },
+          "supportsTestCredential": {
+            "type": "boolean",
+            "description": "Indicates whether the financial institution supports testing access to the financial institution with only credential (and not account) data",
+            "example": true
+          },
+          "requiresInSessionActivation": {
+            "type": "boolean",
+            "description": "Indicates whether the financial institution whether the Financial Institution may potentially prompt for In-Session Activation Codes during Test Credential or Test Account operations",
+            "example": true
+          },
+          "requiresSQA": {
+            "type": "boolean",
+            "description": "Indicates whether the financial institution may require security questions and answer input from the user in order to access the site",
+            "example": true
+          },
+          "requiresSecondPW": {
+            "type": "boolean",
+            "description": "Indicates whether the financial institution requires the second PIN term",
+            "example": true
+          },
+          "setupInstructions": {
+            "type": "string",
+            "description": "The financial institution instructions for setting up accounts at the FI for aggregation"
+          },
+          "knownConnectionIssue": {
+            "type": "string",
+            "description": "Known connectivity issue for the financial institution or third party",
+            "example": "We are currently experiencing a problem connecting to the financial institution and this may affect your ability to successfully connect accounts. We are working hard to resolve the problem. Please check back later."
+          },
+          "configuredOAuth": {
+            "type": "boolean",
+            "description": "Indicates whether the OAuth Credential has been configured for the financial institution.",
+            "example": true
+          },
+          "logo": {
+            "type": "string",
+            "description": "The name used for logo at the respective financial institution",
+            "example": "https://www.byallaccounts.net/WebPortfolio/vendorResources/Default/assets/fi/logos/logo.png"
+          },
+          "icon": {
+            "type": "string",
+            "description": "The path to the icon for the financial institution. If the financial institution is requested (not supported) it is the path to a default icon.",
+            "example": "https://www.byallaccounts.net/WebPortfolio/vendorResources/Default/assets/fi/icons/icon.svg"
+          }
+        },
+        "description": "Financial institution list"
+      },
+      "FinancialInstitution": {
+        "title": "FinancialInstitution",
+        "required": [
+          "id",
+          "supportsAccountDiscovery",
+          "supportsOauth",
+          "supportsTestCredential",
+          "userLoginURL"
+        ],
+        "type": "object",
+        "properties": {
+          "accountNumber2Term": {
+            "type": "string",
+            "description": "Term used for the optional account number at this financial institution",
+            "example": "Other Account Number"
+          },
+          "accountNumberTerm": {
+            "type": "string",
+            "description": "Term used for the account number at this financial institution",
+            "example": "Plan Number"
+          },
+          "icon": {
+            "type": "string",
+            "description": "The path to the icon for the financial institution. If the financial institution is requested (not supported) it is the path to a default icon.",
+            "example": "https://www.byallaccounts.net/WebPortfolio/vendorResources/Default/assets/fi/icons/icon.svg"
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID of the financial institution",
+            "format": "int64",
+            "example": 254367
+          },
+          "login2Term": {
+            "type": "string",
+            "description": "Term used for the optional second login at this financial institution",
+            "example": "Other Login"
+          },
+          "loginTerm": {
+            "type": "string",
+            "description": "Term used for the login at this financial institution",
+            "example": "Login"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the financial institution",
+            "example": "Bank of America - Banking"
+          },
+          "pw2Term": {
+            "type": "string",
+            "description": "Term used for the optional second password at this financial institution",
+            "example": "Other Password"
+          },
+          "pwTerm": {
+            "type": "string",
+            "description": "Term used for the password at this financial institution",
+            "example": "Password"
+          },
+          "supportsAccountDiscovery": {
+            "type": "boolean",
+            "description": "Indicates whether the financial institution supports account discovery",
+            "example": true
+          },
+          "supportsOauth": {
+            "type": "boolean",
+            "description": "Indicates whether the financial institution supports OAuth flag",
+            "example": true
+          },
+          "supportsTestCredential": {
+            "type": "boolean",
+            "description": "Indicates whether the financial institution supports test credential (testing authentication)",
+            "example": true
+          },
+          "userLoginURL": {
+            "type": "string",
+            "description": "User login URL of the financial institution",
+            "example": "https://chaseonline.chase.com/Logon.aspx?LOB=COLLogin"
+          },
+          "websiteURL": {
+            "type": "string",
+            "description": "Website URL of the financial institution",
+            "example": "https://chaseonline.chase.com/Logon.aspx?LOB=COLLogin"
+          }
+        }
+      },
+      "InputRadio": {
+        "title": "InputRadio",
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "instructionText": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "Page«AccountDto,DefaultSummaryDto»": {
+        "title": "Page«AccountDto,DefaultSummaryDto»",
+        "type": "object",
+        "properties": {
+          "activitySummary": {
+            "$ref": "#/components/schemas/ActivitySummary"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AccountDto"
+            }
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Number of records per page",
+            "format": "int32",
+            "example": 25
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number of this page",
+            "format": "int32",
+            "example": 0
+          },
+          "isFirst": {
+            "type": "boolean",
+            "description": "True or false. True if and only if this is the first page of data in the result set",
+            "example": true
+          },
+          "isLast": {
+            "type": "boolean",
+            "description": "True or false. True if and only if this is the last page of data in the result set",
+            "example": true
+          },
+          "summary": {
+            "$ref": "#/components/schemas/DefaultSummaryDto"
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "Total number of elements in result set",
+            "format": "int64",
+            "example": 1
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages in result set",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "A page of data records"
+      },
+      "Page«Credential,DefaultSummaryDto»": {
+        "title": "Page«Credential,DefaultSummaryDto»",
+        "type": "object",
+        "properties": {
+          "activitySummary": {
+            "$ref": "#/components/schemas/ActivitySummary"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Credential"
+            }
+          },
+          "isFirst": {
+            "type": "boolean",
+            "description": "True or false. True if and only if this is the first page of data in the result set",
+            "example": true
+          },
+          "isLast": {
+            "type": "boolean",
+            "description": "True if and only if this is the last page of data in the result set",
+            "example": true
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number of this page",
+            "format": "int32",
+            "example": 0
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Number of records per page",
+            "format": "int32",
+            "example": 25
+          },
+          "summary": {
+            "$ref": "#/components/schemas/DefaultSummaryDto"
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "Total number of elements in result set",
+            "format": "int64",
+            "example": 1
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages in result set",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "A page of data records"
+      },
+      "Page«Credential-Account Pair,DefaultSummaryDto»": {
+        "title": "Page«Credential-Account Pair,DefaultSummaryDto»",
+        "type": "object",
+        "properties": {
+          "activitySummary": {
+            "$ref": "#/components/schemas/ActivitySummary"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Credential-Account Pair"
+            }
+          },
+          "isFirst": {
+            "type": "boolean",
+            "description": "True if and only if this is the first page of data in the result set",
+            "example": true
+          },
+          "isLast": {
+            "type": "boolean",
+            "description": "True if and only if this is the last page of data in the result set",
+            "example": true
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number of this page",
+            "format": "int32",
+            "example": 0
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Number of records per page",
+            "format": "int32",
+            "example": 25
+          },
+          "summary": {
+            "$ref": "#/components/schemas/DefaultSummaryDto"
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "Total number of elements in result set",
+            "format": "int64",
+            "example": 1
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages in result set",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "A page of data records"
+      },
+      "Page«DiscoveryDto,DiscoverySummaryDto»": {
+        "title": "Page«DiscoveryDto,DiscoverySummaryDto»",
+        "type": "object",
+        "properties": {
+          "activitySummary": {
+            "$ref": "#/components/schemas/ActivitySummary"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DiscoveryDto"
+            }
+          },
+          "isFirst": {
+            "type": "boolean",
+            "description": "True if and only if this is the first page of data in the result set",
+            "example": true
+          },
+          "isLast": {
+            "type": "boolean",
+            "description": "True if and only if this is the last page of data in the result set",
+            "example": true
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number of this page",
+            "format": "int32",
+            "example": 0
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Number of records per page",
+            "format": "int32",
+            "example": 25
+          },
+          "summary": {
+            "$ref": "#/components/schemas/DiscoverySummaryDto"
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "Total number of elements in result set",
+            "format": "int64",
+            "example": 1
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages in result set",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "A page of data records"
+      },
+      "Page«Financial Institution list,DefaultSummaryDto»": {
+        "title": "Page«Financial Institution list,DefaultSummaryDto»",
+        "type": "object",
+        "properties": {
+          "activitySummary": {
+            "$ref": "#/components/schemas/ActivitySummary"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Financial Institution list"
+            }
+          },
+          "isFirst": {
+            "type": "boolean",
+            "description": "True if and only if this is the first page of data in the result set",
+            "example": true
+          },
+          "isLast": {
+            "type": "boolean",
+            "description": "True if and only if this is the last page of data in the result set",
+            "example": true
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number of this page",
+            "format": "int32",
+            "example": 0
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Number of records per page",
+            "format": "int32",
+            "example": 25
+          },
+          "summary": {
+            "$ref": "#/components/schemas/DefaultSummaryDto"
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "Total number of elements in result set",
+            "format": "int64",
+            "example": 1
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages in result set",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "A page of data records"
+      },
+      "Page«Position,DefaultSummaryDto»": {
+        "title": "Page«Position,DefaultSummaryDto»",
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Position"
+            }
+          },
+          "isFirst": {
+            "type": "boolean",
+            "description": "True if and only if this is the first page of data in the result set",
+            "example": true
+          },
+          "isLast": {
+            "type": "boolean",
+            "description": "True if and only if this is the last page of data in the result set",
+            "example": true
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number of this page",
+            "format": "int32",
+            "example": 0
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Number of records per page",
+            "format": "int32",
+            "example": 25
+          },
+          "summary": {
+            "$ref": "#/components/schemas/DefaultSummaryDto"
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "Total number of elements in result set",
+            "format": "int64",
+            "example": 1
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages in result set",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "A page of data records"
+      },
+      "Page«SQADto,DefaultSummaryDto»": {
+        "title": "Page«SQADto,DefaultSummaryDto»",
+        "type": "object",
+        "properties": {
+          "activitySummary": {
+            "$ref": "#/components/schemas/ActivitySummary"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SQADto"
+            }
+          },
+          "isFirst": {
+            "type": "boolean",
+            "description": "True if and only if this is the first page of data in the result set",
+            "example": true
+          },
+          "isLast": {
+            "type": "boolean",
+            "description": "True if and only if this is the last page of data in the result set",
+            "example": true
+          },
+          "pageNumber": {
+            "type": "integer",
+            "description": "Page number of this page",
+            "format": "int32",
+            "example": 0
+          },
+          "pageSize": {
+            "type": "integer",
+            "description": "Number of records per page",
+            "format": "int32",
+            "example": 25
+          },
+          "summary": {
+            "$ref": "#/components/schemas/DefaultSummaryDto"
+          },
+          "totalElements": {
+            "type": "integer",
+            "description": "Total number of elements in result set",
+            "format": "int64",
+            "example": 1
+          },
+          "totalPages": {
+            "type": "integer",
+            "description": "Total number of pages in result set",
+            "format": "int32",
+            "example": 1
+          }
+        },
+        "description": "A page of data records"
+      },
+      "PersonDto": {
+        "title": "PersonDto",
+        "required": [
+          "firstName",
+          "id",
+          "lastName",
+          "userAgreementAccepted"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID of the Person",
+            "format": "int64",
+            "example": 778899
+          },
+          "firstName": {
+            "type": "string",
+            "description": "First name of the Person",
+            "example": "Rosalind"
+          },
+          "middleName": {
+            "type": "string",
+            "description": "Middle name of the Person",
+            "example": "Elsie"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Last name of the Person",
+            "example": "Franklin"
+          },
+          "emailAddress": {
+            "type": "string",
+            "description": "Email address of the Person"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number of the Person",
+            "example": "5085551212"
+          },
+          "taxId": {
+            "type": "string",
+            "description": "Social Security Number or Tax ID of the Person",
+            "example": "111111111"
+          },
+          "isSSOUser": {
+            "type": "boolean",
+            "description": "true if Person is an SSO-enabled user",
+            "example": true
+          },
+          "advisorId": {
+            "type": "integer",
+            "description": "Id of the Person's Advisor",
+            "format": "int64"
+          },
+          "firmTag1": {
+            "type": "string",
+            "description": "Firm Tag 1",
+            "example": "xxx"
+          },
+          "firmTag2": {
+            "type": "string",
+            "description": "Firm Tag 2",
+            "example": "yyy"
+          },
+          "firmTag3": {
+            "type": "string",
+            "description": "Firm Tag 3",
+            "example": "ZZZ"
+          },
+          "userAgreementAccepted": {
+            "type": "boolean",
+            "description": "Indicates whether the user agreement has been accepted",
+            "example": true
+          },
+          "uimGuid": {
+            "type": "string",
+            "description": "UIM Guid for the Person if one was assigned at creation",
+            "example": "C5E883D3-8B92-438C-A43B-E70455FA1F06"
+          }
+        },
+        "description": "Profile data of a person"
+      },
+      "PersonPatchDto": {
+        "title": "PersonPatchDto",
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "First name of the Person",
+            "example": "Rosalind"
+          },
+          "middleName": {
+            "type": "string",
+            "description": "Middle name of the Person",
+            "example": "Elsie"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Last name of the Person",
+            "example": "Franklin"
+          },
+          "emailAddress": {
+            "type": "string",
+            "description": "Email address of the Person"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number of the Person",
+            "example": "5083538888"
+          },
+          "taxId": {
+            "type": "string",
+            "description": "Social Security Number of the Person",
+            "example": "101896403"
+          },
+          "userAgreementAccepted": {
+            "type": "boolean",
+            "description": "Indicates whether the user agreement has been accepted",
+            "example": true
+          }
+        },
+        "description": "Profile data of a person for update"
+      },
+      "PersonPost": {
+        "title": "PersonPost",
+        "required": [
+          "emailAddress",
+          "firstName",
+          "lastName",
+          "role"
+        ],
+        "type": "object",
+        "properties": {
+          "firstName": {
+            "type": "string",
+            "description": "First name of the Person",
+            "example": "Chris"
+          },
+          "middleName": {
+            "type": "string",
+            "description": "Middle name of the Person",
+            "example": "Pat"
+          },
+          "lastName": {
+            "type": "string",
+            "description": "Last name of the Person",
+            "example": "Smith"
+          },
+          "role": {
+            "type": "string",
+            "description": "Role of the Person. Currently must be the value \"\"",
+            "example": "investor"
+          },
+          "emailAddress": {
+            "type": "string",
+            "description": "Email address of the Person"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number of the Person. There are no format requirements",
+            "example": "6035551212"
+          },
+          "firmTag1": {
+            "type": "string",
+            "description": "Firm tag 1. If specified, thevalue must be unique within teh Firm to which the new Person is to be added. If not,  HTTP 409 Conflict is returned. Is only required if the Firm configuration requires a value for this field",
+            "example": "BAA-primary-user-identifier"
+          },
+          "firmTag2": {
+            "type": "string",
+            "description": "Firm tag 2. Is only required if the Firm configuration requires a value for this field",
+            "example": "BAA-primary-user-identifier-Marketing"
+          },
+          "firmTag3": {
+            "type": "string",
+            "description": "Firm tag 3. Is only required if the Firm configuration requires a value for this field",
+            "example": "BAA-primary-user-identifier-Sales"
+          },
+          "taxId": {
+            "type": "string",
+            "description": "Social Security Number or Tax ID of the Person. Is only required if the Firm configuration requires a value for this field",
+            "example": "111111111"
+          },
+          "firmCode": {
+            "type": "string",
+            "description": "Vendor name value for the Firm to which this Investor should be added. The Firm must already exist. </br>At least one of firmCode or advisorId  must be specified in order identify to which firm to add the Person. If firmCode is specified and advisorId is not, then the Person is created without any association to an advisor. If both are specified, then they must not conflict, meaning the Advisor identified by advisorId must exist within the Firm identified by the firmCode. Otherwise, an HTTP  400 Bad Request is returned.  ",
+            "example": "ABC-12345"
+          },
+          "advisorId": {
+            "type": "integer",
+            "description": "BAA Person Id for the Advisor to whom this Investor should be assigned after the Investor is created. The Advisor must already exist and be part of the Firm identified in firmCode (if firmCode is specified). </br>At least one of firmCode or advisorId must be specified in order identify to which firm to add the Person. If firmCode is specified and advisorId is not, then the Person is created without any association to an advisor. If both are specified, then they must not conflict, meaning the Advisor identified by advisorId must exist within the Firm identified by the firmCode. Otherwise, an HTTP  400 Bad Request is returned.  ",
+            "format": "int64",
+            "example": 123
+          },
+          "uimGuid": {
+            "type": "string",
+            "description": "Used in conjunction with Service Admin JWT.  The uimGuid for the user to be created. Must be unique across all Persons in the ByAllAccounts system. If not, HTTP 409 Conflict is returned with the person URI.  Ignored if a valid Service Admin JWT is not provided. </br> Required when a Service Admin JWT is submitted to the endpoint. ",
+            "example": "C5E883D3-8B92-438C-A43B-E70455FA1F06"
+          }
+        },
+        "description": "Profile data of a person to be added"
+      },
+      "Position": {
+        "title": "Position",
+        "required": [
+          "accountId",
+          "assetLiabilityIndicator",
+          "id",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "ticker": {
+            "type": "string",
+            "description": "Ticker symbol of the position",
+            "example": "SIEGY"
+          },
+          "cusip": {
+            "type": "string",
+            "description": "Committee on Uniform Security Identification Procedures (CUSIP) for this of the position",
+            "example": "826197501"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the position",
+            "example": "Siemens AG"
+          },
+          "morningstarSecId": {
+            "type": "string",
+            "description": "Morningstar security identifier of the position",
+            "example": "E0DEU00CVS"
+          },
+          "morningstarPerfId": {
+            "type": "string",
+            "description": "Morningstar performance identifier of the position",
+            "example": "0P000004XO"
+          },
+          "units": {
+            "type": "number",
+            "description": "Units of the position",
+            "example": 12
+          },
+          "unitPrice": {
+            "$ref": "#/components/schemas/CurrencyValue"
+          },
+          "marketValue": {
+            "$ref": "#/components/schemas/CurrencyValue"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "description": "Date and time stamp of last update",
+            "format": "date-time",
+            "example": "2021-08-19T13:08:10.000Z"
+          },
+          "assetLiabilityIndicator": {
+            "type": "string",
+            "description": "Valid values are *Asset* or *Liability*",
+            "example": "Asset"
+          },
+          "secType": {
+            "type": "string",
+            "description": "Security type of the position. Can be BOND, CASH, MUTUALFUND, OPTION, OTHER, or STOCK",
+            "example": "Bond"
+          },
+          "costBasis": {
+            "$ref": "#/components/schemas/CurrencyValue"
+          },
+          "couponRate": {
+            "type": "number",
+            "description": "The interest payment rate of a debt instrument",
+            "example": 24
+          },
+          "maturityDate": {
+            "$ref": "#/components/schemas/DateNoTime"
+          },
+          "originalFace": {
+            "type": "number",
+            "description": "The original face or par value for a security that amortizes or accretes (e.g., a mortgage)",
+            "example": 12484
+          },
+          "paydownFactor": {
+            "type": "number",
+            "description": "The paydown factor value for bond if provided by the financial institution",
+            "example": 12484
+          },
+          "fiSuppliedSecType": {
+            "type": "string",
+            "description": "The security type as supplied by the financial institution",
+            "example": "5566"
+          },
+          "id": {
+            "type": "integer",
+            "description": "Unique ID of the position",
+            "format": "int64",
+            "example": 778899
+          },
+          "accountId": {
+            "type": "integer",
+            "description": "ID for the Account that contains this Position",
+            "format": "int64",
+            "example": 778899
+          },
+          "securityId": {
+            "type": "integer",
+            "description": "ID for Security owned by this Position",
+            "format": "int64",
+            "example": 778899
+          }
+        },
+        "description": "Positions"
+      },
+      "ProductLicense": {
+        "title": "ProductLicense",
+        "required": [
+          "product"
+        ],
+        "type": "object",
+        "properties": {
+          "product": {
+            "type": "string",
+            "description": "ID of the product",
+            "example": "CUI2_CE"
+          }
+        }
+      },
+      "SQA": {
+        "title": "SQA",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID of the SQA",
+            "format": "int64",
+            "readOnly": true,
+            "example": 5487894
+          },
+          "question": {
+            "type": "string",
+            "description": "The security question from the financial institution",
+            "readOnly": true,
+            "example": "In what city did you meet your spouse for the first time?"
+          },
+          "answer": {
+            "type": "string",
+            "description": "The answer to the security question",
+            "readOnly": true,
+            "example": "Boston"
+          }
+        }
+      },
+      "SQADto": {
+        "title": "SQADto",
+        "required": [
+          "id",
+          "question"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID of the Credential SQA",
+            "format": "int64",
+            "example": 778899
+          },
+          "question": {
+            "type": "string",
+            "description": "The SQA quesion"
+          },
+          "answerPresent": {
+            "type": "boolean",
+            "description": "SQA answer Present = true or false",
+            "example": true
+          }
+        }
+      },
+      "SQAPost": {
+        "title": "SQAPost",
+        "required": [
+          "credentialId"
+        ],
+        "type": "object",
+        "properties": {
+          "credentialId": {
+            "type": "integer",
+            "description": "ID of the credential",
+            "format": "int64",
+            "example": 5487894
+          },
+          "question": {
+            "type": "string",
+            "description": "The security question from the financial institution",
+            "example": "In what city did you meet your spouse for the first time?"
+          },
+          "answer": {
+            "type": "string",
+            "description": "The answer to the security question",
+            "example": "Boston"
+          }
+        }
+      },
+      "SQA[Patch]": {
+        "title": "SQA[Patch]",
+        "type": "object",
+        "properties": {
+          "question": {
+            "maxLength": 128,
+            "minLength": 0,
+            "type": "string",
+            "description": "The security question"
+          },
+          "answer": {
+            "maxLength": 128,
+            "minLength": 0,
+            "type": "string",
+            "description": "The answer to the security question",
+            "example": "Boston"
+          }
+        },
+        "description": "SQA definition for PATCH requests "
+      },
+      "SSO": {
+        "title": "SSO",
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "Summary": {
+        "title": "Summary",
+        "type": "object",
+        "properties": {
+          "marketValue": {
+            "$ref": "#/components/schemas/CurrencyValue"
+          }
+        }
+      },
+      "TimestampDto": {
+        "title": "TimestampDto",
+        "required": [
+          "timestamp"
+        ],
+        "type": "object",
+        "properties": {
+          "timestamp": {
+            "type": "string",
+            "description": "Status timestamp",
+            "format": "date-time",
+            "example": "2019-06-20T18:51:54.665Z"
+          }
+        }
+      },
+      "UriElement": {
+        "title": "UriElement",
+        "type": "object",
+        "properties": {
+          "uri": {
+            "type": "string"
+          }
+        }
+      },
+      "UserInput": {
+        "title": "UserInput",
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "inputRadio": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputRadio"
+            }
+          },
+          "inputType": {
+            "type": "string"
+          },
+          "instructionText": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {
+            "type": "object",
+            "properties": {}
+          }
+        }
+      },
+      "UserInputPatchDto": {
+        "title": "UserInputPatchDto",
+        "type": "object",
+        "properties": {
+          "userInput": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserInput"
+            }
+          }
+        }
+      },
+      "UserInputPatchResponseDto": {
+        "title": "UserInputPatchResponseDto",
+        "type": "object",
+        "properties": {
+          "authenticationURI": {
+            "type": "string"
+          }
+        }
+      },
+      "UserInputPromptDto": {
+        "title": "UserInputPromptDto",
+        "type": "object",
+        "properties": {
+          "userInput": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/UserInput"
+            }
+          }
+        }
+      }
+    }
+  }
+}

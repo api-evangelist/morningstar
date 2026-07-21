@@ -1,0 +1,160 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Report Files Manager (US)",
+    "version": "1.0.1",
+    "description": "\nYou use the Report Files Manager API to:\n* Download report files stored in the web-based version of [Morningstar Office](https://www.morningstar.com/products/office).\n* Upload report files to the web-based version of Morningstar Office.\n"
+  },
+  "servers": [
+    {
+      "url": "https://office-integration.morningstar.com/report-file-manager/v1",
+      "description": "PROD"
+    },
+    {
+      "url": "https://office-integration-uat.morningstar.com/report-file-manager/v1",
+      "description": "UAT"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "report files"
+    }
+  ],
+  "paths": {
+    "/report-files/{reportId}": {
+      "get": {
+        "tags": [
+          "report files"
+        ],
+        "summary": "Download a report",
+        "description": "Download the report file specified in the `reportId` parameter. </br></br> `reportId` can be retrieved by using the [Report Retrieval API](/apis/financial-planning/report-retrieval-us).",
+        "operationId": "downloadReport",
+        "parameters": [
+          {
+            "name": "reportId",
+            "in": "path",
+            "description": "Unique identifier of a report",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "binary/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/report-files": {
+      "post": {
+        "tags": [
+          "report files"
+        ],
+        "summary": "Upload a report",
+        "description": "Upload a report file. If a `bucketId` is not specified in the request body, the file will be uploaded to the root bucket.",
+        "operationId": "uploadReport",
+        "requestBody": {
+          "description": "Upload file",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "required": [
+                  "fileName"
+                ],
+                "type": "object",
+                "properties": {
+                  "bucketId": {
+                    "description": "Unique identifier of a bucket",
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "fileName": {
+                    "description": "Choose file to upload",
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "reportId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "ab11cd11-abcd-1234-0000-000000000000"
+                    },
+                    "storageId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "ab11cd11-abcd-1234-0000-000000000000"
+                    },
+                    "bucketId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "00000000-0000-0000-0000-000000000000"
+                    },
+                    "createdDate": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

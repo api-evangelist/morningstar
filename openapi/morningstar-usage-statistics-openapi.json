@@ -1,0 +1,1784 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "EC Usage Statistics",
+    "description": "The EC Usage Statistics API allows you to query Morningstar usage tracking information logged by EC components and US APIs. Users with the relevant permissions can fetch usage statistics for client namespaces.\n\n\nYou can use the API to:\n\n* Retrieve usage statistics.\n* Retrieve usage statistics in timeseries format.\n* Generate reports in Excel format.\n* Manage and create objects representing company entitlements.\n\n\nThe API queries the following resources:\n\n|Resource|Description|\n|:----|:----|\n|`statistics`| Objects that represent usage tracking information for components and APIs. You can retrieve `statistics` resources for a specific namespace, tool and time period. |\n|`timeseries`| Objects that represent usage statistics in timeseries format. You can retrieve `timeseries` resources for a specific namespace, tool and time period. |\n|`reports`| Objects that represent an instance of a usage statistics report for a specific namespace. Reports are available in Excel format.|\n|`company-entitlements`| Objects that represent a record of a company and the namespaces it is entitled for. You can retrieve, create, update, and delete `company-entitlements` resources.|",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/ec-usage-statistics",
+      "description": "PROD (live data)"
+    },
+    {
+      "url": "https://www.us-qa-api.morningstar.com/ec-usage-statistics",
+      "description": "QA (test data)"
+    }
+  ],
+  "paths": {
+    "/v1/statistics/{namespace}/{tool}/{period}": {
+      "get": {
+        "tags": [
+          "statistics"
+        ],
+        "summary": "Get a statistics resource for a namespace, tool and time period",
+        "description": "Get the latest statistics for the specified namespace, tool and time period. Specify the `date` parameter to get statistics for that date.",
+        "operationId": "GetStatistics",
+        "parameters": [
+          {
+            "name": "namespace",
+            "description": "Get statistics for this namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "abco.opp.config"
+            }
+          },
+          {
+            "name": "tool",
+            "description": "Get statistics for this tool",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "mwc-sc-screener"
+            }
+          },
+          {
+            "name": "period",
+            "description": "Get statistics for this time period",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "quarter"
+              ],
+              "example": "day"
+            }
+          },
+          {
+            "name": "date",
+            "description": "Get statistics logged for this date. For month or quarter this is the end date for the period. If omitted returns the latest available statistics.",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2020-04-01"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statistics for a namespace and tool over a time period (day, month or quarter)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Statistics for a namespace, tool and date",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "example": "2022-02-01"
+                    },
+                    "namespace": {
+                      "type": "string",
+                      "example": "abco.opp.config"
+                    },
+                    "tool": {
+                      "type": "string",
+                      "example": "mwc-sc-screener"
+                    },
+                    "period": {
+                      "type": "string",
+                      "example": "day"
+                    },
+                    "securities": {
+                      "type": "object",
+                      "description": "A breakdown of securities (by security identifier) and how often each was logged"
+                    },
+                    "loaded": {
+                      "type": "object",
+                      "description": "Load event statistics",
+                      "properties": {
+                        "count": {
+                          "type": "number",
+                          "description": "The number of times the loaded event was triggered",
+                          "example": "207"
+                        },
+                        "uniqueUsers": {
+                          "type": "number",
+                          "description": "The number of unique users",
+                          "example": "60"
+                        },
+                        "uniqueSessions": {
+                          "description": "The number of unique sessions",
+                          "example": "80"
+                        },
+                        "mean": {
+                          "type": "number",
+                          "description": "The mean load time",
+                          "example": "250"
+                        },
+                        "median": {
+                          "type": "number",
+                          "description": "The median load time",
+                          "example": "260"
+                        },
+                        "percentile95": {
+                          "type": "number",
+                          "description": "The 95th percentile load time",
+                          "example": "310"
+                        }
+                      }
+                    },
+                    "events": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Statistics for a specific event",
+                        "properties": {
+                          "event": {
+                            "type": "string",
+                            "description": "The event name",
+                            "example": "filterChanged"
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "The event type - timed, count or breakdown",
+                            "example": "breakdown"
+                          },
+                          "source": {
+                            "type": "string",
+                            "description": "The component that was the source of the event",
+                            "example": "mwc-sc-filters"
+                          },
+                          "count": {
+                            "type": "number",
+                            "description": "The number of times the event was triggered",
+                            "example": 10
+                          },
+                          "breakdown": {
+                            "type": "object",
+                            "description": "A breakdown of the primary values for the event and how many times each was logged",
+                            "example": {
+                              "categoryChanged": 2,
+                              "companyChanged": 5,
+                              "distributionChanged": 3
+                            }
+                          },
+                          "mean": {
+                            "type": "number",
+                            "description": "For timed events, the mean load time",
+                            "example": 100
+                          },
+                          "median": {
+                            "type": "number",
+                            "description": "For timed events, the median load time",
+                            "example": 150
+                          },
+                          "percentile95": {
+                            "type": "number",
+                            "description": "For timed events, the 95th percentile load time",
+                            "example": 190
+                          },
+                          "method": {
+                            "type": "string",
+                            "description": "For 'dataLoaded' events, the method of the call",
+                            "example": "get"
+                          },
+                          "url": {
+                            "type": "string",
+                            "description": "For 'dataLoaded' events, the URL that was called",
+                            "example": "https://lt.morningstar.com/filters"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authorised to perform this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requested operation is forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/timeseries/{namespace}/{tool}/{period}": {
+      "get": {
+        "tags": [
+          "timeseries"
+        ],
+        "summary": "Get statistics in timeseries format for a namespace, tool and time period",
+        "description": "Get latest statistics in timeseries format for the specified namespace, tool and time period.\n\n. You can specify a date range for the query.",
+        "operationId": "GetTimeseries",
+        "parameters": [
+          {
+            "name": "namespace",
+            "description": "Get statistics for this namespace",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "abco.opp.config"
+            }
+          },
+          {
+            "name": "tool",
+            "description": "Get statistics for this tool",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "mwc-sc-screener"
+            }
+          },
+          {
+            "name": "period",
+            "description": "Get statistics for this time period",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "day",
+                "month",
+                "quarter"
+              ],
+              "example": "day"
+            }
+          },
+          {
+            "name": "startDate",
+            "description": "Get statistics logged on or after this date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2020-04-01"
+            }
+          },
+          {
+            "name": "endDate",
+            "description": "Get statistics logged on or before this date",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "date",
+              "example": "2020-04-01"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Statistics in timeseries format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Statistics in timeseries format for a namespace, tool and date",
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "example": "2022-02-01"
+                    },
+                    "namespace": {
+                      "type": "string",
+                      "example": "abco.opp.config"
+                    },
+                    "tool": {
+                      "type": "string",
+                      "example": "mwc-sc-screener"
+                    },
+                    "period": {
+                      "type": "string",
+                      "example": "day"
+                    },
+                    "timeseries": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "description": "Statistics for a specific event",
+                        "properties": {
+                          "date": {
+                            "type": "string",
+                            "description": "The date or end date for the time period",
+                            "example": "2022-02-01"
+                          },
+                          "loaded": {
+                            "type": "object",
+                            "description": "Load event statistics",
+                            "properties": {
+                              "count": {
+                                "type": "number",
+                                "description": "The number of times the loaded event was triggered",
+                                "example": "207"
+                              },
+                              "uniqueUsers": {
+                                "type": "number",
+                                "description": "The number of unique users",
+                                "example": "60"
+                              },
+                              "uniqueSessions": {
+                                "description": "The number of unique sessions",
+                                "example": "80"
+                              },
+                              "mean": {
+                                "type": "number",
+                                "description": "The mean load time",
+                                "example": "250"
+                              },
+                              "median": {
+                                "type": "number",
+                                "description": "The median load time",
+                                "example": "260"
+                              },
+                              "percentile95": {
+                                "type": "number",
+                                "description": "The 95th percentile load time",
+                                "example": "310"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authorised to perform this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requested operation is forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/reports/{namespaces}": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Generate reports in Excel format",
+        "operationId": "getStatisticsReports",
+        "parameters": [
+          {
+            "name": "namespaces",
+            "description": "Get statistics for a namespace or comma-separated list of namespaces",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "abco.opp.screener,abco.opp.xray"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Excel report file containing monthly and quarterly usage stats and top security data",
+            "content": {
+              "application/vnd.ms-excel": {
+                "schema": {
+                  "type": "string",
+                  "format": "base64",
+                  "example": "SGVsbG8gV29ybGQ="
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authorised to perform this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company-entitlements": {
+      "get": {
+        "tags": [
+          "company entitlements"
+        ],
+        "summary": "Get company entitlements",
+        "description": "Get company entitlements for the company specified in the `companyId` parameter or for the entitlementIds specified in the `entitlementIds` parameter",
+        "operationId": "GetEntitlements",
+        "parameters": [
+          {
+            "name": "companyId",
+            "description": "Unique identifier of a company",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "1234aeaf-4321-1a23-1234-23gf5c663g24"
+            }
+          },
+          {
+            "name": "entitlementIds",
+            "description": "Comma-separated list of entitlementIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1,1fa234a-1234-8x1x-0c11-x1y2131zf4d1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of entitlements",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "description": "List of entitlements",
+                  "items": {
+                    "properties": {
+                      "entitlementId": {
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+                      },
+                      "companyId": {
+                        "type": "string",
+                        "readOnly": false,
+                        "example": "1234aeaf-4321-1a23-1234-23gf5c663g24"
+                      },
+                      "namespaces": {
+                        "type": "array",
+                        "description": "List of authorised namespaces",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": [
+                          "namespace1",
+                          "namespace2"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "company entitlements"
+        ],
+        "summary": "Create a company entitlement",
+        "description": "Create a company entitlement for the company and namespaces specified in the request body. A namespace in an entitlement can be:\n\n * a complete namespace, e.g. `abc.opp.screener`, to give the companyId access to that namespace only\n * a partial namespace, e.g. `abc.opp`, to give the companyId access to all namespaces that begin with that prefix, e.g. `abc.opp.screener` and `abc.opp.xray`",
+        "operationId": "createEntitlement",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "entitlementId": {
+                    "type": "string",
+                    "readOnly": true,
+                    "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+                  },
+                  "companyId": {
+                    "type": "string",
+                    "readOnly": false,
+                    "example": "1234aeaf-4321-1a23-1234-23gf5c663g24"
+                  },
+                  "namespaces": {
+                    "type": "array",
+                    "description": "List of authorised namespaces",
+                    "items": {
+                      "type": "string"
+                    },
+                    "example": [
+                      "namespace1",
+                      "namespace2"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "An entitlement object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "entitlementId": {
+                      "type": "string",
+                      "readOnly": true,
+                      "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+                    },
+                    "companyId": {
+                      "type": "string",
+                      "readOnly": false,
+                      "example": "1234aeaf-4321-1a23-1234-23gf5c663g24"
+                    },
+                    "namespaces": {
+                      "type": "array",
+                      "description": "List of authorised namespaces",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "namespace1",
+                        "namespace2"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authorised to perform this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requested operation is forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "There is a request conflict with the target resource",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/company-entitlements/{entitlementId}": {
+      "get": {
+        "tags": [
+          "company entitlements"
+        ],
+        "summary": "Get a company entitlement",
+        "description": "Get the company entitlement specified by the `entitlementId` parameter",
+        "operationId": "GetSingleEntitlement",
+        "parameters": [
+          {
+            "name": "entitlementId",
+            "description": "Unique identifier of an entitlement",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "An entitlement object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "entitlementId": {
+                      "type": "string",
+                      "readOnly": true,
+                      "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+                    },
+                    "companyId": {
+                      "type": "string",
+                      "readOnly": false,
+                      "example": "1234aeaf-4321-1a23-1234-23gf5c663g24"
+                    },
+                    "namespaces": {
+                      "type": "array",
+                      "description": "List of authorised namespaces",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "namespace1",
+                        "namespace2"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authorised to perform this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requested operation is forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "company entitlements"
+        ],
+        "summary": "Overwrite a company entitlement",
+        "description": "Overwrite the company entitlement specified by the `entitlementId` parameter. The namespaces listed in the request body will replace the current namespaces for this entitlement. The `companyId` for this entitlement will not be updated.",
+        "operationId": "UpdateEntitlement",
+        "parameters": [
+          {
+            "name": "entitlementId",
+            "description": "Unique identifier of an entitlement",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "properties": {
+                      "entitlementId": {
+                        "type": "string",
+                        "readOnly": true,
+                        "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+                      },
+                      "companyId": {
+                        "type": "string",
+                        "readOnly": false,
+                        "example": "1234aeaf-4321-1a23-1234-23gf5c663g24"
+                      },
+                      "namespaces": {
+                        "type": "array",
+                        "description": "List of authorised namespaces",
+                        "items": {
+                          "type": "string"
+                        },
+                        "example": [
+                          "namespace1",
+                          "namespace2"
+                        ]
+                      }
+                    }
+                  },
+                  {
+                    "properties": {
+                      "companyId": {
+                        "readOnly": true
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "An entitlement object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "entitlementId": {
+                      "type": "string",
+                      "readOnly": true,
+                      "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+                    },
+                    "companyId": {
+                      "type": "string",
+                      "readOnly": false,
+                      "example": "1234aeaf-4321-1a23-1234-23gf5c663g24"
+                    },
+                    "namespaces": {
+                      "type": "array",
+                      "description": "List of authorised namespaces",
+                      "items": {
+                        "type": "string"
+                      },
+                      "example": [
+                        "namespace1",
+                        "namespace2"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authorised to perform this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requested operation is forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "company entitlements"
+        ],
+        "summary": "Delete a company entitlement",
+        "description": "Delete the company entitlement specified by the `entitlementId` parameter.",
+        "operationId": "deleteEntitlement",
+        "parameters": [
+          {
+            "name": "entitlementId",
+            "description": "Unique identifier of an entitlement",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "An empty object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "The user is not authorised to perform this operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "The requested operation is forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "The requested resource does not exist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An unexpected error occured",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "description": "Generic error object",
+                  "properties": {
+                    "errorId": {
+                      "type": "string",
+                      "format": "uuid",
+                      "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "An error occurred"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Entitlements": {
+        "type": "array",
+        "description": "List of entitlements",
+        "items": {
+          "properties": {
+            "entitlementId": {
+              "type": "string",
+              "readOnly": true,
+              "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+            },
+            "companyId": {
+              "type": "string",
+              "readOnly": false,
+              "example": "1234aeaf-4321-1a23-1234-23gf5c663g24"
+            },
+            "namespaces": {
+              "type": "array",
+              "description": "List of authorised namespaces",
+              "items": {
+                "type": "string"
+              },
+              "example": [
+                "namespace1",
+                "namespace2"
+              ]
+            }
+          }
+        }
+      },
+      "Entitlement": {
+        "properties": {
+          "entitlementId": {
+            "type": "string",
+            "readOnly": true,
+            "example": "1fa234a-5678-9d1d-0c11-x1y2131zf4d1"
+          },
+          "companyId": {
+            "type": "string",
+            "readOnly": false,
+            "example": "1234aeaf-4321-1a23-1234-23gf5c663g24"
+          },
+          "namespaces": {
+            "type": "array",
+            "description": "List of authorised namespaces",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "namespace1",
+              "namespace2"
+            ]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "description": "Generic error object",
+        "properties": {
+          "errorId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "100380c0-8f94-11ea-bc55-0242ac130003"
+          },
+          "message": {
+            "type": "string",
+            "example": "An error occurred"
+          }
+        }
+      },
+      "Statistics": {
+        "type": "object",
+        "description": "Statistics for a namespace, tool and date",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2022-02-01"
+          },
+          "namespace": {
+            "type": "string",
+            "example": "abco.opp.config"
+          },
+          "tool": {
+            "type": "string",
+            "example": "mwc-sc-screener"
+          },
+          "period": {
+            "type": "string",
+            "example": "day"
+          },
+          "securities": {
+            "type": "object",
+            "description": "A breakdown of securities (by security identifier) and how often each was logged"
+          },
+          "loaded": {
+            "type": "object",
+            "description": "Load event statistics",
+            "properties": {
+              "count": {
+                "type": "number",
+                "description": "The number of times the loaded event was triggered",
+                "example": "207"
+              },
+              "uniqueUsers": {
+                "type": "number",
+                "description": "The number of unique users",
+                "example": "60"
+              },
+              "uniqueSessions": {
+                "description": "The number of unique sessions",
+                "example": "80"
+              },
+              "mean": {
+                "type": "number",
+                "description": "The mean load time",
+                "example": "250"
+              },
+              "median": {
+                "type": "number",
+                "description": "The median load time",
+                "example": "260"
+              },
+              "percentile95": {
+                "type": "number",
+                "description": "The 95th percentile load time",
+                "example": "310"
+              }
+            }
+          },
+          "events": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Statistics for a specific event",
+              "properties": {
+                "event": {
+                  "type": "string",
+                  "description": "The event name",
+                  "example": "filterChanged"
+                },
+                "type": {
+                  "type": "string",
+                  "description": "The event type - timed, count or breakdown",
+                  "example": "breakdown"
+                },
+                "source": {
+                  "type": "string",
+                  "description": "The component that was the source of the event",
+                  "example": "mwc-sc-filters"
+                },
+                "count": {
+                  "type": "number",
+                  "description": "The number of times the event was triggered",
+                  "example": 10
+                },
+                "breakdown": {
+                  "type": "object",
+                  "description": "A breakdown of the primary values for the event and how many times each was logged",
+                  "example": {
+                    "categoryChanged": 2,
+                    "companyChanged": 5,
+                    "distributionChanged": 3
+                  }
+                },
+                "mean": {
+                  "type": "number",
+                  "description": "For timed events, the mean load time",
+                  "example": 100
+                },
+                "median": {
+                  "type": "number",
+                  "description": "For timed events, the median load time",
+                  "example": 150
+                },
+                "percentile95": {
+                  "type": "number",
+                  "description": "For timed events, the 95th percentile load time",
+                  "example": 190
+                },
+                "method": {
+                  "type": "string",
+                  "description": "For 'dataLoaded' events, the method of the call",
+                  "example": "get"
+                },
+                "url": {
+                  "type": "string",
+                  "description": "For 'dataLoaded' events, the URL that was called",
+                  "example": "https://lt.morningstar.com/filters"
+                }
+              }
+            }
+          }
+        }
+      },
+      "Timeseries": {
+        "type": "object",
+        "description": "Statistics in timeseries format for a namespace, tool and date",
+        "properties": {
+          "date": {
+            "type": "string",
+            "example": "2022-02-01"
+          },
+          "namespace": {
+            "type": "string",
+            "example": "abco.opp.config"
+          },
+          "tool": {
+            "type": "string",
+            "example": "mwc-sc-screener"
+          },
+          "period": {
+            "type": "string",
+            "example": "day"
+          },
+          "timeseries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "description": "Statistics for a specific event",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "description": "The date or end date for the time period",
+                  "example": "2022-02-01"
+                },
+                "loaded": {
+                  "type": "object",
+                  "description": "Load event statistics",
+                  "properties": {
+                    "count": {
+                      "type": "number",
+                      "description": "The number of times the loaded event was triggered",
+                      "example": "207"
+                    },
+                    "uniqueUsers": {
+                      "type": "number",
+                      "description": "The number of unique users",
+                      "example": "60"
+                    },
+                    "uniqueSessions": {
+                      "description": "The number of unique sessions",
+                      "example": "80"
+                    },
+                    "mean": {
+                      "type": "number",
+                      "description": "The mean load time",
+                      "example": "250"
+                    },
+                    "median": {
+                      "type": "number",
+                      "description": "The median load time",
+                      "example": "260"
+                    },
+                    "percentile95": {
+                      "type": "number",
+                      "description": "The 95th percentile load time",
+                      "example": "310"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

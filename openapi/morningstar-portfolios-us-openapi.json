@@ -1,0 +1,414 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "description": "\nThe Portfolios API is used by the web-based version of [Morningstar Office](https://www.morningstar.com/products/office) to get information about portfolios owned by a household. \n\n  With the API you can:\n\n  * Get full holdings for an account\n  * Get all accounts for a specific household\n  \n",
+    "version": "2.0.3",
+    "title": "Portfolios (US)"
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/office-portfolio/v2",
+      "description": "PROD"
+    },
+    {
+      "url": "https://www.us-uat-api.morningstar.com/office-portfolio/v2",
+      "description": "UAT"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "holdings"
+    },
+    {
+      "name": "profiles"
+    }
+  ],
+  "paths": {
+    "/holdings": {
+      "get": {
+        "tags": [
+          "holdings"
+        ],
+        "summary": "Get holdings for a portfolio",
+        "description": "Get holdings for the portfolio(s) specified in the `portfolioIds` parameter.",
+        "operationId": "getAnalysisUsingGET_4",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          {
+            "name": "portfolioIds",
+            "in": "query",
+            "description": "Unique identifier of a portfolio. Multiple values must be comma-separated.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "enddate",
+            "in": "query",
+            "description": "Return results with end date specified (yyyy-mm-dd, yyyymmdd or LastMonthEnd).",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiPortfolioAnalysisEntities"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/profiles": {
+      "get": {
+        "tags": [
+          "profiles"
+        ],
+        "summary": "Get household accounts",
+        "description": "Get accounts for the household(s) specified in the `householdIds` parameter.",
+        "operationId": "getPortfoliosUsingGET_3",
+        "parameters": [
+          {
+            "name": "x-api-key",
+            "in": "header",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "string"
+            }
+          },
+          {
+            "name": "householdIds",
+            "in": "query",
+            "description": "Unique identifier of a household. Multiple values must be comma-separated.",
+            "required": true,
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Limit number of records returned. Default is 100 or 500.",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "skip",
+            "in": "query",
+            "description": "Number of results to skip",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "count",
+            "in": "query",
+            "description": "Return the total count of profiles when \"limit\" or \"skip\" parameter is used. Default is `false`.",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "enum": [
+                true,
+                false
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ApiPortfolioResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "APIMetaStatusResponse": {
+        "type": "object",
+        "properties": {
+          "hint": {
+            "type": "string"
+          },
+          "response_status": {
+            "type": "string"
+          }
+        },
+        "title": "APIMetaStatusResponse"
+      },
+      "APIPaginationResponse": {
+        "type": "object",
+        "properties": {
+          "count": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "limit": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "skip": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "title": "APIPaginationResponse"
+      },
+      "ApiPortfolioAnalysisEntities": {
+        "type": "object",
+        "properties": {
+          "_meta": {
+            "$ref": "#/components/schemas/APIMetaStatusResponse"
+          },
+          "errMsg": {
+            "type": "string"
+          },
+          "portfolios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiPortfolioAnalysisEntity"
+            }
+          }
+        },
+        "title": "ApiPortfolioAnalysisEntities"
+      },
+      "ApiPortfolioAnalysisEntity": {
+        "type": "object",
+        "properties": {
+          "accountTypeName": {
+            "type": "string"
+          },
+          "householdId": {
+            "type": "string"
+          },
+          "lastUpdateTime": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "portfolioId": {
+            "type": "string"
+          },
+          "portfolioType": {
+            "type": "string"
+          },
+          "portfolioTypeName": {
+            "type": "string"
+          },
+          "snapshots": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiSnapshotEntity"
+            }
+          },
+          "trackingMethod": {
+            "type": "string",
+            "enum": [
+              "positional",
+              "transactional",
+              "quick",
+              "fixed"
+            ]
+          },
+          "topHoldingList": {
+            "$ref": "#/components/schemas/TopHoldingListEntity"
+          }
+        },
+        "title": "ApiPortfolioAnalysisEntity"
+      },
+      "ApiPortfolioEntity": {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "custodianId": {
+            "type": "string"
+          },
+          "custodianName": {
+            "type": "string"
+          },
+          "householdId": {
+            "type": "string"
+          },
+          "householdName": {
+            "type": "string"
+          },
+          "isDynamicAggregate": {
+            "type": "boolean"
+          },
+          "excludeInClientAggregate": {
+            "type": "boolean"
+          },
+          "unmanagedAsset": {
+            "type": "boolean"
+          },
+          "lastUpdateTime": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "number": {
+            "type": "string"
+          },
+          "ownerId": {
+            "type": "string"
+          },
+          "ownerName": {
+            "type": "string"
+          },
+          "permission": {
+            "type": "string"
+          },
+          "portfolioId": {
+            "type": "string"
+          },
+          "portfolioType": {
+            "type": "string"
+          },
+          "portfolioTypeName": {
+            "type": "string"
+          },
+          "trackingMethod": {
+            "type": "string",
+            "enum": [
+              "positional",
+              "transactional",
+              "quick",
+              "fixed"
+            ]
+          },
+          "views": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "title": "ApiPortfolioEntity"
+      },
+      "ApiPortfolioResponse": {
+        "type": "object",
+        "properties": {
+          "_meta": {
+            "$ref": "#/components/schemas/APIMetaStatusResponse"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/APIPaginationResponse"
+          },
+          "portfolios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ApiPortfolioEntity"
+            }
+          }
+        },
+        "title": "ApiPortfolioResponse"
+      },
+      "ApiSnapshotEntity": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string"
+          },
+          "topNHoldingsCount": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "title": "ApiSnapshotEntity"
+      },
+      "TopHoldingListEntity": {
+        "type": "object",
+        "properties": {
+          "additionalProperties": {
+            "$ref": "#/components/schemas/TopHoldingListDateEntity"
+          }
+        },
+        "title": "TopHoldingListEntity"
+      },
+      "TopHoldingListDateEntity": {
+        "type": "object",
+        "properties": {
+          "total": {
+            "type": "string"
+          },
+          "top-holdings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Map_string_string"
+            }
+          },
+          "validation-end-date": {
+            "type": "string"
+          }
+        },
+        "title": "TopHoldingListDateEntity"
+      },
+      "Map_string_string": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

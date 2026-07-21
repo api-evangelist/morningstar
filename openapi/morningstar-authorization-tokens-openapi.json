@@ -1,0 +1,101 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Authorization Tokens",
+    "description": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret."
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/token",
+      "description": "PROD US"
+    },
+    {
+      "url": "https://www.emea-api.morningstar.com/token",
+      "description": "PROD EMEA"
+    },
+    {
+      "url": "https://www.apac-api.morningstar.com/token",
+      "description": "PROD APAC"
+    }
+  ],
+  "security": [
+    {
+      "BasicAuth": []
+    }
+  ],
+  "paths": {
+    "/oauth": {
+      "post": {
+        "tags": [
+          "oauth"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/200Response"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid account credentials",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/401Response"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "200Response": {
+        "required": [
+          "access_token",
+          "expires_in",
+          "token_type"
+        ],
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJraWQiOiJCazNLcUhvZVhQNk53aHl0K0Fp0.eyJzdWIiOiJmYTcwODgyYi02MWE1LTQ2NTctYTVlYS1mMzlkOTRlNTM5ZTYiLQ.iuxBpTRDm28e2jIGQGUh2cD_R2GCyhNWdUTeUf2jl7lznB4kgiXzLAXgw4iWcpvYhszbmRRHwm8r5"
+          },
+          "expires_in": {
+            "type": "string",
+            "example": "3600"
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer"
+          }
+        }
+      },
+      "401Response": {
+        "required": [
+          "error_message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Incorrect username or password"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    }
+  }
+}

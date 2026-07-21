@@ -1,0 +1,743 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Report Retrieval (US)",
+    "version": "1.1.1",
+    "description": "\nThe Report Retrieval API is used to retrieve reports generated and stored in the web-based version of [Morningstar Office](https://www.morningstar.com/products/office).\n\nWith this API you can:\n* Get report metadata.\n* Get metadata for 'buckets', the folders where reports are stored.\n* Filter results by household ID in a bucket.\n* Filter results by report name or bucket ID.\n* Assign reports to household(s).\n* Publish or unpublish report(s) to the Client Web Portal.\n"
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/report-api/v1/report-retrieval",
+      "description": "PROD"
+    },
+    {
+      "url": "https://www.us-uat-api.morningstar.com/report-api/v1/report-retrieval",
+      "description": "UAT"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "reports"
+    },
+    {
+      "name": "buckets"
+    }
+  ],
+  "paths": {
+    "/reports": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Get report(s) metadata",
+        "description": "Get reports metadata including `reportId`. </br></br>You must enter a time period for the request to query in the `period` parameter. Time period is measured in quarters:</br> - `0` = Current quarter. For example, if today is 2021-07-31, returns reports for 2021-07-01 to 2021-09-30.</br> - `1` = Previous quarter. For example, if today is 2021-07-31, returns reports for 2021-04-01 to 2021-06-30.</br> - `n` = nth quarter from the current quarter. For example, `4` returns reports of the 4th quarter from the current quarter. If today is 2021-07-31, returns reports for 2020-07-01 to 2020-09-30.</br> - `-1` = Current and previous quarter. </br></br>You can limit results returned by entering a string in the `name` parameter. Only reports with that string in the report name will be returned. </br></br>You can also limit the results returned by specifying values in the `bucketId` and `householdId` parameters. </br></br>A value of `published` in the `published` parameter will return published files only. <br><br>**Note:** If `published` has a `published` or `unpublished` value, the bucket ID will be ignored, and the response will return reports from all buckets.",
+        "operationId": "getReports",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "description": "Time period for reports in quarters:<br> 0 = Current quarter<br> 1 = Previous quarter<br> n = nth quarter from the current quarter<br> -1 = Current and previous quarter<br>",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "description": "Name search string",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bucketId",
+            "in": "query",
+            "description": "Unique identifier of a bucket. Default is root bucket.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "householdId",
+            "in": "query",
+            "description": "Unique identifier of a client",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          },
+          {
+            "name": "published",
+            "in": "query",
+            "description": "When set to `published` returns published reports only",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "all",
+              "enum": [
+                "all",
+                "published",
+                "unpublished"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid status value"
+          }
+        }
+      }
+    },
+    "/reports/{reportId}": {
+      "get": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Get a report",
+        "description": "Get the report specified in the `reportId` parameter.",
+        "operationId": "getReportDetails",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "reportId",
+            "in": "path",
+            "description": "Unique identifier of a report",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReportListSingle"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameter value"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/reports/assign": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Assign report(s)",
+        "description": "Assign report(s) specified in the request body to household(s) specified in the request body.</br></br>You must assign a report to a household before it can be published.",
+        "operationId": "assignReport",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Assign report(s) to household(s).",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AssignInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Assign"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameter value"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/reports/publish": {
+      "post": {
+        "tags": [
+          "reports"
+        ],
+        "summary": "Publish or unpublish reports(s) to Client Web Portal",
+        "description": "Add or remove report files from the Client Web Portal. You must assign a report to a household before it can be published.</br></br>**Note:** Requests to unpublish a report that contain an identifier for a report that has not been published will fail.",
+        "operationId": "publishReport",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "enabled",
+            "description": "Set report(s) to added (true) or removed (false).",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "List of report IDs to add to/remove from Client Web Portal.",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ArrayOfReportUuid"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Publish"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameter value"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    },
+    "/buckets": {
+      "get": {
+        "tags": [
+          "buckets"
+        ],
+        "summary": "Get buckets",
+        "description": "Get all buckets.",
+        "operationId": "getBucketsMetadata",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BucketList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameter value"
+          }
+        }
+      }
+    },
+    "/buckets/{bucketId}": {
+      "get": {
+        "tags": [
+          "buckets"
+        ],
+        "summary": "Get a bucket",
+        "description": "Get the bucket specified in the `bucketId` parameter.",
+        "operationId": "getBucketsMetadataSingle",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "x-api-key",
+            "description": "Unique API key of a client",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "bucketId",
+            "in": "path",
+            "description": "Unique identifier of a bucket",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/BucketList"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameter value"
+          },
+          "404": {
+            "description": "Not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "ReportMetaDataSingle": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "integer",
+            "example": 1,
+            "description": "Number of reports found."
+          }
+        }
+      },
+      "ReportMetaData": {
+        "type": "object",
+        "properties": {
+          "startdate": {
+            "type": "string",
+            "example": "YYYY-MM-DD",
+            "description": "Date or empty."
+          },
+          "enddate": {
+            "type": "string",
+            "example": "YYYY-MM-DD",
+            "description": "Date or empty."
+          },
+          "bucketId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "bb11bb11-1111-0000-0000-000000000000",
+            "description": "BucketId or empty in special cases."
+          },
+          "items": {
+            "type": "integer",
+            "example": 1,
+            "description": "Number of reports found."
+          }
+        }
+      },
+      "BucketMetaData": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "integer",
+            "example": 1,
+            "description": "Number of buckets found."
+          }
+        }
+      },
+      "ArrayOfReportUuid": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid",
+          "example": "ef11ef11-abcd-1234-0000-000000000000"
+        }
+      },
+      "ArrayOfHouseholdUuid": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "format": "uuid",
+          "example": "cd11cd11-cdef-5678-0000-000000000000"
+        }
+      },
+      "ArrayOfPublishA": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PublishA"
+        }
+      },
+      "ArrayOfPublishB": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/PublishB"
+        }
+      },
+      "PublishA": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "ef11ef11-abcd-1234-0000-000000000000"
+          }
+        }
+      },
+      "PublishB": {
+        "type": "object",
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "ef22ef22-efef-5678-0000-000000000000"
+          }
+        }
+      },
+      "ArrayOfHouseholds": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Households"
+        }
+      },
+      "Households": {
+        "type": "object",
+        "properties": {
+          "householdId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "cd11cd11-cdef-5678-0000-000000000000"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "AssignInput": {
+        "type": "object",
+        "required": [
+          "reportIds",
+          "householdIds"
+        ],
+        "properties": {
+          "reportIds": {
+            "$ref": "#/components/schemas/ArrayOfReportUuid"
+          },
+          "householdIds": {
+            "$ref": "#/components/schemas/ArrayOfHouseholdUuid"
+          }
+        }
+      },
+      "Publish": {
+        "type": "object",
+        "required": [
+          "reportId",
+          "bucketId"
+        ],
+        "properties": {
+          "enabled": {
+            "type": "boolean"
+          },
+          "success": {
+            "$ref": "#/components/schemas/ArrayOfPublishA"
+          },
+          "failure": {
+            "$ref": "#/components/schemas/ArrayOfPublishB"
+          }
+        }
+      },
+      "Assign": {
+        "type": "object",
+        "required": [
+          "reportId",
+          "bucketId"
+        ],
+        "properties": {
+          "reportName": {
+            "type": "string",
+            "example": "ABCo portfolio-xray"
+          },
+          "format": {
+            "type": "string",
+            "example": "PDF"
+          },
+          "reportId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "ef11ef11-abcd-1234-0000-000000000000"
+          },
+          "bucketId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "bb11bb11-1111-0000-0000-000000000000"
+          },
+          "households": {
+            "$ref": "#/components/schemas/ArrayOfHouseholds"
+          }
+        }
+      },
+      "ReportListSingle": {
+        "type": "object",
+        "required": [
+          "reportId",
+          "name"
+        ],
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/ReportMetaDataSingle"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Report"
+            }
+          }
+        }
+      },
+      "ReportList": {
+        "type": "object",
+        "required": [
+          "reportId",
+          "name"
+        ],
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/ReportMetaData"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Report"
+            }
+          }
+        }
+      },
+      "Report": {
+        "type": "object",
+        "required": [
+          "id",
+          "name"
+        ],
+        "properties": {
+          "reportId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "ef11ef11-abcd-1234-0000-000000000000"
+          },
+          "storageId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "ef11ef11-abcd-1234-0000-000000000000"
+          },
+          "households": {
+            "$ref": "#/components/schemas/ArrayOfHouseholds"
+          },
+          "name": {
+            "type": "string",
+            "example": "Report ABCo"
+          },
+          "accountName": {
+            "type": "string",
+            "example": "Brokerage"
+          },
+          "targetAdvisorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "advisorName": {
+            "type": "string",
+            "example": "Advisor"
+          },
+          "reportLevel": {
+            "type": "string",
+            "example": "Client"
+          },
+          "target": {
+            "type": "string",
+            "example": "Brokerage"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "publishedAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2019-01-02T01:59Z"
+          },
+          "fileName": {
+            "type": "string",
+            "format": "string"
+          },
+          "bucketId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "bb11bb11-1111-0000-0000-000000000000"
+          },
+          "reportType": {
+            "type": "string",
+            "enum": [
+              "portfolio-xray",
+              "snapshot",
+              "ToBeDecided"
+            ]
+          },
+          "format": {
+            "type": "string",
+            "example": "PDF"
+          },
+          "uri": {
+            "type": "string",
+            "format": "domain"
+          }
+        }
+      },
+      "Bucket": {
+        "required": [
+          "bucketId",
+          "bucketName",
+          "bucketFullName"
+        ],
+        "type": "object",
+        "properties": {
+          "bucketId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "bb22bb22-2222-0000-0000-000000000000"
+          },
+          "bucketName": {
+            "type": "string",
+            "format": "string",
+            "description": "The bucket name.",
+            "example": "bucketSub2"
+          },
+          "bucketNameArray": {
+            "type": "array",
+            "example": [
+              "bucketSub2",
+              "bucketSub1",
+              "bucketMain"
+            ],
+            "items": {
+              "type": "string",
+              "description": "The full bucket path."
+            }
+          },
+          "bucketParentId": {
+            "type": "string",
+            "format": "uuid",
+            "example": "bb11bb11-1111-0000-0000-000000000000",
+            "description": "If empty, the bucket is in the root."
+          },
+          "advisorId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2019-01-02T01:59Z"
+          },
+          "lastUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2019-01-02T01:59Z"
+          }
+        }
+      },
+      "BucketList": {
+        "required": [
+          "totalRecords",
+          "displayRecords"
+        ],
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/BucketMetaData"
+          },
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Bucket"
+            }
+          }
+        }
+      }
+    }
+  }
+}

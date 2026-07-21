@@ -1,0 +1,304 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Screener (US)",
+    "description": "Use the API to to sort through and retrieve securities and associated data points based on your personal requirements. You can filter results based on a number of criteria including:\n* Universe  \n* Security type  \n* Security data points"
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/screener": {
+      "get": {
+        "tags": [
+          "screener"
+        ],
+        "summary": "Get securites and associated data points",
+        "description": "Specify search and filter criteria to limit the number of results returned. You can define the format of the returned content - JSON or XML. </br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.",
+        "operationId": "Screener_GetScreenerData",
+        "parameters": [
+          {
+            "name": "startIndex",
+            "in": "query",
+            "description": "Row to start query from. Zero-based index; first row is '0.'",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "0"
+            }
+          },
+          {
+            "name": "securityType",
+            "in": "query",
+            "description": "Unique identifier of a security type",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "st"
+            }
+          },
+          {
+            "name": "results",
+            "in": "query",
+            "description": "Maximum number of rows to return",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "10"
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Sort by data point",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "secId"
+            }
+          },
+          {
+            "name": "dir",
+            "in": "query",
+            "description": "Sort results in ascending/descending direction",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "asc",
+              "enum": [
+                "asc",
+                "desc"
+              ]
+            }
+          },
+          {
+            "name": "output",
+            "in": "query",
+            "description": "Format of the returned content",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "json",
+              "enum": [
+                "json",
+                "xml"
+              ]
+            }
+          },
+          {
+            "name": "langcult",
+            "in": "query",
+            "description": "Language and locale, for example, en-US",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-US"
+            }
+          },
+          {
+            "name": "universe",
+            "in": "query",
+            "description": "Unique identifier of a universe",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "STGLOBAL"
+            }
+          },
+          {
+            "name": "securityDataPoints",
+            "in": "query",
+            "description": "Unique identifier of a data point. Can be data point ID or short ID. Multiple values must be pipe-separated.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "secId|selected|name|ticker"
+            }
+          },
+          {
+            "name": "filters",
+            "in": "query",
+            "description": "Data point ID with either min/max values, or a list of specific values. Multiple criteria must be comma-separated.",
+            "required": false,
+            "example": "fundSize:{\"min\":\"100000000\",\"max\":\"500000000\"},starRating:[4,5]}",
+            "schema": {
+              "type": "string",
+              "default": ""
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecuritiesInputModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecuritiesInputModel"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecuritiesInputModel"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/SecuritiesInputModel"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "screener"
+        ],
+        "summary": "Create security and associated data points",
+        "operationId": "Screener_PostScreenerData",
+        "parameters": [
+          {
+            "name": "securityDataPoints",
+            "in": "query",
+            "description": "Unique identifier of a data point. Can be data point ID or short ID. Multiple values must be pipe-separated.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "secId|selected|name|ticker"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScreenerData"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScreenerData"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/ScreenerData"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/ScreenerData"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/ScreenerData"
+              }
+            }
+          },
+          "description": "Data fields to return",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/ec/v1"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "ScreenerData": {
+        "type": "object",
+        "properties": {
+          "securityDataPoints": {
+            "type": "string"
+          },
+          "filters": {
+            "type": "string"
+          }
+        }
+      },
+      "SecuritiesInputModel": {
+        "type": "object",
+        "properties": {
+          "secIds": {
+            "type": "string"
+          },
+          "universeIds": {
+            "type": "string"
+          },
+          "dataPoints": {
+            "type": "string"
+          },
+          "languageId": {
+            "type": "string"
+          },
+          "currencyId": {
+            "type": "string"
+          },
+          "assetAllocationType": {
+            "type": "string"
+          },
+          "customBenchmark": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

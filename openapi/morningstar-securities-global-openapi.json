@@ -1,0 +1,115 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Securities (Global)",
+    "description": "This OpenAPI Specification is for internal use only. \n\nWe have activated a test account with limited data access so that internal users can see how the API works.\n\nUse the  API to get information for a security using predefined views. See the Documentation for more information about views. "
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/securities/{securityId}": {
+      "get": {
+        "summary": "Get information for the security specified",
+        "description": "Information returned depends on the view specifed in the request.",
+        "tags": [
+          "securities"
+        ],
+        "operationId": "LocalwithJWT",
+        "deprecated": false,
+        "parameters": [
+          {
+            "name": "securityId",
+            "description": "Security ID",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "viewId",
+            "description": "View ID",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idType",
+            "description": "Security ID type",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "msid"
+            }
+          },
+          {
+            "name": "languageId",
+            "description": "Language ID - ISO 639-1",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "currencyId",
+            "description": "Currency ID - ISO 4217 alphabetic code",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "responseViewFormat",
+            "description": "Response view format - xml / json",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "https://www.emea-api.morningstar.com/ecint/v1",
+      "description": "PROD"
+    },
+    {
+      "url": "https://www.emea-uat-api.morningstar.com/ecint/v1",
+      "description": "UAT"
+    },
+    {
+      "url": "https://www.apac-api.morningstar.com/ecint/v1",
+      "description": "PROD"
+    },
+    {
+      "url": "https://www.apac-uat-api.morningstar.com/ecint/v1",
+      "description": "UAT"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

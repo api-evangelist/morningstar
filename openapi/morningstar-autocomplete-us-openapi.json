@@ -1,0 +1,236 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Autocomplete (US)",
+    "description": "Search for securities using partial strings based on name, ticker, or CUSIP.  You can:\n * Limit search to specific security universes.\n * Specify data points to return in the response. \n * Specify a language and currency for the response data.<br/><br/>",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/ec/v1",
+      "description": "PROD"
+    },
+    {
+      "url": "https://www.us-uat-api.morningstar.com/ec/v1",
+      "description": "UAT"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "autocomplete"
+    }
+  ],
+  "paths": {
+    "/autocomplete": {
+      "get": {
+        "tags": [
+          "autocomplete"
+        ],
+        "summary": "Get securities",
+        "description": "Get securities based on the search string specified in the `query` parameter. The search string can be part of an investment name, ticker symbol, or CUSIP. For example, if the search string is 'large', the API will return all securities that include 'large' in their name. <br/><br/>Response time is influenced by the number of results to return specified in the `results` parameter. The default value is '10'.<br/><br/>To override the default value in the Accept-Language HTTP header, use the `langCult` parameter. You can also define the currency of the data returned. Only one currency can be specified.",
+        "operationId": "AutoComplete_GetAutoCompleteData",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Text string to search for",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "1290"
+            }
+          },
+          {
+            "name": "universes",
+            "in": "query",
+            "description": "Unique five-letter identifier created by combining a two-letter Investment Type code and three-letter country code.<br/>Multiple entries must be pipe-separated '|'.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "FOUSA|FEUSA|FCUSA"
+            }
+          },
+          {
+            "name": "securityDataPoints",
+            "in": "query",
+            "description": "Data points to return in response. Multiple values must be pipe-separated. Valid values are data point ID or short ID.",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "name|cusip|ticker|category|cidname|universe|categoryid|country"
+            }
+          },
+          {
+            "name": "results",
+            "in": "query",
+            "description": "Number of rows to limit results to",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "10"
+            }
+          },
+          {
+            "name": "responseSchema",
+            "in": "query",
+            "description": "Response Schema config in SBT",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "PG"
+            }
+          },
+          {
+            "name": "schema",
+            "in": "query",
+            "description": "Schema config in SBT",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "PG"
+            }
+          },
+          {
+            "name": "filterCriteria",
+            "in": "query",
+            "description": "Filter express to filter the defined securities in the information retrieved",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "ff,=,text,1290%20Funds"
+            }
+          },
+          {
+            "name": "langcult",
+            "in": "query",
+            "description": "Language and locale, for example, en-US",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en-US"
+            }
+          },
+          {
+            "name": "currency",
+            "in": "query",
+            "description": "ISO 4217 currency code, for example, 'USD'",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "USD"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoCompleteSwaggerDoc"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoCompleteSwaggerDoc"
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoCompleteSwaggerDoc"
+                }
+              },
+              "text/xml": {
+                "schema": {
+                  "$ref": "#/components/schemas/AutoCompleteSwaggerDoc"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AutoCompleteSwaggerDoc": {
+        "type": "object",
+        "properties": {
+          "universes": {
+            "type": "string",
+            "readOnly": true
+          },
+          "langcult": {
+            "type": "string",
+            "readOnly": true
+          },
+          "query": {
+            "type": "string",
+            "readOnly": true
+          },
+          "responseSchema": {
+            "type": "string",
+            "readOnly": true
+          },
+          "schema": {
+            "type": "string",
+            "readOnly": true
+          },
+          "filterCriteria": {
+            "type": "string",
+            "readOnly": true
+          },
+          "securityDataPoints": {
+            "type": "string",
+            "readOnly": true
+          },
+          "currency": {
+            "type": "string",
+            "readOnly": true
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

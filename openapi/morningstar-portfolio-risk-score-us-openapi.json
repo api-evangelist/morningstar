@@ -1,0 +1,493 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "description": "Use the Portfolio Risk Score (US) API to assess risk and diversification in portfolios or multi-asset products, such as open-end mutual funds, closed-end funds, ETFs, or model portfolios.\n\n\nInvestors and advisors can use the information returned by the API to: \n\n  \n  * Understand where a portfolio or investment lies on a risk spectrum.\n  * Test how diversified a portfolio is based on Morningstar-defined standards.\n  * Identify if specific investments pose a concentration or idiosyncratic risk.\n  \nThe API is used in the [Morningstar Risk Ecosystem](https://www.morningstar.com/products/risk)\n  \n",
+    "version": "1.0.0",
+    "title": "Portfolio Risk Score (US)"
+  },
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com/portfolioanalysis/v1",
+      "description": "PROD"
+    }
+  ],
+  "tags": [
+    {
+      "name": "risk scores"
+    }
+  ],
+  "paths": {
+    "/riskscore": {
+      "post": {
+        "tags": [
+          "risk scores"
+        ],
+        "summary": "Calculate portfolio risk scores",
+        "description": "Calculate the following scores for the portfolios specified in the request body:</br></br>- Risk score</br>- Alignment score</br> - R-squared score </br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.",
+        "operationId": "RiskscoreV1_PostAsync",
+        "parameters": [
+          {
+            "name": "langcult",
+            "in": "query",
+            "description": "Language and locale, for example, en-US",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-US"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings"
+              }
+            },
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings"
+              }
+            },
+            "application/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings"
+              }
+            },
+            "text/xml": {
+              "schema": {
+                "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings"
+              }
+            }
+          },
+          "description": "Object that defines the settings to use in the request.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings": {
+        "type": "object",
+        "properties": {
+          "Portfolios": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput"
+            }
+          },
+          "RiskScoreTAIConfig": {
+            "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig"
+          }
+        },
+        "example": {
+          "Portfolios": [
+            {
+              "Name": "TestPortfolio1",
+              "TotalValue": 10000,
+              "Holdings": [
+                {
+                  "SecurityId": "F00000VCTT",
+                  "Weight": 20
+                },
+                {
+                  "SecurityId": "0P00002NW8",
+                  "Weight": 10
+                },
+                {
+                  "TradingSymbol": "AAPL",
+                  "Weight": 15
+                },
+                {
+                  "ISIN": "US09251T1034",
+                  "Weight": 35
+                },
+                {
+                  "CUSIP": "256219106",
+                  "Weight": 20
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string"
+          },
+          "MonthlyReturnsRequired": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "TAIReturnsStartDate": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "ReturnsThresholdValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "RiskScoreGroupConfig": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreGroupConfig"
+            }
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreGroupConfig": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string"
+          },
+          "RiskFreeAssetClassId": {
+            "type": "string"
+          },
+          "AnnualizationFactor": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "RiskScoreConfig": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreConfig"
+            }
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreConfig": {
+        "type": "object",
+        "properties": {
+          "Id": {
+            "type": "string"
+          },
+          "Category": {
+            "type": "string"
+          },
+          "Name": {
+            "type": "string"
+          },
+          "IsEquity": {
+            "type": "boolean"
+          },
+          "UnconstrainedStyleExposure": {
+            "type": "boolean"
+          },
+          "Style": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreStyle"
+            }
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreStyle": {
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string"
+          },
+          "Value": {
+            "format": "double",
+            "type": "number"
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Output.RiskScore.RiskScoreV2Data": {
+        "type": "object",
+        "properties": {
+          "riskScore": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.RiskScore.PortfolioRiskScore"
+            }
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Output.RiskScore.PortfolioRiskScore": {
+        "type": "object",
+        "properties": {
+          "portfolioName": {
+            "type": "string"
+          },
+          "portfolioRiskScore": {
+            "format": "double",
+            "type": "number"
+          },
+          "portfolioAlignmentScore": {
+            "format": "double",
+            "type": "number"
+          },
+          "portfolioRsquared": {
+            "format": "double",
+            "type": "number"
+          },
+          "isProxyUsedInRiskScore": {
+            "type": "boolean"
+          },
+          "errorCode": {
+            "type": "string"
+          },
+          "errorDescription": {
+            "type": "string"
+          },
+          "invalidHoldings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.RiskScore.InvalidSecurities"
+            }
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Output.RiskScore.InvalidSecurities": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput": {
+        "required": [
+          "Name",
+          "Currency",
+          "Holdings"
+        ],
+        "type": "object",
+        "properties": {
+          "Name": {
+            "type": "string"
+          },
+          "TotalValue": {
+            "format": "double",
+            "type": "number"
+          },
+          "Currency": {
+            "enum": [
+              "AUD",
+              "CAD",
+              "CNY",
+              "EUR",
+              "GBP",
+              "INR",
+              "JPY",
+              "USD"
+            ],
+            "type": "string"
+          },
+          "Holdings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding"
+            }
+          },
+          "Benchmark": {
+            "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput"
+          },
+          "IrrFees": {
+            "format": "double",
+            "type": "number"
+          },
+          "RiskFreeProxyId": {
+            "description": "Default is set in the Configuration. This is a portfolio level override.",
+            "type": "string"
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding": {
+        "type": "object",
+        "properties": {
+          "SecurityId": {
+            "type": "string"
+          },
+          "Type": {
+            "description": "TODO: is this required? If not, is there a default?",
+            "enum": [
+              "BD",
+              "CT",
+              "CA",
+              "CASH",
+              "EI",
+              "FC",
+              "FE",
+              "FM",
+              "FO",
+              "FI",
+              "FV",
+              "SA",
+              "ST",
+              "VA",
+              "V1",
+              "XI",
+              "SP"
+            ],
+            "type": "string"
+          },
+          "ExchangeID": {
+            "type": "string"
+          },
+          "Weight": {
+            "format": "double",
+            "type": "number"
+          },
+          "Value": {
+            "format": "double",
+            "type": "number"
+          },
+          "AnnualFeePercent": {
+            "format": "double",
+            "type": "number"
+          },
+          "AnnualFeeFrequency": {
+            "enum": [
+              "Monthly",
+              "Quarterly",
+              "SemiAnnually",
+              "Annually"
+            ],
+            "type": "string"
+          },
+          "SalesFeesAmountType": {
+            "enum": [
+              "Amount",
+              "Percentage"
+            ],
+            "type": "string"
+          },
+          "SalesFeesAmount": {
+            "format": "double",
+            "type": "number"
+          },
+          "SalesFeesType": {
+            "enum": [
+              "Standard",
+              "Custom"
+            ],
+            "type": "string"
+          },
+          "SalesFeesROAAmount": {
+            "format": "double",
+            "type": "number"
+          },
+          "SalesFeesLOIAmount": {
+            "format": "double",
+            "type": "number"
+          },
+          "OtherFeeAmount": {
+            "format": "double",
+            "type": "number"
+          },
+          "OtherFeeAmountType": {
+            "enum": [
+              "Amount",
+              "Percentage"
+            ],
+            "type": "string"
+          },
+          "OtherFeeType": {
+            "enum": [
+              "TradingCommissions",
+              "ShortTermTradingFee"
+            ],
+            "type": "string"
+          },
+          "CUSIP": {
+            "type": "string"
+          },
+          "TradingSymbol": {
+            "type": "string"
+          },
+          "FundCode": {
+            "type": "string"
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput": {
+        "type": "object",
+        "properties": {
+          "Type": {
+            "enum": [
+              "Standard",
+              "AutoAsset",
+              "AutoCategory",
+              "Custom"
+            ],
+            "type": "string"
+          },
+          "Holdings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding"
+            }
+          }
+        }
+      },
+      "Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding": {
+        "description": "TODO: Implement same way as PortfolioInput",
+        "required": [
+          "SecurityId",
+          "Weight"
+        ],
+        "type": "object",
+        "properties": {
+          "SecurityId": {
+            "type": "string"
+          },
+          "Type": {
+            "enum": [
+              "XI",
+              "CA",
+              "EI",
+              "CASH"
+            ],
+            "type": "string"
+          },
+          "Weight": {
+            "format": "double",
+            "type": "number"
+          }
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ]
+}

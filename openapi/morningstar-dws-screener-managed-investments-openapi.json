@@ -1,0 +1,1761 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "version": "v1",
+    "x-changelog": [
+      {
+        "date": "2026-07-06",
+        "changes": [
+          "Updated schemas to point to data dictionary for input data point values instead of listing all available data points as enums."
+        ]
+      },
+      {
+        "date": "2026-04-20",
+        "changes": [
+          "Added base URL for Americas to list of servers."
+        ]
+      }
+    ],
+    "title": "Screener - Managed Investments",
+    "description": "\n## Overview\n\nThe Screener API for managed investments is designed to support advanced, criteria-based screening. It enables you to retrieve highly-tailored datasets quickly and efficiently.\n\n\n## Request Limits\n\nMaximum of **100 data points** per request.\n\n\n## Authentication\n\nRetrieve tokens required to authorize calls to the API. See [documentation](https://developer.morningstar.com/direct-web-services/documentation/api-utilities/authentication-api/overview)."
+  },
+  "tags": [
+    {
+      "name": "Screener"
+    }
+  ],
+  "security": [
+    {
+      "Bearer": []
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://www.us-api.morningstar.com",
+      "description": "Americas"
+    },
+    {
+      "url": "https://www.apac-api.morningstar.com",
+      "description": "APAC"
+    },
+    {
+      "url": "https://www.emea-api.morningstar.com",
+      "description": "EMEA"
+    }
+  ],
+  "paths": {
+    "/direct-web-services/v1/screeners/managed-investments": {
+      "post": {
+        "summary": "Query managed investments and return selected data points.",
+        "operationId": "queryManagedInvestments",
+        "tags": [
+          "Screener"
+        ],
+        "description": "Returns the investments that meet the conditions defined in the `queries` object. Returns `performanceId` by default and any other data points specified in the `dataPoints` array.",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/RequestManagedInvestmentsScreener"
+        },
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ResponseManagedInvestmentsScreener"
+          },
+          "400": {
+            "$ref": "#/components/responses/ResponseStatus400Screener"
+          },
+          "500": {
+            "$ref": "#/components/responses/ResponseStatus500Screener"
+          }
+        }
+      }
+    },
+    "/direct-web-services/v1/screeners/managed-investments/data-points": {
+      "get": {
+        "operationId": "listManagedInvestmentDataPoints",
+        "tags": [
+          "Data Points"
+        ],
+        "summary": "List all managed investment data points.",
+        "description": "Returns the list of managed investment data points supported for screener queries. Metadata returned for each entry includes the operators supported.",
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/ResponseDataPoints"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests."
+      }
+    },
+    "requestBodies": {
+      "RequestManagedInvestmentsScreener": {
+        "required": true,
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/RequestManagedInvestmentsScreener"
+            },
+            "examples": {
+              "Basic Query - Equals": {
+                "$ref": "#/components/examples/RequestManagedInvestmentsScreenerExample1"
+              },
+              "Basic Query - In": {
+                "$ref": "#/components/examples/RequestManagedInvestmentsScreenerExample2"
+              },
+              "Basic Query - Date Range": {
+                "$ref": "#/components/examples/RequestManagedInvestmentsScreenerExample3"
+              },
+              "Basic Query Number Range": {
+                "$ref": "#/components/examples/RequestManagedInvestmentsScreenerExample4"
+              },
+              "Compound Query - AND": {
+                "$ref": "#/components/examples/RequestManagedInvestmentsScreenerExample5"
+              },
+              "Compound Query - OR": {
+                "$ref": "#/components/examples/RequestManagedInvestmentsScreenerExample6"
+              },
+              "Compound Query - NOT": {
+                "$ref": "#/components/examples/RequestManagedInvestmentsScreenerExample7"
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {
+      "ResponseManagedInvestmentsScreener": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseManagedInvestmentsScreener"
+            },
+            "examples": {
+              "Basic Query - Equals": {
+                "$ref": "#/components/examples/ResponseManagedInvestmentsScreenerExample1"
+              },
+              "Basic Query - In": {
+                "$ref": "#/components/examples/ResponseManagedInvestmentsScreenerExample2"
+              },
+              "Basic Query - Date Range": {
+                "$ref": "#/components/examples/ResponseManagedInvestmentsScreenerExample3"
+              },
+              "Basic Query - Number Range": {
+                "$ref": "#/components/examples/ResponseManagedInvestmentsScreenerExample4"
+              },
+              "Compound Query - AND": {
+                "$ref": "#/components/examples/ResponseManagedInvestmentsScreenerExample5"
+              },
+              "Compound Query - OR": {
+                "$ref": "#/components/examples/ResponseManagedInvestmentsScreenerExample6"
+              },
+              "Compound Query - NOT": {
+                "$ref": "#/components/examples/ResponseManagedInvestmentsScreenerExample7"
+              }
+            }
+          }
+        }
+      },
+      "ResponseDataPoints": {
+        "description": "OK",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ResponseDataPoints"
+            },
+            "examples": {
+              "Managed Investments Data Points (Example Truncated)": {
+                "$ref": "#/components/examples/ResponseDataPointsExample1"
+              }
+            }
+          }
+        }
+      },
+      "ResponseStatus400Screener": {
+        "description": "400: Bad Request",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OutputError"
+            },
+            "examples": {
+              "Example1": {
+                "$ref": "#/components/examples/ResponseStatus400ScreenerExample1"
+              }
+            }
+          }
+        }
+      },
+      "ResponseStatus500Screener": {
+        "description": "500: Internal Server Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/OutputError"
+            }
+          }
+        }
+      }
+    },
+    "examples": {
+      "RequestManagedInvestmentsScreenerExample1": {
+        "summary": "Basic Query - Equals",
+        "value": {
+          "scope": {
+            "basicReference.countryAvailableForSale": "USA"
+          },
+          "query": {
+            "basicReference.baseCurrency": "USD"
+          },
+          "dataPoints": [
+            "basicReference.legalName",
+            "basicReference.baseCurrency",
+            "basicReference.name",
+            "basicReference.firmName",
+            "basicReference.fundCode",
+            "basicReference.investmentType"
+          ],
+          "pagination": {
+            "pageSize": 5
+          },
+          "sort": [
+            {
+              "dataPoint": "basicReference.legalName",
+              "orderBy": "asc"
+            },
+            {
+              "dataPoint": "basicReference.firmName",
+              "orderBy": "desc"
+            }
+          ]
+        }
+      },
+      "RequestManagedInvestmentsScreenerExample2": {
+        "summary": "Basic Query - In",
+        "value": {
+          "scope": {
+            "basicReference.countryAvailableForSale": "USA"
+          },
+          "query": {
+            "basicReference.baseCurrency": [
+              "USD",
+              "GBP",
+              "EUR"
+            ]
+          },
+          "dataPoints": [
+            "basicReference.legalName",
+            "basicReference.baseCurrency",
+            "basicReference.name",
+            "basicReference.firmName",
+            "basicReference.fundCode",
+            "basicReference.investmentType"
+          ],
+          "pagination": {
+            "pageSize": 5
+          },
+          "sort": [
+            {
+              "dataPoint": "basicReference.legalName",
+              "orderBy": "asc"
+            }
+          ]
+        }
+      },
+      "RequestManagedInvestmentsScreenerExample3": {
+        "summary": "Basic Query - Date Range",
+        "value": {
+          "scope": {
+            "basicReference.countryAvailableForSale": "USA"
+          },
+          "query": {
+            "basicReference.inceptionDate": {
+              "gt": "2005-01-01",
+              "lt": "2024-03-31"
+            }
+          },
+          "dataPoints": [
+            "basicReference.legalName",
+            "basicReference.baseCurrency",
+            "basicReference.name",
+            "basicReference.firmName",
+            "basicReference.fundCode",
+            "basicReference.investmentType",
+            "basicReference.inceptionDate"
+          ],
+          "pagination": {
+            "pageSize": 5
+          },
+          "sort": [
+            {
+              "dataPoint": "basicReference.legalName",
+              "orderBy": "asc"
+            }
+          ]
+        }
+      },
+      "RequestManagedInvestmentsScreenerExample4": {
+        "summary": "Basic Query - Number Range",
+        "value": {
+          "scope": {
+            "basicReference.countryAvailableForSale": "USA"
+          },
+          "query": {
+            "yieldsHistorical.12MoYield": {
+              "gt": 1.5,
+              "lt": 10.55
+            }
+          },
+          "dataPoints": [
+            "basicReference.legalName",
+            "basicReference.baseCurrency",
+            "basicReference.name",
+            "basicReference.firmName",
+            "basicReference.fundCode",
+            "basicReference.investmentType",
+            "basicReference.inceptionDate",
+            "yieldsHistorical.12MoYield"
+          ],
+          "pagination": {
+            "pageSize": 5
+          },
+          "sort": [
+            {
+              "dataPoint": "basicReference.legalName",
+              "orderBy": "asc"
+            }
+          ]
+        }
+      },
+      "RequestManagedInvestmentsScreenerExample5": {
+        "summary": "Compound Query - AND",
+        "value": {
+          "scope": {
+            "basicReference.countryAvailableForSale": "USA"
+          },
+          "query": {
+            "and": [
+              {
+                "yieldsHistorical.12MoYield": {
+                  "gt": 1.5,
+                  "lt": 10.55
+                }
+              },
+              {
+                "basicReference.baseCurrency": "USD"
+              }
+            ]
+          },
+          "dataPoints": [
+            "basicReference.legalName",
+            "basicReference.baseCurrency",
+            "basicReference.name",
+            "basicReference.firmName",
+            "basicReference.fundCode",
+            "basicReference.investmentType",
+            "basicReference.inceptionDate",
+            "yieldsHistorical.12MoYield"
+          ],
+          "pagination": {
+            "pageSize": 5
+          },
+          "sort": [
+            {
+              "dataPoint": "basicReference.legalName",
+              "orderBy": "asc"
+            }
+          ]
+        }
+      },
+      "RequestManagedInvestmentsScreenerExample6": {
+        "summary": "Compound Query - OR",
+        "value": {
+          "scope": {
+            "basicReference.countryAvailableForSale": "USA"
+          },
+          "query": {
+            "or": [
+              {
+                "yieldsHistorical.12MoYield": {
+                  "gt": 1.5,
+                  "lt": 10.55
+                }
+              },
+              {
+                "basicReference.baseCurrency": "USD"
+              }
+            ]
+          },
+          "dataPoints": [
+            "basicReference.legalName",
+            "basicReference.baseCurrency",
+            "basicReference.name",
+            "basicReference.firmName",
+            "basicReference.fundCode",
+            "basicReference.investmentType",
+            "basicReference.inceptionDate",
+            "yieldsHistorical.12MoYield"
+          ],
+          "pagination": {
+            "pageSize": 5
+          },
+          "sort": [
+            {
+              "dataPoint": "basicReference.legalName",
+              "orderBy": "asc"
+            }
+          ]
+        }
+      },
+      "RequestManagedInvestmentsScreenerExample7": {
+        "summary": "Compound Query - NOT",
+        "value": {
+          "scope": {
+            "basicReference.countryAvailableForSale": "USA"
+          },
+          "query": {
+            "not": [
+              {
+                "yieldsHistorical.12MoYield": {
+                  "gt": 1.5,
+                  "lt": 10.55
+                }
+              },
+              {
+                "basicReference.baseCurrency": "USD"
+              }
+            ]
+          },
+          "dataPoints": [
+            "basicReference.legalName",
+            "basicReference.baseCurrency",
+            "basicReference.name",
+            "basicReference.firmName",
+            "basicReference.fundCode",
+            "basicReference.investmentType",
+            "basicReference.inceptionDate",
+            "yieldsHistorical.12MoYield"
+          ],
+          "pagination": {
+            "pageSize": 5
+          },
+          "sort": [
+            {
+              "dataPoint": "basicReference.legalName",
+              "orderBy": "asc"
+            }
+          ]
+        }
+      },
+      "ResponseManagedInvestmentsScreenerExample1": {
+        "summary": "Basic Query - Equals",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001UMFK",
+              "basicReference.firmName": "Driftwood Euro Solutions LLC",
+              "basicReference.name": "Ser 501TrbtHtlOldSanJuanNtsdue2027$Acc",
+              "basicReference.legalName": "(Series 501) Tribute Hotel Old San Juan Notes Due 2027 USD Accumulation"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001O9X4",
+              "basicReference.firmName": "VS TRUST",
+              "basicReference.name": "-1x Short VIX Futures ETF",
+              "basicReference.legalName": "-1x Short VIX Futures ETF"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001LOE2",
+              "basicReference.firmName": "Bitcoin Capital AG",
+              "basicReference.name": "15 FiCAS Active Crypto ETP",
+              "basicReference.legalName": "15 FiCAS Active Crypto ETP"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001QYNH",
+              "basicReference.firmName": "Valour Digital Securities Limited",
+              "basicReference.name": "1Valour Bitcoin Physcl Carb Netrl $ Acc",
+              "basicReference.legalName": "1Valour Bitcoin Physical Carbon Neutral USD Acc"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001TY43",
+              "basicReference.firmName": "Valour Digital Securities Limited",
+              "basicReference.name": "1Valour Bitcoin Physical Staking $ Acc",
+              "basicReference.legalName": "1Valour Bitcoin Physical Staking USD Acc"
+            }
+          ],
+          "metadata": {
+            "paginationTokenNext": "WyIxVmFsb3VyIEJpdGNvaW4gUGh5c2ljYWwgU3Rha2luZyBVU0QgQWNjIixudWxsLG51bGwsIjBQMDAwMVRZNDMiXQ==",
+            "totalCount": 10000,
+            "requestId": "d98e0f36-91b3-4cf3-bd61-15841ce6f9f8",
+            "time": "2025-10-27T09:09:01.3362533Z"
+          }
+        }
+      },
+      "ResponseManagedInvestmentsScreenerExample2": {
+        "summary": "Basic Query - In",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001UMFK",
+              "basicReference.firmName": "Driftwood Euro Solutions LLC",
+              "basicReference.name": "Ser 501TrbtHtlOldSanJuanNtsdue2027$Acc",
+              "basicReference.legalName": "(Series 501) Tribute Hotel Old San Juan Notes Due 2027 USD Accumulation"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001O9X4",
+              "basicReference.firmName": "VS TRUST",
+              "basicReference.name": "-1x Short VIX Futures ETF",
+              "basicReference.legalName": "-1x Short VIX Futures ETF"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001LOE2",
+              "basicReference.firmName": "Bitcoin Capital AG",
+              "basicReference.name": "15 FiCAS Active Crypto ETP",
+              "basicReference.legalName": "15 FiCAS Active Crypto ETP"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001LOE3",
+              "basicReference.firmName": "Bitcoin Capital AG",
+              "basicReference.name": "15 FiCAS Active Crypto ETP",
+              "basicReference.legalName": "15 FiCAS Active Crypto ETP"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001QYNH",
+              "basicReference.firmName": "Valour Digital Securities Limited",
+              "basicReference.name": "1Valour Bitcoin Physcl Carb Netrl $ Acc",
+              "basicReference.legalName": "1Valour Bitcoin Physical Carbon Neutral USD Acc"
+            }
+          ],
+          "metadata": {
+            "paginationTokenNext": "WyIxVmFsb3VyIEJpdGNvaW4gUGh5c2ljYWwgQ2FyYm9uIE5ldXRyYWwgVVNEIEFjYyIsbnVsbCwiMFAwMDAxUVlOSCJd",
+            "totalCount": 10000,
+            "requestId": "c4d4af1b-18e3-4827-a3ca-c6a498d962e5",
+            "time": "2025-10-27T09:15:02.9153502Z"
+          }
+        }
+      },
+      "ResponseManagedInvestmentsScreenerExample3": {
+        "summary": "Basic Query - Date Range",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001UMFK",
+              "basicReference.firmName": "Driftwood Euro Solutions LLC",
+              "basicReference.inceptionDate": "2023-04-14",
+              "basicReference.name": "Ser 501TrbtHtlOldSanJuanNtsdue2027$Acc",
+              "basicReference.legalName": "(Series 501) Tribute Hotel Old San Juan Notes Due 2027 USD Accumulation"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001O9X4",
+              "basicReference.firmName": "VS TRUST",
+              "basicReference.inceptionDate": "2022-03-28",
+              "basicReference.name": "-1x Short VIX Futures ETF",
+              "basicReference.legalName": "-1x Short VIX Futures ETF"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001XGJO",
+              "basicReference.firmName": "Zero Cinco Um Capital Gestão de Recursos Ltda",
+              "basicReference.inceptionDate": "2025-08-04",
+              "basicReference.name": "051 ANGA III Cred Estruturado FIF FIC",
+              "basicReference.legalName": "051 ANGA III CRÉDITO ESTRUTURADO FUNDO DE INVESTIMENTO FINANCEIRO EM COTAS DE FUNDOS DE INVESTIMENTO"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001PQPT",
+              "basicReference.firmName": "Zero Cinco Um Capital Gestão de Recursos Ltda",
+              "basicReference.inceptionDate": "2022-06-28",
+              "basicReference.name": "Zero 051 Aurora Boreal FIM C Priv IE",
+              "basicReference.legalName": "051 AURORA BOREAL FUNDO DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO INVESTIMENTO NO EXTERIOR"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001IACV",
+              "basicReference.firmName": "Zero Cinco Um Capital Gestão de Recursos Ltda",
+              "basicReference.inceptionDate": "2019-06-04",
+              "basicReference.name": "051 Brucutu FIM C Priv IE",
+              "basicReference.legalName": "051 BRUCUTU FUNDO DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO INVESTIMENTO EXTERIOR"
+            }
+          ],
+          "metadata": {
+            "paginationTokenNext": "WyIwNTEgQlJVQ1VUVSBGVU5ETyBERSBJTlZFU1RJTUVOVE8gTVVMVElNRVJDQURPIENSXHUwMEM5RElUTyBQUklWQURPIElOVkVTVElNRU5UTyBFWFRFUklPUiIsbnVsbCwiMFAwMDAxSUFDViJd",
+            "totalCount": 10000,
+            "requestId": "5dfa5fec-dfc0-43e1-baa2-f1565213adb6",
+            "time": "2025-10-27T09:24:58.6262904Z"
+          }
+        }
+      },
+      "ResponseManagedInvestmentsScreenerExample4": {
+        "summary": "Basic Query - Number Range",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001RHZF",
+              "basicReference.firmName": "10X Investments (Pty) Ltd",
+              "basicReference.inceptionDate": "2023-05-17",
+              "basicReference.name": "10X Income AMETF",
+              "basicReference.legalName": "10X Income AMETF",
+              "yieldsHistorical.12MoYield": 7.2118
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001CROW",
+              "basicReference.firmName": "10X Investments (Pty) Ltd",
+              "basicReference.inceptionDate": "2018-02-22",
+              "basicReference.name": "10X S&P Global Dividend AristocratsETF",
+              "basicReference.legalName": "10X S&P Global Dividend Aristocrats ETF",
+              "yieldsHistorical.12MoYield": 2.00723
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001996O",
+              "basicReference.firmName": "CoreShares Index Tracker Managers",
+              "basicReference.inceptionDate": "2016-11-04",
+              "basicReference.name": "10X S&P Global Property ETF",
+              "basicReference.legalName": "10X S&P Global Property ETF",
+              "yieldsHistorical.12MoYield": 2.27204
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001QNV9",
+              "basicReference.firmName": "CoreShares Asset Management",
+              "basicReference.inceptionDate": "2022-12-05",
+              "basicReference.name": "10X Wealth Govi Bond ETF",
+              "basicReference.legalName": "10X Wealth Govi Bond ETF",
+              "yieldsHistorical.12MoYield": 9.28629
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001QW2Y",
+              "basicReference.firmName": "10X Investments (Pty) Ltd",
+              "basicReference.inceptionDate": "2023-04-24",
+              "basicReference.name": "10X Wealth Next40 Equal Weighted ETF",
+              "basicReference.legalName": "10X Wealth Next40 Equal Weighted ETF",
+              "yieldsHistorical.12MoYield": 1.82409
+            }
+          ],
+          "metadata": {
+            "paginationTokenNext": "WyIxMFggV2VhbHRoIE5leHQ0MCBFcXVhbCBXZWlnaHRlZCBFVEYiLG51bGwsIjBQMDAwMVFXMlkiXQ==",
+            "totalCount": 8485,
+            "requestId": "775ca110-4b08-474b-963c-feac294ffcc2",
+            "time": "2025-10-27T09:31:23.4406481Z"
+          }
+        }
+      },
+      "ResponseManagedInvestmentsScreenerExample5": {
+        "summary": "Compound Query - AND",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001MTWK",
+              "basicReference.firmName": "1WS Capital Advisors",
+              "basicReference.inceptionDate": "2021-04-30",
+              "basicReference.name": "1WS Credit Income A-2",
+              "basicReference.legalName": "1WS Credit Income Fund Class A-2 Shares",
+              "yieldsHistorical.12MoYield": 8.8141
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001H18L",
+              "basicReference.firmName": "1WS Capital Advisors",
+              "basicReference.inceptionDate": "2019-03-04",
+              "basicReference.name": "1WS Credit Income I",
+              "basicReference.legalName": "1WS Credit Income Fund Class I shares",
+              "yieldsHistorical.12MoYield": 8.52713
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001QRAZ",
+              "basicReference.firmName": "Volatility Shares Trust",
+              "basicReference.inceptionDate": "2023-06-27",
+              "basicReference.name": "2x Bitcoin Strategy ETF",
+              "basicReference.legalName": "2x Bitcoin Strategy ETF",
+              "yieldsHistorical.12MoYield": 10.72546
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001IC1I",
+              "basicReference.firmName": "AAM",
+              "basicReference.inceptionDate": "2019-11-19",
+              "basicReference.name": "AAM Low Duration Pref & Inc Secs ETF",
+              "basicReference.legalName": "AAM Low Duration Preferred and Income Securities ETF",
+              "yieldsHistorical.12MoYield": 7.00165
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001BEZ8",
+              "basicReference.firmName": "AAM",
+              "basicReference.inceptionDate": "2017-11-28",
+              "basicReference.name": "AAM S&P 500 High Dividend Value ETF",
+              "basicReference.legalName": "AAM S&P 500 High Dividend Value ETF",
+              "yieldsHistorical.12MoYield": 3.65641
+            }
+          ],
+          "metadata": {
+            "paginationTokenNext": "WyJBQU0gU1x1MDAyNlAgNTAwIEhpZ2ggRGl2aWRlbmQgVmFsdWUgRVRGIixudWxsLCIwUDAwMDFCRVo4Il0=",
+            "totalCount": 3456,
+            "requestId": "371f69e2-17cf-484f-b095-61e24e496bff",
+            "time": "2025-10-27T09:38:57.5567623Z"
+          }
+        }
+      },
+      "ResponseManagedInvestmentsScreenerExample6": {
+        "summary": "Compound Query - OR",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001UMFK",
+              "basicReference.firmName": "Driftwood Euro Solutions LLC",
+              "basicReference.inceptionDate": "2023-04-14",
+              "basicReference.name": "Ser 501TrbtHtlOldSanJuanNtsdue2027$Acc",
+              "basicReference.legalName": "(Series 501) Tribute Hotel Old San Juan Notes Due 2027 USD Accumulation",
+              "yieldsHistorical.12MoYield": 0
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001O9X4",
+              "basicReference.firmName": "VS TRUST",
+              "basicReference.inceptionDate": "2022-03-28",
+              "basicReference.name": "-1x Short VIX Futures ETF",
+              "basicReference.legalName": "-1x Short VIX Futures ETF",
+              "yieldsHistorical.12MoYield": 0
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001RHZF",
+              "basicReference.firmName": "10X Investments (Pty) Ltd",
+              "basicReference.inceptionDate": "2023-05-17",
+              "basicReference.name": "10X Income AMETF",
+              "basicReference.legalName": "10X Income AMETF",
+              "yieldsHistorical.12MoYield": 7.2118
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001CROW",
+              "basicReference.firmName": "10X Investments (Pty) Ltd",
+              "basicReference.inceptionDate": "2018-02-22",
+              "basicReference.name": "10X S&P Global Dividend AristocratsETF",
+              "basicReference.legalName": "10X S&P Global Dividend Aristocrats ETF",
+              "yieldsHistorical.12MoYield": 2.00723
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001996O",
+              "basicReference.firmName": "CoreShares Index Tracker Managers",
+              "basicReference.inceptionDate": "2016-11-04",
+              "basicReference.name": "10X S&P Global Property ETF",
+              "basicReference.legalName": "10X S&P Global Property ETF",
+              "yieldsHistorical.12MoYield": 2.27204
+            }
+          ],
+          "metadata": {
+            "paginationTokenNext": "WyIxMFggU1x1MDAyNlAgR2xvYmFsIFByb3BlcnR5IEVURiIsbnVsbCwiMFAwMDAxOTk2TyJd",
+            "totalCount": 10000,
+            "requestId": "42484ad5-5a9f-4b70-bb49-620d8e1ff375",
+            "time": "2025-10-27T09:42:15.2012135Z"
+          }
+        }
+      },
+      "ResponseManagedInvestmentsScreenerExample7": {
+        "summary": "Compound Query - NOT",
+        "value": {
+          "investments": [
+            {
+              "instrumentIdentifiers.performanceId": "0P0001XGJO",
+              "basicReference.firmName": "Zero Cinco Um Capital Gestão de Recursos Ltda",
+              "basicReference.inceptionDate": "2025-08-04",
+              "basicReference.name": "051 ANGA III Cred Estruturado FIF FIC",
+              "basicReference.legalName": "051 ANGA III CRÉDITO ESTRUTURADO FUNDO DE INVESTIMENTO FINANCEIRO EM COTAS DE FUNDOS DE INVESTIMENTO"
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001PQPT",
+              "basicReference.firmName": "Zero Cinco Um Capital Gestão de Recursos Ltda",
+              "basicReference.inceptionDate": "2022-06-28",
+              "basicReference.name": "Zero 051 Aurora Boreal FIM C Priv IE",
+              "basicReference.legalName": "051 AURORA BOREAL FUNDO DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO INVESTIMENTO NO EXTERIOR",
+              "yieldsHistorical.12MoYield": 0
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001IACV",
+              "basicReference.firmName": "Zero Cinco Um Capital Gestão de Recursos Ltda",
+              "basicReference.inceptionDate": "2019-06-04",
+              "basicReference.name": "051 Brucutu FIM C Priv IE",
+              "basicReference.legalName": "051 BRUCUTU FUNDO DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO INVESTIMENTO EXTERIOR",
+              "yieldsHistorical.12MoYield": 0
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001KYRB",
+              "basicReference.firmName": "Wealth High Governance Capital Ltda.",
+              "basicReference.inceptionDate": "2020-10-01",
+              "basicReference.name": "XP 051 Camaleão FIC FIM C Priv",
+              "basicReference.legalName": "051 CAMALEÃO FUNDO DE INVESTIMENTO EM COTAS DE FUNDOS DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO",
+              "yieldsHistorical.12MoYield": 0
+            },
+            {
+              "instrumentIdentifiers.performanceId": "0P0001HZU4",
+              "basicReference.firmName": "Zero Cinco Um Capital Gestão de Recursos Ltda",
+              "basicReference.inceptionDate": "2018-04-13",
+              "basicReference.name": "051 Caribe FIM C Priv IE",
+              "basicReference.legalName": "051 CARIBE FUNDO DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO INVESTIMENTO NO EXTERIOR",
+              "yieldsHistorical.12MoYield": 0
+            }
+          ],
+          "metadata": {
+            "paginationTokenNext": "WyIwNTEgQ0FSSUJFIEZVTkRPIERFIElOVkVTVElNRU5UTyBNVUxUSU1FUkNBRE8gQ1JcdTAwQzlESVRPIFBSSVZBRE8gSU5WRVNUSU1FTlRPIE5PIEVYVEVSSU9SIixudWxsLCIwUDAwMDFIWlU0Il0=",
+            "totalCount": 10000,
+            "requestId": "0e8b14aa-40e6-4113-bbee-5e3931d68974",
+            "time": "2025-10-27T09:44:58.7069929Z"
+          }
+        }
+      },
+      "ResponseDataPointsExample1": {
+        "summary": "Managed Investments Data Points",
+        "value": {
+          "datapoints": [
+            {
+              "type": "decimal",
+              "name": "annualReturnsHistorical.annualNetRet2021",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": true,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "decimal",
+              "name": "riskStatistics.trackingError10YrMoEnd",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": true,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "decimal",
+              "name": "esgFundLevelProductInvolvement.productInvolvementPercPesticides",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "decimal",
+              "name": "529CollegeInvestmentPackage.minAdditionalPurchaseResidentUsd",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "decimal",
+              "name": "riskStatistics.treynorRatio15YrQtrEnd",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": true,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "int",
+              "name": "investmentBasicDetails.currencyHedgeAttributionJita",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "int",
+              "name": "feeLevelRanks.morningstarFeeLevelBroad",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "string",
+              "name": "equityPortfolioStatistics.numberOfHoldings",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "decimal",
+              "name": "gicsIndustryAndSubindustry.gicsGasUtilitiesPercLongRescaled",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "decimal",
+              "name": "rg97FeeComponents.investmentManagementFeeProspective",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "int",
+              "name": "performanceRanks.retPercRankCat3MoMoEnd",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "int",
+              "name": "policyFees.rollingSurrender",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "decimal",
+              "name": "morningstarRatingMostRecent.morningstarReturn5Yr",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "string",
+              "name": "investmentBasicDetails.primaryProspectusBenchmarkId",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "decimal",
+              "name": "mifidCostData.transactionCostsActualUk",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "string",
+              "name": "investmentBasicDetails.prospectusObjective",
+              "operators": [
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": false,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            },
+            {
+              "type": "decimal",
+              "name": "riskStatistics.arithmeticMean5YrMoEnd",
+              "operators": [
+                "gt",
+                "lt",
+                "gte",
+                "lte",
+                "eq",
+                "in"
+              ],
+              "isCurrencyDependent": true,
+              "isLanguageDependent": false,
+              "isSortable": false,
+              "fuzzy": false
+            }
+          ]
+        }
+      },
+      "ResponseStatus400ScreenerExample1": {
+        "summary": "400 - Invalid Data Point Names",
+        "value": {
+          "statusCode": 400,
+          "errorCode": "400.screener.05",
+          "message": "Invalid dataPoint names {0}. Provide valid values.",
+          "requestId": "5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9"
+        }
+      }
+    },
+    "schemas": {
+      "FieldClause": {
+        "title": "DataPointFilters",
+        "description": "Supported operators for data point filtering.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/ValueClause"
+          },
+          {
+            "$ref": "#/components/schemas/ValueClauseOptions"
+          },
+          {
+            "$ref": "#/components/schemas/OperatorObject"
+          }
+        ]
+      },
+      "InputQueryOptions": {
+        "title": "InputQueryOptions",
+        "description": "Filters investments using `field:value` conditions or compound logic. For example:\n* Basic query - \"equals\": `{ \"basicReference.baseCurrency\": \"USD\" }`\n* Basic query - \"in\": `{ \"basicReference.baseCurrency\": [\"USD\", \"GBP\"] }`\n* Basic query - \"range\": `{ \"basicReference.inceptionDate\": { \"gt\": \"2020-01-01\", \"lt\": \"2024-01-01\" } }`\n* Compound query: `{ \"and\": [ { \"field1\": \"value1\" }, { \"field2\": \"value2\" } ] }`\n* Nested compound query: `{ \"or\": [ { \"and\": [ ... ] }, { \"field\": \"value\" } ] }`",
+        "type": "object",
+        "properties": {
+          "and": {
+            "description": "All conditions must match (logical AND). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputQueryOptions"
+            }
+          },
+          "or": {
+            "description": "At least one condition must match (logical OR). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputQueryOptions"
+            }
+          },
+          "not": {
+            "description": "All conditions must not match (logical NOT). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputQueryOptions"
+            }
+          }
+        },
+        "additionalProperties": {
+          "$ref": "#/components/schemas/InputFilterOptions"
+        },
+        "propertyNames": {
+          "description": "Data points supported for filtering and sorting in screener queries. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/managed-investments/data-points`, or browse the full reference in the data dictionary.",
+          "type": "string",
+          "example": "basicReference.legalName",
+          "externalDocs": {
+            "description": "Data dictionary (Excel)",
+            "url": "https://developer.morningstar.com/content/hidden-from-navigation/ScreenerManagedInvestmentsDataDictionary.xlsx"
+          }
+        }
+      },
+      "InputDataPoints": {
+        "title": "InputDataPoints",
+        "description": "Lists data points to return. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/managed-investments/data-points`, or browse the full reference in the data dictionary.",
+        "type": "array",
+        "example": [
+          "basicReference.legalName",
+          "basicReference.baseCurrency",
+          "basicReference.name",
+          "basicReference.firmName",
+          "basicReference.fundCode",
+          "basicReference.investmentType"
+        ],
+        "items": {
+          "type": "string"
+        },
+        "externalDocs": {
+          "description": "Data dictionary (Excel)",
+          "url": "https://developer.morningstar.com/content/hidden-from-navigation/ScreenerManagedInvestmentsDataDictionary.xlsx"
+        }
+      },
+      "OutputDataPoint": {
+        "description": "Data point filter options.",
+        "type": "object",
+        "title": "OutputDataPoint",
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/DataPoint"
+          },
+          "type": {
+            "description": "Indicates the data type.",
+            "type": "string",
+            "readOnly": true,
+            "enum": [
+              "boolean",
+              "date",
+              "number",
+              "string"
+            ],
+            "x-enum-description": [
+              "boolean (Supports eq operator.)",
+              "date (Supports range operators, and equals and in queries. )",
+              "number (Supports range operators, and equals and in queries. )",
+              "string (Supports equals and in queries. Supports fuzzy searches for some data points.)"
+            ],
+            "example": "boolean",
+            "nullable": true
+          },
+          "operators": {
+            "description": "Indicates the range and compound operators supported by the data point.",
+            "type": "array",
+            "readOnly": true,
+            "items": {
+              "type": "string",
+              "enum": [
+                "gt",
+                "gte",
+                "lt",
+                "lte",
+                "eq",
+                "and",
+                "or",
+                "not"
+              ],
+              "x-enum-description": [
+                "gt (Greater than. Numbers or dates)",
+                "gte (Greater than or equal to. Numbers or dates.)",
+                "lt (Less than. Numbers or dates)\"",
+                "lte (Less than or equals. Supported by number and date data types.)",
+                "eq (Equals. Supported by boolean, date, number, and string data types.)",
+                "and (And. Compound operator)",
+                "or (Or. Compound operator.)",
+                "not (Not. Conpound operator)"
+              ],
+              "example": [
+                "gt",
+                "lt"
+              ]
+            },
+            "nullable": true
+          },
+          "isSortable": {
+            "description": "When true, indicates that data point can be used to sort results.",
+            "readOnly": true,
+            "nullable": true
+          },
+          "isLanguageDependent": {
+            "description": "When true, indicates the data point is language-dependent.",
+            "type": "boolean",
+            "readOnly": true,
+            "nullable": true
+          },
+          "isCurrencyDependent": {
+            "description": "When true, indicates the data point is currency-dependent.",
+            "type": "boolean",
+            "readOnly": true,
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseDataPoints": {
+        "title": "ResponseDataPoints",
+        "description": "Data points and operators supported for screening.",
+        "type": "object",
+        "properties": {
+          "metadata": {
+            "$ref": "#/components/schemas/ResponseDataPointsMetadata"
+          },
+          "dataPoints": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputDataPoint"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseDataPointsMetadata": {
+        "title": "ResponseDataPointsMetadata",
+        "description": "Request ID and timestamp for use in debugging and troubleshooting.",
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "description": "Indicates the request identifier.",
+            "example": "c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c",
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "time": {
+            "description": "Indicates time response was returned.",
+            "example": "2025-10-02T10:54:36.9161062Z",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputError": {
+        "title": "OutputError",
+        "description": "Error message and status code.",
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "string",
+            "description": "Indicates the HTTP status code.",
+            "example": 400
+          },
+          "errorCode": {
+            "type": "string",
+            "description": "Indicates the unique error identifier.",
+            "example": "400.screener.006"
+          },
+          "message": {
+            "type": "string",
+            "description": "Description of the errror.",
+            "example": "Please provide valid sort option."
+          },
+          "requestId": {
+            "type": "string",
+            "description": "Indicates the unique request identifier.",
+            "example": "6631c374-2331-4c7e-b6f2-d0c0079f6ee"
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputFilterOptions": {
+        "title": "InputFilterOptions",
+        "description": "Supported operators for data point filtering.",
+        "oneOf": [
+          {
+            "$ref": "#/components/schemas/InputFieldValueFilter"
+          },
+          {
+            "$ref": "#/components/schemas/InputFieldValueFilterFuzzy"
+          },
+          {
+            "$ref": "#/components/schemas/InputFieldValueComparitorFilter"
+          }
+        ]
+      },
+      "InputFieldValueComparitorFilter": {
+        "title": "InputFieldValueComparitorFilter",
+        "description": "Filters for values within a range or based on a comparator condition. Supports numeric, integer, and date string data types.",
+        "type": "object",
+        "additionalProperties": false,
+        "minProperties": 1,
+        "properties": {
+          "gt": {
+            "description": "Greater than",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "gte": {
+            "description": "Greater than or equal",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "lt": {
+            "description": "Less than",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          },
+          "lte": {
+            "description": "Less than or equal",
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string",
+                "format": "date"
+              }
+            ]
+          }
+        }
+      },
+      "InputFieldValueFilter": {
+        "title": "InputFieldValueFilter",
+        "description": "Filters for exact matches to value or a match to a value in a list. Supports string, number, integer, boolean, date and array data types.",
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "number"
+          },
+          {
+            "type": "integer"
+          },
+          {
+            "type": "boolean"
+          },
+          {
+            "type": "string",
+            "format": "date"
+          },
+          {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "number"
+                },
+                {
+                  "type": "integer"
+                },
+                {
+                  "type": "boolean"
+                },
+                {
+                  "type": "string",
+                  "format": "date"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      "InputFieldValueFilterFuzzy": {
+        "title": "InputFieldValueFilterFuzzy",
+        "type": "object",
+        "description": "Filters text string data type using fuzzy text matching.",
+        "additionalProperties": false,
+        "properties": {
+          "value": {
+            "type": "string"
+          },
+          "fuzzy": {
+            "type": "boolean",
+            "description": "Enable fuzzy text matching. Text string data types only."
+          }
+        }
+      },
+      "InputPaginationOptions": {
+        "title": "InputPaginationOptions",
+        "description": "Determines how results are paginated.",
+        "type": "object",
+        "properties": {
+          "paginationTokenNext": {
+            "description": "Specifies the target of the next API call.",
+            "type": "string",
+            "example": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK",
+            "nullable": true
+          },
+          "paginationTokenPrevious": {
+            "description": "Specifies the target of the next API call.",
+            "type": "string",
+            "example": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK",
+            "nullable": true
+          },
+          "pageSize": {
+            "description": "Specifies the maximum number of results per page. The default value is 50.",
+            "type": "integer",
+            "format": "int32",
+            "example": 500,
+            "default": 50,
+            "maximum": 50
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseMetadataMessage": {
+        "title": "ResponseMetadataMessage",
+        "description": "Indicates why specific data points were not returned for a result.",
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "Provides information about investment returned.",
+            "example": "Datapoints are not entitled for 0P0001VK70 security",
+            "type": "string",
+            "readOnly": true
+          },
+          "dataPoints": {
+            "$ref": "#/components/schemas/InputDataPoints"
+          },
+          "errorCode": {
+            "description": "Indicates error code.",
+            "example": 403,
+            "type": "string",
+            "readOnly": true
+          },
+          "id": {
+            "description": "Indicates the investment for which no data was returned.",
+            "example": "0P0001VK70",
+            "type": "string",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "RequestManagedInvestmentsScreener": {
+        "title": "RequestManagedInvestmentsScreener",
+        "description": "Screener request body model.",
+        "type": "object",
+        "required": [
+          "scope",
+          "query"
+        ],
+        "properties": {
+          "scope": {
+            "description": "Defines the starting universe of investments. For managed investments, the scoping data point is `basicReference.countryAvailableForSale`. Compound and nested compound queries are supported. Each branch of the query must contain the scoping data point.",
+            "$ref": "#/components/schemas/InputQueryOptions"
+          },
+          "query": {
+            "$ref": "#/components/schemas/InputQueryOptions"
+          },
+          "dataPoints": {
+            "$ref": "#/components/schemas/InputDataPoints"
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/InputPaginationOptions"
+          },
+          "sort": {
+            "description": "Specifies one or more fields to sort results by. If multiple fields are provided, they are applied in the order listed in the array (the first field is the primary sort key, the second is the secondary key, and so on).",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InputSort"
+            },
+            "nullable": true
+          },
+          "languageId": {
+            "description": "Specifies the language code used to filter language-dependent results.",
+            "type": "string",
+            "default": "ENG",
+            "example": "JPN",
+            "enum": [
+              "ARA",
+              "CHI",
+              "DAN",
+              "DUT",
+              "ENG",
+              "FIN",
+              "FRE",
+              "GER",
+              "HEB",
+              "ITA",
+              "JPN",
+              "KOR",
+              "NOR",
+              "POR",
+              "SPA",
+              "SWE",
+              "THA",
+              "ZHO"
+            ],
+            "x-enum-description": [
+              "ARA (Arabic)",
+              "CHI or ZHO (Chinese)",
+              "DAN (Danish)",
+              "DUT (Dutch)",
+              "ENG (English)",
+              "FIN (Finnish)",
+              "FRE (French)",
+              "GER (German)",
+              "HEB (Hebrew)",
+              "ITA (Italian)",
+              "JPN (Japanese)",
+              "KOR (Korean)",
+              "NOR (Norwegian)",
+              "POR (Portuguese)",
+              "SPA (Spanish)",
+              "SWE (Swedish)",
+              "THA (Thai)"
+            ],
+            "nullable": true
+          },
+          "currencyId": {
+            "description": "Specifies the currency code used to filter currency-dependent results. Accepts ISO 4217 currency codes.",
+            "type": "string",
+            "example": "EUR",
+            "default": "USD",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseManagedInvestmentsScreener": {
+        "title": "ResponseManagedInvestmentsScreener",
+        "description": "Screener response including results and metadata.",
+        "type": "object",
+        "properties": {
+          "investments": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OutputInvestment"
+            },
+            "nullable": true,
+            "readOnly": true
+          },
+          "metadata": {
+            "$ref": "#/components/schemas/ResponseManagedInvestmentsScreenerMetadata"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ResponseManagedInvestmentsScreenerMetadata": {
+        "description": "Metadata returned in response to screening requests. Includes information about data points not returned for results.",
+        "title": "ResponseManagedInvestmentsScreenerMetadata",
+        "type": "object",
+        "properties": {
+          "requestId": {
+            "description": "Indicates request identifier.",
+            "example": "c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c",
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "messages": {
+            "$ref": "#/components/schemas/ResponseMetadataMessage"
+          },
+          "time": {
+            "description": "Indicates time response was returned.",
+            "example": "2025-10-02T10:54:36.9161062Z",
+            "type": "string",
+            "format": "date-time",
+            "nullable": true,
+            "readOnly": true
+          },
+          "paginationTokenNext": {
+            "type": "string",
+            "description": "Indicates token to fetch next page of results.",
+            "example": "CNOAQhoJKQBIuTktAQAAGhU6E3RlYW0gcGFydG5lcnMgZ3JvdXAaDDoKMHAwMDAwYTZ6dCIMOgowUDAwMDBBNlpU",
+            "nullable": true,
+            "readOnly": true
+          },
+          "paginationTokenPrevious": {
+            "type": "string",
+            "description": "Indicates token to fetch previous page of results.",
+            "example": "CKDjNhoJKQBIuTktAQAAGg06C2dkZiBzdWV6IHNhGgw6CjBwMDAwMDl3cW8iDDoKMFAwMDAwOVdRTw==",
+            "nullable": true,
+            "readOnly": true
+          },
+          "totalCount": {
+            "type": "integer",
+            "description": "Indicates the total number of results found.",
+            "example": 2162,
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "InputSort": {
+        "title": "InputSort",
+        "description": "Specifies the data points(s) to sort results by and sets the sort direction. If multiple data points are provided, they are applied in the order listed in the array (the first item is the primary sort key, the second is the secondary key, and so on.",
+        "type": "object",
+        "properties": {
+          "dataPoint": {
+            "description": "Specifies the data point used to sort results.",
+            "example": "basicReference.investmentType",
+            "default": "instrumentIdentifiers.performanceId",
+            "type": "string",
+            "nullable": true
+          },
+          "orderBy": {
+            "description": "Sets the sort order.",
+            "type": "string",
+            "enum": [
+              "asc",
+              "desc"
+            ],
+            "x-enum-description": [
+              "asc (Ascending)",
+              "desc (Descending)"
+            ],
+            "default": "asc",
+            "example": "desc"
+          }
+        },
+        "additionalProperties": false
+      },
+      "OutputInvestment": {
+        "title": "OutputInvestment",
+        "description": "Data points and corresponding values returned for each result. Keys are data point names in the format `<dataGroup>.<fieldName>`. Values may be string, number, integer, or boolean depending on the data point. Use the discovery endpoint to determine the type for each data point.",
+        "type": "object",
+        "additionalProperties": {
+          "oneOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "number"
+            },
+            {
+              "type": "integer"
+            },
+            {
+              "type": "boolean"
+            }
+          ],
+          "nullable": true
+        },
+        "example": {
+          "instrumentIdentifiers.performanceId": "0P0001VK71",
+          "shareClassInformation.symbol": "MSES",
+          "shareClassInformation.investmentStatus": 1,
+          "marketCapital.asOfDate": "2025-10-02",
+          "marketCapital.companyLevelMarketCapital": 145230000,
+          "trailingReturn.trailing1YearReturn": 12.45,
+          "esgCompanyLevel2DataCarbonEmissions.carbonIntensity": 92.8,
+          "companyInformation.sic": 6719
+        }
+      },
+      "OutputInvalidInvestment": {
+        "title": "OutputInvalidInvestment",
+        "type": "object",
+        "properties": {
+          "status": {
+            "description": "Provides information about an investment returned.",
+            "example": "Data points are not entitled for 0P0001VK70 security.",
+            "type": "string",
+            "nullable": true
+          },
+          "dataPoints": {
+            "description": "Indicates the data points that could not be returned for the investment.",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": [
+                "companyInformation.cik",
+                "balanceSheet.totalAssetsValueFY",
+                "basicReference.isin"
+              ],
+              "externalDocs": {
+                "description": "Data dictionary (Excel)",
+                "url": "https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx"
+              }
+            }
+          },
+          "errorCode": {
+            "description": "Indicates error code.",
+            "example": 403,
+            "type": "string",
+            "nullable": true
+          },
+          "id": {
+            "description": "Indicates the investment for which no data was returned.",
+            "example": "0P0001VK70",
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  }
+}
