@@ -1,0 +1,95 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts fund reports - esg API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: fund reports - esg
+paths:
+  /fund/v1/reports/esg/{fundshareclassId}:
+    get:
+      tags:
+      - fund reports - esg
+      summary: Get an Environmental, Social, and Governance (ESG) Report
+      description: Get an ESG Report for the fund shareclass specified in the `fundshareclassId` parameter.</br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter. </br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br>If a report exists, a presigned URL from which you can download the PDF is returned in the response.
+      operationId: ESGReport
+      parameters:
+      - name: fundshareclassId
+        in: path
+        description: Unique identifier of a fund shareclass
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          default: F00000UPC2
+      - name: analyst-rating
+        in: query
+        description: Include Morningstar Analyst Ratings data point in report
+        required: false
+        explode: false
+        schema:
+          type: integer
+          default: 0
+          enum:
+          - 0
+          - 1
+      - name: pageSize
+        in: query
+        description: Page size of output PDF
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: Letter
+          enum:
+          - Letter
+          - A4
+      - name: locale
+        in: query
+        description: Language and locale, for example, en-US
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: en-US
+          enum:
+          - en-US
+          - en-GB
+          - en-AU
+          - en-NZ
+          - fr-FR
+          - de-DE
+          - it-IT
+          - es-ES
+          - fi-Fi
+          - nb-NO
+          - nl-NL
+          - sv-SE
+      responses:
+        '200':
+          description: Success
+          content: {}
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

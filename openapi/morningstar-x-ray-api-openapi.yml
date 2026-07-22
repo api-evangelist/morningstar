@@ -1,0 +1,3075 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts X-Ray API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: X-Ray
+paths:
+  /portfolioanalysis/v1/xray:
+    post:
+      tags:
+      - X-Ray
+      summary: Generate portfolio x-ray
+      description: Generate an x-ray of the portfolio(s) specified in the request body. The response will return information about how the portfolio is diversified by region, sector and investment style.</br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.
+      operationId: generatePortfolioXRay
+      parameters:
+      - name: langcult
+        in: query
+        description: Language and locale used for the response. Defaults to en-US.
+        required: true
+        schema:
+          type: string
+          default: en-US
+          enum:
+          - en-US
+          - en-CA
+          - en-AU
+          - en-GB
+      requestBody:
+        $ref: '#/components/requestBodies/RequestPortfolioXray'
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponsePortfolioXray'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputErrorOutput'
+              examples:
+                General - BadInput Output:
+                  summary: General BadInput
+                  value: '{"Message": "The request is invalid.","SpecificErrorStatus": [    {"ErrorCode": "40015","ErrorMessage": "Portfolio does not have any valid holdings. Invalid portfolio name: TestPortfolio1. Invalid Holdings: TradingSymbol:DODGX1."}]}'
+                DisableRescaleTrue - BadInputOutput:
+                  summary: DisableRescale BadInput
+                  value: '{"Message": "The request is invalid.","SpecificErrorStatus": [    {"ErrorCode": "40059","ErrorMessage": "There are holdings present in portfolio which are invalid.","Metadata": {"InvalidPortfolios": [{    "Name": "Test Portfolio","InvalidHoldings": [{"SecurityId": "FX000015JA3","Status": "Invalid"},{"SecurityId": "F00000YZ48","Status": "Unentitled"}]}]}}]}'
+        '401':
+          description: Unauthorized
+          content: {}
+        '403':
+          description: Forbidden
+          content: {}
+        '500':
+          description: Internal Server Error
+          content: {}
+components:
+  schemas:
+    OutputInterestRateRiskItem:
+      type: object
+      properties:
+        Maturity:
+          type: number
+          format: double
+          description: Weighted average maturity of portfolio holdings.
+        MaturityPercentAnalyzed:
+          type: number
+          format: double
+          description: Percentage of portfolio maturity analyzed.
+        YieldToMaturity:
+          type: number
+          format: double
+          description: Holding-weighted average yield of all applicable holdings. Ignores the impact of option features such as calls or puts.
+        ModifiedDuration:
+          type: number
+          format: double
+          description: Holding-weighted average price sensitivity to interest rate changes, excluding the impact of option features. Expressed in years.
+        EffectiveDuration:
+          type: number
+          format: double
+          description: Holding-weighted average price sensitivity to interest rate changes, including the impact of option features. Expressed in years.
+        EffectiveDurationPercentAnalyzed:
+          type: number
+          format: double
+          description: Percentage of portfolio effective duration analyzed.
+        WTDCoupon:
+          type: number
+          format: double
+        WTDPrice:
+          type: number
+          format: double
+        AverageCreditQuality:
+          type: number
+          format: double
+          description: Morningstar proprietary measure of overall portfolio credit risk, derived from historical default rates associated with each credit rating level.
+    OutputPerformanceRollingReturns:
+      description: Rolling return data for the portfolio.
+      type: object
+      properties:
+        RollingReturn:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceRollingReturn'
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+    OutputCreditQuality:
+      description: The percentage of the portfolio's fixed income holdings assigned to each credit quality rating band.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputCreditQualityItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputCreditQualityItem'
+    OutputXRayHoldingsTopNetUnderlyingHoldings:
+      description: Top net underlying holdings data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        TopNumber:
+          type: integer
+          format: int32
+          description: Number of top holdings returned.
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputXRayHoldingsTopNetUnderlyingHoldingsSecurity'
+    OutputEquityMarketMaturity:
+      description: Market maturity breakdown showing the percentage of portfolio stocks domiciled in developed and emerging markets.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputEquityMarketMaturityItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputEquityMarketMaturityItem'
+    OutputEquityMarketMaturityItem:
+      type: object
+      properties:
+        DevelopedMarkets:
+          type: number
+          format: double
+          description: Countries with mature economies and stock markets that benefit from a high degree of investor recourse, corporate governance and legal infrastructure.
+        EmergingMarkets:
+          type: number
+          format: double
+          description: Countries with fairly young economies and stock markets that offer higher growth potential and higher risk.
+        NotAvailable:
+          type: number
+          format: double
+          description: Countries that are neither developed nor emerging, or that lack a sufficiently liquid or transparent stock market.
+    OutputEquityStyleItem:
+      type: object
+      properties:
+        AverageMarketCap:
+          type: number
+          format: double
+          description: Geometric mean of the market capitalizations of all stocks held, weighted by portfolio allocation.
+    OutputAssetAllocationSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Analyzed:
+          type: number
+          format: double
+          description: Percentage of security analyzed.
+        NotAnalyzed:
+          type: number
+          format: double
+          description: Percentage of security not analyzed.
+        AssetClass:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputAssetClassItem'
+    OutputPerformanceRollingReturn:
+      type: object
+      properties:
+        RollingPeriod:
+          type: string
+          enum:
+          - Month24
+          - Month120
+          - '12'
+          - '36'
+          - '60'
+          - '120'
+        Portfolio:
+          $ref: '#/components/schemas/OutputPerformanceRollingReturnsItem'
+    OutputInterestRateRiskItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        InterestRateRiskItem:
+          $ref: '#/components/schemas/OutputSecurityInterestRateRiskItem'
+    InputPortfolio:
+      description: Object representing a portfolio to be analysed. Each holding must specify a security identifier and either `Weight` or `Value` to define its allocation. `TotalValue` is required when holdings use `Weight`.
+      title: InputPortfolio
+      required:
+      - Currency
+      - Holdings
+      - Name
+      type: object
+      properties:
+        Name:
+          description: Portfolio name.
+          type: string
+        TotalValue:
+          description: Total market value of the portfolio in the portfolio currency. Required when holdings use `Weight`.
+          type: number
+          format: double
+          minimum: 1
+          example: 20000
+        Currency:
+          description: Portfolio currency. 19 currencies are supported. Accepted values are ISO 4217 currency codes..
+          type: string
+          enum:
+          - AUD
+          - BRL
+          - CAD
+          - CHF
+          - DKK
+          - EUR
+          - GBP
+          - HKD
+          - INR
+          - JPY
+          - MXN
+          - MYR
+          - NOK
+          - NZD
+          - SEK
+          - SGD
+          - TWD
+          - USD
+          - ZAR
+          example: USD
+        Holdings:
+          type: array
+          minItems: 1
+          maxItems: 250
+          items:
+            $ref: '#/components/schemas/InputPortfolioHolding'
+        Fees:
+          $ref: '#/components/schemas/InputPortfolioFees'
+        IrrFees:
+          description: Annual fee used in the internal rate of return calculation.
+          type: number
+          format: double
+          minimum: 1
+          example: 1000
+    OutputRiskSecurity.RiskStatisticsItem:
+      type: object
+      properties:
+        Mean:
+          type: number
+          format: double
+          description: Mean return over the trailing period.
+        SharpeRatio:
+          type: number
+          format: double
+          description: Risk-adjusted return per unit of risk. Year2 is not supported at the security level.
+        StandardDeviation:
+          type: number
+          format: double
+          description: Statistical measure of return dispersion around the mean, used as an indicator of volatility.
+    OutputPerformanceStandardizedAndTaxAdjustedReturnsSecurity:
+      type: object
+      properties:
+        Sequence:
+          type: integer
+          format: int32
+          description: Sequence identifier.
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        StandardizedReturns:
+          $ref: '#/components/schemas/OutputPerformanceStandardizedReturns'
+        AfterTaxReturns:
+          $ref: '#/components/schemas/OutputPerformanceAfterTaxReturns'
+    OutputFixedIncomeSuperSectorDataBreakdown:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        FixedIncomeSuperSectorDataItems:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemStringNumber'
+    OutputDataItemEquityType:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Equity type identifier.
+          enum:
+          - AggressiveGrowth
+          - ClassicGrowth
+          - Cyclical
+          - Distressed
+          - HardAsset
+          - HighYield
+          - NotAvailable
+          - SlowGrowth
+          - SpeculativeGrowth
+        Value:
+          type: number
+          format: double
+          description: Value of equity type.
+    OutputFixedIncomeStyle:
+      description: Fixed income style data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        PortfolioAnalyzed:
+          type: number
+          format: double
+          description: Percentage of portfolio analyzed.
+        Portfolio:
+          $ref: '#/components/schemas/OutputFixedIncomeStyleItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputFixedIncomeStyleItem'
+        FixedIncomeStyleBreakdown:
+          $ref: '#/components/schemas/OutputFixedIncomeStyleBreakdown'
+    InputAssetClassGroupConfigs:
+      description: Asset class group to query.
+      type: object
+      properties:
+        AssetClassGroupConfig:
+          type: array
+          description: Asset class group identifier. Maximum of one value can be passed in a request.
+          items:
+            $ref: '#/components/schemas/InputAssetClassGroupConfig'
+    OutputXRayOwnershipOwnership:
+      description: Ownership zone data for equity holdings.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Zones:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputXRayOwnershipZone'
+    OutputEquityTypeBreakdown:
+      description: Portfolio stocks broken down into Morningstar equity type designations based on objective financial criteria.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        PortfolioAnalyzed:
+          type: number
+          format: double
+          description: Percentage of portfolio analyzed.
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemEquityType'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemEquityType'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquityTypeBreakdownItemSecurity'
+    OutputDataItemOutputAfterTaxReturnsTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: string
+          enum:
+          - YearToDate
+          - Month3
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+        Value:
+          type: number
+          format: double
+          description: Value for the time period.
+    InputRequestSettings:
+      title: InputXRayRequestSettings
+      required:
+      - OutputCurrency
+      description: Analysis settings including output currency, date range, performance frequency, and optional data sections.
+      type: object
+      properties:
+        OutputCurrency:
+          description: Currency used to calculate output values. 19 currencies are supported. Accepted values are ISO 4217 currency codes.
+          type: string
+          default: USD
+          enum:
+          - AUD
+          - BRL
+          - CAD
+          - CHF
+          - DKK
+          - EUR
+          - GBP
+          - HKD
+          - INR
+          - JPY
+          - MXN
+          - MYR
+          - NOK
+          - NZD
+          - SEK
+          - SGD
+          - TWD
+          - USD
+          - ZAR
+          x-enumDescriptions:
+            AUD: Australian Dollar
+            BRL: Brazilian Real
+            CAD: Canadian Dollar
+            CHF: Swiss Franc
+            DKK: Danish Krone
+            EUR: Euro
+            GBP: British Pound Sterling
+            HKD: Hong Kong Dollar
+            INR: Indian Rupee
+            JPY: Japanese Yen
+            MXN: Mexican Peso
+            MYR: Malaysian Ringgit
+            NOK: Norwegian Krone
+            NZD: New Zealand Dollar
+            SEK: Swedish Krona
+            SGD: Singapore Dollar
+            TWD: New Taiwan Dollar
+            USD: United States Dollar
+            ZAR: South African Rand
+        AnalysisDateTimePeriod:
+          description: End date period for the analysis. `CustomDate` requires `PortfolioPerformanceEndDate` to be set explicitly.
+          type: string
+          enum:
+          - MonthEnd
+          - QuarterEnd
+          - YearEnd
+          - CustomDate
+          default: MonthEnd
+        AssetClassGroupConfigs:
+          $ref: '#/components/schemas/InputAssetClassGroupConfigs'
+        DisableRescale:
+          description: When `true`, portfolio weights are not rescaled if any holdings are invalid or unentitled.
+          type: boolean
+          default: false
+        EnablePerformanceCommonEndDate:
+          description: When `true`, the most recent common end date across all portfolios is used as the analysis end date.
+          type: boolean
+          default: false
+        IncludeGrossNetReturns:
+          description: When `true`, both gross and net return values are included in trailing returns and calendar year return data.
+          type: boolean
+          default: false
+        IncludePortfolioInCorrelationMatrix:
+          description: When `true`, the portfolio is included as an entry in the correlation matrix.
+          type: boolean
+          default: false
+        InitialValue:
+          description: Initial value of the portfolio in the output currency.
+          type: number
+          format: double
+          minimum: 1
+          default: 10000
+        MaxCorrelationMatrixHoldingNumber:
+          description: Maximum number of holdings to include in the correlation matrix. Only applies when `ReturnDataSections` includes `CorrelationMatrix`.
+          type: integer
+          format: int32
+          default: 50
+          minimum: 2
+          maximum: 50
+        PerformanceFrequency:
+          description: Frequency of performance returns and risk calculations.
+          enum:
+          - Monthly
+          - Quarterly
+          type: string
+          default: Monthly
+        PortfolioPerformanceStartDate:
+          description: Start date of the analysis. `CustomDate` requires `PortfolioPerformanceCustomStartDate` to be set explicitly.
+          type: string
+          enum:
+          - EarliestCommon
+          - EarliestAvailable
+          - EarliestCommonExtended
+          - EarliestCommonExtended10Year
+          - Year10
+          - CustomDate
+          default: EarliestCommon
+        PortfolioPerformanceEndDate:
+          type: string
+          description: End date of the analysis. Required when `AnalysisDateTimePeriod` is set to `CustomDate`.
+          format: date
+          example: '2022-10-31'
+        PortfolioPerformanceCustomStartDate:
+          type: string
+          description: 'Custom start date of the analysis. Required when `PortfolioPerformanceStartDate` is set to `CustomDate`. Note: this field name contains a trailing space.'
+          format: date
+          example: '2022-10-31'
+        ReturnDataSections:
+          description: Additional data sections to include in the response. See `RollingReturnFrequencies` and `MaxCorrelationMatrixHoldingNumber` for related configuration.
+          type: array
+          items:
+            type: string
+            enum:
+            - CorrelationMatrix
+            - RollingReturns
+            example: RollingReturns
+        RollingReturnFrequencies:
+          description: Rolling return periods to calculate. Required when `ReturnDataSections` includes `RollingReturns`.
+          type: array
+          items:
+            type: string
+            enum:
+            - Month3
+            - Month6
+            - Year1
+            - Year3
+            - Year5
+            - Year10
+            example: Month3
+        RollingReturnStep:
+          description: Step interval (in months) between rolling return calculations. Only applies when `ReturnDataSections` includes `RollingReturns`.
+          type: integer
+          format: int32
+          default: 1
+          minimum: 1
+        SynchronizePortfolioStartDate:
+          description: When `true`, the latest common start date across all portfolios is used as the analysis start date for all portfolios.
+          type: boolean
+          default: false
+    OutputXRayStatisticsStatisticsItem:
+      description: Statistics data.
+      type: object
+      properties:
+        PortfolioSummary:
+          $ref: '#/components/schemas/OutputXRayStatisticsPortfolioStatisticsSummary'
+        FundStatistics:
+          $ref: '#/components/schemas/OutputXRayStatisticsFundStatistics'
+    OutputXRayHoldingsHoldingsItem:
+      description: Holdings data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        RegionAnalysis:
+          $ref: '#/components/schemas/OutputXRayHoldingsRegionAnalysis'
+        TopNetUnderlyingHoldings:
+          $ref: '#/components/schemas/OutputXRayHoldingsTopNetUnderlyingHoldings'
+        PortfolioHoldings:
+          $ref: '#/components/schemas/OutputXRayHoldingsPortfolioHoldings'
+        StockIntersection:
+          $ref: '#/components/schemas/OutputXRayHoldingsStockIntersection'
+    OutputRiskCorrelationMatrix:
+      description: Correlation matrix data showing pairwise return correlations between holdings and/or the portfolio.
+      type: object
+      properties:
+        TrailingTimePeriod:
+          type: string
+          description: Trailing time period over which correlations are calculated.
+          enum:
+          - Year3
+          - Year5
+          - Year10
+        DataFrequency:
+          type: string
+          description: Frequency of data used in the calculation.
+          enum:
+          - Monthly
+        StartDate:
+          type: string
+          format: date-time
+          description: Start date of the correlation calculation period.
+        EndDate:
+          type: string
+          format: date-time
+          description: End date of the correlation calculation period.
+        Correlations:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskCorrelationItemKey'
+    OutputXRayHoldingsRegionAnalysis:
+      description: Count of portfolio holdings allocated by region.
+      type: object
+      properties:
+        US:
+          type: integer
+          format: int32
+          description: Number of holdings allocated to the US region.
+        NotClassified:
+          type: integer
+          format: int32
+          description: Number of holdings not classified to a region.
+        Foreign:
+          type: integer
+          format: int32
+          description: Number of holdings allocated to foreign regions.
+        Cash:
+          type: integer
+          format: int32
+          description: Number of cash holdings.
+    OutputPerformanceInvestmentActivity:
+      description: Investment activity data.
+      type: object
+      properties:
+        DataFrequency:
+          type: string
+          description: Frequency of investment activity data.
+          enum:
+          - Monthly
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceInvestmentActivityItem'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceBenchmarkInvestmentActivityItem'
+    OutputXRayHoldingsPortfolioHoldings:
+      description: Portfolio holdings data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputXRayHoldingsPortfolioHolding'
+    OutputAssetAllocation:
+      description: Long, short, and net asset allocation positions. Asset class grouping depends on request settings.
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Asset class group identifier.
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        PortfolioAnalyzed:
+          type: number
+          format: double
+          description: Percentage of portfolio analyzed.
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputAssetClassItem'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputAssetClassItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputAssetAllocationSecurity'
+    OutputRiskCaptureRatioItem:
+      type: object
+      properties:
+        Downside:
+          $ref: '#/components/schemas/OutputRiskDownsideItems'
+        Upside:
+          $ref: '#/components/schemas/OutputRiskUpsideItems'
+    OutputEquitySectorExposureItem:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Parent/rollup sector identifier.
+        Value:
+          type: number
+          format: double
+          description: Sector exposure value.
+        ExposureItem:
+          type: array
+          description: Child sector items. Values are client-specific and may follow GICS, Morningstar, or institution-defined classifications.
+          items:
+            $ref: '#/components/schemas/OutputDataItemStringNumber'
+    OutputPriceRatios:
+      description: Price ratio data for the portfolio and benchmark.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputPriceRatiosItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputPriceRatiosItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPriceRatiosItemSecurity'
+    OutputPerformanceBenchmarkTrailingReturnsItem:
+      type: object
+      properties:
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemBenchmarkTrailingTimePeriod'
+    OutputRiskCorrelatedItemKey:
+      type: object
+      properties:
+        CorrelatedItemKeyId:
+          type: integer
+          format: int32
+        Type:
+          type: string
+          description: Indicates whether the correlated item is a portfolio or an individual security.
+          enum:
+          - Portfolio
+          - Security
+        Value:
+          type: number
+          format: double
+          description: Correlation coefficient between this item and the referenced item.
+    OutputPerformanceDate:
+      description: Key performance date reference points for the portfolio.
+      type: object
+      properties:
+        EarliestCommonDate:
+          description: The earliest date for which all holdings in the portfolio have return data.
+          type: string
+          format: date-time
+        EarliestAvailableDate:
+          description: The earliest date for which any holding in the portfolio has return data.
+          type: string
+          format: date-time
+        EarliestInceptionDate:
+          description: The inception date of the most recently launched holding in the portfolio.
+          type: string
+          format: date-time
+        EarliestCommonExtendedDate:
+          description: The earliest common date calculated using extended return history where available.
+          type: string
+          format: date-time
+    OutputCreditQualityItem:
+      type: object
+      properties:
+        AAA:
+          type: number
+          format: double
+          description: Percentage of fixed income holdings assigned to this credit quality rating band.
+        AA:
+          type: number
+          format: double
+          description: Percentage of fixed income holdings assigned to this credit quality rating band.
+        A:
+          type: number
+          format: double
+          description: Percentage of fixed income holdings assigned to this credit quality rating band.
+        BBB:
+          type: number
+          format: double
+          description: Percentage of fixed income holdings assigned to this credit quality rating band.
+        BB:
+          type: number
+          format: double
+          description: Percentage of fixed income holdings assigned to this credit quality rating band.
+        B:
+          type: number
+          format: double
+          description: Percentage of fixed income holdings assigned to this credit quality rating band.
+        BelowB:
+          type: number
+          format: double
+          description: Percentage of fixed income holdings assigned to this credit quality rating band.
+        NotRated:
+          type: number
+          format: double
+          description: Percentage of fixed income holdings assigned to this credit quality rating band.
+    OutputPerformanceBenchmarkCalendarYearReturn:
+      type: object
+      properties:
+        CalendarYear:
+          type: array
+          description: Calendar year return data. Index 1–10 represents the 10 most recent calendar years.
+          items:
+            $ref: '#/components/schemas/OutputDataItemInt32'
+    OutputDataItemCalendarYearReturnTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+          description: Calendar year return identifier (1–10, representing the 10 most recent years).
+        Value:
+          type: number
+          format: double
+          description: Calendar year return value.
+        GrossValue:
+          type: number
+          format: double
+          description: Gross calendar year return value.
+    OutputRiskRiskStatisticsSecurityItem:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Weight:
+          type: number
+          format: double
+          description: Percentage of portfolio assets allocated to this holding.
+        RiskStatisticsItem:
+          $ref: '#/components/schemas/OutputRiskSecurity.RiskStatisticsItem'
+    OutputXRayStatisticsSecurityFundStatisticsItem:
+      type: object
+      properties:
+        AverageNetExpenseRatio:
+          type: number
+          format: double
+          description: Percentage of fund assets, net of reimbursements, used to pay operating expenses and management fees. Does not include brokerage or sales charges.
+        AverageGrossExpenseRatio:
+          type: number
+          format: double
+          description: Percentage of fund assets used to pay operating expenses and management fees before any reimbursements. Does not include brokerage or sales charges.
+        PotentialCapGainsExposure:
+          type: number
+          format: double
+          description: Estimated percentage of fund assets representing unrealized gains. An indicator of possible future capital gain distributions.
+    OutputPerformanceTrailingReturnsItem:
+      type: object
+      properties:
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemTrailingTimePeriod'
+    OutputXRayHoldingsStockIntersectionItemSource:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        CUSIP:
+          type: string
+          description: Nine-character CUSIP identifier consisting of a six-character issuer number, two-character issue number, and one check digit.
+        FundPortfolioDate:
+          type: string
+          format: date-time
+          description: The date the portfolio was reported.
+        PercentOfInvestments:
+          type: number
+          format: double
+          description: Percentage of total portfolio investments.
+        MarketValue:
+          type: number
+          format: double
+          description: Current market value of the holding.
+    OutputEquityRegionExposureItem:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Parent/rollup region identifier.
+        Value:
+          type: number
+          format: double
+          description: Value for world region.
+        ExposureItem:
+          type: array
+          description: Child region items. Values are client-specific and may follow Morningstar or institution-defined classifications.
+          items:
+            $ref: '#/components/schemas/OutputDataItemStringNumber'
+    OutputXRaySecurityFees:
+      description: Fee data for each security in the portfolio.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputXRaySecurityFeesSecurity'
+    OutputPortfolioBenchmarkHolding:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Weight:
+          type: number
+          format: double
+          description: Percentage of portfolio assets allocated to this holding.
+    OutputRiskRisks:
+      description: Risk data.
+      type: object
+      properties:
+        RiskStatistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskRiskStatistics'
+        MPTStatistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskMPTStatistics'
+        CorrelationMatrix:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskCorrelationMatrix'
+        Drawdown:
+          $ref: '#/components/schemas/OutputRiskDrawdown'
+        CaptureRatio:
+          $ref: '#/components/schemas/OutputRiskCaptureRatio'
+    OutputRiskRiskStatisticsItem:
+      type: object
+      properties:
+        Mean:
+          type: number
+          format: double
+          description: Mean return over the trailing period.
+        SharpeRatio:
+          type: number
+          format: double
+          description: Risk-adjusted return per unit of risk, calculated as excess return over the risk-free rate divided by standard deviation.
+        StandardDeviation:
+          type: number
+          format: double
+          description: Statistical measure of return dispersion around the mean, used as an indicator of volatility.
+        InformationRatio:
+          type: number
+          format: double
+          description: Risk-adjusted performance measure comparing excess return over a benchmark to tracking error.
+        TrackingError:
+          type: number
+          format: double
+          description: Measure of how closely the portfolio's returns follow the benchmark.
+        SortinoRatio:
+          type: number
+          format: double
+          description: Variation of the Sharpe ratio that uses downside deviation rather than total standard deviation.
+        ExcessReturn:
+          type: number
+          format: double
+          description: The portfolio's return relative to the benchmark return over the same period.
+    OutputRiskTimePeriods:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Time period identifier.
+          enum:
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+        DrawdownItem:
+          $ref: '#/components/schemas/OutputRiskDrawdownItem'
+    OutputFixedIncomeMaturityItem:
+      type: object
+      properties:
+        Maturity:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemFixedIncomeMaturityPeriod'
+    OutputEquityStyleBreakdown:
+      description: Equity style box breakdown by market capitalization (Large/Mid/Small) and investment style (Value/Blend/Growth).
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputEquityStyleBreakdownItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquityStyleBreakdownItemSecurity'
+    OutputBenchmarkInterestRateRiskItem:
+      type: object
+      properties:
+        Maturity:
+          type: number
+          format: double
+          description: Weighted average maturity of benchmark holdings.
+        YieldToMaturity:
+          type: number
+          format: double
+          description: Holding-weighted average yield of all applicable holdings. Ignores the impact of option features such as calls or puts.
+        ModifiedDuration:
+          type: number
+          format: double
+          description: Holding-weighted average price sensitivity to interest rate changes, excluding the impact of option features. Expressed in years.
+        EffectiveDuration:
+          type: number
+          format: double
+          description: Holding-weighted average price sensitivity to interest rate changes, including the impact of option features. Expressed in years.
+        WTDCoupon:
+          type: number
+          format: double
+        WTDPrice:
+          type: number
+          format: double
+        AverageCreditQuality:
+          type: number
+          format: double
+          description: Morningstar proprietary measure of overall portfolio credit risk, derived from historical default rates associated with each credit rating level.
+    OutputXRayHoldingsPortfolioHolding:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Name:
+          type: string
+          description: Security name.
+        FundPortfolioDate:
+          type: string
+          format: date-time
+          description: The date the portfolio was reported.
+        Year1:
+          type: number
+          format: double
+          description: 1-year annualized return.
+        Year3:
+          type: number
+          format: double
+          description: 3-year annualized return.
+        Year5:
+          type: number
+          format: double
+          description: 5-year annualized return.
+        Year10:
+          type: number
+          format: double
+          description: 10-year annualized return.
+        PercentAssets:
+          type: number
+          format: double
+          description: Percent of portfolio assets.
+        MarketValue:
+          type: number
+          format: double
+          description: Current market value of the holding.
+        NotClassifiedHoldingId:
+          type: string
+          description: Identifier of an unclassified holding.
+    OutputProfitability:
+      description: Profitability data for the portfolio and benchmark.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputProfitabilityItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputProfitabilityItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputProfitabilityItemSecurity'
+    OutputEquityAnalysis:
+      description: Equity analysis data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        EquitySectors:
+          $ref: '#/components/schemas/OutputEquitySectors'
+        WorldRegions:
+          $ref: '#/components/schemas/OutputWorldRegions'
+        EquityMarketMaturity:
+          $ref: '#/components/schemas/OutputEquityMarketMaturity'
+        EquityTypeBreakdown:
+          $ref: '#/components/schemas/OutputEquityTypeBreakdown'
+        PriceRatios:
+          $ref: '#/components/schemas/OutputPriceRatios'
+        Profitability:
+          $ref: '#/components/schemas/OutputProfitability'
+        GeometricAverageCapitalization:
+          $ref: '#/components/schemas/OutputGeometricAverageCapitalization'
+    OutputEquityStyleItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        EquityStyleItem:
+          $ref: '#/components/schemas/OutputEquityStyleItem'
+    OutputInvestmentStyle:
+      description: Investment style data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        FixedIncomeStyle:
+          $ref: '#/components/schemas/OutputFixedIncomeStyle'
+        EquityStyle:
+          $ref: '#/components/schemas/OutputEquityStyle'
+    OutputFixedIncomeMaturity:
+      description: Fixed income maturity distribution data for the portfolio and benchmark.
+      type: object
+      properties:
+        Portfolio:
+          $ref: '#/components/schemas/OutputFixedIncomeMaturityItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputFixedIncomeMaturityItem'
+    OutputGeometricAverageCapitalization:
+      description: Geometric average capitalization data for the portfolio and benchmark.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputGeometricAverageCapitalizationItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputGeometricAverageCapitalizationItem'
+    OutputPerformanceBenchmarkInvestmentActivityItem:
+      type: object
+      properties:
+        Sequence:
+          type: integer
+          format: int32
+          description: Sequence identifier.
+        StartDate:
+          type: string
+          format: date-time
+          description: Start date of the time period.
+        EndDate:
+          type: string
+          format: date-time
+          description: End date of the time period.
+        BeginningBalance:
+          type: number
+          format: double
+          description: Beginning balance for the time period.
+        MarketValue:
+          type: number
+          format: double
+          description: Market value at end of the time period.
+    OutputXRayStatisticsFundStatisticsItem:
+      type: object
+      properties:
+        AverageNetExpenseRatio:
+          type: number
+          format: double
+          description: Percentage of fund assets, net of reimbursements, used to pay operating expenses and management fees. Does not include brokerage or sales charges.
+        AverageGrossExpenseRatio:
+          type: number
+          format: double
+          description: Percentage of fund assets used to pay operating expenses and management fees before any reimbursements. Does not include brokerage or sales charges.
+        PotentialCapGainsExposure:
+          type: number
+          format: double
+          description: Estimated percentage of fund assets representing unrealized gains. An indicator of possible future capital gain distributions.
+        AverageManagementExpenseRatio:
+          type: number
+          format: double
+        AverageManagementFee:
+          type: number
+          format: double
+          description: Compensation paid to the fund's investment manager for portfolio management services.
+        EstimatedMutualFundExpensesAmount:
+          type: number
+          format: double
+    OutputXRayOwnershipZone:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        SizeScore:
+          type: number
+          format: double
+          description: Size score for the ownership zone calculation.
+        StyleScore:
+          type: number
+          format: double
+          description: Style score for the ownership zone calculation.
+        SizeVariance:
+          type: number
+          format: double
+          description: Size variance for the ownership zone calculation.
+        StyleVariance:
+          type: number
+          format: double
+          description: Style variance for the ownership zone calculation.
+        Rho:
+          type: number
+          format: double
+          description: Correlation coefficient used in the ownership zone calculation.
+        ZonePercentile:
+          type: number
+          format: double
+          description: Percentile ranking within the ownership zone.
+    OutputEquityStyleBreakdownItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Analyzed:
+          type: number
+          format: double
+          description: Percentage of security analyzed.
+        NotAnalyzed:
+          type: number
+          format: double
+          description: Percentage of security not analyzed.
+        EquityStyleBreakdownItem:
+          $ref: '#/components/schemas/OutputEquityStyleBreakdownItem'
+    OutputEquityStyleBreakdownItem:
+      type: object
+      properties:
+        LargeValue:
+          type: number
+          format: double
+          description: Percentage of equity holdings in this style box quadrant of the Morningstar Style Box™.
+        LargeBlend:
+          type: number
+          format: double
+          description: Percentage of equity holdings in this style box quadrant of the Morningstar Style Box™.
+        LargeGrowth:
+          type: number
+          format: double
+          description: Percentage of equity holdings in this style box quadrant of the Morningstar Style Box™.
+        MidValue:
+          type: number
+          format: double
+          description: Percentage of equity holdings in this style box quadrant of the Morningstar Style Box™.
+        MidBlend:
+          type: number
+          format: double
+          description: Percentage of equity holdings in this style box quadrant of the Morningstar Style Box™.
+        MidGrowth:
+          type: number
+          format: double
+          description: Percentage of equity holdings in this style box quadrant of the Morningstar Style Box™.
+        SmallValue:
+          type: number
+          format: double
+          description: Percentage of equity holdings in this style box quadrant of the Morningstar Style Box™.
+        SmallBlend:
+          type: number
+          format: double
+          description: Percentage of equity holdings in this style box quadrant of the Morningstar Style Box™.
+        SmallGrowth:
+          type: number
+          format: double
+          description: Percentage of equity holdings in this style box quadrant of the Morningstar Style Box™.
+        Unclassified:
+          type: number
+          format: double
+          description: Percentage not classified into a style box category.
+    OutputXRayHoldingsStockIntersectionItem:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        SecurityName:
+          type: string
+          description: Security name.
+        CUSIP:
+          type: string
+          description: Nine-character CUSIP identifier consisting of a six-character issuer number, two-character issue number, and one check digit.
+        TradingSymbol:
+          type: string
+          description: Security trading symbol.
+        PercentOfInvestments:
+          type: number
+          format: double
+          description: Percentage of total portfolio investments.
+        MarketValue:
+          type: number
+          format: double
+          description: Current market value of the holding.
+        StockSector:
+          type: string
+          description: Stock sector identifier.
+        SourceOfStock:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputXRayHoldingsStockIntersectionItemSource'
+    OutputEquitySector:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Possible values are GICS, Morningstar, or institution-defined identifier.
+        PortfolioAnalyzed:
+          type: number
+          format: double
+          description: Percentage of portfolio analyzed.
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquitySectorItem'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquitySectorItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquitySectorExposureItemSecurity'
+    OutputEquityTypeBreakdownItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Analyzed:
+          type: number
+          format: double
+          description: Percentage of security analyzed.
+        NotAnalyzed:
+          type: number
+          format: double
+          description: Percentage of security not analyzed.
+        EquityTypeBreakdownItem:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemEquityType'
+    OutputInterestRateRisk:
+      description: Interest rate risk data for the portfolio and benchmark.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputInterestRateRiskItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputBenchmarkInterestRateRiskItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInterestRateRiskItemSecurity'
+    OutputPortfolioBenchmark:
+      description: Portfolio benchmark data.
+      type: object
+      properties:
+        Type:
+          type: string
+          description: Benchmark type.
+          enum:
+          - Standard
+          - AutoAsset
+          - AutoCategory
+          - Custom
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPortfolioBenchmarkHolding'
+    OutputXRayStatisticsPortfolioStatisticsSummary:
+      description: Portfolio summary statistics.
+      type: object
+      properties:
+        PortfolioValue:
+          type: number
+          format: double
+          description: Total value of the portfolio.
+        Currency:
+          type: string
+          description: Currency of the fund returns.
+          enum:
+          - AUD
+          - BRL
+          - CAD
+          - CHF
+          - DKK
+          - EUR
+          - GBP
+          - HKD
+          - INR
+          - JPY
+          - MXN
+          - MYR
+          - NOK
+          - NZD
+          - SEK
+          - SGD
+          - TWD
+          - USD
+          - ZAR
+        PortfolioDate:
+          type: string
+          format: date-time
+          description: The date the portfolio was reported.
+        EquityCount:
+          type: integer
+          format: int32
+          description: Number of equity holdings in the portfolio.
+        FixedIncomeCount:
+          type: integer
+          format: int32
+          description: Number of fixed income holdings in the portfolio.
+        SECYield:
+          type: number
+          format: double
+          description: Standardized yield calculated over the 30-day period ending on the last day of the previous month, based on maximum offering price.
+        PortfolioYield:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemPortfolioYieldTrailingTimePeriod'
+    InputView:
+      title: InputXRayView
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Identifier of a predefined set of data points to return in the response.
+          default: All
+          enum:
+          - All
+          - Default
+          - Intersection
+          - Operation
+          - Portfolio
+          - StockIntersection
+          - XrayOverview
+          - Snapshot
+    OutputRiskDrawdown:
+      description: Drawdown data for the portfolio.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputRiskPortfolio'
+    OutputRiskRiskStatistics:
+      description: Risk statistics for the portfolio, benchmark, and individual securities.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        TrailingTimePeriod:
+          type: string
+          description: Trailing time period for which risk statistics are calculated.
+          enum:
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+        DataFrequency:
+          type: string
+          description: Frequency of data used in the calculation.
+          enum:
+          - Monthly
+          - Quarterly
+        Portfolio:
+          $ref: '#/components/schemas/OutputRiskRiskStatisticsItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputRiskRiskStatisticsItem'
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskRiskStatisticsSecurityItem'
+    OutputXRayStatisticsFundStatisticsItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Analyzed:
+          type: number
+          format: double
+          description: Percentage of security analyzed.
+        NotAnalyzed:
+          type: number
+          format: double
+          description: Percentage of security not analyzed.
+        FundStatisticsItem:
+          $ref: '#/components/schemas/OutputXRayStatisticsSecurityFundStatisticsItem'
+    OutputPriceRatiosItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        PriceRatiosItem:
+          $ref: '#/components/schemas/OutputPriceRatiosItem'
+    OutputProfitabilityItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        ProfitabilityItem:
+          $ref: '#/components/schemas/OutputProfitabilityItem'
+    OutputPerformanceStandardizedReturns:
+      type: object
+      properties:
+        GrossExpenseRatio:
+          type: number
+          format: double
+          description: Total gross expenses divided by average net assets, including waived fees. Excludes brokerage costs.
+        InceptionDate:
+          type: string
+          format: date-time
+          description: Original issue date of the instrument.
+        MaxBackLoad:
+          type: number
+          format: double
+          description: Fund's maximum deferred sales charge, expressed as a percentage of the lesser of the initial or final value of shares sold.
+        MaxFrontLoad:
+          type: number
+          format: double
+          description: Maximum initial sales charge deducted at the time of purchase, expressed as a percentage of the investment.
+        NetExpenseRatio:
+          type: number
+          format: double
+          description: Total net expenses divided by average net assets, net of reimbursements and waivers. Excludes brokerage costs.
+        ManagementExpenseRatio:
+          type: number
+          format: double
+          description: Percentage of average net assets paid annually to cover fixed fund management costs. Specific to the Canadian market.
+        TurnoverRatio:
+          type: number
+          format: double
+          description: Measure of how frequently the fund buys or sells holdings, expressed as a percentage of assets traded over the year.
+        TurnoverRatioDate:
+          type: string
+          format: date-time
+          description: Date of the turnover ratio calculation.
+        Day7YieldUnsubsized:
+          type: number
+          format: double
+          description: 7-day unsubsidized yield, annualized using the base period return divided by the starting account value.
+        Day7YieldSubsidized:
+          type: number
+          format: double
+          description: 7-day subsidized yield, annualized using the base period return divided by the starting account value.
+        Month12Yield:
+          type: number
+          format: double
+          description: Total distributions paid in the last 12 months as a percentage of the previous month-end price, excluding return of capital.
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceStandardizedReturns.TimePeriodItem'
+    OutputEquitySectorItem:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Parent/rollup sector identifier.
+        Value:
+          type: number
+          format: double
+          description: Sector exposure value.
+    OutputRiskCorrelationItemKey:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        UseExtendedReturns:
+          type: boolean
+          description: Indicates whether extended return history was used in the calculation.
+        Type:
+          type: string
+          description: Indicates whether the item is a portfolio or an individual security.
+          enum:
+          - Portfolio
+          - Security
+        CorrelatedItemKey:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskCorrelatedItemKey'
+    OutputAnalysisItem:
+      description: Analysis data.
+      type: object
+      properties:
+        AssetAllocation:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputAssetAllocation'
+        EquityAnalysis:
+          $ref: '#/components/schemas/OutputEquityAnalysis'
+        FixedIncomeAnalysis:
+          $ref: '#/components/schemas/OutputFixedIncomeAnalysis'
+        InvestmentStyle:
+          $ref: '#/components/schemas/OutputInvestmentStyle'
+    OutputEquitySectors:
+      description: The portfolio's equity exposure broken down by sector. Percentages may reflect long, short, net, or long-rescaled positions.
+      type: object
+      properties:
+        EquitySector:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquitySector'
+    OutputPerformanceSecurityReturns:
+      description: Security returns data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        StandardizedAndTaxAdjustedReturns:
+          $ref: '#/components/schemas/OutputPerformanceStandardizedAndTaxAdjustedReturns'
+    OutputSecurityItem:
+      description: Security reference data returned alongside the X-Ray response.
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Morningstar identifier for a share class.
+        CUSIP:
+          type: string
+          description: Nine-character CUSIP identifier consisting of a six-character issuer number, two-character issue number, and one check digit.
+        ISIN:
+          type: string
+          description: ISO 6166 alphanumeric code uniquely identifying a financial instrument, consisting of a two-character country code, nine-character NSIN, and one check digit.
+        FundCode:
+          type: string
+          description: Abbreviated fund name used as a trading code. Specific to Thai markets.
+        Name:
+          type: string
+          description: Name of the investment.
+        TradingSymbol:
+          type: string
+          description: Security trading symbol.
+        PerformanceId:
+          type: string
+          description: Morningstar performance identifier.
+        BaseCurrency:
+          type: string
+          description: Currency in which the security is denominated, identified by ISO 4217 code.
+          enum:
+          - MultipleCurrencies
+          - AED
+          - AFN
+          - ALL
+          - AMD
+          - ANG
+          - AOA
+          - ARS
+          - AUD
+          - AWG
+          - AZN
+          - BAM
+          - BBD
+          - BDT
+          - BGN
+          - BHD
+          - BIF
+          - BMD
+          - BND
+          - BOB
+          - BOV
+          - BRL
+          - BSD
+          - BTN
+          - BWP
+          - BYR
+          - BZD
+          - CAD
+          - CDF
+          - CHE
+          - CHF
+          - CHW
+          - CLF
+          - CLP
+          - CNY
+          - COP
+          - COU
+          - CRC
+          - CUP
+          - CVE
+          - CZK
+          - DJF
+          - DKK
+          - DOP
+          - DZD
+          - EEK
+          - EGP
+          - ERN
+          - ETB
+          - EUR
+          - FJD
+          - FKP
+          - GBP
+          - GEL
+          - GHC
+          - GIP
+          - GMD
+          - GNF
+          - GTQ
+          - GYD
+          - HKD
+          - HNL
+          - HRK
+          - HTG
+          - HUF
+          - IDR
+          - ILS
+          - INR
+          - IQD
+          - IRR
+          - ISK
+          - JMD
+          - JOD
+          - JPY
+          - KES
+          - KGS
+          - KHR
+          - KMF
+          - KPW
+          - KRW
+          - KWD
+          - KYD
+          - KZT
+          - LAK
+          - LBP
+          - LKR
+          - LRD
+          - LSL
+          - LTL
+          - LVL
+          - LYD
+          - MAD
+          - MDL
+          - MGA
+          - MKD
+          - MMK
+          - MNT
+          - MOP
+          - MRO
+          - MUR
+          - MVR
+          - MWK
+          - MXN
+          - MXV
+          - MYR
+          - MZN
+          - NAD
+          - NGN
+          - NIO
+          - NOK
+          - NPR
+          - NZD
+          - OMR
+          - PAB
+          - PEN
+          - PGK
+          - PHP
+          - PKR
+          - PLN
+          - PYG
+          - QAR
+          - ROL
+          - RON
+          - RSD
+          - RUB
+          - RWF
+          - SAR
+          - SBD
+          - SCR
+          - SDD
+          - SEK
+          - SGD
+          - SHP
+          - SLL
+          - SOS
+          - SRD
+          - STD
+          - SYP
+          - SZL
+          - THB
+          - TJS
+          - TMT
+          - TND
+          - TOP
+          - TRY
+          - TTD
+          - TWD
+          - TZS
+          - UAH
+          - UGX
+          - USD
+          - USN
+          - USS
+          - UYU
+          - UZS
+          - VEF
+          - VND
+          - VUV
+          - WST
+          - XAF
+          - XAG
+          - XAU
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XCD
+          - XDR
+          - XFO
+          - XFU
+          - XOF
+          - XPD
+          - XPF
+          - XPT
+          - YER
+          - ZAR
+          - ZMK
+          - ZWR
+        Type:
+          type: string
+          description: Security type code. BD=Bond, CT=529 Portfolio, CA=Category Average, CASH=Cash, EI=Economics Series, FC=Closed-End Fund, FE=ETF, FM=Money Market Fund, FO=Open-End Fund, FI=Unit Investment, FV=Insurance Product Fund, SA=Separate Account, ST=Stock, VA=UK LP SubAccounts, V1=Variable Annuity, XI=Index, SP=Custom Plan/Private Funds, CZ=Collective Investment Trust, MO=Models, VP=VA Policy, VL=VL Subaccount, FH=Hedge Fund, CP=529 Plan, MF=Open-End Fund, S1=UBS Separate Account.
+          enum:
+          - BD
+          - CT
+          - CA
+          - CASH
+          - EI
+          - FC
+          - FE
+          - FM
+          - FO
+          - FI
+          - FV
+          - SA
+          - ST
+          - VA
+          - V1
+          - XI
+          - SP
+          - Proxy
+          - CZ
+          - MO
+          - VP
+          - VL
+          - FH
+          - CP
+          - CIT
+          - GA
+          - MF
+          - SC
+          - S1
+        InceptionDate:
+          type: string
+          format: date-time
+          description: Original issue date of the instrument.
+        ObsoleteType:
+          type: string
+          description: Reason the investment stopped pricing (e.g. liquidated or merged).
+        ObsoleteDate:
+          type: string
+          format: date-time
+          description: Date the investment was delisted or deleted.
+        SecurityReferenceTypes:
+          type: array
+          description: Roles this security plays in the response context.
+          items:
+            type: string
+            enum:
+            - PortfolioHolding
+            - BenchmarkHolding
+            - DisclosureIndex
+            - InvalidSecurity
+            - InactiveSecurity
+            - NotEntitled
+        Value:
+          type: number
+          format: double
+          description: Value of the security.
+        NotClassifiedHoldingId:
+          type: string
+          description: Identifier of an unclassified holding.
+        Weight:
+          type: number
+          format: double
+          description: Percentage of portfolio assets allocated to this holding.
+    OutputPerformanceStandardizedReturns.TimePeriodItem:
+      type: object
+      properties:
+        Id:
+          type: string
+          enum:
+          - YearToDate
+          - Month3
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+        Market:
+          type: number
+          format: double
+        Nav:
+          type: number
+          format: double
+    OutputRiskDrawdownItem:
+      type: object
+      properties:
+        MaxDrawdown:
+          type: number
+          format: double
+          description: Peak-to-trough decline over the measurement period, expressed as a percentage.
+        NoOfPeriods:
+          type: integer
+          format: int32
+          description: Number of periods in the drawdown.
+        PeakDate:
+          type: string
+          format: date-time
+          description: Date at which the maximum drawdown began.
+        ValleyDate:
+          type: string
+          format: date-time
+          description: Date at which the maximum drawdown ended.
+        UpPercent:
+          type: number
+          format: double
+          description: Number of periods the portfolio outperformed the benchmark when the benchmark was up, divided by total up-benchmark periods.
+        DownPercent:
+          type: number
+          format: double
+          description: Number of periods the portfolio outperformed the benchmark when the benchmark was down, divided by total down-benchmark periods.
+    RequestPortfolioXray:
+      title: RequestPortfolioXray
+      description: Generate a Portfolio X-Ray for up to **2** portfolios. The **maximum** number of holdings per portfolio is **250**.
+      required:
+      - Portfolios
+      - RequestSettings
+      type: object
+      properties:
+        View:
+          $ref: '#/components/schemas/InputView'
+        Config:
+          $ref: '#/components/schemas/InputConfig'
+        RequestSettings:
+          $ref: '#/components/schemas/InputRequestSettings'
+        Portfolios:
+          description: Array of portfolios to analyse. Maximum 2 portfolios per request.
+          type: array
+          maxItems: 2
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InputPortfolio'
+    OutputRiskPortfolio:
+      description: Portfolio drawdown data across overall, time period, and calendar year views.
+      type: object
+      properties:
+        PortfolioDrawdownItem:
+          $ref: '#/components/schemas/OutputRiskDrawdownItem'
+        TimePeriods:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskTimePeriods'
+        CalendarYear:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskCalenderYearItem'
+    OutputEquityRegionExposureItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Analyzed:
+          type: number
+          format: double
+          description: Percentage of security analyzed.
+        NotAnalyzed:
+          type: number
+          format: double
+          description: Percentage of security not analyzed.
+        Region:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquityRegionExposureItem'
+    OutputXRayXRay:
+      type: object
+      properties:
+        PortfolioName:
+          type: string
+          description: Name of the portfolio queried.
+        PerformanceDate:
+          $ref: '#/components/schemas/OutputPerformanceDate'
+        AnalysisDate:
+          type: string
+          format: date-time
+          description: Date of analysis.
+        ReturnMethodology:
+          type: string
+          description: Return methodology used in the calculation.
+          enum:
+          - QuickPortfolio
+        Analysis:
+          $ref: '#/components/schemas/OutputAnalysisItem'
+        Holdings:
+          $ref: '#/components/schemas/OutputXRayHoldingsHoldingsItem'
+        Statistics:
+          $ref: '#/components/schemas/OutputXRayStatisticsStatisticsItem'
+        PortfolioBenchmark:
+          $ref: '#/components/schemas/OutputPortfolioBenchmark'
+        Returns:
+          $ref: '#/components/schemas/OutputPerformanceReturns'
+        SecurityFees:
+          $ref: '#/components/schemas/OutputXRaySecurityFees'
+        Risks:
+          $ref: '#/components/schemas/OutputRiskRisks'
+        Ownership:
+          $ref: '#/components/schemas/OutputXRayOwnershipOwnership'
+        FinraHeader:
+          $ref: '#/components/schemas/OutputXRayFinraFinraHeader'
+    OutputPerformanceRollingReturnsItem:
+      type: object
+      properties:
+        StartYear:
+          type: integer
+          format: int32
+        StartMonth:
+          maximum: 12
+          minimum: 1
+          type: integer
+          format: int32
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemInt32'
+        Details:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceRollingReturnsDetail'
+    OutputPerformanceInvestmentActivityItem:
+      type: object
+      properties:
+        Sequence:
+          type: integer
+          format: int32
+          description: Sequence identifier.
+        StartDate:
+          type: string
+          format: date-time
+          description: Start date of the time period.
+        EndDate:
+          type: string
+          format: date-time
+          description: End date of the time period.
+        BeginningBalance:
+          type: number
+          format: double
+          description: Beginning balance for the time period.
+        MarketValue:
+          type: number
+          format: double
+          description: Market value at end of the time period.
+        GrossBeginningBalance:
+          type: number
+          format: double
+          description: Gross beginning balance for the time period.
+        GrossMarketValue:
+          type: number
+          format: double
+          description: Gross market value at end of the time period.
+    OutputEquityStyle:
+      description: Equity style data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        PortfolioAnalyzed:
+          type: number
+          format: double
+          description: Percentage of portfolio analyzed.
+        Portfolio:
+          $ref: '#/components/schemas/OutputEquityStyleItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputEquityStyleItem'
+        EquityStyleBreakdown:
+          $ref: '#/components/schemas/OutputEquityStyleBreakdown'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquityStyleItemSecurity'
+    OutputDataItemPortfolioYieldTrailingTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: string
+          enum:
+          - Month12
+        Value:
+          type: number
+          format: double
+          description: Yield value for the time period.
+    OutputRiskCaptureRatio:
+      description: Capture ratio data showing portfolio performance relative to the benchmark in up and down markets.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputRiskCaptureRatioItem'
+    OutputDataItemInt32:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+        Value:
+          type: number
+          format: double
+          description: Value.
+    OutputFixedIncomeAnalysis:
+      description: Fixed income analysis data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        FixedIncomeSectors:
+          $ref: '#/components/schemas/OutputFixedIncomeSectors'
+        FixedIncomeMaturity:
+          $ref: '#/components/schemas/OutputFixedIncomeMaturity'
+        CreditQuality:
+          $ref: '#/components/schemas/OutputCreditQuality'
+        InterestRateRisk:
+          $ref: '#/components/schemas/OutputInterestRateRisk'
+    OutputPerformanceTrailingReturns:
+      description: Annualized trailing returns for the portfolio and benchmark, looking backward from the analysis end date.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputPerformanceTrailingReturnsItem'
+        Benchmark:
+          $ref: '#/components/schemas/OutputPerformanceBenchmarkTrailingReturnsItem'
+    OutputFixedIncomeStyleItem:
+      type: object
+      properties:
+        EffectiveDuration:
+          type: number
+          format: double
+          description: Holding-weighted average price sensitivity to interest rate changes, including the impact of option features. Expressed in years.
+        EffectiveMaturity:
+          type: number
+          format: double
+          description: Holding-weighted average term at which principal is expected to be paid. Expressed in years.
+    OutputDataItemTrailingTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Time period identifier.
+          enum:
+          - YearToDate
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+        Value:
+          type: number
+          format: double
+          description: Value for the time period.
+        GrossValue:
+          type: number
+          format: double
+          description: Gross value for the time period.
+    OutputSecurityInterestRateRiskItem:
+      type: object
+      properties:
+        Maturity:
+          type: number
+          format: double
+          description: Weighted average maturity of the security.
+        EffectiveDuration:
+          type: number
+          format: double
+          description: Holding-weighted average price sensitivity to interest rate changes, including the impact of option features. Expressed in years.
+        WTDCoupon:
+          type: number
+          format: double
+        AverageCreditQuality:
+          type: number
+          format: double
+          description: Morningstar proprietary measure of credit risk, derived from historical default rates associated with each credit rating level.
+    OutputPerformanceStandardizedAndTaxAdjustedReturns:
+      description: Standardized and tax-adjusted return data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceStandardizedAndTaxAdjustedReturnsSecurity'
+    InputConfig:
+      title: InputXRayConfig
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Account-specific configuration preset. Settings can be overridden directly in the request.
+          default: Default
+          enum:
+          - Default
+    OutputAssetClassItem:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Allocation identifier.
+        Long:
+          type: number
+          format: double
+          description: Percentage of fund assets in long positions.
+        Short:
+          type: number
+          format: double
+          description: Percentage of fund assets in short positions.
+        Net:
+          type: number
+          format: double
+          description: Percentage of fund assets after subtracting short positions from long positions.
+    InputAssetClassGroupConfig:
+      type: object
+      properties:
+        Id:
+          description: Asset class group identifier.
+          type: string
+          enum:
+          - ACG-AUDETAILED
+          - ACG-BROAD-INDIA2
+          - ACG-BROAD-JAPAN
+          - ACG-CABROAD
+          - ACG-CANBROAD4
+          - ACG-EUBROAD
+          - ACG-GLOBBROAD
+          - ACG-NZDETAILED
+          - ACG-UKBROAD
+          - ACG-UK-GBR
+          - ACG-USBROAD
+          default: ACG-USBROAD
+    OutputXRayHoldingsStockIntersection:
+      description: Stock intersection data showing overlapping equity holdings across portfolio funds.
+      type: object
+      properties:
+        IncludeIndex:
+          type: boolean
+          default: false
+          description: Indicates whether index holdings are included in the stock intersection.
+        Stock:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputXRayHoldingsStockIntersectionItem'
+        ConcentrationRatio:
+          $ref: '#/components/schemas/OutputXRayHoldingsStockIntersectionConcentrationRatio'
+    OutputXRayFinraFinraHeader:
+      description: FINRA disclosure header message.
+      type: object
+      properties:
+        Message:
+          type: string
+          description: FINRA disclosure message text.
+    OutputDataItemFixedIncomeMaturityPeriod:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Maturity year range identifier.
+          enum:
+          - Years1to3
+          - Years3to5
+          - Years5to7
+          - Years7to10
+          - Years10to15
+          - Years15to20
+          - Years20to30
+          - YearsOver30
+        Value:
+          type: number
+          format: double
+          description: Maturity year range value.
+    OutputErrorOutput:
+      type: object
+      properties:
+        Message:
+          type: string
+          example: The request is invalid.
+        SpecificErrorStatus:
+          type: array
+          items:
+            type: object
+            properties:
+              ErrorCode:
+                type: string
+                example: '40059'
+              ErrorMessage:
+                type: string
+                example: There are holdings present in portfolio which are invalid.
+              Metadata:
+                type: object
+                properties:
+                  InvalidPortfolios:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Name:
+                          type: string
+                          example: Test Portfolio
+                        InvalidHoldings:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              SecurityId:
+                                type: string
+                                example: FX000015JA3
+                              Status:
+                                type: string
+                                enum:
+                                - Invalid
+                                - Unentitled
+    OutputFixedIncomeStyleBreakdown:
+      description: Fixed income style box breakdown by credit quality (High/Medium/Low) and duration (Limited/Moderate/Extensive).
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        HighLtd:
+          type: number
+          format: double
+          description: High credit quality / Limited duration.
+        HighMod:
+          type: number
+          format: double
+          description: High credit quality / Moderate duration.
+        HighExt:
+          type: number
+          format: double
+          description: High credit quality / Extensive duration.
+        MedLtd:
+          type: number
+          format: double
+          description: Medium credit quality / Limited duration.
+        MedMod:
+          type: number
+          format: double
+          description: Medium credit quality / Moderate duration.
+        MedExt:
+          type: number
+          format: double
+          description: Medium credit quality / Extensive duration.
+        LowLtd:
+          type: number
+          format: double
+          description: Low credit quality / Limited duration.
+        LowMod:
+          type: number
+          format: double
+          description: Low credit quality / Moderate duration.
+        LowExt:
+          type: number
+          format: double
+          description: Low credit quality / Extensive duration.
+        Unclassified:
+          type: number
+          format: double
+          description: Percentage not classified into a style box category.
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputFixedIncomeStyleBreakdownSecurity'
+    ResponsePortfolioXray:
+      description: X-Ray response containing analysis results and security reference data.
+      type: object
+      properties:
+        XRay:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputXRayXRay'
+        SecurityReference:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputSecurityItem'
+    OutputXRayHoldingsStockIntersectionConcentrationRatio:
+      description: Concentration ratio showing the combined percentage of portfolio assets held in the top stocks.
+      type: object
+      properties:
+        TopStocksPercent:
+          type: number
+          format: double
+          description: Percentage of portfolio assets in the top stocks.
+        OtherStocksPercent:
+          type: number
+          format: double
+          description: Percentage of portfolio assets in all other stocks.
+        TopNumberOfStocks:
+          type: integer
+          format: int32
+          description: Number of stocks counted as top holdings.
+    OutputRiskUpsideItems:
+      description: Upside capture ratio — the portfolio's percentage capture of benchmark returns during periods when the benchmark was positive.
+      type: object
+      properties:
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemCaptureRatioTimePeriod'
+    OutputRiskCalenderYearItem:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Calendar year identifier.
+        CalenderYearDrawdownItem:
+          $ref: '#/components/schemas/OutputRiskDrawdownItem'
+    OutputProfitabilityItem:
+      type: object
+      properties:
+        DebtCapital:
+          type: number
+          format: double
+          description: Financial leverage ratio calculated by dividing long-term debt by total capitalization. Not provided for financial companies.
+        NetMargin:
+          type: number
+          format: double
+          description: Weighted median net income divided by revenues over the past five fiscal years, expressed as a percentage.
+        ROA:
+          type: number
+          format: double
+          description: Weighted average Return on Assets ratio of underlying stock holdings using long-only data.
+        ROE:
+          type: number
+          format: double
+          description: Weighted average Return on Equity ratio of underlying stock holdings using long-only data.
+    OutputPerformanceCalendarYearReturns:
+      description: Performance of the portfolio and benchmark over calendar year periods.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputPerformanceCalendarYearReturn'
+        Benchmark:
+          $ref: '#/components/schemas/OutputPerformanceBenchmarkCalendarYearReturn'
+    OutputPerformanceReturns:
+      description: Returns data.
+      type: object
+      properties:
+        TrailingReturns:
+          $ref: '#/components/schemas/OutputPerformanceTrailingReturns'
+        CalendarYearReturn:
+          $ref: '#/components/schemas/OutputPerformanceCalendarYearReturns'
+        RollingReturns:
+          $ref: '#/components/schemas/OutputPerformanceRollingReturns'
+        InvestmentActivity:
+          $ref: '#/components/schemas/OutputPerformanceInvestmentActivity'
+        SecurityReturns:
+          $ref: '#/components/schemas/OutputPerformanceSecurityReturns'
+    OutputXRayStatisticsFundStatistics:
+      description: Fund statistics data.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        PortfolioAnalyzed:
+          type: number
+          format: double
+          description: Percentage of portfolio analyzed.
+        Portfolio:
+          $ref: '#/components/schemas/OutputXRayStatisticsFundStatisticsItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputXRayStatisticsFundStatisticsItemSecurity'
+    OutputEquitySectorExposureItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Analyzed:
+          type: number
+          format: double
+          description: Percentage of security analyzed.
+        NotAnalyzed:
+          type: number
+          format: double
+          description: Percentage of security not analyzed.
+        Sector:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquitySectorExposureItem'
+    OutputDataItemBenchmarkTrailingTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Time period identifier.
+          enum:
+          - YearToDate
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+        Value:
+          type: number
+          format: double
+          description: Value for the time period.
+    OutputWorldRegions:
+      description: The portfolio's equity exposure broken down by geographic region. Percentages may reflect long, short, net, or long-rescaled positions.
+      type: object
+      properties:
+        Id:
+          type: string
+          description: World region identifier.
+        PortfolioAnalyzed:
+          type: number
+          format: double
+          description: Percentage of portfolio analyzed.
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquityRegionExposureItem'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquityRegionExposureItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputEquityRegionExposureItemSecurity'
+    InputPortfolioFees:
+      description: Portfolio-level annual fee configuration.
+      type: object
+      properties:
+        AnnualFeePercent:
+          description: Annual fee as a percentage of portfolio value (e.g. `1.15` = 1.15%). Defaults to `0` (no fee).
+          minimum: 0
+          default: 0
+          example: 1.15
+          type: number
+          format: double
+        AnnualFeeFrequency:
+          description: How often the annual fee is deducted from the portfolio.
+          default: Monthly
+          type: string
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+    OutputPerformanceAfterTaxReturns:
+      description: After-tax returns data.
+      type: object
+      properties:
+        OnDistributionAndSalesOfShares:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemOutputAfterTaxReturnsTimePeriod'
+        OnDistributionReturn:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemOutputAfterTaxReturnsTimePeriod'
+    OutputXRayHoldingsTopNetUnderlyingHoldingsSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        PercentAssets:
+          type: number
+          format: double
+          description: Percent of portfolio assets.
+        EquitySector:
+          type: string
+          description: Institution-specific equity sector classification.
+        FixedIncomeSector:
+          type: string
+          description: Fixed income sector identifier.
+        Country:
+          type: string
+          description: Country identifier (ISO country code).
+    OutputPriceRatiosItem:
+      type: object
+      properties:
+        PriceBook:
+          type: number
+          format: double
+          description: Weighted average of the Price-to-Book ratio of underlying stock holdings using long-only data.
+        PriceCashFlow:
+          type: number
+          format: double
+          description: Weighted average of the Price-to-Cash-Flow ratio of underlying stock holdings using long-only data.
+        PriceEarnings:
+          type: number
+          format: double
+          description: Weighted average of the Price-to-Earnings ratio of underlying stock holdings using long-only data.
+        PriceSales:
+          type: number
+          format: double
+          description: Weighted average of the Price-to-Sales ratio of underlying stock holdings using long-only data.
+    InputPortfolioHolding:
+      description: 'Each holding requires a security identifier and a position size. For the identifier, pass one of: `SecurityId`, `CUSIP`, `FundCode`, `ISIN`, `PerformanceId`, or `TradingSymbol`. If multiple identifiers are provided for a single security, `SecurityId` takes priority; if `SecurityId` is absent, the last identifier listed in the object is used. For the position size, pass either of: `Weight` or `Value`.'
+      type: object
+      properties:
+        SecurityId:
+          description: Morningstar unique identifier of a security. Use `CASH%0.000` for cash positions.
+          type: string
+          examples:
+          - FOUSA00DFS
+          - CASH%0.000
+        CUSIP:
+          description: Security's CUSIP.
+          type: string
+          examples:
+          - 09251T103
+        ISIN:
+          description: Security's ISIN.
+          type: string
+          examples:
+          - US0378331005
+        PerformanceId:
+          description: Security's Morningstar Performance ID.
+          type: string
+          examples:
+          - 0P00002QN3
+        TradingSymbol:
+          description: '"Security''s ticker/trading symbol."'
+          type: string
+          examples:
+          - MDLOX
+        FundCode:
+          description: Security's fund code.
+          type: string
+          examples:
+          - ABG
+        Weight:
+          description: Holding weight as a percentage of portfolio total. All holding weights must sum to 100.
+          minimum: 1
+          maximum: 100
+          examples:
+          - 60
+          type: number
+          format: double
+        Value:
+          description: Market value of the holding in the portfolio currency. Sum of all holdings must equal portfolio `TotalValue`.
+          minimum: 1
+          examples:
+          - 25000
+          type: number
+          format: double
+        AnnualFeeFrequency:
+          description: How often the holding-level annual fee is deducted.
+          default: Monthly
+          type: string
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+        AnnualFeePercent:
+          description: Holding-level annual fee as a percentage of holding value (e.g. `1.15` = 1.15%). Defaults to `0` (no fee).
+          minimum: 0
+          default: 0
+          examples:
+          - 1.15
+          type: number
+          format: double
+    OutputFixedIncomeStyleBreakdownSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        Analyzed:
+          type: number
+          format: double
+          description: Percentage of security analyzed.
+        NotAnalyzed:
+          type: number
+          format: double
+          description: Percentage of security not analyzed.
+        FixedIncomeStyleBreakdownItem:
+          $ref: '#/components/schemas/OutputFixedIncomeStyleBreakdownItem'
+    OutputRiskMPTStatistics:
+      description: Modern Portfolio Theory (MPT) statistics for the portfolio.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        TrailingTimePeriod:
+          type: string
+          description: Trailing time period for which MPT statistics are calculated.
+          enum:
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+        DataFrequency:
+          type: string
+          description: Frequency of data used in the calculation.
+          enum:
+          - Monthly
+          - Quarterly
+        Portfolio:
+          $ref: '#/components/schemas/OutputRiskMPTStatisticsItem'
+    OutputFixedIncomeStyleBreakdownItem:
+      type: object
+      properties:
+        HighLtd:
+          type: number
+          format: double
+          description: High credit quality / Limited duration.
+        HighMod:
+          type: number
+          format: double
+          description: High credit quality / Moderate duration.
+        HighExt:
+          type: number
+          format: double
+          description: High credit quality / Extensive duration.
+        MedLtd:
+          type: number
+          format: double
+          description: Medium credit quality / Limited duration.
+        MedMod:
+          type: number
+          format: double
+          description: Medium credit quality / Moderate duration.
+        MedExt:
+          type: number
+          format: double
+          description: Medium credit quality / Extensive duration.
+        LowLtd:
+          type: number
+          format: double
+          description: Low credit quality / Limited duration.
+        LowMod:
+          type: number
+          format: double
+          description: Low credit quality / Moderate duration.
+        LowExt:
+          type: number
+          format: double
+          description: Low credit quality / Extensive duration.
+        Unclassified:
+          type: number
+          format: double
+          description: Percentage not classified into a style box category.
+    OutputRiskDownsideItems:
+      description: Downside capture ratio — the portfolio's percentage capture of benchmark returns during periods when the benchmark was negative.
+      type: object
+      properties:
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemCaptureRatioTimePeriod'
+    OutputGeometricAverageCapitalizationItem:
+      type: object
+      properties:
+        Value:
+          type: number
+          format: double
+          description: Geometric average capitalization value.
+    OutputDataItemCaptureRatioTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Time period identifier.
+          enum:
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+        Value:
+          type: number
+          format: double
+          description: Capture ratio value for the time period.
+    OutputPerformanceCalendarYearReturn:
+      type: object
+      properties:
+        CalendarYear:
+          type: array
+          description: Calendar year return data. Index 1–10 represents the 10 most recent calendar years.
+          items:
+            $ref: '#/components/schemas/OutputDataItemCalendarYearReturnTimePeriod'
+    OutputRiskMPTStatisticsItem:
+      type: object
+      properties:
+        Alpha:
+          type: number
+          format: double
+          description: Difference between the portfolio's actual return and the return predicted by its beta. A positive alpha indicates outperformance.
+        Beta:
+          type: number
+          format: double
+          description: Measure of the portfolio's sensitivity to benchmark market movements.
+        RSquared:
+          type: number
+          format: double
+          description: Strength of the relationship between portfolio returns and benchmark returns. High values indicate close correlation.
+        UpCaptureRatio:
+          type: number
+          format: double
+          description: Percentage of benchmark upside returns captured by the portfolio during periods when the benchmark had positive returns.
+        DownCaptureRatio:
+          type: number
+          format: double
+          description: Percentage of benchmark downside returns captured by the portfolio during periods when the benchmark had negative returns.
+        TreynorRatio:
+          type: number
+          format: double
+          description: Risk-adjusted return measure using market risk (beta) rather than total risk (standard deviation).
+        OmegaRatio:
+          type: number
+          format: double
+          description: Risk-adjusted return measure that does not assume a normal return distribution, focusing on the likelihood of not meeting a target return.
+    OutputXRaySecurityFeesSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Unique identifier of a security.
+        FrontLoadFee:
+          type: number
+          format: double
+          description: Front-end sales charge applied at the time of initial purchase, expressed as a percentage.
+        DeferredLoadFee:
+          type: number
+          format: double
+          description: Deferred sales charge assessed when shares are sold before a specified date.
+        ManagementFees:
+          type: number
+          format: double
+          description: Management and administrative fees paid by shareholders over the fund's prior fiscal year, taken from the fund's prospectus.
+        Expense12b1:
+          type: number
+          format: double
+          description: Annual marketing or distribution fee included in the fund expense ratio.
+        GrossExpenseRatio:
+          type: number
+          format: double
+          description: Annual fee charged to shareholders as a percentage of assets, covering all fund operating expenses including management, administrative, and 12b-1 fees.
+    OutputDataItemStringNumber:
+      type: object
+      properties:
+        Id:
+          type: string
+        Value:
+          type: number
+          format: double
+          description: Value.
+    OutputFixedIncomeSectors:
+      description: The portfolio's fixed income exposure broken down by super sector. Percentages may reflect long, short, net, or long-rescaled positions.
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of analysis.
+        Id:
+          type: string
+          description: Fixed income sector identifier.
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemStringNumber'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemStringNumber'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputFixedIncomeSuperSectorDataBreakdown'
+    OutputPerformanceRollingReturnsDetail:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+        Period:
+          type: string
+        CumulativeTotalReturn:
+          type: number
+          format: double
+          description: Cumulative total return for the rolling period.
+        AnnualizedTotalReturn:
+          type: number
+          format: double
+          description: Annualized total return for the rolling period.
+  examples:
+    RequestPortfolioXrayExample2:
+      summary: 'Request: Maximum Portfolios Input (2)'
+      value:
+        RequestSettings:
+          OutputCurrency: USD
+          AssetClassGroupConfig:
+            AssetClassGroupConfigs:
+            - id: ACG-USBROAD
+          AnalysisDateTimePeriod: MonthEnd
+          PortfolioPerformanceStartDate: EarliestCommon
+          PerformanceFrequency: Monthly
+          InitialValue: 10000
+          SynchronizePortfolioStartDate: true
+          ReturnDataSections:
+          - RollingReturns
+          RollingReturnFrequencies:
+          - Year1
+          - Year3
+          - Year5
+          RollingReturnStep: 1
+          IncludePortfolioInCorrelationMatrix: false
+        Portfolios:
+        - Name: ExamplePortfolio1
+          Currency: USD
+          TotalValue: 50000
+          Holdings:
+          - TradingSymbol: AAPL
+            Value: 15000
+          - TradingSymbol: MSFT
+            Value: 12000
+          - TradingSymbol: AMZN
+            Value: 10000
+          - ISIN: US5949181045
+            Value: 8000
+          - TradingSymbol: NVDA
+            Value: 5000
+          Fees:
+            AnnualFeePercent: 0.5
+            AnnualFeeFrequency: Monthly
+        - Name: ExamplePortfolio2
+          Currency: USD
+          TotalValue: 19500
+          Holdings:
+          - TradingSymbol: BND
+            Value: 2000
+          - TradingSymbol: VYM
+            Value: 1500
+          - CUSIP: '922908769'
+            Value: 10000
+          - SecurityId: CASH%0.000
+            Value: 6000
+    RequestPortfolioXrayExample1:
+      summary: 'Request: Minimum Portfolios Input (1)'
+      value:
+        Portfolios:
+        - Name: ExamplePortfolio1
+          Currency: USD
+          TotalValue: 50000
+          Holdings:
+          - TradingSymbol: SPY
+            Weight: 40
+          - TradingSymbol: AGG
+            Weight: 30
+          - TradingSymbol: QQQ
+            Weight: 20
+          - SecurityId: CASH%0.000
+            Weight: 10
+          Benchmark:
+            Type: Standard
+          RequestSettings:
+            OutputCurrency: USD
+            AnalysisDateTimePeriod: MonthEnd
+            PortfolioPerformanceStartDate: EarliestCommon
+            PerformanceFrequency: Monthly
+            InitialValue: 10000
+            DisableRescale: false
+  responses:
+    ResponsePortfolioXray:
+      description: '200: OK'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponsePortfolioXray'
+  requestBodies:
+    RequestPortfolioXray:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestPortfolioXray'
+          examples:
+            RequestPortfolioXrayExample1:
+              $ref: '#/components/examples/RequestPortfolioXrayExample1'
+            RequestPortfolioXrayExample2:
+              $ref: '#/components/examples/RequestPortfolioXrayExample2'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

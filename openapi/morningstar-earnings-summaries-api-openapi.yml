@@ -1,0 +1,501 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Earnings Summaries API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Earnings Summaries
+paths:
+  /direct-web-services/v1/ai-insights/earnings-summaries:
+    post:
+      tags:
+      - Earnings Summaries
+      operationId: postEarningsSummaries
+      summary: Returns earnings summaries for a list of companies.
+      description: "Submit a list of company identifiers to retrieve AI-generated earnings release summaries. Results are returned synchronously.\n\n  #### Supported Identifier Types\n\n  * `companyId` - Morningstar company ID (default).\n  * `performanceId`, `securityId`, `msid`, `isin`, `cusip`, `tradingSymbol`\n  \n  When using non-unique identifiers such as `tradingSymbol` or `isin`, apply\n  optional filters (`baseCurrency`, `domicile`, `exchangeCountry`) to improve\n  match accuracy.\n"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EarningsSummariesRequestInput'
+            examples:
+              Sort by filing updated date:
+                value:
+                  investments:
+                  - id: 0C00000378
+                    idType: companyId
+                  - id: 0C00000D9W
+                    idType: companyId
+                  - id: 0C00000L88
+                    idType: companyId
+                  sortBy:
+                  - filingUpdatedAt
+                  orderBy: desc
+              Sort by company ID:
+                value:
+                  investments:
+                  - id: 0C00000378
+                    idType: companyId
+                  - id: 0C00000D9W
+                    idType: companyId
+                  - id: 0C00000L88
+                    idType: companyId
+                  sortBy:
+                  - companyId
+                  orderBy: asc
+              Sort by multiple fields without order:
+                value:
+                  investments:
+                  - id: 0C00000378
+                    idType: companyId
+                  - id: 0C00000D9W
+                    idType: companyId
+                  - id: 0C00000L88
+                    idType: companyId
+                  sortBy:
+                  - companyId
+                  - filingUpdatedAt
+              Request with multiple identifier types (ID Lookup):
+                value:
+                  investments:
+                  - id: 0P0000BZSZ
+                    idType: performanceId
+                  - id: US33833Q1067
+                    idType: isin
+                    baseCurrency: EUR
+                    domicile: USA
+                    exchangeCountry: DEU
+                  - id: F000015DDK
+                    idType: securityId
+                  - id: 004239109
+                    idType: cusip
+                    baseCurrency: USD
+                    domicile: USA
+                    exchangeCountry: USA
+                  - id: NJUL
+                    idType: tradingSymbol
+                    exchangeCountry: USA
+                  - id: F000015DDK
+                    idType: msid
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EarningsSummariesResponse'
+              examples:
+                Success with all companies covered:
+                  value:
+                    companies:
+                    - identifiers:
+                        companyId: 0C00000378
+                      summary: Apple Inc. reported strong quarterly earnings with revenue beating analyst expectations. iPhone sales drove growth in the quarter.
+                      metadata:
+                        companyName: Apple Inc.
+                        filingType: 8-K
+                        filingUpdatedAt: '2025-05-21'
+                        earningsReleaseSummaryPublishedAt: '2025-05-28T08:11:48.095000'
+                    - identifiers:
+                        companyId: 0C00000D9W
+                      summary: Microsoft Corporation announced quarterly results with cloud services revenue showing significant year-over-year growth.
+                      metadata:
+                        companyName: Microsoft Corporation
+                        filingType: 10-Q
+                        filingUpdatedAt: '2025-05-22'
+                        earningsReleaseSummaryPublishedAt: '2025-05-29T09:30:15.120000'
+                    - identifiers:
+                        companyId: 0C00000L88
+                      summary: Amazon.com Inc. posted quarterly earnings with AWS revenue contributing to overall revenue growth.
+                      metadata:
+                        companyName: Amazon.com Inc.
+                        filingType: 10-K
+                        filingUpdatedAt: '2025-05-23'
+                        earningsReleaseSummaryPublishedAt: '2025-05-30T10:45:22.500000'
+                    metadata:
+                      requestId: ac585332-fddb-463e-a966-864686c6ac16
+                      time: '2026-03-03T10:39:34.0164714Z'
+                Success with some companies not covered:
+                  value:
+                    companies:
+                    - identifiers:
+                        companyId: 0C00000378
+                      summary: Apple Inc. reported strong quarterly earnings with revenue beating analyst expectations. iPhone sales drove growth in the quarter.
+                      metadata:
+                        companyName: Apple Inc.
+                        filingType: 8-K
+                        filingUpdatedAt: '2025-05-21'
+                        earningsReleaseSummaryPublishedAt: '2025-05-28T08:11:48.095000'
+                    metadata:
+                      messages:
+                      - investments:
+                        - id: 0C00000XYZ
+                          idType: companyId
+                        - id: 0C00000ABC
+                          idType: companyId
+                        type: Warning
+                        message: No earnings data coverage for the following company IDs.
+                        code: 404.earningsInsights.101
+                      requestId: 1bc9a92d-8ca9-49b9-b5f5-344e64928603
+                      time: '2026-03-03T10:39:34.0166886Z'
+                Success with lookup ID warnings:
+                  value:
+                    companies:
+                    - identifiers:
+                        companyId: 0C00008UOF
+                      summary: Five Point Holdings, LLC reported a robust first quarter for 2025, showcasing significant financial performance and strategic developments.
+                      metadata:
+                        companyName: Five Point Holdings LLC
+                        filingType: 8-K
+                        filingUpdatedAt: '2025-04-24'
+                        earningsReleaseSummaryPublishedAt: '2025-05-28T08:07:53.297000'
+                    - identifiers:
+                        companyId: 0C0000C0VA
+                      summary: 908 Devices Inc. recently released its unaudited pro forma condensed financial statements for the years ended December 31, 2024, and December 31, 2023, providing a detailed look at the company's financial performance and strategic developments.
+                      metadata:
+                        companyName: 908 Devices Inc
+                        filingType: 8-K
+                        filingUpdatedAt: '2025-03-04'
+                        earningsReleaseSummaryPublishedAt: '2025-05-28T07:36:29.605000'
+                    metadata:
+                      messages:
+                      - investments:
+                        - id: 0P0000BZS4
+                          idType: performanceId
+                        type: Warning
+                        message: 'Lookup : Invalid investments.'
+                        code: 404.common.125
+                      - investments:
+                        - id: US33833Q1067
+                          idType: isin
+                          companyId: 0C00008UOF
+                          baseCurrency: EUR
+                          domicile: USA
+                          exchangeCountry: DEU
+                        type: Warning
+                        message: 'Lookup : Multiple identifier match found for the investments.'
+                        code: 200.common.126
+                      - investments:
+                        - id: F000015DDK
+                          idType: securityId
+                          companyId: 0C0000A4NK
+                        - id: NJUL
+                          idType: tradingSymbol
+                          companyId: 0C0000A4NK
+                          exchangeCountry: USA
+                        - id: F000015DDK
+                          idType: msid
+                          companyId: 0C0000A4NK
+                        type: Warning
+                        message: Duplicate investments found in the request
+                        code: 200.common.128
+                      - investments:
+                        - id: F000015DDK
+                          idType: securityId
+                          companyId: 0C0000A4NK
+                        - id: 004239109
+                          idType: cusip
+                          companyId: 0C00000974
+                        type: Warning
+                        message: No data coverage for the investments.
+                        code: 404.earningsInsights.006
+                      requestId: 4bf30785-b50b-41c6-a645-9f27f0362c7c
+                      time: '2026-03-03T10:39:34.0167883Z'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+components:
+  schemas:
+    EarningsSummariesRequestInput:
+      description: Request body for the Earnings Summaries endpoint.
+      required:
+      - investments
+      type: object
+      properties:
+        investments:
+          type: array
+          description: List of up to 20 company investments to query.
+          minItems: 1
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/EarningsSummaryInvestmentInput'
+        sortBy:
+          type:
+          - array
+          - 'null'
+          description: One or more fields to sort results by. When multiple fields are provided, results are sorted in the order the fields are listed.
+          items:
+            type: string
+            enum:
+            - companyId
+            - filingUpdatedAt
+            - earningsReleaseSummaryPublishedAt
+        orderBy:
+          type:
+          - string
+          - 'null'
+          description: Determines the sort direction applied to all `sortBy` fields.
+          enum:
+          - asc
+          - desc
+          default: desc
+      additionalProperties: false
+    ResponseMessage:
+      description: A warning or informational message relating to one or more investments.
+      type: object
+      properties:
+        investments:
+          type:
+          - array
+          - 'null'
+          description: The investments this message applies to.
+          items:
+            $ref: '#/components/schemas/InvestmentLookupInputDetails'
+        type:
+          $ref: '#/components/schemas/MessageType'
+        message:
+          type:
+          - string
+          - 'null'
+          description: Human-readable description of the warning or issue.
+        code:
+          type:
+          - string
+          - 'null'
+          description: Machine-readable error or warning code.
+      additionalProperties: false
+    EarningsSummaryItemMetadata:
+      description: Filing and publication metadata associated with an earnings summary result.
+      type: object
+      required:
+      - companyName
+      - filingType
+      - filingUpdatedAt
+      - earningsReleaseSummaryPublishedAt
+      properties:
+        companyName:
+          type: string
+          description: Full legal name of the company.
+          example: Apple Inc.
+        filingType:
+          type: string
+          description: The SEC filing type associated with the earnings release.
+          enum:
+          - 8-K
+          - 10-Q
+          - 10-K
+          example: 8-K
+        filingUpdatedAt:
+          type: string
+          format: date
+          description: The date on which the filing was last updated (YYYY-MM-DD).
+          example: '2025-05-21'
+        earningsReleaseSummaryPublishedAt:
+          type: string
+          format: date-time
+          description: ISO 8601 datetime at which the earnings release summary was published.
+          example: '2025-05-28T08:11:48.095000'
+    EarningsSummariesResponse:
+      description: Response body returned by the Earnings Summaries endpoint.
+      type: object
+      required:
+      - companies
+      - metadata
+      properties:
+        companies:
+          type: array
+          description: List of earnings summary results for matched companies.
+          items:
+            $ref: '#/components/schemas/EarningsSummaryCompany'
+        metadata:
+          $ref: '#/components/schemas/ResponseMetadataWithMessages'
+    InvestmentLookupInputDetails:
+      description: Describes an investment referenced in a response message, including its resolved identifiers.
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The identifier value as supplied in the original request.
+        idType:
+          type:
+          - string
+          - 'null'
+          description: The identifier type as supplied in the original request.
+        companyId:
+          type:
+          - string
+          - 'null'
+          description: Resolved Morningstar company ID, if available.
+        performanceId:
+          type:
+          - string
+          - 'null'
+          description: Resolved Morningstar performance ID, if available.
+        baseCurrency:
+          type:
+          - string
+          - 'null'
+          description: Base currency filter applied during lookup.
+        domicile:
+          type:
+          - string
+          - 'null'
+          description: Domicile filter applied during lookup.
+        exchangeCountry:
+          type:
+          - string
+          - 'null'
+          description: Exchange country filter applied during lookup.
+      additionalProperties: false
+    EarningsSummaryCompany:
+      description: A single company's earnings summary result.
+      type: object
+      required:
+      - identifiers
+      - summary
+      - metadata
+      properties:
+        identifiers:
+          type: object
+          description: Map of identifier types to their resolved values for this company. Typically contains `companyId`.
+          additionalProperties:
+            type: string
+          example:
+            companyId: 0C00000378
+        summary:
+          type: string
+          description: AI-generated summary of the company's most recent earnings release.
+          example: Apple Inc. reported strong quarterly earnings with revenue beating analyst expectations. iPhone sales drove growth in the quarter.
+        metadata:
+          $ref: '#/components/schemas/EarningsSummaryItemMetadata'
+    ErrorDetails:
+      description: Standard error response body.
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+          description: HTTP status code.
+        errorCode:
+          type:
+          - string
+          - 'null'
+          description: Morningstar-specific error code (e.g. `400.aiInsights.007`).
+        message:
+          type:
+          - string
+          - 'null'
+          description: Human-readable description of the error.
+        requestId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Request identifier to include when contacting support.
+      additionalProperties: false
+    EarningsSummaryInvestmentInput:
+      description: A single investment identifier submitted in an Earnings Summaries request.
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+          description: The identifier value for the investment.
+        idType:
+          type:
+          - string
+          - 'null'
+          description: The type of the identifier supplied in `id`.
+          enum:
+          - companyId
+          - performanceId
+          - securityId
+          - msid
+          - isin
+          - cusip
+          - tradingSymbol
+          default: companyId
+        baseCurrency:
+          type:
+          - string
+          - 'null'
+          description: ISO 4217 three-letter currency code. Used to disambiguate non-unique identifiers such as `tradingSymbol`.
+        domicile:
+          type:
+          - string
+          - 'null'
+          description: ISO 3166-1 alpha-3 country code for the investment's domicile. Used to disambiguate non-unique identifiers.
+        exchangeCountry:
+          type:
+          - string
+          - 'null'
+          description: ISO 3166-1 alpha-3 country code for the exchange country. Used to disambiguate non-unique identifiers.
+        exchangeId:
+          type:
+          - string
+          - 'null'
+          description: Exchange identifier. Used to disambiguate non-unique identifiers.
+      additionalProperties: false
+    ResponseMetadataWithMessages:
+      description: Standard response metadata, extended with an optional list of warnings or informational messages about the request.
+      type: object
+      properties:
+        messages:
+          type:
+          - array
+          - 'null'
+          description: Warnings or informational messages relating to specific investments in the request — for example, unmatched identifiers, duplicate submissions, or missing data coverage.
+          items:
+            $ref: '#/components/schemas/ResponseMessage'
+        requestId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Unique identifier for the API request, useful for tracing and support.
+        time:
+          type: string
+          format: date-time
+          description: UTC datetime at which the response was generated.
+          readOnly: true
+      additionalProperties: false
+    MessageType:
+      type: string
+      description: Indicates whether the message is an informational warning or a hard error.
+      enum:
+      - Warning
+      - Error
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,762 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Shareholder Stewardship API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Shareholder Stewardship
+paths:
+  /direct-web-services/v1/investments/{id}/equity-say-on-pay:
+    get:
+      summary: Get Say on Pay dataset view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquitySayOnPayDataset
+      tags:
+      - Shareholder Stewardship
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquitySayOnPay'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 952
+  /direct-web-services/v1/investments/{id}/equity-shareholder-stewardship:
+    get:
+      summary: Get Shareholder Stewardship package view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: Most recent and time series data supported.
+      operationId: getEquityShareholderStewardShipPackage
+      tags:
+      - Shareholder Stewardship
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityShareholderStewardship'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 952
+  /direct-web-services/v1/investments/{id}/equity-voting-report:
+    get:
+      summary: Get Voting Report view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityVotingReportDataset
+      tags:
+      - Shareholder Stewardship
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityVotingReport'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 952
+components:
+  schemas:
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputVotingReport:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its financial statements.
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        annualGeneralMeetingRecordDate:
+          type: string
+          description: Indicates the date established by an issuer of a security for the purpose of determining the holders who are entitled to take part in the annual general meeting.
+          nullable: true
+        description:
+          type: string
+          description: ''
+          nullable: true
+        companyTotalShareOutstanding:
+          type: integer
+          description: This value represents the aggregate number of shares outstanding for a company. These values are reported by the company itself; with the most common source of this information being from the regulatory filings.
+          format: int32
+          nullable: true
+        companyTotalVoting:
+          type: integer
+          description: Total voting power at the company level. This figure is the aggregated voting power of each of the specific investments the company may have
+          format: int32
+          nullable: true
+        investmentTotalSharesOutstanding:
+          type: integer
+          description: The shares outstanding value reported by the company for a particular share class. The most common source of this information is from the company's regulatory filings.
+          format: int32
+          nullable: true
+        investmentTotalVotingPower:
+          type: integer
+          description: The total voting power of a specific investment. This is determined by multiplying the Investment's Total Shares Outstanding by the Investment's Vote Per Share.
+          format: int32
+          nullable: true
+        isPublicInvestment:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        votePerShare:
+          type: number
+          description: Vote per share indicates the number of votes the shareholder is entitled to; for each individual share they hold. Shareholders vote on matters such as shareholder proposals; compensation plans; director election; etc.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputVotingReport
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputSayOnPay:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The company's fiscal year that it uses to report its financial results.
+          nullable: true
+        transactionId:
+          type: string
+          description: ''
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        sayOnFrequencyAbstention:
+          type: number
+          description: Represents the number of shareholder votes that abstain for frequency of approval for executive compensation.
+          format: double
+          nullable: true
+        sayOnFrequencyAnnual:
+          type: number
+          description: Represents the number of shareholder votes in favor of one-year say-on-pay frequency. Public companies are required to provide their shareholders with an advisory vote on how often they would like to be presented with the say-on-pay votes - every year; every second year; or every third year.
+          format: double
+          nullable: true
+        sayOnFrequencyBiennial:
+          type: number
+          description: Represents the number of shareholder votes in favor of two-year say-on-pay frequency. Public companies are required to provide their shareholders with an advisory vote on how often they would like to be presented with the say-on-pay votes - every year; every second year; or every third year.
+          format: double
+          nullable: true
+        sayOnFrequencyBrokerNonVotes:
+          type: number
+          description: Represents the number of broker non-votes for frequency of approval for executive compensation.
+          format: double
+          nullable: true
+        sayOnFrequencyTriennial:
+          type: number
+          description: Represents the number of shareholder votes in favor of three-year say-on-pay frequency. Public companies are required to provide their shareholders with an advisory vote on how often they would like to be presented with the say-on-pay votes - every year; every second year; or every third year.
+          format: double
+          nullable: true
+        sayOnPayAbstention:
+          type: number
+          description: Represents the number of shareholder votes that abstain for executive compensation/pay package. Public companies are subject to proxy rules to provide their shareholders with an advisory vote on the compensation of the most highly compensated executives.
+          format: double
+          nullable: true
+        sayOnPayAgainst:
+          type: number
+          description: Represents the number of shareholder votes against pay package/executive compensation. Public companies are subject to proxy rules to provide their shareholders with an advisory vote on the compensation of the most highly compensated executives.
+          format: double
+          nullable: true
+        sayOnPayBrokerNonVotes:
+          type: number
+          description: Represents the number of broker non-votes for executive compensation.
+          format: double
+          nullable: true
+        sayOnPayFor:
+          type: number
+          description: Represents the number of shareholder votes in favor of pay package/executive compensation. Public companies are subject to proxy rules to provide their shareholders with an advisory vote on the compensation of the most highly compensated executives.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputSayOnPay
+  responses:
+    ResponseEquityShareholderStewardship:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sayOnPay:
+                $ref: '#/components/schemas/OutputSayOnPay'
+              votingReport:
+                $ref: '#/components/schemas/OutputVotingReport'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquitySayOnPay:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sayOnPay:
+                $ref: '#/components/schemas/OutputSayOnPay'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityVotingReport:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              votingReport:
+                $ref: '#/components/schemas/OutputVotingReport'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

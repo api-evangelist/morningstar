@@ -1,0 +1,88 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Accounts
+paths:
+  /accounts/aggregate:
+    post:
+      tags:
+      - Accounts
+      summary: Request aggregation of accounts for an authenticated investor user
+      description: 'Initiate demand aggregation  of accounts for the authenticated investor from a financial institution. Use the `class` parameter to restrict which accounts to aggregate by specifying one or more class values: investment, noninvestment, or other. </br></br>Aggregation gathers holdings and transactions for the accounts from associated Financial Institutions. It does not discover new accounts that are available to the user from those financial institutions. The request will not attempt to aggregate any account that is disabled due to a login error as repeated retries with incorrect credentials could cause an account to be locked out.</br></br>Aggregation runs asynchronously. This endpoint validates inputs and locates target accounts for aggregation. If either of these operations fails, an error code is returned. If both operations succeed, the aggregation is submitted.  </br></br>Aggregation progress can be observed and monitored using the following endpoints:</br>`GET /activities/summary`</br>`GET /credentials/accounts`'
+      operationId: aggregateAccountsUsingPOST
+      parameters:
+      - name: class
+        in: query
+        description: 'Class of an account. If no class is specified, then all types are returned. </br></br>List of one or more of the following classes of investor accounts: </br><span>&#8226;</span> **investment** which includes BAA account types prefixed with INVESTMENT_ and INSURANCE_  </br><span>&#8226;</span> **nonInvestment** which includes BAA account types CREDITCARD and all those prefixed with BANKING_, HEALTHACCOUNT_, and LOAN_</br><span>&#8226;</span> **other** which includes BAA account types:OTHER, UNKNOWN, and NULL'
+        allowEmptyValue: false
+        schema:
+          type: string
+          enum:
+          - investment
+          - noninvestment
+          - other
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad request
+        '401':
+          description: Not Authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+  /accounts/{id}:
+    delete:
+      tags:
+      - Accounts
+      summary: Delete an account
+      description: 'Delete the account identified by the `id` parameter. '
+      operationId: deleteUsingDELETE
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of an account
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Not Authorized
+        '403':
+          description: Forbidden
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

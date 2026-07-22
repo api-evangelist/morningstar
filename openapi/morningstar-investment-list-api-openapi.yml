@@ -1,0 +1,2348 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Investment List API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Investment List
+paths:
+  /direct-web-services/v1/investment-list:
+    post:
+      summary: Retrieve investment list.
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseRetrieveInvestmentList'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '401':
+          $ref: '#/components/responses/ResponseUnauthorized'
+        '403':
+          $ref: '#/components/responses/ResponseForbidden'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      operationId: retrieveInvestmentList
+      tags:
+      - Investment List
+      requestBody:
+        $ref: '#/components/requestBodies/RequestRetrieveInvestmentList'
+components:
+  requestBodies:
+    RequestRetrieveInvestmentList:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestRetrieveInvestmentList'
+          examples:
+            RequestRetrieveInvestmentListExample1:
+              $ref: '#/components/examples/RequestRetrieveInvestmentListExample1'
+            RequestRetrieveInvestmentListExample2:
+              $ref: '#/components/examples/RequestRetrieveInvestmentListExample2'
+            RequestRetrieveInvestmentListExample3:
+              $ref: '#/components/examples/RequestRetrieveInvestmentListExample3'
+            RequestRetrieveInvestmentListExample4:
+              $ref: '#/components/examples/RequestRetrieveInvestmentListExample4'
+            RequestRetrieveInvestmentListExample5:
+              $ref: '#/components/examples/RequestRetrieveInvestmentListExample5'
+            RequestRetrieveInvestmentListExample6:
+              $ref: '#/components/examples/RequestRetrieveInvestmentListExample6'
+            RequestRetrieveInvestmentListExample7:
+              $ref: '#/components/examples/RequestRetrieveInvestmentListExample7'
+            RequestRetrieveInvestmentListExample8:
+              $ref: '#/components/examples/RequestRetrieveInvestmentListExample8'
+  schemas:
+    InputInvestment:
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          minLength: 1
+          type: string
+          description: Investment to query. Accepts performance IDs, ISINs, security IDs, CUSIPs, trading symbols, and Morningstar IDs.
+          examples:
+          - 0P00000046
+          - US0042391096
+        idType:
+          type: string
+          description: Identifier type.
+          default: performanceId
+          nullable: true
+          enum:
+          - performanceId
+          - isin
+          - fundCode
+          - securityId
+          - cusip
+          - msid
+          - tradingSymbol
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+          examples:
+          - USD
+          - JPY
+        domicile:
+          type: string
+          description: Domicile used to look up investment. Accepts 3-character ISO 3166-1 country codes.
+          nullable: true
+          examples:
+          - USA
+          - JPN
+        exchangeCountry:
+          type: string
+          description: Exchange country used to look up investment. Accepts 3-character ISO 3166-1 country codes.
+          nullable: true
+          examples:
+          - USA
+          - JPN
+        exchangeId:
+          type: string
+          description: Exchange identifier used to look up investment.
+          nullable: true
+          examples:
+          - EX$$$$XNAS
+          - EX$$$$XLON
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+      additionalProperties: false
+      description: Investment to query. Investment look up is supported.
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+    InputSort:
+      type: object
+      properties:
+        dataPoint:
+          type: string
+          nullable: true
+        orderBy:
+          type: string
+          nullable: true
+      additionalProperties: false
+    OutputMetadataMessages:
+      description: Provides information about identifiers for which no results were returned.
+      title: OutputMetadataMessages
+      type: object
+      properties:
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+        type:
+          type: string
+          description: Indicates the message type.
+          example: Warning
+          readOnly: true
+          enum:
+          - Warning
+        code:
+          type: string
+          description: Code associated with the message.
+          example: 404.common.125
+          readOnly: true
+        message:
+          type: string
+          description: Description of the issue encountered.
+          example: 'Lookup : Invalid investments.'
+          readOnly: true
+      additionalProperties: false
+    RequestRetrieveInvestmentList:
+      type: object
+      properties:
+        datapoints:
+          type: array
+          items:
+            type: string
+            maxItems: 50
+          description: Lists data points to return. Retrieve valid values programmatically via `GET /direct-web-services/v1/investment-list/data-points`, or browse the full reference in the data dictionary.
+          nullable: true
+          examples:
+          - - companyInformation.cik
+            - companyInformation.legalName
+            - companyInformation.morningstarSectorCode
+            - balanceSheet.totalAssetsValueFY
+            - basicReference.isin
+          externalDocs:
+            description: Data dictionary (Excel)
+            url: https://developer.morningstar.com/content/hidden-from-navigation/InvestmentListDataDictionary.xlsx
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputInvestment'
+          nullable: true
+          description: List of investments to query.
+        sort:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputSort'
+          nullable: true
+        languageId:
+          type: string
+          description: Gets or sets the language for the investment list results.
+          nullable: true
+        currencyId:
+          type: string
+          description: Gets or sets the currency for the investment list results.
+          nullable: true
+      additionalProperties: false
+      required:
+      - datapoints
+      - investments
+    ResponseRetrieveInvestmentList:
+      title: ResponseRetireveInvestmentList
+      description: Response including results and metadata.
+      type: object
+      properties:
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvestment'
+          nullable: true
+          readOnly: true
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+      additionalProperties: false
+    OutputInvestment:
+      description: Output investment.
+      type: object
+      title: OutputInvestment
+      required:
+      - performanceId
+      properties:
+        performanceId:
+          type: string
+          alias: performanceId
+          nullable: false
+        aggregateSummary.openInterest:
+          type: number
+          format: double
+          nullable: true
+        aggregateSummary.tradeCount:
+          type: number
+          format: double
+          nullable: true
+        aggregateSummary.turnover:
+          type: number
+          format: double
+          nullable: true
+        aggregateSummary.vwap:
+          type: number
+          format: double
+          nullable: true
+        annualReportFeesAndFinancialsMostRecent.totalExpenseRatio:
+          type: string
+          nullable: true
+        annualReturnsHistorical.annualRet2020:
+          type: string
+          nullable: true
+        annualReturnsHistorical.annualRet2021:
+          type: string
+          nullable: true
+        annualReturnsHistorical.annualRet2022:
+          type: string
+          nullable: true
+        annualReturnsHistorical.annualRet2023:
+          type: string
+          nullable: true
+        annualReturnsHistorical.annualRet2024:
+          type: string
+          nullable: true
+        assetAllocationBreakdown.assetAllocBondPercNet:
+          type: string
+          nullable: true
+        assetAllocationBreakdown.assetAllocCashPercNet:
+          type: string
+          nullable: true
+        assetAllocationBreakdown.assetAllocEquityPercNet:
+          type: string
+          nullable: true
+        assetAllocationBreakdown.assetAllocOtherPercNet:
+          type: string
+          nullable: true
+        basicReference.baseCurrency:
+          type: string
+          nullable: true
+        basicReference.countryAvailableForSale:
+          type: string
+          nullable: true
+        basicReference.domicile:
+          type: string
+          nullable: true
+        basicReference.firmName:
+          type: string
+          nullable: true
+        basicReference.fundCode:
+          type: string
+          nullable: true
+        basicReference.fundLegalName:
+          type: string
+          nullable: true
+        basicReference.fundid:
+          type: string
+          nullable: true
+        basicReference.inceptionDate:
+          type: string
+          nullable: true
+        basicReference.investmentType:
+          type: string
+          nullable: true
+        basicReference.isin:
+          type: string
+          nullable: true
+        basicReference.name:
+          type: string
+          nullable: true
+        basicReference.portfolioDate:
+          type: string
+          nullable: true
+        basicReference.primaryShare:
+          type: string
+          nullable: true
+        basicReference.shareClassType:
+          type: string
+          nullable: true
+        basicReference.ticker:
+          type: string
+          nullable: true
+        bestAndWorstRollingReturns.best3MoAsOfDateQtrEnd:
+          type: string
+          nullable: true
+        bestAndWorstRollingReturns.best3MoRetInceptionQtrEnd:
+          type: string
+          nullable: true
+        bestAndWorstRollingReturns.worst3MoAsOfDateQtrEnd:
+          type: string
+          nullable: true
+        bestAndWorstRollingReturns.worst3MoRetInceptionQtrEnd:
+          type: string
+          nullable: true
+        closePrice.closePrice:
+          type: number
+          format: double
+          nullable: true
+        closePrice.closePriceDatetime:
+          type: string
+          nullable: true
+        companyGrade.growthGrade:
+          type: string
+          nullable: true
+        companyGrade.profitabilityGrade:
+          type: string
+          nullable: true
+        companyInformation.cik:
+          type: string
+          nullable: true
+        companyInformation.companyId:
+          type: string
+          nullable: true
+        companyInformation.companyStatus:
+          type: string
+          nullable: true
+        companyInformation.domicileCountryCode:
+          type: string
+          nullable: true
+        companyInformation.globalTemplateIndustryTemplateCode:
+          type: string
+          nullable: true
+        companyInformation.legalNameLanguageCode:
+          type: string
+          nullable: true
+        companyInformation.lei:
+          type: string
+          nullable: true
+        companyInformation.morningstarIndustryCode:
+          type: string
+          nullable: true
+        companyInformation.morningstarIndustryGroupCode:
+          type: string
+          nullable: true
+        companyInformation.morningstarSectorCode:
+          type: string
+          nullable: true
+        companyInformation.operationStatus:
+          type: string
+          nullable: true
+        companyInformation.shortName:
+          type: string
+          nullable: true
+        companyInformation.standardName:
+          type: string
+          nullable: true
+        companyInformation.webAddress:
+          type: string
+          nullable: true
+        countryAndRegionalExposureBreakdown.equityRegionEmergingPercLongRescaled:
+          type: string
+          nullable: true
+        countryAndRegionalExposureBreakdown.equityRegionGreaterAsiaPercLongRescaled:
+          type: string
+          nullable: true
+        countryAndRegionalExposureBreakdown.equityRegionGreaterEuropePercLongRescaled:
+          type: string
+          nullable: true
+        countryAndRegionalExposureBreakdown.equityRegionUnitedStatesPercLongRescaled:
+          type: string
+          nullable: true
+        dailyDividendResidualRiskAndReturnSensitivity.beta1260Day:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.returnDateDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRet1DayDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRet1MoDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRet1WkDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRet1YrDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRet3MoDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRet6MoDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRetAnnlzd10YrDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRetAnnlzd3YrDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRetAnnlzd5YrDaily:
+          type: string
+          nullable: true
+        dailyReturnsMostRecent.totalRetYtdDaily:
+          type: string
+          nullable: true
+        dailyStandardDeviation.arithmeticMean1008Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.arithmeticMean1260Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.arithmeticMean2520Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.arithmeticMean252Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.arithmeticMean504Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.arithmeticMean756Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.dailyStandardDeviationAsOfDate:
+          type: string
+          nullable: true
+        dailyStandardDeviation.standardDeviation1008Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.standardDeviation1260Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.standardDeviation2520Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.standardDeviation252Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.standardDeviation504Day:
+          type: number
+          format: double
+          nullable: true
+        dailyStandardDeviation.standardDeviation756Day:
+          type: number
+          format: double
+          nullable: true
+        delistInformation.delistingDate:
+          type: string
+          nullable: true
+        derivedStatisticsFromIndexLevelsTimeSeries.averageAnnualReportNetExpenseRatio:
+          type: string
+          nullable: true
+        derivedStatsIEMptCurrent.sharpeRatio3YrMoEnd:
+          type: string
+          nullable: true
+        derivedStatsIEMptCurrent.stdDev3YrMoEnd:
+          type: string
+          nullable: true
+        dividendResidualRiskAndReturnSensitivity.alpha12Month:
+          type: string
+          nullable: true
+        dividendResidualRiskAndReturnSensitivity.alpha36Month:
+          type: string
+          nullable: true
+        dividendResidualRiskAndReturnSensitivity.alpha60Month:
+          type: string
+          nullable: true
+        dividendResidualRiskAndReturnSensitivity.beta12Month:
+          type: string
+          nullable: true
+        dividendResidualRiskAndReturnSensitivity.beta36Month:
+          type: string
+          nullable: true
+        dividendResidualRiskAndReturnSensitivity.beta60Month:
+          type: string
+          nullable: true
+        dividendResidualRiskAndReturnSensitivity.rSquare12Month:
+          type: string
+          nullable: true
+        dividendResidualRiskAndReturnSensitivity.rSquare36Month:
+          type: string
+          nullable: true
+        dividendResidualRiskAndReturnSensitivity.rSquare60Month:
+          type: string
+          nullable: true
+        enterpriseValueCalculations.cashReturn:
+          type: string
+          nullable: true
+        enterpriseValueCalculations.enterpriseValue:
+          type: string
+          nullable: true
+        enterpriseValueCalculations.enterpriseValueToEbitdaRatio:
+          type: string
+          nullable: true
+        enterpriseValueCalculations.enterpriseValueToEbitRatio:
+          type: string
+          nullable: true
+        enterpriseValueCalculations.enterpriseValueToFreeCashFlowRatio:
+          type: string
+          nullable: true
+        enterpriseValueCalculations.enterpriseValueToRevenueRatio:
+          type: string
+          nullable: true
+        enterpriseValueCalculations.totalDebtToEnterpriseValue:
+          type: string
+          nullable: true
+        equityPortfolioStatistics.averageMarketCapMilLong:
+          type: string
+          nullable: true
+        equityPortfolioStatistics.equityStyleFactorDivYldLong:
+          type: string
+          nullable: true
+        equityPortfolioStatistics.numberOfHoldings:
+          type: string
+          nullable: true
+        equityPortfolioStatistics.percAssetInTop10Holdings:
+          type: string
+          nullable: true
+        equityPortfolioStatistics.porbRatioTtmLong:
+          type: string
+          nullable: true
+        equityPortfolioStatistics.poreRatioTtmLong:
+          type: string
+          nullable: true
+        equityPortfolioStatistics.roePercTtmLong:
+          type: string
+          nullable: true
+        equityResearchRatingsMostRecent.priceOrFairValue:
+          type: string
+          nullable: true
+        equityResearchRatingsMostRecent.stockCapitalAllocationRating:
+          type: string
+          nullable: true
+        esgFundLevelCarbonRisk.portfolioCarbonRiskScore:
+          type: string
+          nullable: true
+        esgFundLevelRatingsHistorical.morningstarSustainabilityRating:
+          type: string
+          nullable: true
+        esgFundLevelRatingsHistorical.portfolioCorporateSustainabilityScore:
+          type: string
+          nullable: true
+        esgFundLevelRatingsHistorical.portfolioEnvironmentalRiskScore:
+          type: string
+          nullable: true
+        esgFundLevelRatingsHistorical.portfolioGovernanceRiskScore:
+          type: string
+          nullable: true
+        esgFundLevelRatingsHistorical.portfolioSocialRiskScore:
+          type: string
+          nullable: true
+        esgFundLevelRatingsMostRecent.sustainabilityRatingDate:
+          type: string
+          nullable: true
+        feeLevelRanks.morningstarFeeLevelBroad:
+          type: string
+          nullable: true
+        financialHealthGrade.financialHealthGradeValue:
+          type: string
+          nullable: true
+        financialHealthGrade.probabilityOfDefault:
+          type: string
+          nullable: true
+        fixedIncomePortfolioStatisticsSurveyedAnalytics.averageCreditQuality:
+          type: string
+          nullable: true
+        fixedIncomePortfolioStatisticsSurveyedAnalytics.averageEffDurationSurvey:
+          type: string
+          nullable: true
+        fixedIncomePortfolioStatisticsSurveyedAnalytics.averageYtmSurvey:
+          type: string
+          nullable: true
+        fundAttributes.activelyManaged:
+          type: string
+          nullable: true
+        fundAttributes.fundOfFunds:
+          type: string
+          nullable: true
+        fundAttributes.indexFund:
+          type: string
+          nullable: true
+        fundAttributes.openForInvestment:
+          type: string
+          nullable: true
+        indexTick.indexPrice:
+          type: number
+          format: double
+          nullable: true
+        indexTick.indexPricePublicationTime:
+          type: string
+          nullable: true
+        instrumentIdentifiers.exchangeTickerSymbol:
+          type: string
+          nullable: true
+        instrumentIdentifiers.isin:
+          type: string
+          nullable: true
+        instrumentIdentifiers.localCode:
+          type: string
+          nullable: true
+        instrumentIdentifiers.mdCusip:
+          type: string
+          nullable: true
+        instrumentIdentifiers_performanceId:
+          type: string
+          nullable: true
+        instrumentIdentifiers.sedol:
+          type: string
+          nullable: true
+        instrumentIdentifiers.vendorTickerSymbol:
+          type: string
+          nullable: true
+        investmentBasicDetails.advisor:
+          type: string
+          nullable: true
+        investmentBasicDetails.distributor:
+          type: string
+          nullable: true
+        investmentBasicDetails.exchange:
+          type: string
+          nullable: true
+        investmentBasicDetails.exchangeCountry:
+          type: string
+          nullable: true
+        investmentBasicDetails.firmCountry:
+          type: string
+          nullable: true
+        investmentBasicDetails.managementCompany:
+          type: string
+          nullable: true
+        investmentBasicDetails.primaryProspectusBenchmark:
+          type: string
+          nullable: true
+        investmentBasicDetails.primaryProspectusBenchmarkId:
+          type: string
+          nullable: true
+        investmentBasicDetails.subadvisor:
+          type: string
+          nullable: true
+        lastPrice.lastPrice:
+          type: number
+          format: double
+          nullable: true
+        lastPrice.lastPricePublishDatetime:
+          type: string
+          nullable: true
+        lastPrice.lastSize:
+          type: number
+          format: double
+          nullable: true
+        managerBioAndDetailsMostRecent.managerName:
+          type: string
+          nullable: true
+        managerBioAndDetailsMostRecent.managerTenureAverage:
+          type: string
+          nullable: true
+        managerBioAndDetailsMostRecent.managerTenureLongest:
+          type: string
+          nullable: true
+        marketCapital.asOfDate:
+          type: string
+          nullable: true
+        marketCapital.companyLevelMarketCapital:
+          type: string
+          nullable: true
+        marketCapital.currencyCode:
+          type: string
+          nullable: true
+        marketCapital.shareLevelMarketCapital:
+          type: string
+          nullable: true
+        marketCapitalBreakdown.marketCapGiantPercLongRescaled:
+          type: string
+          nullable: true
+        marketCapitalBreakdown.marketCapLargePercLongRescaled:
+          type: string
+          nullable: true
+        marketCapitalBreakdown.marketCapMidPercLongRescaled:
+          type: string
+          nullable: true
+        marketCapitalBreakdown.marketCapSmallPercLongRescaled:
+          type: string
+          nullable: true
+        marketReturn.asOfDate:
+          type: string
+          nullable: true
+        marketReturn.nonDividendTotalReturnMonthToDate:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.nonDividendTotalReturnOneDay:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalGrossedUpReturnDateToDate:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalGrossedUpReturnMonthToDate:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalGrossedUpReturnQuarterToDate:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalGrossedUpReturnWeekToDate:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalGrossedUpReturnYearToDate:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalReturnMonthToDate:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalReturnOneDay:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalReturnQuarterToDate:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalReturnWeekToDate:
+          type: number
+          format: double
+          nullable: true
+        marketReturn.totalReturnYearToDate:
+          type: number
+          format: double
+          nullable: true
+        metadata.priceFrequencyFlag:
+          type: string
+          nullable: true
+        midPrice.midPrice:
+          type: number
+          format: double
+          nullable: true
+        monthEndReturnStatistics.asOfDate:
+          type: string
+          nullable: true
+        monthEndReturnStatistics.best3MonthTotalReturnOverPast120Months:
+          type: number
+          format: double
+          nullable: true
+        monthEndReturnStatistics.best3MonthTotalReturnOverPast12Months:
+          type: number
+          format: double
+          nullable: true
+        monthEndReturnStatistics.best3MonthTotalReturnOverPast36Months:
+          type: number
+          format: double
+          nullable: true
+        monthEndReturnStatistics.best3MonthTotalReturnOverPast60Months:
+          type: number
+          format: double
+          nullable: true
+        monthEndReturnStatistics.worst3MonthTotalReturnOverPast120Months:
+          type: number
+          format: double
+          nullable: true
+        monthEndReturnStatistics.worst3MonthTotalReturnOverPast12Months:
+          type: number
+          format: double
+          nullable: true
+        monthEndReturnStatistics.worst3MonthTotalReturnOverPast36Months:
+          type: number
+          format: double
+          nullable: true
+        monthEndReturnStatistics.worst3MonthTotalReturnOverPast60Months:
+          type: number
+          format: double
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.returnDateMoEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1MoMoEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrMoEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrQtrEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet3MoMoEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet6MoMoEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd10YrMoEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd10YrQtrEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrMoEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrQtrEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrMoEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrQtrEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetInceptionMoEnd:
+          type: string
+          nullable: true
+        monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetYtdMoEnd:
+          type: string
+          nullable: true
+        monthlyStandardDeviation.arithmeticMean120Month:
+          type: number
+          format: double
+          nullable: true
+        monthlyStandardDeviation.arithmeticMean12Month:
+          type: number
+          format: double
+          nullable: true
+        monthlyStandardDeviation.arithmeticMean24Month:
+          type: number
+          format: double
+          nullable: true
+        monthlyStandardDeviation.arithmeticMean36Month:
+          type: number
+          format: double
+          nullable: true
+        monthlyStandardDeviation.arithmeticMean48Month:
+          type: number
+          format: double
+          nullable: true
+        monthlyStandardDeviation.arithmeticMean60Month:
+          type: number
+          format: double
+          nullable: true
+        monthlyStandardDeviation.asOfDate:
+          type: string
+          nullable: true
+        monthlyStandardDeviation.standardDeviation120Month:
+          type: string
+          nullable: true
+        monthlyStandardDeviation.standardDeviation12Month:
+          type: string
+          nullable: true
+        monthlyStandardDeviation.standardDeviation24Month:
+          type: number
+          format: double
+          nullable: true
+        monthlyStandardDeviation.standardDeviation36Month:
+          type: string
+          nullable: true
+        monthlyStandardDeviation.standardDeviation48Month:
+          type: number
+          format: double
+          nullable: true
+        monthlyStandardDeviation.standardDeviation60Month:
+          type: string
+          nullable: true
+        morningstarCategory.globalBroadCategoryGroup:
+          type: string
+          nullable: true
+        morningstarCategory.globalCategory:
+          type: string
+          nullable: true
+        morningstarCategory.morningstarCategoryId:
+          type: string
+          nullable: true
+        morningstarEquitySectorsBreakdown.equityEconSectorConsumerCyclicalPercLongRescaled:
+          type: string
+          nullable: true
+        morningstarEquitySectorsBreakdown.equityEconSectorConsumerDefensivePercLongRescaled:
+          type: string
+          nullable: true
+        morningstarEquitySectorsBreakdown.equityEconSectorEnergyPercLongRescaled:
+          type: string
+          nullable: true
+        morningstarEquitySectorsBreakdown.equityEconSectorFinancialServicesPercLongRescaled:
+          type: string
+          nullable: true
+        morningstarEquitySectorsBreakdown.equityEconSectorHealthcarePercLongRescaled:
+          type: string
+          nullable: true
+        morningstarEquitySectorsBreakdown.equityEconSectorTechnologyPercLongRescaled:
+          type: string
+          nullable: true
+        morningstarMedalistRatingMostRecent.morningstarMedalistRating:
+          type: string
+          nullable: true
+        morningstarMedalistRatingMostRecent.morningstarMedalistRatingDate:
+          type: string
+          nullable: true
+        morningstarMedalistRatingMostRecent.morningstarMedalistRatingParentPillar:
+          type: string
+          nullable: true
+        morningstarMedalistRatingMostRecent.morningstarMedalistRatingPeoplePillar:
+          type: string
+          nullable: true
+        morningstarMedalistRatingMostRecent.morningstarMedalistRatingProcessPillar:
+          type: string
+          nullable: true
+        morningstarPortfolioRiskScore.portfolioRiskScore:
+          type: string
+          nullable: true
+        morningstarPortfolioRiskScore.portfolioRiskScoreDate:
+          type: string
+          nullable: true
+        morningstarRatingMostRecent.morningstarRating10Yr:
+          type: string
+          nullable: true
+        morningstarRatingMostRecent.morningstarRating3Yr:
+          type: string
+          nullable: true
+        morningstarRatingMostRecent.morningstarRating5Yr:
+          type: string
+          nullable: true
+        morningstarRatingMostRecent.morningstarRatingOverall:
+          type: string
+          nullable: true
+        morningstarRatingMostRecent.ratingDate:
+          type: string
+          nullable: true
+        morningstarStyleBox.equityStyleBoxLong:
+          type: string
+          nullable: true
+        morningstarStyleBox.sizeScoreLong:
+          type: string
+          nullable: true
+        morningstarStyleBox.valueGrowthScoreLong:
+          type: string
+          nullable: true
+        msciCountryClassification.msciCountry:
+          type: string
+          nullable: true
+        navPrice.exchangeNav:
+          type: number
+          format: double
+          nullable: true
+        netAssetsMonthEndMostRecent.firmTotalAssets:
+          type: string
+          nullable: true
+        netAssetsMonthEndMostRecent.fundSize:
+          type: string
+          nullable: true
+        netAssetsMonthEndMostRecent.netAssetsDate:
+          type: string
+          nullable: true
+        nonDividendResidualRiskAndReturnSensitivity.nonDividendBeta36Month:
+          type: string
+          nullable: true
+        nonDividendResidualRiskAndReturnSensitivity.nonDividendRSquare36Month:
+          type: string
+          nullable: true
+        ohlPrice.highPrice:
+          type: number
+          format: double
+          nullable: true
+        ohlPrice.lowPrice:
+          type: number
+          format: double
+          nullable: true
+        ohlPrice.openPrice:
+          type: number
+          format: double
+          nullable: true
+        performanceRanks.bearMarketRankPercMoEnd:
+          type: string
+          nullable: true
+        performanceRanks.totalRetPercRankCat10YrMoEnd:
+          type: string
+          nullable: true
+        performanceRanks.totalRetPercRankCat1YrMoEnd:
+          type: string
+          nullable: true
+        performanceRanks.totalRetPercRankCat3YrMoEnd:
+          type: string
+          nullable: true
+        performanceRanks.totalRetPercRankCat5YrMoEnd:
+          type: string
+          nullable: true
+        performanceRanks.totalRetPercRankCatYtdMoEnd:
+          type: string
+          nullable: true
+        performanceStatistics.52WeekHighLowPrice:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.52WeekHighPrice:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.52WeekHighPriceDate:
+          type: string
+          nullable: true
+        performanceStatistics.52WeekLowPriceDate:
+          type: string
+          nullable: true
+        performanceStatistics.midNetChange:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.midPercentChange:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.netChange:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.percentChange:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.postmarketNetChange:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.postmarketPercentChange:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.premarketNetChange:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.premarketPercentChange:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.yearToDateHighPrice:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.yearToDateHighPriceDate:
+          type: string
+          nullable: true
+        performanceStatistics.yearToDateLowPrice:
+          type: number
+          format: double
+          nullable: true
+        performanceStatistics.yearToDateLowPriceDate:
+          type: string
+          nullable: true
+        priceMultiples.capeRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.normalizedPegRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.normalizedPriceToEarningsRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.normalizedPriceToEarningsRatioNormalizedProfitabilityMetrics:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.normalizedPriceToEbitdaRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.normalizedPriceToEbitdarRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.normalizedPriceToEbitRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.priceEarningsToGrowthRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.priceToAdjustedFundsFromOperations:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.priceToBookRatio:
+          type: string
+          nullable: true
+        priceMultiples.priceToCashFlowRatio:
+          type: string
+          nullable: true
+        priceMultiples.priceToCashRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.priceToEarningsRatio:
+          type: string
+          nullable: true
+        priceMultiples.priceToEbitdaRatio:
+          type: string
+          nullable: true
+        priceMultiples.priceToEbitdarRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.priceToEbitRatio:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.priceToFreeCashFlowRatio:
+          type: string
+          nullable: true
+        priceMultiples.priceToFundsFromOperations:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.priceToSalesRatio:
+          type: string
+          nullable: true
+        priceMultiples.priceToTangibleBookValueRatio:
+          type: string
+          nullable: true
+        priceMultiples.privateEps10:
+          type: number
+          format: double
+          nullable: true
+        priceMultiples.privateNetEarnings10:
+          type: number
+          format: double
+          nullable: true
+        priceMultiplestatistics.asOfDate:
+          type: string
+          nullable: true
+        pricesMostRecent.avgDailyVolume1Mo:
+          type: string
+          nullable: true
+        pricesMostRecent.avgDailyVolume1Yr:
+          type: string
+          nullable: true
+        pricesMostRecent.avgDailyVolume3Mo:
+          type: string
+          nullable: true
+        pricesMostRecent.below52WkHighPerc:
+          type: string
+          nullable: true
+        pricesMostRecent.datePrice52WkHigh:
+          type: string
+          nullable: true
+        pricesMostRecent.datePrice52WkLow:
+          type: string
+          nullable: true
+        pricesMostRecent.lastClose:
+          type: string
+          nullable: true
+        pricesMostRecent.monthEndPrice:
+          type: string
+          nullable: true
+        pricesMostRecent.monthEndPriceDate:
+          type: string
+          nullable: true
+        pricesMostRecent.navMoEnd:
+          type: string
+          nullable: true
+        pricesMostRecent.price52WkHigh:
+          type: string
+          nullable: true
+        pricesMostRecent.price52WkLow:
+          type: string
+          nullable: true
+        priceYields.earningsYield:
+          type: string
+          nullable: true
+        prospectusFees.managementFee:
+          type: string
+          nullable: true
+        prospectusFees.maxFrontLoad:
+          type: string
+          nullable: true
+        prospectusFees.prospectusGrossExpenseRatio:
+          type: string
+          nullable: true
+        prospectusFees.prospectusNetExpenseRatio:
+          type: string
+          nullable: true
+        purchaseDetails.closedToAllInv:
+          type: string
+          nullable: true
+        purchaseDetails.minimumAdditionalPurchase:
+          type: string
+          nullable: true
+        purchaseDetails.minimumInvestmentBaseCurrency:
+          type: string
+          nullable: true
+        purchaseDetails.shareClassClosedToNewInv:
+          type: string
+          nullable: true
+        purchaseDetails.surveyedKiidSrri:
+          type: string
+          nullable: true
+        quantitativeFairValues.asOfClosePriceDate:
+          type: string
+          nullable: true
+        quantitativeFairValues.closePrice:
+          type: number
+          format: double
+          nullable: true
+        quantitativeFairValues.quantitativeFairValue:
+          type: string
+          nullable: true
+        quantitativeFairValues.quantitativeFairValueDate:
+          type: string
+          nullable: true
+        quantitativeFairValues.quantitativeFairValueUncertainty:
+          type: number
+          format: double
+          nullable: true
+        quantitativeFairValues.quantitativeFairValueUncertaintyLabel:
+          type: string
+          nullable: true
+        quantitativeFairValues.quantitativeFinancialHealth:
+          type: string
+          nullable: true
+        quantitativeFairValues.quantitativeFiveStarPrice:
+          type: string
+          nullable: true
+        quantitativeFairValues.quantitativeMoat:
+          type: string
+          nullable: true
+        quantitativeFairValues.quantitativeOneStarPrice:
+          type: string
+          nullable: true
+        quantitativeRatings.quantitativePriceToFairValue:
+          type: string
+          nullable: true
+        quantitativeRatings.quantitativeStarRating:
+          type: string
+          nullable: true
+        quantitativeRatings.quantitativeValuationLabel:
+          type: string
+          nullable: true
+        reference.assetType:
+          type: string
+          nullable: true
+        reference.countryCode:
+          type: string
+          nullable: true
+        reference.countryName:
+          type: string
+          nullable: true
+        reference.currency:
+          type: string
+          nullable: true
+        reference.instrumentDescription:
+          type: string
+          nullable: true
+        reference.marketSectorCode:
+          type: string
+          nullable: true
+        reference.marketSegmentCode:
+          type: string
+          nullable: true
+        reference.morningstarVenueId:
+          type: string
+          nullable: true
+        reference.operatingMic:
+          type: string
+          nullable: true
+        reference.segmentMic:
+          type: string
+          nullable: true
+        returnsPerformanceCurrent.returnDateMoEnd:
+          type: string
+          nullable: true
+        riskStatistics.alpha3YrMoEnd:
+          type: string
+          nullable: true
+        riskStatistics.beta3YrMoEnd:
+          type: string
+          nullable: true
+        riskStatistics.downsideCaptureRatio3YrMoEnd:
+          type: string
+          nullable: true
+        riskStatistics.informationRatio3YrMoEnd:
+          type: string
+          nullable: true
+        riskStatistics.rSquared3YrMoEnd:
+          type: string
+          nullable: true
+        riskStatistics.sortinoRatio3YrMoEnd:
+          type: string
+          nullable: true
+        riskStatistics.trackingError3YrMoEnd:
+          type: string
+          nullable: true
+        riskStatistics.upsideCaptureRatio3YrMoEnd:
+          type: string
+          nullable: true
+        settlementPrice.finalSettlementPrice:
+          type: number
+          format: double
+          nullable: true
+        settlementPrice.todaysSettlementPrice:
+          type: number
+          format: double
+          nullable: true
+        shareClassInformation.cusip:
+          type: string
+          nullable: true
+        shareClassInformation.exchangeCode:
+          type: string
+          nullable: true
+        shareClassInformation.exchangeSubMarketGlobalId:
+          type: string
+          nullable: true
+        shareClassInformation.investmentId:
+          type: string
+          nullable: true
+        shareClassInformation.investmentStatus:
+          type: integer
+          format: int32
+          nullable: true
+        shareClassInformation.investmentType:
+          type: string
+          nullable: true
+        shareClassInformation.ipoDate:
+          type: string
+          nullable: true
+        shareClassInformation.ipoOfferPrice:
+          type: string
+          nullable: true
+        shareClassInformation.isDr:
+          type: boolean
+          nullable: true
+        shareClassInformation.isMainShare:
+          type: string
+          nullable: true
+        shareClassInformation.isPrimaryPerformanceId:
+          type: boolean
+          nullable: true
+        shareClassInformation.marketSymbol:
+          type: string
+          nullable: true
+        shareClassInformation.performanceStatus:
+          type: string
+          nullable: true
+        shareClassInformation.securityType:
+          type: string
+          nullable: true
+        shareClassInformation.sedol:
+          type: string
+          nullable: true
+        shareClassInformation.segmentMicCode:
+          type: string
+          nullable: true
+        shareClassInformation.symbol:
+          type: string
+          nullable: true
+        shareClassInformation.tradingCurrency:
+          type: string
+          nullable: true
+        shareClassInformation.tradingStatus:
+          type: string
+          nullable: true
+        shortInterest.daysToCover:
+          type: string
+          nullable: true
+        shortInterest.percentageOfFloat:
+          type: string
+          nullable: true
+        shortInterest.percentageOfSharesOutstanding:
+          type: string
+          nullable: true
+        shortInterest.shortInterestValue:
+          type: string
+          nullable: true
+        topofbook.askPrice:
+          type: number
+          format: double
+          nullable: true
+        topofbook.askPriceClose:
+          type: number
+          format: double
+          nullable: true
+        topofbook.bidPrice:
+          type: number
+          format: double
+          nullable: true
+        topofbook.bidPriceClose:
+          type: number
+          format: double
+          nullable: true
+        tradePostmarket.postmarketCumulativeVolume:
+          type: number
+          format: double
+          nullable: true
+        tradePostmarket.postmarketTradePrice:
+          type: number
+          format: double
+          nullable: true
+        tradePostmarket.postmarketTradeSize:
+          type: number
+          format: double
+          nullable: true
+        tradePremarket.premarketCumulativeVolume:
+          type: number
+          format: double
+          nullable: true
+        tradePremarket.premarketTradePrice:
+          type: number
+          format: double
+          nullable: true
+        tradePremarket.premarketTradeSize:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.dailyMarketReturnIndex:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailing10YearReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing15YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailing1DayReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing1MonthReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing1WeekReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailing1YearReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing20YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailing2MonthReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailing2YearReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing3MonthReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing3YearReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing4YearReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing5YearReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing6MonthReturn:
+          type: string
+          nullable: true
+        trailingReturn.trailing6YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailing7YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailing8YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailing9MonthReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailing9YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp10YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp15YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp1DayReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp1MonthReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp1WeekReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp1YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp20YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp2MonthReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp2YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp3MonthReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp3YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp4YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp5YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp6MonthReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp6YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp7YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp8YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp9MonthReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingGrossedUp9YearReturn:
+          type: number
+          format: double
+          nullable: true
+        trailingReturn.trailingReturnAsOfDate:
+          type: string
+          nullable: true
+        yieldsMostRecent.secYield:
+          type: string
+          nullable: true
+    OutputInvalidInvestments:
+      type: object
+      title: OutputInvalidInvestments
+      description: Input investment identifiers for which no matching investment was found.
+      properties:
+        id:
+          type: string
+          description: Indicates identifier value passed in request.
+          examples:
+          - US2562191062
+        idType:
+          type: string
+          description: Indicates the identifier type passed in request.
+          example: isin
+          enum:
+          - performanceId
+          - isin
+          - fundCode
+          - securityId
+          - cusip
+          - msid
+          - tradingSymbol
+        errorCode:
+          type: string
+          description: TBC
+          example: TBC
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          example: 0P000PPP6Q
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up investment identifier.
+        domicile:
+          type: string
+          description: Input domicile used to look up investment identifier.
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up investment identifier.
+        exchangeId:
+          type: string
+          description: Specifies the exchange identifier used to look up investment.
+      additionalProperties: false
+    OutputMetadata:
+      description: Metadata returned in response including information about input investment identifiers for which no results were found.
+      title: OutputMetadata
+      type: object
+      readOnly: true
+      properties:
+        requestId:
+          description: Indicates the request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          type: string
+          readOnly: true
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          type: string
+          format: date-time
+          readOnly: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+      additionalProperties: false
+  examples:
+    RequestRetrieveInvestmentListExample8:
+      summary: 'Scenario: Maximum Sort Fields - 2'
+      description: Results are sorted by `performanceId` in ascending order by default. You can override the default settings by specifing up to two fields to sort results by.
+      value:
+        dataPoints:
+        - companyGrade.growthGrade
+        - companyGrade.profitabilityGrade
+        - companyInformation.cik
+        - companyInformation.companyId
+        - companyInformation.companyStatus
+        - companyInformation.domicileCountryCode
+        - companyInformation.globalTemplateIndustryTemplateCode
+        - companyInformation.legalName
+        - companyInformation.legalNameLanguageCode
+        - companyInformation.lei
+        - companyInformation.morningstarIndustryCode
+        - companyInformation.morningstarIndustryGroupCode
+        - companyInformation.morningstarSectorCode
+        - companyInformation.operationStatus
+        - companyInformation.shortName
+        - companyInformation.standardName
+        - companyInformation.webAddress
+        - countryAndRegionalExposureBreakdown.equityRegionEmergingPercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionGreaterAsiaPercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionGreaterEuropePercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionUnitedStatesPercLongRescaled
+        - dailyDividendResidualRiskAndReturnSensitivity.beta1260Day
+        - dailyReturnsMostRecent.returnDateDaily
+        - dailyReturnsMostRecent.totalRet1DayDaily
+        - dailyReturnsMostRecent.totalRet1MoDaily
+        - dailyReturnsMostRecent.totalRet1WkDaily
+        - dailyReturnsMostRecent.totalRet1YrDaily
+        - dailyReturnsMostRecent.totalRet3MoDaily
+        - dailyReturnsMostRecent.totalRet6MoDaily
+        - dailyReturnsMostRecent.totalRetAnnlzd10YrDaily
+        investments:
+        - id: 0P0000000F
+        - id: 0P0000001J
+        - id: 0P0000002I
+        - id: 0P0000003G
+        - id: 0P0000004E
+        - id: 0P0000007F
+        - id: 0P0000008M
+        - id: 0P0000008R
+        - id: 0P000000GB
+        - id: 0P000000GJ
+        - id: 0P000000JI
+        - id: 0P000000T0
+        - id: 0P000000V5
+        - id: 0P000000VK
+        - id: 0P000000VZ
+        - id: 0P000000W5
+        - id: 0P000000W7
+        - id: 0P000000W8
+        - id: 0P000000W9
+        - id: 0P000000WF
+        - id: 0P000000WH
+        sort:
+        - dataPoint: companyInformation.companyId
+          orderBy: asc
+        - dataPoint: dailyReturnsMostRecent.totalRet1DayDaily
+          orderBy: desc
+    ResponseRetrieveInvestmentListExample1:
+      summary: 'Use Case: Performance Watchlist (Response)'
+      description: 'Example output for the following use case:
+
+
+        "I want to compare YTD, 1Y, 3Y, 5Y returns and see as-of dates."
+
+
+        The response includes information about fields for which no data was returned.'
+      value:
+        investments:
+        - performanceId: 0P000000YF
+          trailingReturn.trailingReturnAsOfDate: '2026-04-10'
+          trailingReturn.trailing1MonthReturn: '0.000000'
+          trailingReturn.trailing3MonthReturn: '900.000000'
+          trailingReturn.trailing6MonthReturn: '-95.000000'
+          trailingReturn.trailing1YearReturn: '-95.000000'
+          trailingReturn.trailing3YearReturn: '0.000000'
+          trailingReturn.trailing5YearReturn: '-51.689306'
+          basicReference.name: CMTSU Liquidation Inc
+          basicReference.ticker: CBRI
+          dailyReturnsMostRecent.totalRet1DayDaily: '0'
+          dailyReturnsMostRecent.totalRet1YrDaily: '0'
+          dailyReturnsMostRecent.totalRetYtdDaily: '0'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrMoEnd: '9900.00000'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrMoEnd: '0.00000'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrMoEnd: '-51.43095'
+          dailyReturnsMostRecent.totalRet1WkDaily: '-99'
+          dailyReturnsMostRecent.totalRet1MoDaily: '-99'
+          dailyReturnsMostRecent.returnDateDaily: '2026-04-10'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.returnDateMoEnd: '2026-03-31'
+        - performanceId: 0P000000YD
+          instrumentIdentifiers.isin: US12541W2098
+          reference.assetType: STOCK
+          reference.currency: USD
+          trailingReturn.trailingReturnAsOfDate: '2026-04-10'
+          trailingReturn.trailing1MonthReturn: '-7.034004'
+          trailingReturn.trailing3MonthReturn: '-3.894127'
+          trailingReturn.trailing6MonthReturn: '31.473945'
+          trailingReturn.trailing1YearReturn: '83.881688'
+          trailingReturn.trailing3YearReturn: '21.560638'
+          trailingReturn.trailing5YearReturn: '12.465633'
+          basicReference.name: C.H. Robinson Worldwide Inc
+          basicReference.ticker: CHRW
+          dailyReturnsMostRecent.totalRet1DayDaily: '-3.94242'
+          dailyReturnsMostRecent.totalRet1YrDaily: '83.88169'
+          dailyReturnsMostRecent.totalRetYtdDaily: '2.09007'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrMoEnd: '64.55078'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrMoEnd: '20.39440'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrMoEnd: '13.25928'
+          dailyReturnsMostRecent.totalRet1WkDaily: '-2.59175'
+          dailyReturnsMostRecent.totalRet1MoDaily: '-7.034'
+          dailyReturnsMostRecent.returnDateDaily: '2026-04-10'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.returnDateMoEnd: '2026-03-31'
+        - performanceId: 0P000000YB
+          instrumentIdentifiers.isin: US46122W3034
+          reference.assetType: STOCK
+          reference.currency: USD
+          trailingReturn.trailingReturnAsOfDate: '2026-04-10'
+          trailingReturn.trailing1MonthReturn: '-29.182879'
+          trailingReturn.trailing3MonthReturn: '-33.333333'
+          trailingReturn.trailing6MonthReturn: '-44.680851'
+          trailingReturn.trailing1YearReturn: '-51.466667'
+          trailingReturn.trailing3YearReturn: '-14.265017'
+          trailingReturn.trailing5YearReturn: '-28.397369'
+          basicReference.name: Inuvo Inc
+          basicReference.ticker: INUV
+          dailyReturnsMostRecent.totalRet1DayDaily: '-3.19149'
+          dailyReturnsMostRecent.totalRet1YrDaily: '-51.46667'
+          dailyReturnsMostRecent.totalRetYtdDaily: '-26.6129'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrMoEnd: '-41.69014'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrMoEnd: '-10.80415'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrMoEnd: '-27.31010'
+          dailyReturnsMostRecent.totalRet1WkDaily: '-13.33333'
+          dailyReturnsMostRecent.totalRet1MoDaily: '-29.18288'
+          dailyReturnsMostRecent.returnDateDaily: '2026-04-10'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.returnDateMoEnd: '2026-03-31'
+        - performanceId: 0P000000YA
+          instrumentIdentifiers.isin: CA12532H1047
+          reference.assetType: STOCK
+          reference.currency: USD
+          trailingReturn.trailingReturnAsOfDate: '2026-04-10'
+          trailingReturn.trailing1MonthReturn: '-5.895049'
+          trailingReturn.trailing3MonthReturn: '-25.512954'
+          trailingReturn.trailing6MonthReturn: '-21.163157'
+          trailingReturn.trailing1YearReturn: '-28.494677'
+          trailingReturn.trailing3YearReturn: '-10.183197'
+          trailingReturn.trailing5YearReturn: '-3.507330'
+          basicReference.name: CGI Inc Class A
+          basicReference.ticker: GIB
+          dailyReturnsMostRecent.totalRet1DayDaily: '-0.76814'
+          dailyReturnsMostRecent.totalRet1YrDaily: '-28.49946'
+          dailyReturnsMostRecent.totalRetYtdDaily: '-24.2856'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrMoEnd: '-26.31406'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrMoEnd: '-8.48967'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrMoEnd: '-2.38092'
+          dailyReturnsMostRecent.totalRet1WkDaily: '-5.70424'
+          dailyReturnsMostRecent.totalRet1MoDaily: '-5.89505'
+          dailyReturnsMostRecent.returnDateDaily: '2026-04-10'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.returnDateMoEnd: '2026-03-31'
+        - performanceId: 0P000000W8
+          instrumentIdentifiers.isin: US1143401024
+          reference.assetType: STOCK
+          reference.currency: USD
+          trailingReturn.trailingReturnAsOfDate: '2026-04-10'
+          trailingReturn.trailing1MonthReturn: '-2.502195'
+          trailingReturn.trailing3MonthReturn: '-41.429325'
+          trailingReturn.trailing6MonthReturn: '-25.494800'
+          trailingReturn.trailing1YearReturn: '-16.299227'
+          trailingReturn.trailing3YearReturn: '-20.468480'
+          trailingReturn.trailing5YearReturn: '-25.132607'
+          basicReference.name: Azenta Inc
+          basicReference.ticker: AZTA
+          dailyReturnsMostRecent.totalRet1DayDaily: '-1.98588'
+          dailyReturnsMostRecent.totalRet1YrDaily: '-16.29923'
+          dailyReturnsMostRecent.totalRetYtdDaily: '-33.22309'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrMoEnd: '-39.03002'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrMoEnd: '-22.06699'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrMoEnd: '-23.48040'
+          dailyReturnsMostRecent.totalRet1WkDaily: '-1.85594'
+          dailyReturnsMostRecent.totalRet1MoDaily: '-2.50219'
+          dailyReturnsMostRecent.returnDateDaily: '2026-04-10'
+          monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.returnDateMoEnd: '2026-03-31'
+        metadata:
+          messages:
+          - investments:
+            - status: Datapoints are not entitled for 0P000000YF security
+              datapointIds:
+              - reference.currency
+              - instrumentIdentifiers.isin
+              - reference.assetType
+              errorCode: '403'
+              id: 0P000000YF
+            type: Warning
+          requestId: 85b6f9b2-01f9-4da8-90b8-5efb3c1ec31d
+          time: '2026-04-13T14:41:48.4913734Z'
+    RequestRetrieveInvestmentListExample6:
+      summary: 'Scenario: Request Limits Maximum Data Points - 50'
+      description: A maximum of 50 data points can be sent in a single request.
+      value:
+        dataPoints:
+        - basicReference.baseCurrency
+        - basicReference.countryAvailableForSale
+        - basicReference.domicile
+        - basicReference.firmName
+        - basicReference.fundCode
+        - basicReference.fundid
+        - basicReference.fundLegalName
+        - basicReference.inceptionDate
+        - basicReference.investmentType
+        - basicReference.isin
+        - basicReference.legalName
+        - basicReference.name
+        - basicReference.portfolioDate
+        - basicReference.primaryShare
+        - basicReference.shareClassType
+        - basicReference.ticker
+        - bestAndWorstRollingReturns.best3MoAsOfDateQtrEnd
+        - bestAndWorstRollingReturns.best3MoRetInceptionQtrEnd
+        - bestAndWorstRollingReturns.worst3MoAsOfDateQtrEnd
+        - bestAndWorstRollingReturns.worst3MoRetInceptionQtrEnd
+        - companyGrade.growthGrade
+        - companyGrade.profitabilityGrade
+        - companyInformation.cik
+        - companyInformation.companyId
+        - companyInformation.companyStatus
+        - companyInformation.domicileCountryCode
+        - companyInformation.globalTemplateIndustryTemplateCode
+        - companyInformation.legalName
+        - companyInformation.legalNameLanguageCode
+        - companyInformation.lei
+        - companyInformation.morningstarIndustryCode
+        - companyInformation.morningstarIndustryGroupCode
+        - companyInformation.morningstarSectorCode
+        - companyInformation.operationStatus
+        - companyInformation.shortName
+        - companyInformation.standardName
+        - companyInformation.webAddress
+        - countryAndRegionalExposureBreakdown.equityRegionEmergingPercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionGreaterAsiaPercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionGreaterEuropePercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionUnitedStatesPercLongRescaled
+        - dailyDividendResidualRiskAndReturnSensitivity.beta1260Day
+        - dailyReturnsMostRecent.returnDateDaily
+        - dailyReturnsMostRecent.totalRet1DayDaily
+        - dailyReturnsMostRecent.totalRet1MoDaily
+        - dailyReturnsMostRecent.totalRet1WkDaily
+        - dailyReturnsMostRecent.totalRet1YrDaily
+        - dailyReturnsMostRecent.totalRet3MoDaily
+        - dailyReturnsMostRecent.totalRet6MoDaily
+        - dailyReturnsMostRecent.totalRetAnnlzd10YrDaily
+        investments:
+        - id: 0P0000000F
+        - id: 0P0000001J
+        - id: 0P0000002I
+        - id: 0P0000003G
+        - id: 0P0000004E
+        - id: 0P0000007F
+        - id: 0P0000008M
+        - id: 0P0000008R
+        - id: 0P000000GB
+        - id: 0P000000GJ
+        - id: 0P000000JI
+        - id: 0P000000T0
+        - id: 0P000000V5
+        - id: 0P000000VK
+        - id: 0P000000VZ
+        - id: 0P000000W5
+        - id: 0P000000W7
+        - id: 0P000000W8
+        - id: 0P000000W9
+        - id: 0P000000WF
+        - id: 0P000000WH
+    RequestRetrieveInvestmentListExample5:
+      summary: 'Use Case: Fund Due Diligence Watchlist'
+      description: "\"I want to shortlist funds based on what they are, fees, AUM, and manager.\"\n\n**Typical Fields**\n\n  - **Reference**\n    - Fund Legal Name\n    - ISIN\n    - Investment Type\n    - Domicile\n    - Inception Date\n    - Base Currency\n  - **Fund Attributes**\n    - Actively Managed\n    - Index Fund\n    - Open for Investment\n  - **Fees**\n    - Total Expense Ratio\n    - Gross Expense Ratio\n    - Net Expense Ratio\n    - Fee Level\n  - **Net Assets**\n    - Net Assets Date\n    - Fund Size\n  - **Manager**\n    - Manager Name\n    - Manager Tenure Average\n  - **Month End Trailing Performance** (optional)\n    - Year to Date Return\n    - 1 Year Return"
+      value:
+        investments:
+        - id: IE00B4L5Y983
+        - id: LU0996182563
+        dataPoints:
+        - basicReference.fundLegalName
+        - basicReference.isin
+        - basicReference.investmentType
+        - basicReference.domicile
+        - basicReference.inceptionDate
+        - basicReference.baseCurrency
+        - fundAttributes.activelyManaged
+        - fundAttributes.indexFund
+        - fundAttributes.openForInvestment
+        - annualReportFeesAndFinancialsMostRecent.totalExpenseRatio
+        - prospectusFees.prospectusGrossExpenseRatio
+        - prospectusFees.prospectusNetExpenseRatio
+        - feeLevelRanks.morningstarFeeLevelBroad
+        - netAssetsMonthEndMostRecent.netAssetsDate
+        - netAssetsMonthEndMostRecent.fundSize
+        - managerBioAndDetailsMostRecent.managerName
+        - managerBioAndDetailsMostRecent.managerTenureAverage
+        - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetYtdMoEnd
+        - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrMoEnd
+    ResponseBadRequestExample4:
+      summary: Required Parameter is Missing from Request Input
+      value:
+        statusCode: 400
+        errorCode: 400.investmentList.006
+        message: Please provide correct values for OrderBy which is "asc" or "desc"
+        requestId: b0ce297c-6244-45b6-9f3b-8297fcb7fcd8
+    RequestRetrieveInvestmentListExample4:
+      summary: 'Use Case: Equity Valuation Watchlist'
+      description: "\"I want valuation ratios + quantitative fair value anchors.\"\n\n**Typical Fields**\n\n  - **Reference**\n    - Standard Name\n    - ISIN\n    - Currency\n    - Market Sector Code\n    - Market Segment Code\n  - **Price**\n    - Close Price\n    - Close Price Datetime\n    - Percent Change\n  - **Price Multiples**\n    - Price to Earnings Ratio\n    - Price to Book Ratio\n    - Price to Sales Ratio\n    - Price to Cash Flow Ratio\n    - Price to Free Cash Flow Ratio\n  - **Enterprise Value**\n    - Enterprise Value\n    - Enterprise Value to EBITDA Ratio\n    - Enterprise Value to Revenue Ratio\n  - **Quantitative Ratings**\n    - Price to Fair Value\n    - Valuation Label\n  - **Quantitative Fair Values**\n    - Fair Value\n    - Fair Value Date"
+      value:
+        investments:
+        - id: US0378331005
+        - id: US5949181045
+        dataPoints:
+        - companyInformation.standardName
+        - instrumentIdentifiers.isin
+        - reference.currency
+        - reference.marketSectorCode
+        - reference.marketSegmentCode
+        - closePrice.closePrice
+        - closePrice.closePriceDatetime
+        - performanceStatistics.percentChange
+        - priceMultiples.priceToEarningsRatio
+        - priceMultiples.priceToBookRatio
+        - priceMultiples.priceToSalesRatio
+        - priceMultiples.priceToCashFlowRatio
+        - priceMultiples.priceToFreeCashFlowRatio
+        - enterpriseValueCalculations.enterpriseValue
+        - enterpriseValueCalculations.enterpriseValueToEbitdaRatio
+        - enterpriseValueCalculations.enterpriseValueToRevenueRatio
+        - quantitativeRatings.quantitativePriceToFairValue
+        - quantitativeRatings.quantitativeValuationLabel
+        - quantitativeFairValues.quantitativeFairValue
+        - quantitativeFairValues.quantitativeFairValueDate
+    ResponseBadRequestExample1:
+      summary: Required Parameter is Missing from Request Input
+      value:
+        statusCode: 400
+        errorCode: 400.investmentList.002
+        message: The Investments parameter is required.
+        requestId: 9b11227f-ee46-4bc6-a07f-d9f4321ae3ba
+    ResponseBadRequestExample2:
+      summary: Required Parameter is Missing from Request Input
+      value:
+        statusCode: 400
+        errorCode: 400.investmentList.003
+        message: The number of datapoints exceeds limit. Maximum datapoints allowed are 50 per request
+        requestId: daf1a426-0489-42f3-9144-540b3f3888b5
+    ResponseBadRequestExample5:
+      summary: Required Parameter is Missing from Request Input
+      value:
+        statusCode: 400
+        errorCode: 400.investmentList.005
+        message: Missing Values for sort parameter either DataPoint or OrderBy
+        requestId: ba9fb6d4-c3bc-46df-ae94-5508993ed278
+    ResponseBadRequestExample6:
+      summary: Required Parameter is Missing from Request Input
+      value:
+        statusCode: 400
+        errorCode: 400.investmentList.007
+        message: Mismatch values of the dataPoint provided in sort. Please verify the dataPoint from the datapoints node in order to sort
+        requestId: 8d9095fd-caa6-48b1-8622-1e2c3710c210
+    ResponseBadRequestExample7:
+      summary: Required Parameter is Missing from Request Input
+      value:
+        statusCode: 400
+        errorCode: 400.investmentList.004
+        message: Invalid datapoints companyGrade.profitaityGrade, legalName. Please send the name correctly
+        requestId: e08f8bbc-f5f5-4587-a65a-41e7d056a50c
+    RequestRetrieveInvestmentListExample7:
+      summary: 'Scenario - Request Limits: Maximum Investments - 100'
+      description: A maximum of 100 investment IDs can be sent in a single request.
+      value:
+        dataPoints:
+        - companyGrade.growthGrade
+        - companyGrade.profitabilityGrade
+        - companyInformation.cik
+        - companyInformation.companyId
+        - companyInformation.companyStatus
+        - companyInformation.domicileCountryCode
+        - companyInformation.globalTemplateIndustryTemplateCode
+        - companyInformation.legalName
+        - companyInformation.legalNameLanguageCode
+        - companyInformation.lei
+        - companyInformation.morningstarIndustryCode
+        - companyInformation.morningstarIndustryGroupCode
+        - companyInformation.morningstarSectorCode
+        - companyInformation.operationStatus
+        - companyInformation.shortName
+        - companyInformation.standardName
+        - companyInformation.webAddress
+        - countryAndRegionalExposureBreakdown.equityRegionEmergingPercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionGreaterAsiaPercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionGreaterEuropePercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionUnitedStatesPercLongRescaled
+        - dailyDividendResidualRiskAndReturnSensitivity.beta1260Day
+        - dailyReturnsMostRecent.returnDateDaily
+        - dailyReturnsMostRecent.totalRet1DayDaily
+        - dailyReturnsMostRecent.totalRet1MoDaily
+        - dailyReturnsMostRecent.totalRet1WkDaily
+        - dailyReturnsMostRecent.totalRet1YrDaily
+        - dailyReturnsMostRecent.totalRet3MoDaily
+        - dailyReturnsMostRecent.totalRet6MoDaily
+        - dailyReturnsMostRecent.totalRetAnnlzd10YrDaily
+        investments:
+        - id: 0P0000000F
+        - id: 0P0000001J
+        - id: 0P0000002I
+        - id: 0P0000003G
+        - id: 0P0000004E
+        - id: 0P0000007F
+        - id: 0P0000008M
+        - id: 0P0000008R
+        - id: 0P000000GB
+        - id: 0P000000GJ
+        - id: 0P000000JI
+        - id: 0P000000T0
+        - id: 0P000000V5
+        - id: 0P000000VK
+        - id: 0P000000VZ
+        - id: 0P000000W5
+        - id: 0P000000W7
+        - id: 0P000000W8
+        - id: 0P000000W9
+        - id: 0P000000WF
+        - id: 0P000000WH
+        - id: 0P000000WK
+        - id: 0P000000WN
+        - id: 0P000000WO
+        - id: 0P000000WR
+        - id: 0P000000WZ
+        - id: 0P000000X0
+        - id: 0P000000X1
+        - id: 0P000000X3
+        - id: 0P000000X6
+        - id: 0P000000X9
+        - id: 0P000000XA
+        - id: 0P000000XD
+        - id: 0P000000XE
+        - id: 0P000000XH
+        - id: 0P000000XI
+        - id: 0P000000XJ
+        - id: 0P000000XL
+        - id: 0P000000XO
+        - id: 0P000000XQ
+        - id: 0P000000XT
+        - id: 0P000000XU
+        - id: 0P000000XW
+        - id: 0P000000XX
+        - id: 0P000000XY
+        - id: 0P000000XZ
+        - id: 0P000000Y0
+        - id: 0P000000Y1
+        - id: 0P000000Y2
+        - id: 0P000000Y3
+        - id: 0P000000Y4
+        - id: 0P000000Y5
+        - id: 0P000000Y6
+        - id: 0P000000Y7
+        - id: 0P000000Y8
+        - id: 0P000000Y9
+        - id: 0P000000YA
+        - id: 0P000000YB
+        - id: 0P000000YC
+        - id: 0P000000YD
+        - id: 0P000000YE
+        - id: 0P000000YF
+        - id: 0P000000YG
+        - id: 0P000000YH
+        - id: 0P000000YI
+        - id: 0P000000YJ
+        - id: 0P000000YK
+        - id: 0P000000YL
+        - id: 0P000000YM
+        - id: 0P000000YN
+        - id: 0P000000YO
+        - id: 0P000000YP
+        - id: 0P000000YQ
+        - id: 0P000000YR
+        - id: 0P000000YS
+        - id: 0P000000YT
+        - id: 0P000000YU
+        - id: 0P000000YV
+        - id: 0P000000YW
+        - id: 0P000000YX
+        - id: 0P000000YY
+        - id: 0P000000YZ
+        - id: 0P000000Z0
+        - id: 0P000000Z1
+        - id: 0P000000Z2
+        - id: 0P000000Z3
+        - id: 0P000000Z4
+        - id: 0P000000Z5
+        - id: 0P000000Z6
+        - id: 0P000000Z7
+        - id: 0P000000Z8
+        - id: 0P000000Z9
+        - id: 0P000000ZA
+        - id: 0P000000ZB
+        - id: 0P000000ZC
+        - id: 0P000000ZD
+        - id: 0P000000ZE
+        - id: 0P000000ZF
+        - id: 0P000000ZG
+        - id: 0P000000ZH
+    RequestRetrieveInvestmentListExample2:
+      summary: 'Use Case: Diversification / Exposure Watchlist'
+      description: "“I want to compare what funds are exposed to: equity/bond mix, regions, sectors, market cap.\"\n\n**Typical Fields**\n\n  - **Reference**\n    - Fund Legal Name\n    - Global Category\n  - **Asset Allocation Mix**\n    - Equity Percent\n    - Bond Percent\n    - Cash Percent\n    - Other Percent\n  - **Country & Regional Exposure**\n    - United States Percent Long Rescaled\n    - Greater Europe Percent Long Rescaled\n    - Greater Asia Percent Long Rescaled\n    - Emerging Percent Long Rescaled\n  - **Market Cap Breakdown**\n    - Market Cap Large Percent Long Rescaled\n    - Market Cap Small Percent Long Rescaled\n    - Market Cap Mid Percent Long Rescaled\n  - **Sector Exposure**\n    - Technology\n    - Healthcare"
+      value:
+        investments:
+        - id: IE00B4L5Y983
+        - id: LU0996182563
+        dataPoints:
+        - basicReference.fundLegalName
+        - basicReference.isin
+        - morningstarCategory.globalCategory
+        - assetAllocationBreakdown.assetAllocEquityPercNet
+        - assetAllocationBreakdown.assetAllocBondPercNet
+        - assetAllocationBreakdown.assetAllocCashPercNet
+        - assetAllocationBreakdown.assetAllocOtherPercNet
+        - countryAndRegionalExposureBreakdown.equityRegionUnitedStatesPercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionGreaterEuropePercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionGreaterAsiaPercLongRescaled
+        - countryAndRegionalExposureBreakdown.equityRegionEmergingPercLongRescaled
+        - marketCapitalBreakdown.marketCapLargePercLongRescaled
+        - marketCapitalBreakdown.marketCapMidPercLongRescaled
+        - marketCapitalBreakdown.marketCapSmallPercLongRescaled
+        - morningstarEquitySectorsBreakdown.equityEconSectorTechnologyPercLongRescaled
+        - morningstarEquitySectorsBreakdown.equityEconSectorFinancialServicesPercLongRescaled
+        - morningstarEquitySectorsBreakdown.equityEconSectorHealthcarePercLongRescaled
+    ResponseBadRequestExample3:
+      summary: Required Parameter is Missing from Request Input
+      value:
+        statusCode: 400
+        errorCode: 400.investmentList.003
+        message: The number of investments exceeds limit. Maximum investments allowed are 100 per request
+        requestId: d7a2eabc-52d6-4405-9b9e-c462e46fd6eb
+    RequestRetrieveInvestmentListExample1:
+      summary: 'Use Case: Performance Watchlist'
+      description: "\"I want to compare YTD, 1Y, 3Y, 5Y returns and see as-of dates.\"\n\n**Typical Fields**\n\n  - **Reference**\n    - Name\n    - Ticker\n    - ISIN\n    - Asset Type\n    - Currency\n  - **Daily Returns**\n    - Return Date\n    - 1 Day Return\n    - 1 Week Return\n    - 1 Month Return\n    - Year to Date Return\n    - 1 Year Return\n  - **Trailing Return**\n    - As Of Date\n    - 1 Month Return\n    - 3 Month Return\n    - 6 Month Return\n    - 1 Year Return\n    - 3 Year Return\n    - 5 Year Return\n  - **Month End Trailing Performance** (optional)\n    - Return Date\n    - 1 Year Return\n    - 3 Year Annualised Return\n    - 5 Year Annualised Return"
+      value:
+        investments:
+        - id: 0P000000YF
+        - id: 0P000000YD
+        - id: 0P000000YB
+        - id: 0P000000YA
+        - id: 0P000000W8
+        dataPoints:
+        - basicReference.name
+        - basicReference.ticker
+        - instrumentIdentifiers.isin
+        - reference.assetType
+        - reference.currency
+        - dailyReturnsMostRecent.returnDateDaily
+        - dailyReturnsMostRecent.totalRet1DayDaily
+        - dailyReturnsMostRecent.totalRet1WkDaily
+        - dailyReturnsMostRecent.totalRet1MoDaily
+        - dailyReturnsMostRecent.totalRetYtdDaily
+        - dailyReturnsMostRecent.totalRet1YrDaily
+        - trailingReturn.trailingReturnAsOfDate
+        - trailingReturn.trailing1MonthReturn
+        - trailingReturn.trailing3MonthReturn
+        - trailingReturn.trailing6MonthReturn
+        - trailingReturn.trailing1YearReturn
+        - trailingReturn.trailing3YearReturn
+        - trailingReturn.trailing5YearReturn
+        - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.returnDateMoEnd
+        - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrMoEnd
+        - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrMoEnd
+        - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrMoEnd
+    RequestRetrieveInvestmentListExample3:
+      summary: 'Use Case:  Risk & Volatility Watchlist'
+      description: "\"I want to see volatility, beta, r-squared, Sharpe/Sortino, tracking error.\"\n\n**Typical Fields**\n\n  - **Reference**\n    - Name\n    - ISIN\n    - Asset Type\n    - Currency\n  - **Daily Standard Deviation**\n    - As Of Date\n    - Standard Deviation 252 Day\n    - Standard Deviation 756 Day\n  - **Monthly Standard Deviation**\n    - As Of Date\n    - Standard Deviation 36 Month\n    - Standard Deviation 60 Month\n  - **Risk Statistics**\n    - Beta 3 Year\n    - R-Squared 3 Year\n    - Sortino Ratio 3 Year\n    - Information Ratio 3 Year\n    - Tracking Error 3 Year\n    - Upside Capture Ratio 3 Year\n    - Downside Capture Ratio 3 Year\n  - **Risk-Adjusted Metrics**\n    - Sharpe Ratio 3 Year"
+      value:
+        investments:
+        - id: US90214Q1058
+        - id: US5949181045
+        dataPoints:
+        - basicReference.name
+        - instrumentIdentifiers.isin
+        - reference.assetType
+        - reference.currency
+        - dailyStandardDeviation.dailyStandardDeviationAsOfDate
+        - dailyStandardDeviation.standardDeviation252Day
+        - dailyStandardDeviation.standardDeviation756Day
+        - monthlyStandardDeviation.asOfDate
+        - monthlyStandardDeviation.standardDeviation36Month
+        - monthlyStandardDeviation.standardDeviation60Month
+        - riskStatistics.beta3YrMoEnd
+        - riskStatistics.rSquared3YrMoEnd
+        - derivedStatsIEMptCurrent.sharpeRatio3YrMoEnd
+        - riskStatistics.sortinoRatio3YrMoEnd
+        - riskStatistics.informationRatio3YrMoEnd
+        - riskStatistics.trackingError3YrMoEnd
+        - riskStatistics.upsideCaptureRatio3YrMoEnd
+        - riskStatistics.downsideCaptureRatio3YrMoEnd
+  responses:
+    ResponseRetrieveInvestmentList:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseRetrieveInvestmentList'
+          examples:
+            ResponseRetrieveInvestmentListExample1:
+              $ref: '#/components/examples/ResponseRetrieveInvestmentListExample1'
+    ResponseInternalServerError:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseUnauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseForbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+          examples:
+            ResponseBadRequestExample1:
+              $ref: '#/components/examples/ResponseBadRequestExample1'
+            ResponseBadRequestExample2:
+              $ref: '#/components/examples/ResponseBadRequestExample2'
+            ResponseBadRequestExample3:
+              $ref: '#/components/examples/ResponseBadRequestExample3'
+            ResponseBadRequestExample4:
+              $ref: '#/components/examples/ResponseBadRequestExample4'
+            ResponseBadRequestExample5:
+              $ref: '#/components/examples/ResponseBadRequestExample5'
+            ResponseBadRequestExample6:
+              $ref: '#/components/examples/ResponseBadRequestExample6'
+            ResponseBadRequestExample7:
+              $ref: '#/components/examples/ResponseBadRequestExample7'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

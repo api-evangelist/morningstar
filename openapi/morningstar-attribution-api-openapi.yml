@@ -1,0 +1,101 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts attribution API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: attribution
+paths:
+  /attribution/calculate:
+    post:
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Authentication required.
+        '403':
+          description: You do not have access permission..
+        '404':
+          description: Not found.
+        '500':
+          description: Internal server error.
+      summary: Calculate performance attribution for a portfolio over a defined time period
+      description: Based on a specific risk model, calculate performance attribution for a specific portfolio or fund over a time period of between 3 months and 15 years.  The response enables you to attribute  returns to specific factors.
+      operationId: post_attribution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attribution'
+        required: true
+      tags:
+      - attribution
+components:
+  schemas:
+    Attribution:
+      required:
+      - endDate
+      - riskModelId
+      - startDate
+      properties:
+        riskModelId:
+          type: string
+          example: morn-glb-eq-usd
+        startDate:
+          type: string
+          description: The start date of the time period to perform the attribution analysis.
+          example: '2017-01-01T00:00:00.000Z'
+        endDate:
+          type: string
+          description: The end date of the time period to perform the attribution analysis.
+          example: '2017-06-30T00:00:00.000Z'
+        investment:
+          example:
+            id: 0P000001RB
+            type: ''
+          allOf:
+          - $ref: '#/components/schemas/idType'
+        benchmark:
+          example:
+            id: 0P0000058R
+            type: ''
+          allOf:
+          - $ref: '#/components/schemas/idType'
+        frequency:
+          type: string
+          example: single
+          enum:
+          - single
+          - monthly
+          - quarterly
+          - annually
+        annualized:
+          type: boolean
+      type: object
+    idType:
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+      type: object
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,1307 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts hypo API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: hypo
+paths:
+  /hypo:
+    post:
+      tags:
+      - hypo
+      summary: Calculate hypothetical performance
+      description: Calculate hypothetical performance based on the portfolio(s) specified in the request body.</br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.
+      operationId: HypoV1_PostAsync
+      parameters:
+      - name: langcult
+        in: query
+        description: Language and locale, for example, en-US
+        required: false
+        schema:
+          type: string
+          default: en-US
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoInputSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoInputSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoInputSettings'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoInputSettings'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoInputSettings'
+        description: Object that defines the settings and portfolio(s) to use in the request.
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.Hypos'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.Hypos'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.Hypos'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.Hypos'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      deprecated: false
+components:
+  schemas:
+    Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoView:
+      required:
+      - Id
+      type: object
+      properties:
+        Id:
+          description: this will look up the view definition defined by configuration
+          type: string
+        Hypos:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.Hypos'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.Hypos:
+      type: object
+      properties:
+        PerformanceDate:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.PerformanceDate'
+        Hypo:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.Hypo'
+        SecurityReference:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.SecurityItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecuritySummary:
+      type: object
+      properties:
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecuritySummaryItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecurityInvestmentDetails:
+      type: object
+      properties:
+        SecurityDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.InvestmentDetailsItem'
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding:
+      description: 'TODO: Implement same way as PortfolioInput'
+      required:
+      - SecurityId
+      - Weight
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Type:
+          enum:
+          - XI
+          - CA
+          - EI
+          - CASH
+          type: string
+        Weight:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecurityEndingMarketValueBreakdown:
+      type: object
+      properties:
+        Principal:
+          format: double
+          type: number
+        Income:
+          format: double
+          type: number
+        CapGain:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
+      required:
+      - Name
+      - Currency
+      - Holdings
+      type: object
+      properties:
+        Name:
+          type: string
+        TotalValue:
+          format: double
+          type: number
+        Currency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
+        IrrFees:
+          format: double
+          type: number
+        RiskFreeProxyId:
+          description: Default is set in the Configuration. This is a portfolio level override.
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.AssetClassConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        Color:
+          type: string
+        BorderColor:
+          type: string
+        Index:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoCalculationSettings:
+      description: Contains input parameters and their values used in the hypothetical calculations.
+      type: object
+      properties:
+        HypoType:
+          enum:
+          - Portfolio
+          - IndividualHoldings
+          - HoldingsComparison
+          - PortfolioComparison
+          type: string
+        FilingStatus:
+          description: This parameter is used to set the tax status of the portfolios to be analyzed.
+          enum:
+          - NoTaxes
+          - Single
+          - MarriedFilingJointly
+          - MarriedFilingSeparately
+          - HeadOfHousehold
+          - Registered
+          - NonRegistered
+          type: string
+        TaxableIncome:
+          format: double
+          description: This is the amount of income subject to income taxes for the year, found by subtracting the appropriate deductions (IRA contributions, alimony payments, unreimbursed business expenses, some capital losses, etc.) from adjusted gross income.
+          type: number
+        PayTaxes:
+          description: You can set the option to pay any taxes that are assessed either out of pocket (as if the taxpayer writes a check to pay for them) or by selling shares equal to the amount of taxes.
+          enum:
+          - OutOfPocket
+          - SalesOfShares
+          type: string
+        FederalIncomeTaxRate:
+          format: double
+          description: The federal income tax rate assessed on incomes from the portfolio. This would be referred to as the  Income Marginal Tax Rate for Canada.
+          type: number
+        CapitalGainTaxRate:
+          format: double
+          description: A tax assessed on profits realized from the sale of a capital asset, such as stock or fund. . This would be referred to as the  Capital Gains Marginal Tax Rate for Canada.
+          type: number
+        StateIncomeTaxRate:
+          format: double
+          description: State income tax rate on incomes received from the portfolio.
+          type: number
+        DividendTaxRate:
+          format: double
+          description: Dividend tax rate on dividends received from the portfolio. Canada only.
+          type: number
+        IllustrationTrailingTimePeriod:
+          description: This parameter determines the Illustration Time period��s start date and end date of the hypothetical illustration. Please be sure that start date and end date are set in accordance to the Illustration Time period value selected before sending the request to the Portfolio Analysis API.
+          enum:
+          - YearToDate
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          - EarliestAvailable
+          - EarliestCommon
+          - Customized
+          type: string
+        StartDate:
+          format: date-time
+          description: Illustration Time period start date the Hypothetical illustration will be run.
+          type: string
+        EndDate:
+          format: date-time
+          description: Illustration Time period end date the Hypothetical illustration will be run.
+          type: string
+        SynchronizePortfolioStartDate:
+          description: This will override the IllustrationTrailingTimePeriod to the EarliestCommon across all input portfolios.
+          type: boolean
+        InvestmentDetailReturnsFrequency:
+          description: 'TODO: can this have a value of None? NO'
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        LiquidateOnEndDate:
+          description: "When this is set to true, holdings are sold at month-end NAV/price and taxes will be applied.\r\n            Note: This affects total returns because taxes are calculated based on the final market value of your investments and the tax rates specified in the Taxes section."
+          type: boolean
+        SubsequentInvestmentType:
+          enum:
+          - Invest
+          - Withdrawal
+          - WithdrawalPercentage
+          type: string
+        SubsequentInvestmentAmount:
+          format: double
+          description: This is the amount for the subsequent investment or withdrawal. It is invested or removed on a regular basis, according to SubsequentInvestmentWithdrawalFrequency value.
+          type: number
+        SubsequentInvestmentWithdrawalFrequency:
+          description: "This parameter informs the Portfolio Analysis API how frequently to apply the subsequent investment or withdrawal, for example, if the frequency is quarterly, the subsequent amount will be applied every quarter after the initial investments. \r\n            Note: subsequent amount is applied on the first month end in the frequency period. Also, None is not a valid value"
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        AssetBasedAnnualFee:
+          format: double
+          description: This parameter specifies the amount of the fee as a percentage. For example, if you want to apply a 1% fee, set this parameter to 1.00. For Australian Hypo this can be set as a dollar amount as well, depending on the Annual Fees Type.
+          type: number
+        AssetFeeFrequency:
+          description: "TODO: can this have a value of None? NO\r\n            This parameter specifies how often the asset based fees are to be applied. Asset-based fees are deducted as a percentage."
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        AssetFeeType:
+          description: This parameter specifies the type of the annual fee amount as a percentage, or as a dollar amount. For example, if you want to apply a 1% fee, set this parameter to %. This option is available only in Australian Hypo.
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        PayFees:
+          description: This parameter can be set to the option to pay any asset-based fees that are assessed either out of pocket (as if the client writes a check to pay for them), or by selling shares equal to the amount of the fees.
+          enum:
+          - OutOfPocketBeginning
+          - OutOfPocketEnding
+          - SalesOfSharesBeginning
+          - SalesOfSharesEnding
+          type: string
+        PayFeesUseCashFirst:
+          description: This parameter is applicable to Portfolio Illustrations only. If Pay Fees parameter is set to sale of shares, then this parameter can be set to true to specify that the application tap cash equivalents first before selling shares in the other securities on which annual fees are applied.
+          type: boolean
+        PortfolioAmountFee:
+          format: double
+          description: This parameter specifies the portfolio amount fee charged annually
+          type: number
+        FrontLoadType:
+          description: This parameter specifies what sales fees are deducted from an investment upon purchase or sale.
+          enum:
+          - Standard
+          - Custom
+          - LetterOfIntent
+          - None
+          - CustomEntry
+          - CustomExit
+          type: string
+        CustomFeeType:
+          description: "TODO: Optional, and only affects FrontLoadType=Custom\r\n            If Apply Fee Schedule parameter is set to Custom, this parameter specifies what type the value in custom fee parameter is, percentage or money amount."
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        SalesFeeAmount:
+          format: double
+          description: If Apply Fee Schedule parameter is set to Custom, this parameter specifies the amount of the custom fee.
+          type: number
+        ApplySalesCharge:
+          description: For funds, deferred or redemption fees are applied to charge a fee to the investor upon redeeming shares. Deferred fees apply for most withdrawals, and redemption fees are deducted when you choose to liquidate the investment. Set this parameter to false if you do not want the standard deferred or redemption fees to be applied.
+          type: boolean
+        ApplyFeeForRebalance:
+          description: Rebalance results in at least one sale and at least one buy. The sale may involve a fund that has a back-end charge and the buy may involve a fund that has a front-end charge. Any front-end charge that would normally be applied for the bought fund will be applied when this parameter is set to true. For example, if standard schedule is selected, the tool will apply whatever front-end charges would be applied for a buy on that schedule. On a sale, back-end charges that would normally be applied using the standard back-end schedule would be applied. If a custom schedule is selected, the tool will apply the custom % entered in the Custom Fees parameter as the same load as the fund. If this parameter is set to false, neither a front-end nor back-end charge for buys/sells due to rebalancing will be applied.
+          type: boolean
+        EntryExitFeeType:
+          description: This parameter is applicable to Australian Hypo only.
+          enum:
+          - CustomEntry
+          - CustomExit
+          - None
+          type: string
+        RebalanceFrequency:
+          description: This parameter specifies how often to rebalance your portfolio.
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - Biennially
+          - None
+          type: string
+        RebalanceThreshold:
+          format: double
+          description: This parameter specifies a rebalance threshold that must be reached before the holdings are rebalanced. For example, if set it to 5, rebalancing will only take place if the allocation increases or decreases from the original setting by 5% or more for at least one security in the portfolio.
+          type: number
+        ReinvestDividends:
+          description: "Set it to true to reinvest dividends and income distributions, or set it to false to not reinvest dividends and income distributions.\r\n            For Australian Hypo,either set both ReinvestDividends and ReinvestCapitalGains to true, or both to false."
+          type: boolean
+        ReinvestCapitalGains:
+          description: "Set it to true to reinvest capital gains distributions, or set it to false to not reinvest capital gains distributions.\r\n            For Australian Hypo,either set both ReinvestDividends and ReinvestCapitalGains to true, or both to false.\r\n            Note: If you choose not to reinvest, you may notice the Total Reinvestment, Taxes Paid, and Final Market Value of your portfolio decrease because you own fewer shares."
+          type: boolean
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.BenchmarkPerformance:
+      type: object
+      properties:
+        Name:
+          type: string
+        Performance:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Type:
+          description: 'TODO: is this required? If not, is there a default?'
+          enum:
+          - BD
+          - CT
+          - CA
+          - CASH
+          - EI
+          - FC
+          - FE
+          - FM
+          - FO
+          - FI
+          - FV
+          - SA
+          - ST
+          - VA
+          - V1
+          - XI
+          - SP
+          type: string
+        ExchangeID:
+          type: string
+        Weight:
+          format: double
+          type: number
+        Value:
+          format: double
+          type: number
+        AnnualFeePercent:
+          format: double
+          type: number
+        AnnualFeeFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+        SalesFeesAmountType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        SalesFeesAmount:
+          format: double
+          type: number
+        SalesFeesType:
+          enum:
+          - Standard
+          - Custom
+          type: string
+        SalesFeesROAAmount:
+          format: double
+          type: number
+        SalesFeesLOIAmount:
+          format: double
+          type: number
+        OtherFeeAmount:
+          format: double
+          type: number
+        OtherFeeAmountType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        OtherFeeType:
+          enum:
+          - TradingCommissions
+          - ShortTermTradingFee
+          type: string
+        CUSIP:
+          type: string
+        TradingSymbol:
+          type: string
+        FundCode:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecuritySummaryPerformance:
+      type: object
+      properties:
+        AverageAnnualizedReturn:
+          format: double
+          type: number
+        CumulativeReturn:
+          format: double
+          type: number
+        Day7Yield:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.InvestmentAssumptionSecurityItem:
+      type: object
+      properties:
+        Sequence:
+          format: int32
+          type: integer
+        SecurityId:
+          type: string
+        AnnualFee:
+          format: double
+          type: number
+        AnnualFeeType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        AnnualFeeFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        DeferredLoadPercent:
+          description: values can be "0-0"
+          type: string
+        EndingMarketValue:
+          format: double
+          type: number
+        FrontLoad:
+          format: double
+          type: number
+        HoldingPeriodEndDate:
+          format: date-time
+          type: string
+        HoldingPeriodStartDate:
+          format: date-time
+          type: string
+        InitialInvestment:
+          format: double
+          type: number
+        Liquidate:
+          description: 'TODO: need to confirm this type'
+          type: boolean
+        RebalancePercent:
+          format: double
+          description: values can be "2004-06-29 - 2015-04-30"
+          type: number
+        ReinvestDistributionsCapGains:
+          description: need to confirm this type
+          type: boolean
+        ReinvestDistributionsIncome:
+          description: need to confirm this type
+          type: boolean
+        SubsequentInvestmentWithdrawalAmount:
+          format: double
+          type: number
+        SubsequentInvestmentWithdrawalFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+        EntryExitFeeAmount:
+          format: double
+          type: number
+        EntryExitFeeAmountType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        EntryExitFeeType:
+          enum:
+          - CustomEntry
+          - CustomExit
+          - None
+          type: string
+        TotalReturnPercent:
+          format: double
+          type: number
+        PeriodYears:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.PortfolioSummaryChartItem:
+      type: object
+      properties:
+        StartDate:
+          format: date-time
+          type: string
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
+      type: object
+      properties:
+        Type:
+          enum:
+          - Standard
+          - AutoAsset
+          - AutoCategory
+          - Custom
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecuritiesReturns:
+      type: object
+      properties:
+        MedianReturn:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.MedianReturn'
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecurityReturnsItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.PortfolioSummaryChart:
+      type: object
+      properties:
+        Frequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.PortfolioSummaryChartItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.PortfolioSummaryChartItem'
+        NetAmountInvested:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.InvestmentAssumption:
+      type: object
+      properties:
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.InvestmentAssumptionSecurityItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.Hypo:
+      type: object
+      properties:
+        PortfolioName:
+          type: string
+        PerformanceDate:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.PerformanceDate'
+        InvestmentAssumption:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.InvestmentAssumption'
+        PortfolioSummary:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.PortfolioSummary'
+        SecuritySummary:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecuritySummary'
+        SecuritiesReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecuritiesReturns'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.InvestmentDetails:
+      type: object
+      properties:
+        PortfolioDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.InvestmentDetailsItem'
+        PortfolioTotalDistributionAndWithdrawal:
+          format: double
+          type: number
+        PortfolioTotalNewInvestment:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.PortfolioSummary:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        PlanningAssumptions:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.PlanningAssumptions'
+        PortfolioSummaryPerformance:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.PortfolioSummaryPerformance'
+        InvestmentDetails:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.InvestmentDetails'
+        PortfolioSummaryChart:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.PortfolioSummaryChart'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecuritySummaryItem:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        StartDate:
+          format: date-time
+          description: Based on IllustrationTrailingTimePeriod
+          type: string
+        EndDate:
+          format: date-time
+          description: Based on IllustrationTrailingTimePeriod
+          type: string
+        InitialInvestment:
+          format: double
+          type: number
+        SubsequentInvestmentWithdrawalAmount:
+          format: double
+          type: number
+        SubsequentInvestmentWithdrawalFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+        ReinvestDistributionsIncome:
+          type: boolean
+        ReinvestDistributionsCapGains:
+          type: boolean
+        Liquidate:
+          type: boolean
+        RebalanceFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - Biennially
+          - None
+          type: string
+        FrontLoad:
+          format: double
+          type: number
+        AnnualFee:
+          format: double
+          type: number
+        DeferredLoadAmount:
+          description: current value in format of "0-0"
+          type: string
+        EndMarketValue:
+          format: double
+          type: number
+        PeriodYears:
+          format: double
+          type: number
+        HistoricalMonthEndPerformance:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+        InvestmentDetails:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecurityInvestmentDetails'
+        SecuritySummaryPerformance:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecuritySummaryPerformance'
+        SecurityEndingMarketValueBreakdown:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecurityEndingMarketValueBreakdown'
+        PlanningAssumptions:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.PlanningAssumptions'
+        EntryExitFeeAmount:
+          format: double
+          type: number
+        EntryExitFeeAmountType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        EntryExitFeeType:
+          enum:
+          - CustomEntry
+          - CustomExit
+          - None
+          type: string
+        BenchmarkPerformance:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.BenchmarkPerformance'
+        NetAmountInvested:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+        Principal:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+        Income:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+        CapGain:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.SecurityReturnsItem:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        ReturnData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.ReturnDataItem'
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_:
+      type: object
+      properties:
+        Id:
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.ReturnDataItem:
+      type: object
+      properties:
+        Id:
+          format: int32
+          type: integer
+        Date:
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.InvestmentDetailsItem:
+      description: 'TODO: check all the types and possible values for properties in this class'
+      type: object
+      properties:
+        Sequence:
+          format: int32
+          type: integer
+        BeginningBalance:
+          format: double
+          type: number
+        StartDate:
+          format: date-time
+          type: string
+        EndDate:
+          format: date-time
+          type: string
+        ChargesFees:
+          format: double
+          type: number
+        DistributionWithdrawal:
+          format: double
+          type: number
+        MarketValue:
+          format: double
+          type: number
+        NewInvestment:
+          format: double
+          type: number
+        TaxesDue:
+          format: double
+          type: number
+        TotalReinvest:
+          format: double
+          type: number
+        TotalReturnPercent:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.PerformanceDate:
+      type: object
+      properties:
+        EarliestCommonDate:
+          format: date-time
+          type: string
+        EarliestAvailableDate:
+          format: date-time
+          type: string
+        EarliestInceptionDate:
+          format: date-time
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        Type:
+          enum:
+          - Broad
+          - Detailed
+          type: string
+        AssetClassConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassConfig'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.PortfolioSummaryPerformance:
+      type: object
+      properties:
+        AverageAnnualizedReturn:
+          format: double
+          type: number
+        CumulativeReturn:
+          format: double
+          type: number
+        FinalMarketValue:
+          format: double
+          type: number
+        NetAmountInvested:
+          format: double
+          type: number
+        BenchmarkCumulativeReturn:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.PlanningAssumptions:
+      type: object
+      properties:
+        Currency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        RebalanceFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - Biennially
+          - None
+          type: string
+        IllustrationTrailingTimePeriod:
+          enum:
+          - YearToDate
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          - EarliestAvailable
+          - EarliestCommon
+          - Customized
+          type: string
+        RebalanceThreshold:
+          format: double
+          type: number
+        AllocationUpdateFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        FederalIncomeTaxRate:
+          format: double
+          type: number
+        CapitalGainTaxRate:
+          format: double
+          type: number
+        StateIncomeTaxRate:
+          format: double
+          type: number
+        CanadianIncomeMarginalTaxRate:
+          format: double
+          type: number
+        CanadianDividendMarginalTaxRate:
+          format: double
+          type: number
+        CanadianCapitalGainsMarginalTaxRate:
+          format: double
+          type: number
+        PayTaxes:
+          enum:
+          - OutOfPocket
+          - SalesOfShares
+          type: string
+        PayFees:
+          enum:
+          - OutOfPocket
+          - SalesOfShares
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoInputSettings:
+      required:
+      - View
+      type: object
+      properties:
+        View:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoView'
+        RequestSettings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoRequestSettings'
+        Portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
+      example:
+        View:
+          Id: Growth
+        RequestSettings:
+          OutputCurrency: USD
+          OutputReturnsFrequency: Monthly
+          AssetClassGroupConfigs:
+            AssetClassGroupConfig:
+            - Id: ACG-USBROAD
+          HypoCalculationSettings:
+            HypoType: Portfolio
+            FilingStatus: NoTaxes
+            TaxableIncome: 50000
+            PayTaxes: OutOfPocket
+            FederalIncomeTaxRate: 0
+            CapitalGainTaxRate: 0
+            StateIncomeTaxRate: 0
+            DividendTaxRate: 0
+            IllustrationTrailingTimePeriod: EarliestCommon
+            StartDate: '1998-12-31T00:00:00.000Z'
+            EndDate: '2008-12-31T00:00:00.000Z'
+            SynchronizePortfolioStartDate: true
+            InvestmentDetailReturnsFrequency: Monthly
+            LiquidateOnEndDate: true
+            SubsequentInvestmentType: Invest
+            SubsequentInvestmentAmount: 0
+            SubsequentInvestmentWithdrawalFrequency: Monthly
+            AssetBasedAnnualFee: 0
+            AssetFeeFrequency: Annually
+            AssetFeeType: Amount
+            PayFees: OutOfPocketBeginning
+            PayFeesUseCashFirst: true
+            FrontLoadType: Standard
+            CustomFeeType: Amount
+            SalesFeeAmount: 0
+            ApplySalesCharge: true
+            ApplyFeeForRebalance: false
+            EntryExitFeeType: CustomEntry
+            RebalanceFrequency: None
+            RebalanceThreshold: 0
+            ReinvestDividends: true
+            ReinvestCapitalGains: true
+            PortfolioAmountFee: 1000
+        Portfolios:
+        - Name: TestPortfolio1
+          TotalValue: 10000
+          Currency: USD
+          Holdings:
+          - SecurityId: F00000VCTT
+            Weight: 20
+          - SecurityId: 0P00002NW8
+            Weight: 10
+          - TradingSymbol: AAPL
+            Weight: 15
+          - ISIN: US09251T1034
+            Weight: 35
+          - CUSIP: '256219106'
+            Weight: 20
+          Benchmark:
+            Type: Standard
+            Holdings:
+            - SecurityId: XIUSA04G92
+              Type: XI
+              Weight: 100
+    Morningstar.PortfolioAnalysis.Models.Output.SecurityItem:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        CUSIP:
+          type: string
+        Name:
+          type: string
+        TradingSymbol:
+          type: string
+        BaseCurrency:
+          enum:
+          - MultipleCurrencies
+          - AED
+          - AFN
+          - ALL
+          - AMD
+          - ANG
+          - AOA
+          - ARS
+          - AUD
+          - AWG
+          - AZN
+          - BAM
+          - BBD
+          - BDT
+          - BGN
+          - BHD
+          - BIF
+          - BMD
+          - BND
+          - BOB
+          - BOV
+          - BRL
+          - BSD
+          - BTN
+          - BWP
+          - BYR
+          - BZD
+          - CAD
+          - CDF
+          - CHE
+          - CHF
+          - CHW
+          - CLF
+          - CLP
+          - CNY
+          - COP
+          - COU
+          - CRC
+          - CUP
+          - CVE
+          - CZK
+          - DJF
+          - DKK
+          - DOP
+          - DZD
+          - EEK
+          - EGP
+          - ERN
+          - ETB
+          - EUR
+          - FJD
+          - FKP
+          - GBP
+          - GEL
+          - GHC
+          - GIP
+          - GMD
+          - GNF
+          - GTQ
+          - GYD
+          - HKD
+          - HNL
+          - HRK
+          - HTG
+          - HUF
+          - IDR
+          - ILS
+          - INR
+          - IQD
+          - IRR
+          - ISK
+          - JMD
+          - JOD
+          - JPY
+          - KES
+          - KGS
+          - KHR
+          - KMF
+          - KPW
+          - KRW
+          - KWD
+          - KYD
+          - KZT
+          - LAK
+          - LBP
+          - LKR
+          - LRD
+          - LSL
+          - LTL
+          - LVL
+          - LYD
+          - MAD
+          - MDL
+          - MGA
+          - MKD
+          - MMK
+          - MNT
+          - MOP
+          - MRO
+          - MUR
+          - MVR
+          - MWK
+          - MXN
+          - MXV
+          - MYR
+          - MZN
+          - NAD
+          - NGN
+          - NIO
+          - NOK
+          - NPR
+          - NZD
+          - OMR
+          - PAB
+          - PEN
+          - PGK
+          - PHP
+          - PKR
+          - PLN
+          - PYG
+          - QAR
+          - ROL
+          - RON
+          - RSD
+          - RUB
+          - RWF
+          - SAR
+          - SBD
+          - SCR
+          - SDD
+          - SEK
+          - SGD
+          - SHP
+          - SLL
+          - SOS
+          - SRD
+          - STD
+          - SYP
+          - SZL
+          - THB
+          - TJS
+          - TMT
+          - TND
+          - TOP
+          - TRY
+          - TTD
+          - TWD
+          - TZS
+          - UAH
+          - UGX
+          - USD
+          - USN
+          - USS
+          - UYU
+          - UZS
+          - VEF
+          - VND
+          - VUV
+          - WST
+          - XAF
+          - XAG
+          - XAU
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XCD
+          - XDR
+          - XFO
+          - XFU
+          - XOF
+          - XPD
+          - XPF
+          - XPT
+          - YER
+          - ZAR
+          - ZMK
+          - ZWR
+          type: string
+        Type:
+          enum:
+          - BD
+          - CT
+          - CA
+          - CASH
+          - EI
+          - FC
+          - FE
+          - FM
+          - FO
+          - FI
+          - FV
+          - SA
+          - ST
+          - VA
+          - V1
+          - XI
+          - SP
+          type: string
+        InceptionDate:
+          format: date-time
+          type: string
+        SecurityReferenceTypes:
+          type: array
+          items:
+            enum:
+            - PortfolioHolding
+            - BenchmarkHolding
+            - RiskFreeIndex
+            - DisclosureIndex
+            - TopNetUnderlyingHolding
+            - StockIntersection
+            - InvalidSecurity
+            type: string
+    Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfigs:
+      type: object
+      properties:
+        AssetClassGroupConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfig'
+    Morningstar.PortfolioAnalysis.Models.Output.Hypo.MedianReturn:
+      type: object
+      properties:
+        ReturnData:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Hypo.ReturnDataItem'
+    Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoRequestSettings:
+      type: object
+      properties:
+        OutputCurrency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        IncludePortfolioInCorrelationMatrix:
+          type: boolean
+        AssetClassGroupConfigs:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfigs'
+        HypoCalculationSettings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoCalculationSettings'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

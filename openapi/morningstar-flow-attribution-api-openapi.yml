@@ -1,0 +1,108 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts flow attribution API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: flow attribution
+paths:
+  /flow-attribution/calculate:
+    post:
+      summary: Create analysis of historic flow attribution for a share class
+      description: Create analysis of historic flow attribution for a specific share class and flow model.  Response will provide information about how each factor in the model contributed to or detracted from the growth of the share class.
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: post_attribution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Attribution'
+        required: true
+      tags:
+      - flow attribution
+  /flow-attribution/calculate-ex-ante:
+    post:
+      summary: Create analysis of future flow attribution for a share class
+      description: 'Create analysis of future flow attribution for a specific share class and flow model.  Response will provide information about how each factor in the model would contribute or detract from the growth of the share class.
+
+        '
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: post_ex_ante_attribution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AntiAttribution'
+        required: true
+      tags:
+      - flow attribution
+components:
+  schemas:
+    Attribution:
+      required:
+      - shareClassId
+      properties:
+        start:
+          type: string
+          example: '2018-01-01T00:00:00.000Z'
+        end:
+          type: string
+          example: '2018-12-31T00:00:00.000Z'
+        flowModelId:
+          type: string
+          example: usa-equity-shareclass-fundflow
+        shareClassId:
+          type: string
+          example: F00000VRI7
+      type: object
+    AntiAttribution:
+      required:
+      - shareClassId
+      properties:
+        flowModelId:
+          type: string
+          example: usa-equity-shareclass-fundflow
+        shareClassId:
+          type: string
+          example: F00000VRI7
+      type: object
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

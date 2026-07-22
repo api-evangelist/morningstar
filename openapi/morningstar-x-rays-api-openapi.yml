@@ -1,0 +1,2167 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts x-rays API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: x-rays
+paths:
+  /xray:
+    post:
+      tags:
+      - x-rays
+      summary: Generate portfolio x-rays
+      description: Generate an x-ray of the portfolio(s) specified in the request body. The response will return information about how the portfolio is diversified by region, sector and investment style.</br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.
+      operationId: XRayV1_PostAsync
+      parameters:
+      - name: langcult
+        in: query
+        description: Language and locale, for example, en-US
+        required: false
+        schema:
+          type: string
+          default: en-US
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayInputSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayInputSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayInputSettings'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayInputSettings'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayInputSettings'
+        description: Object that defines the settings and portfolio(s) to use in the request.
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.XRays'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.XRays'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.XRays'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.XRays'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      deprecated: false
+components:
+  schemas:
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySector:
+      type: object
+      properties:
+        Id:
+          description: Possible values are GICS, Morningstar, or Institution defined Id
+          type: string
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySectorExposureItem'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySectorExposureItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySectorExposureItemSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.StockIntersection:
+      type: object
+      properties:
+        IncludeIndex:
+          type: boolean
+        Stock:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.StockIntersectionItem'
+        ConcentrationRatio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.StockIntersectionConcentrationRatio'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.WorldRegions:
+      type: object
+      properties:
+        Id:
+          type: string
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityRegionExposureItem'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityRegionExposureItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityRegionExposureItemSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InvestmentStyle:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        FixedIncomeStyle:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeStyle'
+        EquityStyle:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyle'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeStyle:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeStyleItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeStyleItem'
+        FixedIncomeStyleBreakdown:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeStyleBreakdown'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySectorExposureItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Sector:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySectorExposureItem'
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.EquityType_:
+      type: object
+      properties:
+        Id:
+          enum:
+          - AggressiveGrowth
+          - ClassicGrowth
+          - Cyclical
+          - Distressed
+          - HardAsset
+          - HighYield
+          - NotAvailable
+          - SlowGrowth
+          - SpeculativeGrowth
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleBreakdownItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        EquityStyleBreakdownItem:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleBreakdownItem'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.HoldingsItem:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        TopNetUnderlyingHoldings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.TopNetUnderlyingHoldings'
+        PortfolioHoldings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.PortfolioHoldings'
+        StockIntersection:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.StockIntersection'
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
+      type: object
+      properties:
+        Type:
+          enum:
+          - Standard
+          - AutoAsset
+          - AutoCategory
+          - Custom
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.StockIntersectionItemSource:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        CUSIP:
+          type: string
+        FundPortfolioDate:
+          format: date-time
+          type: string
+        PercentOfInvestments:
+          format: double
+          type: number
+        MarketValue:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.PriceRatiosItem:
+      type: object
+      properties:
+        PriceBook:
+          format: double
+          type: number
+        PriceCashFlow:
+          format: double
+          type: number
+        PriceEarnings:
+          format: double
+          type: number
+        PriceSales:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.WorldRegionGroupConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        QuickPortInputId:
+          type: string
+        WorldRegionConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.WorldRegionConfig'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturnSecurityItem:
+      type: object
+      properties:
+        Sequence:
+          format: int32
+          description: 'TODO: is this needed?'
+          type: integer
+        InceptionDate:
+          format: date-time
+          type: string
+        SecurityId:
+          type: string
+        Date:
+          format: date-time
+          description: 'TODO: Is this field needed?'
+          type: string
+        HoldingValue:
+          format: double
+          type: number
+        Percent:
+          format: double
+          description: 'TODO: Should this be named Percent or Weight?'
+          type: number
+        TimePeriods:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.IllustrationReturnTimePeriod_'
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_:
+      type: object
+      properties:
+        Id:
+          enum:
+          - QuarterToDate
+          - YearToDate
+          - Month1
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturnsSecurity:
+      type: object
+      properties:
+        Sequence:
+          format: int32
+          type: integer
+        SecurityId:
+          type: string
+        StandardizedReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturns'
+        AfterTaxReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.AfterTaxReturns'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.ProfitabilityItem:
+      type: object
+      properties:
+        DebtCapital:
+          format: double
+          type: number
+        NetMargin:
+          format: double
+          type: number
+        ROA:
+          format: double
+          type: number
+        ROE:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySectors:
+      type: object
+      properties:
+        EquitySector:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySector'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturn:
+      type: object
+      properties:
+        CalendarYear:
+          description: 1-10 to represent 10 most recent calendar years
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.Int32_'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityRegionExposureItem:
+      type: object
+      properties:
+        Id:
+          description: Parent/Rollup
+          type: string
+        Value:
+          format: double
+          type: number
+        ExposureItem:
+          description: Children of a grouping. Can't use enum because they can be client specific and have different classifications (Morningstar, Institution specific)
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistory:
+      type: object
+      properties:
+        Type:
+          enum:
+          - Difference
+          type: string
+        Frequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+        StartDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistoryItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistoryItem'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeStyleBreakdown:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        HighLtd:
+          format: double
+          type: number
+        HighMod:
+          format: double
+          type: number
+        HighExt:
+          format: double
+          type: number
+        MedLtd:
+          format: double
+          type: number
+        MedMod:
+          format: double
+          type: number
+        MedExt:
+          format: double
+          type: number
+        LowLtd:
+          format: double
+          type: number
+        LowMod:
+          format: double
+          type: number
+        LowExt:
+          format: double
+          type: number
+        Unclassified:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.SecurityItem:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        CUSIP:
+          type: string
+        Name:
+          type: string
+        TradingSymbol:
+          type: string
+        BaseCurrency:
+          enum:
+          - MultipleCurrencies
+          - AED
+          - AFN
+          - ALL
+          - AMD
+          - ANG
+          - AOA
+          - ARS
+          - AUD
+          - AWG
+          - AZN
+          - BAM
+          - BBD
+          - BDT
+          - BGN
+          - BHD
+          - BIF
+          - BMD
+          - BND
+          - BOB
+          - BOV
+          - BRL
+          - BSD
+          - BTN
+          - BWP
+          - BYR
+          - BZD
+          - CAD
+          - CDF
+          - CHE
+          - CHF
+          - CHW
+          - CLF
+          - CLP
+          - CNY
+          - COP
+          - COU
+          - CRC
+          - CUP
+          - CVE
+          - CZK
+          - DJF
+          - DKK
+          - DOP
+          - DZD
+          - EEK
+          - EGP
+          - ERN
+          - ETB
+          - EUR
+          - FJD
+          - FKP
+          - GBP
+          - GEL
+          - GHC
+          - GIP
+          - GMD
+          - GNF
+          - GTQ
+          - GYD
+          - HKD
+          - HNL
+          - HRK
+          - HTG
+          - HUF
+          - IDR
+          - ILS
+          - INR
+          - IQD
+          - IRR
+          - ISK
+          - JMD
+          - JOD
+          - JPY
+          - KES
+          - KGS
+          - KHR
+          - KMF
+          - KPW
+          - KRW
+          - KWD
+          - KYD
+          - KZT
+          - LAK
+          - LBP
+          - LKR
+          - LRD
+          - LSL
+          - LTL
+          - LVL
+          - LYD
+          - MAD
+          - MDL
+          - MGA
+          - MKD
+          - MMK
+          - MNT
+          - MOP
+          - MRO
+          - MUR
+          - MVR
+          - MWK
+          - MXN
+          - MXV
+          - MYR
+          - MZN
+          - NAD
+          - NGN
+          - NIO
+          - NOK
+          - NPR
+          - NZD
+          - OMR
+          - PAB
+          - PEN
+          - PGK
+          - PHP
+          - PKR
+          - PLN
+          - PYG
+          - QAR
+          - ROL
+          - RON
+          - RSD
+          - RUB
+          - RWF
+          - SAR
+          - SBD
+          - SCR
+          - SDD
+          - SEK
+          - SGD
+          - SHP
+          - SLL
+          - SOS
+          - SRD
+          - STD
+          - SYP
+          - SZL
+          - THB
+          - TJS
+          - TMT
+          - TND
+          - TOP
+          - TRY
+          - TTD
+          - TWD
+          - TZS
+          - UAH
+          - UGX
+          - USD
+          - USN
+          - USS
+          - UYU
+          - UZS
+          - VEF
+          - VND
+          - VUV
+          - WST
+          - XAF
+          - XAG
+          - XAU
+          - XBA
+          - XBB
+          - XBC
+          - XBD
+          - XCD
+          - XDR
+          - XFO
+          - XFU
+          - XOF
+          - XPD
+          - XPF
+          - XPT
+          - YER
+          - ZAR
+          - ZMK
+          - ZWR
+          type: string
+        Type:
+          enum:
+          - BD
+          - CT
+          - CA
+          - CASH
+          - EI
+          - FC
+          - FE
+          - FM
+          - FO
+          - FI
+          - FV
+          - SA
+          - ST
+          - VA
+          - V1
+          - XI
+          - SP
+          type: string
+        InceptionDate:
+          format: date-time
+          type: string
+        SecurityReferenceTypes:
+          type: array
+          items:
+            enum:
+            - PortfolioHolding
+            - BenchmarkHolding
+            - RiskFreeIndex
+            - DisclosureIndex
+            - TopNetUnderlyingHolding
+            - StockIntersection
+            - InvalidSecurity
+            type: string
+    Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfigs:
+      type: object
+      properties:
+        AssetClassGroupConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfig'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturnsItem:
+      type: object
+      properties:
+        StartYear:
+          format: int32
+          type: integer
+        StartMonth:
+          format: int32
+          maximum: 12
+          minimum: 1
+          type: integer
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturns:
+      type: object
+      properties:
+        GrossExpenseRatio:
+          format: double
+          type: number
+        InceptionDate:
+          format: date-time
+          type: string
+        MaxBackLoad:
+          format: double
+          type: number
+        MaxFrontLoad:
+          format: double
+          type: number
+        NetExpenseRatio:
+          format: double
+          type: number
+        ManagementExpenseRatio:
+          format: double
+          type: number
+        TurnoverRatio:
+          format: double
+          type: number
+        TurnoverRatioDate:
+          format: date-time
+          type: string
+        Day7YieldUnsubsized:
+          format: double
+          type: number
+        Day7YieldSubsidized:
+          format: double
+          type: number
+        Month12Yield:
+          format: double
+          type: number
+        TimePeriod:
+          description: Year1,Year3,Year5,Year10,SinceInception only supported
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturnsTimePeriodItem'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.Profitability:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.ProfitabilityItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.ProfitabilityItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.ProfitabilityItemSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        EquityStyleItem:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleItem'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.XRays:
+      type: object
+      properties:
+        XRay:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.XRay'
+        SecurityReference:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.SecurityItem'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Statistics.PortfolioStatisticsSummary:
+      type: object
+      properties:
+        PortfolioValue:
+          format: double
+          type: number
+        Currency:
+          description: Ignore value in the view definition. This will be set correctly as part of the response.
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        PortfolioDate:
+          format: date-time
+          type: string
+        EquityCount:
+          format: int32
+          type: integer
+        FixedIncomeCount:
+          format: int32
+          type: integer
+        PortfolioYield:
+          description: Currently only support PortfolioYield12Month
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.PortfolioYieldTrailingTimePeriod_'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriods:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        BestTimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriod'
+        WorstTimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriod'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturns:
+      type: object
+      properties:
+        RollingReturn:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturn'
+    Morningstar.PortfolioAnalysis.Models.Output.PortfolioBenchmarkHolding:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Weight:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Input.AssetClassConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        Color:
+          type: string
+        BorderColor:
+          type: string
+        Index:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Statistics.FundStatistics:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Statistics.FundStatisticsItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturnsItem:
+      type: object
+      properties:
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TrailingTimePeriod_'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturnsSecurity:
+      type: object
+      properties:
+        Sequence:
+          format: int32
+          type: integer
+        SecurityId:
+          type: string
+        HoldingDate:
+          format: date-time
+          type: string
+        HoldingValue:
+          format: double
+          type: number
+        Day7Yield:
+          format: double
+          type: number
+        TimePeriod:
+          description: Year1,Year3,Year5,Year10 only supported
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_'
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayRequestSettings:
+      type: object
+      properties:
+        OutputCurrency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        AnalysisDateTimePeriod:
+          enum:
+          - MonthEnd
+          - QuarterEnd
+          type: string
+        AssetClassGroupConfigs:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfigs'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AssetAllocationSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        AssetClass:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AssetClassItem'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleBreakdownItem:
+      type: object
+      properties:
+        LargeValue:
+          format: double
+          type: number
+        LargeBlend:
+          format: double
+          type: number
+        LargeGrowth:
+          format: double
+          type: number
+        MidValue:
+          format: double
+          type: number
+        MidBlend:
+          format: double
+          type: number
+        MidGrowth:
+          format: double
+          type: number
+        SmallValue:
+          format: double
+          type: number
+        SmallBlend:
+          format: double
+          type: number
+        SmallGrowth:
+          format: double
+          type: number
+        Unclassified:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturns:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturnsItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturnsItem'
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TrailingTimePeriod_:
+      type: object
+      properties:
+        Id:
+          enum:
+          - QuarterToDate
+          - YearToDate
+          - Month1
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeMaturity:
+      type: object
+      properties:
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeMaturityItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeMaturityItem'
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_:
+      type: object
+      properties:
+        Id:
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySectorExposureItem:
+      type: object
+      properties:
+        Id:
+          description: Parent/Rollup
+          type: string
+        Value:
+          format: double
+          type: number
+        ExposureItem:
+          description: Children. Can't use enum because they can be client specific and have different classifications (GICS, Morningstar, Institution specific)
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.PortfolioHoldings:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.PortfolioHolding'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.SecurityFees:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.SecurityFeesSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityRegionExposureItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Region:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityRegionExposureItem'
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.FixedIncomeSectorGroupConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        QuickPortInputId:
+          type: string
+        FixedIncomeSectorConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.FixedIncomeSectorConfig'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturns:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturnsSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityMarketMaturityItem:
+      type: object
+      properties:
+        DevelopedMarkets:
+          format: double
+          type: number
+        EmergingMarkets:
+          format: double
+          type: number
+        NotAvailable:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.PriceRatios:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.PriceRatiosItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.PriceRatiosItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.PriceRatiosItemSecurity'
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding:
+      description: 'TODO: Implement same way as PortfolioInput'
+      required:
+      - SecurityId
+      - Weight
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Type:
+          enum:
+          - XI
+          - CA
+          - EI
+          - CASH
+          type: string
+        Weight:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleBreakdown:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleBreakdownItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleBreakdownItemSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturns:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturnSecurityItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.SecurityReturns:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        NonStdLoadAdjustedReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturns'
+        StandardizedAndTaxAdjustedReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturns'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriod:
+      type: object
+      properties:
+        TimePeriod:
+          description: Only support Month1, Month3, Year1, Year3
+          enum:
+          - QuarterToDate
+          - YearToDate
+          - Month1
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        Value:
+          format: double
+          type: number
+        StartDate:
+          format: date-time
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.AfterTaxReturns:
+      type: object
+      properties:
+        OnDistributionAndSalesOfShares:
+          description: Year1,Year3,Year5,Year10,SinceInception only supported
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_'
+        OnDistributionReturn:
+          description: Year1,Year3,Year5,Year10,SinceInception only supported
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_'
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayInputSettings:
+      type: object
+      properties:
+        View:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayView'
+        Config:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayConfig'
+        RequestSettings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayRequestSettings'
+        Portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
+      example:
+        View:
+          Id: Snapshot
+        Config:
+          Id: Default
+        RequestSettings:
+          OutputCurrency: USD
+          AnalysisDateTimePeriod: MonthEnd
+          AssetClassGroupConfigs:
+            AssetClassGroupConfig:
+            - Id: ACG-USBROAD
+        Portfolios:
+        - Name: TestPortfolio1
+          TotalValue: 10000
+          Currency: USD
+          Holdings:
+          - SecurityId: F00000VCTT
+            Weight: 20
+          - SecurityId: 0P00002NW8
+            Weight: 10
+          - TradingSymbol: AAPL
+            Weight: 15
+          - ISIN: US09251T1034
+            Weight: 35
+          - CUSIP: '256219106'
+            Weight: 20
+          Benchmark:
+            Type: Standard
+            Holdings:
+            - SecurityId: XIUSA04G92
+              Type: XI
+              Weight: 100
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.StockIntersectionConfig:
+      type: object
+      properties:
+        ApiDataPoints:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.ProfitabilityItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        ProfitabilityItem:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.ProfitabilityItem'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.GeometricAverageCapitalizationItem:
+      type: object
+      properties:
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivity:
+      type: object
+      properties:
+        DataFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          type: string
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivityItem'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivityItem'
+        MaxSequence:
+          format: int32
+          type: integer
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.Int32_:
+      type: object
+      properties:
+        Id:
+          format: int32
+          type: integer
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.PortfolioBenchmark:
+      type: object
+      properties:
+        Type:
+          description: Ignore value in the view definition. This will be set correctly as part of the response.
+          enum:
+          - Standard
+          - AutoAsset
+          - AutoCategory
+          - Custom
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.PortfolioBenchmarkHolding'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturnsTimePeriodItem:
+      type: object
+      properties:
+        Id:
+          enum:
+          - QuarterToDate
+          - YearToDate
+          - Month1
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        Market:
+          format: double
+          type: number
+        Nav:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleItem:
+      type: object
+      properties:
+        AverageMarketCap:
+          format: double
+          type: number
+        ProspectivePriceBook:
+          format: double
+          type: number
+        ProspectivePriceCashFlow:
+          format: double
+          type: number
+        ProspectivePriceEarnings:
+          format: double
+          type: number
+        ProspectivePriceSales:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.XRay:
+      type: object
+      properties:
+        PortfolioName:
+          type: string
+        AnalysisDate:
+          format: date-time
+          type: string
+        AnalysisDateTimePeriod:
+          enum:
+          - MonthEnd
+          - QuarterEnd
+          type: string
+        ReturnMethodology:
+          enum:
+          - QuickPortfolio
+          - Hypothetical
+          type: string
+        Analysis:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AnalysisItem'
+        Holdings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.HoldingsItem'
+        Statistics:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Statistics.StatisticsItem'
+        PortfolioBenchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.PortfolioBenchmark'
+        Returns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.Returns'
+        SecurityFees:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.SecurityFees'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.StockIntersectionConcentrationRatio:
+      type: object
+      properties:
+        TopStocksPercent:
+          format: double
+          type: number
+        OtherStocksPercent:
+          format: double
+          type: number
+        TopNumberOfStocks:
+          format: int32
+          type: integer
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InterestRateRiskItem:
+      type: object
+      properties:
+        Maturity:
+          format: double
+          type: number
+        MaturityPercentAnalyzed:
+          format: double
+          type: number
+        YieldToMaturity:
+          format: double
+          type: number
+        ModifiedDuration:
+          format: double
+          type: number
+        EffectiveDuration:
+          format: double
+          type: number
+        EffectiveDurationPercentAnalyzed:
+          format: double
+          type: number
+        WTDCoupon:
+          format: double
+          type: number
+        WTDPrice:
+          format: double
+          type: number
+        AverageCreditQuality:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AssetClassItem:
+      type: object
+      properties:
+        Id:
+          type: string
+        Long:
+          format: double
+          type: number
+        Short:
+          format: double
+          type: number
+        Net:
+          format: double
+          type: number
+        RescaledLong:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.SecurityFeesSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        FrontLoadFee:
+          format: double
+          type: number
+        DeferredLoadFee:
+          format: double
+          type: number
+        ManagementFees:
+          format: double
+          type: number
+        Expense12b1:
+          format: double
+          type: number
+        NetExpenseRatio:
+          format: double
+          type: number
+        GrossExpenseRatio:
+          format: double
+          type: number
+        AnnualReportNetExpenseRatio:
+          format: double
+          type: number
+        AnnualReportGrossExpenseRatio:
+          format: double
+          type: number
+        TotalExpenseRatio:
+          format: double
+          type: number
+        ManagementExpenseRatio:
+          format: double
+          type: number
+        IndirectCostRatio:
+          format: double
+          type: number
+        OnGoingCharge:
+          format: double
+          type: number
+        KIIDOnGoingCharge:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeStyleItem:
+      type: object
+      properties:
+        EffectiveDuration:
+          format: double
+          type: number
+        EffectiveMaturity:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AssetAllocation:
+      type: object
+      properties:
+        Id:
+          description: Asset Class Group Id
+          type: string
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AssetClassItem'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AssetClassItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AssetAllocationSecurity'
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayConfig:
+      type: object
+      properties:
+        Id:
+          description: this will look up the configuration settings
+          type: string
+        ReturnMethodology:
+          enum:
+          - QuickPortfolio
+          - Hypothetical
+          type: string
+        FixedIncomeSectorGroupConfig:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.FixedIncomeSectorGroupConfig'
+        StockIntersectionConfig:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.StockIntersectionConfig'
+        EquitySectorGroupConfig:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.EquitySectorGroupConfig'
+        WorldRegionGroupConfig:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.WorldRegionGroupConfig'
+        AssetClassGroupConfig:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfig'
+        IncludeStockIntersectionIndexData:
+          type: boolean
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.TopNetUnderlyingHoldings:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        TopNumber:
+          format: int32
+          type: integer
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.TopNetUnderlyingHoldingsSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeSectors:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Id:
+          description: Possible values Morningstar, or Institution defined Id
+          type: string
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AnalysisItem:
+      type: object
+      properties:
+        AssetAllocation:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.AssetAllocation'
+        EquityAnalysis:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityAnalysis'
+        FixedIncomeAnalysis:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeAnalysis'
+        InvestmentStyle:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InvestmentStyle'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivityItem:
+      description: 'TODO: check all the types and possible values for properties in this class'
+      type: object
+      properties:
+        Sequence:
+          format: int32
+          type: integer
+        StartDate:
+          format: date-time
+          type: string
+        EndDate:
+          format: date-time
+          type: string
+        BeginningBalance:
+          format: double
+          type: number
+        ChargesFees:
+          format: double
+          type: number
+        DistributionWithdrawal:
+          format: double
+          type: number
+        MarketValue:
+          format: double
+          type: number
+        NewInvestment:
+          type: boolean
+        TaxesDue:
+          format: double
+          type: number
+        TotalReinvest:
+          format: double
+          type: number
+        TotalReturnPercent:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.Returns:
+      type: object
+      properties:
+        BestWorstTimePeriods:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriods'
+        TrailingReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturns'
+        CalendarYearReturn:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturns'
+        RollingReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturns'
+        IllustrationReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturns'
+        PerformanceHistorys:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistorys'
+        InvestmentActivity:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivity'
+        SecurityReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.SecurityReturns'
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.XRayView:
+      type: object
+      properties:
+        Id:
+          description: this will look up the view definition defined by configuration
+          type: string
+        XRays:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.XRays'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyle:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleItem'
+        EquityStyleBreakdown:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleBreakdown'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityStyleItemSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InterestRateRisk:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InterestRateRiskItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InterestRateRiskItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InterestRateRiskItemSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturns:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturn'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturn'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.StockIntersectionItem:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        SecurityName:
+          type: string
+        CUSIP:
+          type: string
+        TradingSymbol:
+          type: string
+        PercentOfInvestments:
+          format: double
+          type: number
+        MarketValue:
+          format: double
+          type: number
+        StockSector:
+          description: 'TODO: should this be an enum instead of a string?'
+          type: string
+        SourceOfStock:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.StockIntersectionItemSource'
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
+      required:
+      - Name
+      - Currency
+      - Holdings
+      type: object
+      properties:
+        Name:
+          type: string
+        TotalValue:
+          format: double
+          type: number
+        Currency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
+        IrrFees:
+          format: double
+          type: number
+        RiskFreeProxyId:
+          description: Default is set in the Configuration. This is a portfolio level override.
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityTypeBreakdownItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        EquityTypeBreakdownItem:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.EquityType_'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeMaturityItem:
+      type: object
+      properties:
+        Maturity:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.FixedIncomeMaturityPeriod_'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.GeometricAverageCapitalization:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.GeometricAverageCapitalizationItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.GeometricAverageCapitalizationItem'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.GeometricAverageCapitalizationItemSecurity'
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Type:
+          description: 'TODO: is this required? If not, is there a default?'
+          enum:
+          - BD
+          - CT
+          - CA
+          - CASH
+          - EI
+          - FC
+          - FE
+          - FM
+          - FO
+          - FI
+          - FV
+          - SA
+          - ST
+          - VA
+          - V1
+          - XI
+          - SP
+          type: string
+        ExchangeID:
+          type: string
+        Weight:
+          format: double
+          type: number
+        Value:
+          format: double
+          type: number
+        AnnualFeePercent:
+          format: double
+          type: number
+        AnnualFeeFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+        SalesFeesAmountType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        SalesFeesAmount:
+          format: double
+          type: number
+        SalesFeesType:
+          enum:
+          - Standard
+          - Custom
+          type: string
+        SalesFeesROAAmount:
+          format: double
+          type: number
+        SalesFeesLOIAmount:
+          format: double
+          type: number
+        OtherFeeAmount:
+          format: double
+          type: number
+        OtherFeeAmountType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        OtherFeeType:
+          enum:
+          - TradingCommissions
+          - ShortTermTradingFee
+          type: string
+        CUSIP:
+          type: string
+        TradingSymbol:
+          type: string
+        FundCode:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.FixedIncomeMaturityPeriod_:
+      type: object
+      properties:
+        Id:
+          enum:
+          - Years1to3
+          - Years3to5
+          - Years5to7
+          - Years7to10
+          - Years10to15
+          - Years15to20
+          - Years20to30
+          - YearsOver30
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeAnalysis:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        FixedIncomeSectors:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeSectors'
+        FixedIncomeMaturity:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.FixedIncomeMaturity'
+        CreditQuality:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.CreditQuality'
+        InterestRateRisk:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InterestRateRisk'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityTypeBreakdown:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.EquityType_'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.EquityType_'
+        SecurityBreakdown:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityTypeBreakdownItemSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.TopNetUnderlyingHoldingsSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        PercentAssets:
+          format: double
+          type: number
+        FundCategory:
+          type: string
+        EquitySector:
+          description: Institution specific sector configuration
+          type: string
+        FixedIncomeSector:
+          type: string
+        Industry:
+          type: string
+        Country:
+          description: Needs to be ISO country code
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Statistics.StatisticsItem:
+      type: object
+      properties:
+        PortfolioSummary:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Statistics.PortfolioStatisticsSummary'
+        FundStatistics:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Statistics.FundStatistics'
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.FixedIncomeSectorConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        QuickPortId:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.CreditQualityItem:
+      type: object
+      properties:
+        AAA:
+          format: double
+          type: number
+        AA:
+          format: double
+          type: number
+        A:
+          format: double
+          type: number
+        BBB:
+          format: double
+          type: number
+        BB:
+          format: double
+          type: number
+        B:
+          format: double
+          type: number
+        BelowB:
+          format: double
+          type: number
+        NotRated:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.IllustrationReturnTimePeriod_:
+      type: object
+      properties:
+        Id:
+          enum:
+          - Days7Yield
+          - Days7YieldUnsubsidized
+          - Days7YieldSubsidized
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.WorldRegionConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        QuickPortId:
+          type: string
+        QuickPortRegionText:
+          type: string
+        QuickPortParentRegionText:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Holdings.PortfolioHolding:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        FundPortfolioDate:
+          format: date-time
+          type: string
+        Year1:
+          format: double
+          type: number
+        Year3:
+          format: double
+          type: number
+        Year5:
+          format: double
+          type: number
+        Year10:
+          format: double
+          type: number
+        PercentAssets:
+          format: double
+          type: number
+        MarketValue:
+          format: double
+          type: number
+        FundCategory:
+          type: string
+        Sector:
+          description: Institution specific sector configuration
+          type: string
+        Industry:
+          type: string
+        Country:
+          description: ISO country code
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.PriceRatiosItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        PriceRatiosItem:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.PriceRatiosItem'
+    Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        Type:
+          enum:
+          - Broad
+          - Detailed
+          type: string
+        AssetClassConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassConfig'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityMarketMaturity:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityMarketMaturityItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityMarketMaturityItem'
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.EquitySectorGroupConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        EquitySectorConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.XRay.EquitySectorConfig'
+    Morningstar.PortfolioAnalysis.Models.Input.XRay.EquitySectorConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        QuickPortId:
+          type: string
+        IsParentSector:
+          type: boolean
+        ParentSectorId:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Statistics.FundStatisticsItem:
+      type: object
+      properties:
+        AverageNetExpenseRatio:
+          format: double
+          type: number
+        AverageGrossExpenseRatio:
+          format: double
+          type: number
+        PotentialCapGainsExposure:
+          format: double
+          type: number
+        AverageAnnualReportNetExpenseRatio:
+          format: double
+          type: number
+        AverageAnnualReportGrossExpenseRatio:
+          format: double
+          type: number
+        AverageTotalExpenseRatio:
+          format: double
+          type: number
+        AverageManagementExpenseRatio:
+          format: double
+          type: number
+        AverageManagementFee:
+          format: double
+          type: number
+        SimilarlyWeightedHypotheticalPortfolioPercentExpenseRatio:
+          format: double
+          type: number
+        EstimatedMutualFundExpensesAmount:
+          format: double
+          type: number
+        TotalSalesChargesPaidAmount:
+          format: double
+          type: number
+        IndirectCostRatio:
+          format: double
+          type: number
+        OnGoingCharge:
+          format: double
+          type: number
+        KIIDOnGoingCharge:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InterestRateRiskItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        InterestRateRiskItem:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.InterestRateRiskItem'
+    ? Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.PortfolioYieldTrailingTimePeriod_
+    : type: object
+      properties:
+        Id:
+          enum:
+          - Month12
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.GeometricAverageCapitalizationItemSecurity:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        AverageMarketCapitalization:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityAnalysis:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        EquitySectors:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquitySectors'
+        WorldRegions:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.WorldRegions'
+        EquityMarketMaturity:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityMarketMaturity'
+        EquityTypeBreakdown:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.EquityTypeBreakdown'
+        PriceRatios:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.PriceRatios'
+        Profitability:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.Profitability'
+        GeometricAverageCapitalization:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.GeometricAverageCapitalization'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturn:
+      type: object
+      properties:
+        RollingPeriod:
+          enum:
+          - Month3
+          - Month6
+          - Month12
+          - Month24
+          - Month36
+          - Month60
+          - Month120
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturnsItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturnsItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturns:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturnsSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.CreditQuality:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.CreditQualityItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.XRay.Analysis.CreditQualityItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistoryItem:
+      type: object
+      properties:
+        StartYear:
+          format: int32
+          type: integer
+        StartQuarter:
+          format: int32
+          maximum: 4
+          minimum: 1
+          type: integer
+        StartMonth:
+          format: int32
+          maximum: 12
+          minimum: 1
+          type: integer
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.Int32_'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistorys:
+      type: object
+      properties:
+        PerformanceHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistory'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

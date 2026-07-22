@@ -1,0 +1,81 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts IDR (Investment Details Report) API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: IDR (Investment Details Report)
+paths:
+  /IDR:
+    get:
+      tags:
+      - IDR (Investment Details Report)
+      summary: Get an Investment Details Report
+      description: Get an Investment Details Report for the securities specified in the `securities` parameter.  Reports are generated in PDF format. You can specify that the PDF opens online or is downloaded as an attachment. </br></br>Use the `currencyId` parameter to define the currency of the data in the report. To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.
+      operationId: InvestmentDetailsReportV1_GetIDR
+      parameters:
+      - name: securities
+        in: query
+        description: Securities to query. Separate multiple entries with ',' or '|'.
+        required: true
+        schema:
+          type: string
+          default: FOUSA05H5F
+      - name: currencyId
+        in: query
+        description: ISO 4217 code. For example 'USD'.
+        required: false
+        schema:
+          type: string
+      - name: langcult
+        in: query
+        description: Language and locale, for example, en-US
+        required: true
+        schema:
+          type: string
+          default: en-US
+      - name: contentDispositionHeaderValue
+        in: query
+        description: Open PDF online or download as an attachment
+        required: false
+        schema:
+          type: string
+          default: attachment
+      responses:
+        '200':
+          description: Success
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      deprecated: false
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

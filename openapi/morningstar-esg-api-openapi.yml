@@ -1,0 +1,321 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts esg API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: esg
+paths:
+  /esg:
+    post:
+      tags:
+      - esg
+      summary: Calculate ESG performance
+      description: Calculate Environmental, Social and Governance (ESG) performance for the portfolios specified in the request body. The response will return portfolio sustainability scores and fund and company-level ESG data.</br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.
+      operationId: ESGV1_PostAsync
+      parameters:
+      - name: langcult
+        in: query
+        description: Language and locale, for example, en-US
+        required: false
+        schema:
+          type: string
+          default: en-US
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+        description: Object that defines the settings and portfolio(s) to use in the request.
+        required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  /esg/eusfdr:
+    post:
+      tags:
+      - esg
+      summary: Calculate percentage of investments that can be classified under EU SFDR Article 8/9
+      description: Calculate what percentage of investments contained in the funds and portfolios specified in the request body can be classified under EU Sustainable Finance Disclosures Regulation (SFDR) Article 8/9.</br></br>The response returns the following information for funds:</br></br>- Which (if any) EU SFDRs article the fund can be classified under. </br>- Whether or not intentional attributes have been specified.</br></br>The response includes the following information for portfolios:</br></br>- Percentage that can be classified under Articles 8 and 9 of the EU SFDR.</br>- Percentage that has been analyzed but where no information about EU SFDR classifications is available. </br> - Percentage that has not been analyzed for this information.</br>- Percentage of intentional attributes that can be classified as sustainable.</br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.
+      operationId: ESGV11_PostAsync
+      parameters:
+      - name: langcult
+        in: query
+        description: Language and locale, for example, en-US
+        required: false
+        schema:
+          type: string
+          default: en-US
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings'
+        description: Object that defines the settings and portfolio(s) to use in the request.
+        required: true
+      responses:
+        '200':
+          description: Success
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
+      type: object
+      properties:
+        Type:
+          enum:
+          - Standard
+          - AutoAsset
+          - AutoCategory
+          - Custom
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding:
+      description: 'TODO: Implement same way as PortfolioInput'
+      required:
+      - SecurityId
+      - Weight
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Type:
+          enum:
+          - XI
+          - CA
+          - EI
+          - CASH
+          type: string
+        Weight:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings:
+      type: object
+      properties:
+        RequestSettings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.EsgRequestSettings'
+        Portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
+      example:
+        Portfolios:
+        - Name: TestPortfolio1
+          TotalValue: 10000
+          Holdings:
+          - SecurityId: F00000VCTT
+            Weight: 20
+          - SecurityId: 0P00002NW8
+            Weight: 10
+          - TradingSymbol: AAPL
+            Weight: 15
+          - ISIN: US09251T1034
+            Weight: 35
+          - CUSIP: '256219106'
+            Weight: 20
+          Benchmark:
+            Type: Standard
+            Holdings:
+            - SecurityId: XIUSA04G92
+              Type: XI
+              Weight: 100
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
+      required:
+      - Name
+      - Currency
+      - Holdings
+      type: object
+      properties:
+        Name:
+          type: string
+        TotalValue:
+          format: double
+          type: number
+        Currency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
+        IrrFees:
+          format: double
+          type: number
+        RiskFreeProxyId:
+          description: Default is set in the Configuration. This is a portfolio level override.
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.Esg.EsgRequestSettings:
+      type: object
+      properties:
+        OutputCurrency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        AnalysisDateTimePeriod:
+          enum:
+          - MonthEnd
+          - QuarterEnd
+          type: string
+        IncludeSecurityLevel:
+          type: boolean
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Type:
+          description: 'TODO: is this required? If not, is there a default?'
+          enum:
+          - BD
+          - CT
+          - CA
+          - CASH
+          - EI
+          - FC
+          - FE
+          - FM
+          - FO
+          - FI
+          - FV
+          - SA
+          - ST
+          - VA
+          - V1
+          - XI
+          - SP
+          type: string
+        ExchangeID:
+          type: string
+        Weight:
+          format: double
+          type: number
+        Value:
+          format: double
+          type: number
+        AnnualFeePercent:
+          format: double
+          type: number
+        AnnualFeeFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+        SalesFeesAmountType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        SalesFeesAmount:
+          format: double
+          type: number
+        SalesFeesType:
+          enum:
+          - Standard
+          - Custom
+          type: string
+        SalesFeesROAAmount:
+          format: double
+          type: number
+        SalesFeesLOIAmount:
+          format: double
+          type: number
+        OtherFeeAmount:
+          format: double
+          type: number
+        OtherFeeAmountType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        OtherFeeType:
+          enum:
+          - TradingCommissions
+          - ShortTermTradingFee
+          type: string
+        CUSIP:
+          type: string
+        TradingSymbol:
+          type: string
+        FundCode:
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

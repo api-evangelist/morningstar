@@ -1,0 +1,2094 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Industry-Specific Metrics API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Industry-Specific Metrics
+paths:
+  /direct-web-services/v1/investments/{id}/equity-bank-reserve-metrics:
+    get:
+      summary: Get Bank Reserve Metrics view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: reportType
+        in: query
+        required: true
+        schema:
+          enum:
+          - a
+          - r
+          - d
+          - b
+          - tb
+          - p
+          - ta
+          - td
+          - tr
+          - tp
+          type: string
+          x-enumDescriptions:
+            a: Value as originally reported in a formal document.
+            p: Value reported in a preliminary announcement of results prior to a formal document.
+            r: Restated value reported in a formal document.
+            d: Restated value reported in a preliminary announcement of results prior to a formal document.
+            b: 'Best known value chosen from the available report types: A, P, R, D.'
+            ta: Calculated Trailing 12 months of as originally reported values in a formal document.
+            tp: Calculated Trailing 12 months of values reported in a preliminary announcement of results prior to a formal document.
+            tr: Calculated Trailing 12 months of restated values reported in a formal document.
+            td: Calculated Trailing 12 months of restated values reported in a preliminary announcement of results prior to a formal document.
+            tb: 'Calculated Trailing 12 months of ''best known'' value chosen from the available report types: A, P, R, D.'
+        description: "\nFilters results by report type. Must be used together with `period`.\n\n  - `a` = Value as originally reported in a formal document.\n\n  - `p` = Value reported in a preliminary announcement of results prior to a formal document.\n\n  - `r` = Restated value reported in a formal document.\n\n  - `d` = Restated value reported in a preliminary announcement of results prior to a formal document.\n\n  - `b` = Best known value chosen from the available report types: A, P, R, D.\n\n  - `ta` = Calculated Trailing 12 months of as originally reported values in a formal document.\n\n  - `tp` = Calculated Trailing 12 months of values reported in a preliminary announcement of results prior to a formal document.\n\n  - `tr` = Calculated Trailing 12 months of restated values reported in a formal document.\n\n  - `td` = Calculated Trailing 12 months of restated values reported in a preliminary announcement of results prior to a formal document.\n\n  - `tb` = Calculated Trailing 12 months of ‘best known’ value chosen from the available report types: A, P, R, D."
+        examples:
+          reportTypeExample1:
+            summary: As originally reported
+            value: a
+          reportTypeExample2:
+            summary: Preliminary announcement
+            value: p
+          reportTypeExample3:
+            summary: Restated (formal document)
+            value: r
+          reportTypeExample4:
+            summary: Restated (preliminary announcement)
+            value: d
+          reportTypeExample5:
+            summary: Best known
+            value: b
+          reportTypeExample6:
+            summary: Trailing 12 months, as originally reported
+            value: ta
+          reportTypeExample7:
+            summary: Trailing 12 months, preliminary
+            value: tp
+          reportTypeExample8:
+            summary: Trailing 12 months, restated (formal)
+            value: tr
+          reportTypeExample9:
+            summary: Trailing 12 months, restated (preliminary)
+            value: td
+          reportTypeExample10:
+            summary: Trailing 12 months, best known
+            value: tb
+      - name: period
+        in: query
+        required: true
+        schema:
+          enum:
+          - sa2
+          - q1
+          - sa1
+          - a
+          - q2
+          - q3
+          - q4
+          - q6
+          - q9
+          - ir
+          type: string
+          x-enumDescriptions:
+            a: 'Annual (full fiscal year). Example: 1 January to 31 December'
+            sa1: 'First semi-annual. Example: 1 January to 30 June'
+            sa2: 'Second semi-annual. Example: 1 July to 31 December'
+            q1: 'First quarter. Example: 1 January to 31 March'
+            q2: 'Second quarter. Example: 1 April to 30 June'
+            q3: 'Third quarter. Example: 1 July to 30 September'
+            q4: 'Fourth quarter. Example: 1 October to 31 December'
+            q6: 'Cumulative six-month period to the end of Q2. Example: 1 January to 30 June'
+            q9: 'Cumulative nine-month period to the end of Q3. Example: 1 January to 30 September'
+            ir: Irregular report. No standardized date range
+        description: '
+
+          Filters results by the duration period of financial statements reported by the company. Must be used together with `reportType`.
+
+
+          - `a` = Annual (full fiscal year). Example: 1 January to 31 December
+
+          - `sa1` = First semi-annual. Example: 1 January to 30 June
+
+          - `sa2` = Second semi-annual. Example: 1 July to 31 December
+
+          - `q1` = First quarter. Example: 1 January to 31 March
+
+          - `q2` = Second quarter. Example: 1 April to 30 June
+
+          - `q3` = Third quarter. Example: 1 July to 30 September
+
+          - `q4` = Fourth quarter. Example: 1 October to 31 December
+
+          - `q6` = Cumulative six-month period to the end of Q2. Example: 1 January to 30 June
+
+          - `q9` = Cumulative nine-month period to the end of Q3. Example: 1 January to 30 September
+
+          - `ir` = Irregular report. No standardized date range'
+        examples:
+          periodExample1:
+            summary: Annual (full fiscal year)
+            value: a
+          periodExample2:
+            summary: First semi-annual
+            value: sa1
+          periodExample3:
+            summary: Second semi-annual
+            value: sa2
+          periodExample4:
+            summary: First quarter
+            value: q1
+          periodExample5:
+            summary: Second quarter
+            value: q2
+          periodExample6:
+            summary: Third quarter
+            value: q3
+          periodExample7:
+            summary: Fourth quarter
+            value: q4
+          periodExample8:
+            summary: Cumulative six-month period (to end of Q2)
+            value: q6
+          periodExample9:
+            summary: Cumulative nine-month period (to end of Q3)
+            value: q9
+          periodExample10:
+            summary: Irregular report
+            value: ir
+      - name: numberOfMonths
+        in: query
+        schema:
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          type: string
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityBankReserveMetricsDataset
+      tags:
+      - Industry-Specific Metrics
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityBankReserveMetrics'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 953
+  /direct-web-services/v1/investments/{id}/equity-industry-specific-metrics:
+    get:
+      summary: Get Industry-Specific Metrics view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: reportType
+        in: query
+        required: true
+        schema:
+          enum:
+          - a
+          - r
+          - d
+          - b
+          - tb
+          - p
+          - ta
+          - td
+          - tr
+          - tp
+          type: string
+          x-enumDescriptions:
+            a: Value as originally reported in a formal document.
+            p: Value reported in a preliminary announcement of results prior to a formal document.
+            r: Restated value reported in a formal document.
+            d: Restated value reported in a preliminary announcement of results prior to a formal document.
+            b: 'Best known value chosen from the available report types: A, P, R, D.'
+            ta: Calculated Trailing 12 months of as originally reported values in a formal document.
+            tp: Calculated Trailing 12 months of values reported in a preliminary announcement of results prior to a formal document.
+            tr: Calculated Trailing 12 months of restated values reported in a formal document.
+            td: Calculated Trailing 12 months of restated values reported in a preliminary announcement of results prior to a formal document.
+            tb: 'Calculated Trailing 12 months of ''best known'' value chosen from the available report types: A, P, R, D.'
+        description: "\nFilters results by report type. Must be used together with `period`.\n\n  - `a` = Value as originally reported in a formal document.\n\n  - `p` = Value reported in a preliminary announcement of results prior to a formal document.\n\n  - `r` = Restated value reported in a formal document.\n\n  - `d` = Restated value reported in a preliminary announcement of results prior to a formal document.\n\n  - `b` = Best known value chosen from the available report types: A, P, R, D.\n\n  - `ta` = Calculated Trailing 12 months of as originally reported values in a formal document.\n\n  - `tp` = Calculated Trailing 12 months of values reported in a preliminary announcement of results prior to a formal document.\n\n  - `tr` = Calculated Trailing 12 months of restated values reported in a formal document.\n\n  - `td` = Calculated Trailing 12 months of restated values reported in a preliminary announcement of results prior to a formal document.\n\n  - `tb` = Calculated Trailing 12 months of ‘best known’ value chosen from the available report types: A, P, R, D."
+        examples:
+          reportTypeExample1:
+            summary: As originally reported
+            value: a
+          reportTypeExample2:
+            summary: Preliminary announcement
+            value: p
+          reportTypeExample3:
+            summary: Restated (formal document)
+            value: r
+          reportTypeExample4:
+            summary: Restated (preliminary announcement)
+            value: d
+          reportTypeExample5:
+            summary: Best known
+            value: b
+          reportTypeExample6:
+            summary: Trailing 12 months, as originally reported
+            value: ta
+          reportTypeExample7:
+            summary: Trailing 12 months, preliminary
+            value: tp
+          reportTypeExample8:
+            summary: Trailing 12 months, restated (formal)
+            value: tr
+          reportTypeExample9:
+            summary: Trailing 12 months, restated (preliminary)
+            value: td
+          reportTypeExample10:
+            summary: Trailing 12 months, best known
+            value: tb
+      - name: period
+        in: query
+        required: true
+        schema:
+          enum:
+          - sa2
+          - q1
+          - sa1
+          - a
+          - q2
+          - q3
+          - q4
+          - q6
+          - q9
+          - ir
+          type: string
+          x-enumDescriptions:
+            a: 'Annual (full fiscal year). Example: 1 January to 31 December'
+            sa1: 'First semi-annual. Example: 1 January to 30 June'
+            sa2: 'Second semi-annual. Example: 1 July to 31 December'
+            q1: 'First quarter. Example: 1 January to 31 March'
+            q2: 'Second quarter. Example: 1 April to 30 June'
+            q3: 'Third quarter. Example: 1 July to 30 September'
+            q4: 'Fourth quarter. Example: 1 October to 31 December'
+            q6: 'Cumulative six-month period to the end of Q2. Example: 1 January to 30 June'
+            q9: 'Cumulative nine-month period to the end of Q3. Example: 1 January to 30 September'
+            ir: Irregular report. No standardized date range
+        description: '
+
+          Filters results by the duration period of financial statements reported by the company. Must be used together with `reportType`.
+
+
+          - `a` = Annual (full fiscal year). Example: 1 January to 31 December
+
+          - `sa1` = First semi-annual. Example: 1 January to 30 June
+
+          - `sa2` = Second semi-annual. Example: 1 July to 31 December
+
+          - `q1` = First quarter. Example: 1 January to 31 March
+
+          - `q2` = Second quarter. Example: 1 April to 30 June
+
+          - `q3` = Third quarter. Example: 1 July to 30 September
+
+          - `q4` = Fourth quarter. Example: 1 October to 31 December
+
+          - `q6` = Cumulative six-month period to the end of Q2. Example: 1 January to 30 June
+
+          - `q9` = Cumulative nine-month period to the end of Q3. Example: 1 January to 30 September
+
+          - `ir` = Irregular report. No standardized date range'
+        examples:
+          periodExample1:
+            summary: Annual (full fiscal year)
+            value: a
+          periodExample2:
+            summary: First semi-annual
+            value: sa1
+          periodExample3:
+            summary: Second semi-annual
+            value: sa2
+          periodExample4:
+            summary: First quarter
+            value: q1
+          periodExample5:
+            summary: Second quarter
+            value: q2
+          periodExample6:
+            summary: Third quarter
+            value: q3
+          periodExample7:
+            summary: Fourth quarter
+            value: q4
+          periodExample8:
+            summary: Cumulative six-month period (to end of Q2)
+            value: q6
+          periodExample9:
+            summary: Cumulative nine-month period (to end of Q3)
+            value: q9
+          periodExample10:
+            summary: Irregular report
+            value: ir
+      - name: numberOfMonths
+        in: query
+        schema:
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          type: string
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: Most recent and time series data supported.
+      operationId: getEquityIndustrySpecificMetricsPackage
+      tags:
+      - Industry-Specific Metrics
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityIndustrySpecificMetrics'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 953
+  /direct-web-services/v1/investments/{id}/equity-reit-metrics:
+    get:
+      summary: Get REIT Metrics view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: reportType
+        in: query
+        required: true
+        schema:
+          enum:
+          - a
+          - r
+          - d
+          - b
+          - tb
+          - p
+          - ta
+          - td
+          - tr
+          - tp
+          type: string
+          x-enumDescriptions:
+            a: Value as originally reported in a formal document.
+            p: Value reported in a preliminary announcement of results prior to a formal document.
+            r: Restated value reported in a formal document.
+            d: Restated value reported in a preliminary announcement of results prior to a formal document.
+            b: 'Best known value chosen from the available report types: A, P, R, D.'
+            ta: Calculated Trailing 12 months of as originally reported values in a formal document.
+            tp: Calculated Trailing 12 months of values reported in a preliminary announcement of results prior to a formal document.
+            tr: Calculated Trailing 12 months of restated values reported in a formal document.
+            td: Calculated Trailing 12 months of restated values reported in a preliminary announcement of results prior to a formal document.
+            tb: 'Calculated Trailing 12 months of ''best known'' value chosen from the available report types: A, P, R, D.'
+        description: "\nFilters results by report type. Must be used together with `period`.\n\n  - `a` = Value as originally reported in a formal document.\n\n  - `p` = Value reported in a preliminary announcement of results prior to a formal document.\n\n  - `r` = Restated value reported in a formal document.\n\n  - `d` = Restated value reported in a preliminary announcement of results prior to a formal document.\n\n  - `b` = Best known value chosen from the available report types: A, P, R, D.\n\n  - `ta` = Calculated Trailing 12 months of as originally reported values in a formal document.\n\n  - `tp` = Calculated Trailing 12 months of values reported in a preliminary announcement of results prior to a formal document.\n\n  - `tr` = Calculated Trailing 12 months of restated values reported in a formal document.\n\n  - `td` = Calculated Trailing 12 months of restated values reported in a preliminary announcement of results prior to a formal document.\n\n  - `tb` = Calculated Trailing 12 months of ‘best known’ value chosen from the available report types: A, P, R, D."
+        examples:
+          reportTypeExample1:
+            summary: As originally reported
+            value: a
+          reportTypeExample2:
+            summary: Preliminary announcement
+            value: p
+          reportTypeExample3:
+            summary: Restated (formal document)
+            value: r
+          reportTypeExample4:
+            summary: Restated (preliminary announcement)
+            value: d
+          reportTypeExample5:
+            summary: Best known
+            value: b
+          reportTypeExample6:
+            summary: Trailing 12 months, as originally reported
+            value: ta
+          reportTypeExample7:
+            summary: Trailing 12 months, preliminary
+            value: tp
+          reportTypeExample8:
+            summary: Trailing 12 months, restated (formal)
+            value: tr
+          reportTypeExample9:
+            summary: Trailing 12 months, restated (preliminary)
+            value: td
+          reportTypeExample10:
+            summary: Trailing 12 months, best known
+            value: tb
+      - name: period
+        in: query
+        required: true
+        schema:
+          enum:
+          - sa2
+          - q1
+          - sa1
+          - a
+          - q2
+          - q3
+          - q4
+          - q6
+          - q9
+          - ir
+          type: string
+          x-enumDescriptions:
+            a: 'Annual (full fiscal year). Example: 1 January to 31 December'
+            sa1: 'First semi-annual. Example: 1 January to 30 June'
+            sa2: 'Second semi-annual. Example: 1 July to 31 December'
+            q1: 'First quarter. Example: 1 January to 31 March'
+            q2: 'Second quarter. Example: 1 April to 30 June'
+            q3: 'Third quarter. Example: 1 July to 30 September'
+            q4: 'Fourth quarter. Example: 1 October to 31 December'
+            q6: 'Cumulative six-month period to the end of Q2. Example: 1 January to 30 June'
+            q9: 'Cumulative nine-month period to the end of Q3. Example: 1 January to 30 September'
+            ir: Irregular report. No standardized date range
+        description: '
+
+          Filters results by the duration period of financial statements reported by the company. Must be used together with `reportType`.
+
+
+          - `a` = Annual (full fiscal year). Example: 1 January to 31 December
+
+          - `sa1` = First semi-annual. Example: 1 January to 30 June
+
+          - `sa2` = Second semi-annual. Example: 1 July to 31 December
+
+          - `q1` = First quarter. Example: 1 January to 31 March
+
+          - `q2` = Second quarter. Example: 1 April to 30 June
+
+          - `q3` = Third quarter. Example: 1 July to 30 September
+
+          - `q4` = Fourth quarter. Example: 1 October to 31 December
+
+          - `q6` = Cumulative six-month period to the end of Q2. Example: 1 January to 30 June
+
+          - `q9` = Cumulative nine-month period to the end of Q3. Example: 1 January to 30 September
+
+          - `ir` = Irregular report. No standardized date range'
+        examples:
+          periodExample1:
+            summary: Annual (full fiscal year)
+            value: a
+          periodExample2:
+            summary: First semi-annual
+            value: sa1
+          periodExample3:
+            summary: Second semi-annual
+            value: sa2
+          periodExample4:
+            summary: First quarter
+            value: q1
+          periodExample5:
+            summary: Second quarter
+            value: q2
+          periodExample6:
+            summary: Third quarter
+            value: q3
+          periodExample7:
+            summary: Fourth quarter
+            value: q4
+          periodExample8:
+            summary: Cumulative six-month period (to end of Q2)
+            value: q6
+          periodExample9:
+            summary: Cumulative nine-month period (to end of Q3)
+            value: q9
+          periodExample10:
+            summary: Irregular report
+            value: ir
+      - name: numberOfMonths
+        in: query
+        schema:
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          type: string
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityReitMetricsDataset
+      tags:
+      - Industry-Specific Metrics
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityReitMetrics'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 953
+  /direct-web-services/v1/investments/{id}/equity-reit-metrics-per-share:
+    get:
+      summary: Get REIT Metrics Per Share view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: reportType
+        in: query
+        required: true
+        schema:
+          enum:
+          - a
+          - r
+          - d
+          - b
+          - tb
+          - p
+          - ta
+          - td
+          - tr
+          - tp
+          type: string
+          x-enumDescriptions:
+            a: Value as originally reported in a formal document.
+            p: Value reported in a preliminary announcement of results prior to a formal document.
+            r: Restated value reported in a formal document.
+            d: Restated value reported in a preliminary announcement of results prior to a formal document.
+            b: 'Best known value chosen from the available report types: A, P, R, D.'
+            ta: Calculated Trailing 12 months of as originally reported values in a formal document.
+            tp: Calculated Trailing 12 months of values reported in a preliminary announcement of results prior to a formal document.
+            tr: Calculated Trailing 12 months of restated values reported in a formal document.
+            td: Calculated Trailing 12 months of restated values reported in a preliminary announcement of results prior to a formal document.
+            tb: 'Calculated Trailing 12 months of ''best known'' value chosen from the available report types: A, P, R, D.'
+        description: "\nFilters results by report type. Must be used together with `period`.\n\n  - `a` = Value as originally reported in a formal document.\n\n  - `p` = Value reported in a preliminary announcement of results prior to a formal document.\n\n  - `r` = Restated value reported in a formal document.\n\n  - `d` = Restated value reported in a preliminary announcement of results prior to a formal document.\n\n  - `b` = Best known value chosen from the available report types: A, P, R, D.\n\n  - `ta` = Calculated Trailing 12 months of as originally reported values in a formal document.\n\n  - `tp` = Calculated Trailing 12 months of values reported in a preliminary announcement of results prior to a formal document.\n\n  - `tr` = Calculated Trailing 12 months of restated values reported in a formal document.\n\n  - `td` = Calculated Trailing 12 months of restated values reported in a preliminary announcement of results prior to a formal document.\n\n  - `tb` = Calculated Trailing 12 months of ‘best known’ value chosen from the available report types: A, P, R, D."
+        examples:
+          reportTypeExample1:
+            summary: As originally reported
+            value: a
+          reportTypeExample2:
+            summary: Preliminary announcement
+            value: p
+          reportTypeExample3:
+            summary: Restated (formal document)
+            value: r
+          reportTypeExample4:
+            summary: Restated (preliminary announcement)
+            value: d
+          reportTypeExample5:
+            summary: Best known
+            value: b
+          reportTypeExample6:
+            summary: Trailing 12 months, as originally reported
+            value: ta
+          reportTypeExample7:
+            summary: Trailing 12 months, preliminary
+            value: tp
+          reportTypeExample8:
+            summary: Trailing 12 months, restated (formal)
+            value: tr
+          reportTypeExample9:
+            summary: Trailing 12 months, restated (preliminary)
+            value: td
+          reportTypeExample10:
+            summary: Trailing 12 months, best known
+            value: tb
+      - name: period
+        in: query
+        required: true
+        schema:
+          enum:
+          - sa2
+          - q1
+          - sa1
+          - a
+          - q2
+          - q3
+          - q4
+          - q6
+          - q9
+          - ir
+          type: string
+          x-enumDescriptions:
+            a: 'Annual (full fiscal year). Example: 1 January to 31 December'
+            sa1: 'First semi-annual. Example: 1 January to 30 June'
+            sa2: 'Second semi-annual. Example: 1 July to 31 December'
+            q1: 'First quarter. Example: 1 January to 31 March'
+            q2: 'Second quarter. Example: 1 April to 30 June'
+            q3: 'Third quarter. Example: 1 July to 30 September'
+            q4: 'Fourth quarter. Example: 1 October to 31 December'
+            q6: 'Cumulative six-month period to the end of Q2. Example: 1 January to 30 June'
+            q9: 'Cumulative nine-month period to the end of Q3. Example: 1 January to 30 September'
+            ir: Irregular report. No standardized date range
+        description: '
+
+          Filters results by the duration period of financial statements reported by the company. Must be used together with `reportType`.
+
+
+          - `a` = Annual (full fiscal year). Example: 1 January to 31 December
+
+          - `sa1` = First semi-annual. Example: 1 January to 30 June
+
+          - `sa2` = Second semi-annual. Example: 1 July to 31 December
+
+          - `q1` = First quarter. Example: 1 January to 31 March
+
+          - `q2` = Second quarter. Example: 1 April to 30 June
+
+          - `q3` = Third quarter. Example: 1 July to 30 September
+
+          - `q4` = Fourth quarter. Example: 1 October to 31 December
+
+          - `q6` = Cumulative six-month period to the end of Q2. Example: 1 January to 30 June
+
+          - `q9` = Cumulative nine-month period to the end of Q3. Example: 1 January to 30 September
+
+          - `ir` = Irregular report. No standardized date range'
+        examples:
+          periodExample1:
+            summary: Annual (full fiscal year)
+            value: a
+          periodExample2:
+            summary: First semi-annual
+            value: sa1
+          periodExample3:
+            summary: Second semi-annual
+            value: sa2
+          periodExample4:
+            summary: First quarter
+            value: q1
+          periodExample5:
+            summary: Second quarter
+            value: q2
+          periodExample6:
+            summary: Third quarter
+            value: q3
+          periodExample7:
+            summary: Fourth quarter
+            value: q4
+          periodExample8:
+            summary: Cumulative six-month period (to end of Q2)
+            value: q6
+          periodExample9:
+            summary: Cumulative nine-month period (to end of Q3)
+            value: q9
+          periodExample10:
+            summary: Irregular report
+            value: ir
+      - name: numberOfMonths
+        in: query
+        schema:
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          - '8'
+          - '9'
+          - '10'
+          - '11'
+          - '12'
+          - '13'
+          - '14'
+          - '15'
+          - '16'
+          - '17'
+          - '18'
+          - '19'
+          - '20'
+          - '21'
+          - '22'
+          - '23'
+          type: string
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityReitMetricsPerShareDataset
+      tags:
+      - Industry-Specific Metrics
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityReitMetricsPerShare'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 953
+components:
+  responses:
+    ResponseEquityBankReserveMetrics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              bankReserveRatioDuration:
+                $ref: '#/components/schemas/OutputBankReserveRatioDuration'
+              bankReserveRatioSpot:
+                $ref: '#/components/schemas/OutputBankReserveRatioSpot'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityIndustrySpecificMetrics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              bankReserveRatioDuration:
+                $ref: '#/components/schemas/OutputBankReserveRatioDuration'
+              bankReserveRatioSpot:
+                $ref: '#/components/schemas/OutputBankReserveRatioSpot'
+              fundFromOperations:
+                $ref: '#/components/schemas/OutputFundFromOperations'
+              netAssetValue:
+                $ref: '#/components/schemas/OutputNetAssetValue'
+              fundFromOperationsPerShare:
+                $ref: '#/components/schemas/OutputFundFromOperationsPerShare'
+              netAssetValuePerShare:
+                $ref: '#/components/schemas/OutputNetAssetValuePerShare'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityReitMetricsPerShare:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              fundFromOperationsPerShare:
+                $ref: '#/components/schemas/OutputFundFromOperationsPerShare'
+              netAssetValuePerShare:
+                $ref: '#/components/schemas/OutputNetAssetValuePerShare'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityReitMetrics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              fundFromOperations:
+                $ref: '#/components/schemas/OutputFundFromOperations'
+              netAssetValue:
+                $ref: '#/components/schemas/OutputNetAssetValue'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+  schemas:
+    OutputFundFromOperationsPerShare:
+      type: object
+      properties:
+        reportPeriodEndDate:
+          type: string
+          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        documentFormType:
+          type: string
+          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
+          nullable: true
+        documentId:
+          type: integer
+          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
+          format: int32
+          nullable: true
+        fiscalYearEnd:
+          type: string
+          description: The company's fiscal year that it uses to report its financial statements
+          nullable: true
+        fundFromOperationsPerShareFileDate:
+          type: string
+          description: The date of the company's filings where fund from operations per share value was collected
+          nullable: true
+        isBestKnown:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isCalculatedOrCopy:
+          $ref: '#/components/schemas/CodeMappingInt'
+        isConsolidated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isFiscalYearEndChange:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIncomplete:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIrregularPeriod:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        reportedBasicAdjustedFundFromOperationsPerShareValue:
+          type: number
+          description: Reported Basic AFFO per basic shares outstanding
+          format: double
+          nullable: true
+        reportedBasicFundFromOperationsPerShareValue:
+          type: number
+          description: Reported Basic FFO per basic shares outstanding
+          format: double
+          nullable: true
+        reportedDilutedAdjustedFundFromOperationsPerShareValue:
+          type: number
+          description: Reported Diluted AFFO per diluted shares outstanding
+          format: double
+          nullable: true
+        reportedDilutedFundFromOperationsPerShareValue:
+          type: number
+          description: Reported Diluted FFO per diluted shares outstanding
+          format: double
+          nullable: true
+        reportPeriodLength:
+          type: integer
+          description: 'Indicates number of period length reported by the company: for instance; 12-month annual report has report period length as 12.'
+          format: int32
+          nullable: true
+        reportPeriodLengthType:
+          type: string
+          description: 'Indicates unit of period length reported by the company: for instance; 12-month annual report has report period length type as months. General period length types include days; weeks; months and quarters.'
+          nullable: true
+        reportRawEndDate:
+          type: string
+          description: The actual report date when the company reports its financial statements
+          nullable: true
+        templateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        typeOfPeriod:
+          type: string
+          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
+          nullable: true
+        unitOfReport:
+          type: integer
+          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
+          format: int64
+          nullable: true
+        numberOfMonths:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputFundFromOperationsPerShare
+    OutputNetAssetValue:
+      type: object
+      properties:
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        adjustedBasicNetAssetValueValue:
+          type: number
+          description: Adjusted Basic Net Asset Value (NAV) for REIT's industry is not total equity; rather it is intending to show company's actual diluted market value. According to National Association of Real Estate Investment Trusts and European public real estate association; net asset value collected in Morningstar is more related to the estimated market value of a REIT's total assets (mostly real property) minus the value of all liabilities. To calculated net asset value; REIT's company need to revaluation their asset.
+          format: double
+          nullable: true
+        adjustedDilutedNetAssetValueValue:
+          type: number
+          description: Adjusted Diluted Net Asset Value (NAV) for REIT's industry is not total equity; rather it is intending to show company's actual diluted market value. According to National Association of Real Estate Investment Trusts and European public real estate association; net asset value collected in Morningstar is more related to the estimated market value of a REIT's total assets (mostly real property) minus the value of all liabilities. To calculated net asset value; REIT's company need to revaluation their asset.
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        documentFormType:
+          type: string
+          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
+          nullable: true
+        documentId:
+          type: integer
+          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
+          format: int32
+          nullable: true
+        epraNetDisposalValueValue:
+          type: number
+          description: 'Company''s net asset value that is calculated in a scenario when deferred tax; financial instruments; and certain other adjustments are calculated as to the full extent of their liability; including tax exposure not reflected in the Balance Sheet; net of any resulting tax: The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        epraNetReinstatementValueValue:
+          type: number
+          description: 'Company''s net asset value that aims to represent the value required to rebuild the entity and assumes that no selling of assets takes place: The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        epraNetTangibleAssetsValue:
+          type: number
+          description: 'Company''s net asset value that is calculated in a scenario that entities buy and sell assets; thereby crystallizing certain levels of deferred tax liability: The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        fiscalYearEnd:
+          type: string
+          description: The company's fiscal year that it uses to report its financial statements
+          nullable: true
+        isBestKnown:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isCalculatedOrCopy:
+          $ref: '#/components/schemas/CodeMappingInt'
+        isConsolidated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isFiscalYearEndChange:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIncomplete:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIrregularPeriod:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        netAssetValueFileDate:
+          type: string
+          description: The date of the company's filings where net asset value was collected
+          nullable: true
+        reportRawEndDate:
+          type: string
+          description: The actual report date when the company reports its financial statements
+          nullable: true
+        templateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        typeOfPeriod:
+          type: string
+          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
+          nullable: true
+        unitOfReport:
+          type: integer
+          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
+          format: int32
+          nullable: true
+        numberOfMonths:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
+        reportPeriodEndDate:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputNetAssetValue
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputFundFromOperations:
+      type: object
+      properties:
+        reportPeriodEndDate:
+          type: string
+          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        documentFormType:
+          type: string
+          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
+          nullable: true
+        documentId:
+          type: integer
+          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
+          format: int64
+          nullable: true
+        fiscalYearEnd:
+          type: string
+          description: The company's fiscal year that it uses to report its financial statements
+          nullable: true
+        fundFromOperationsFileDate:
+          type: string
+          description: The date of the company's filings where fund from operations value was collected
+          nullable: true
+        isBestKnown:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isCalculatedOrCopy:
+          $ref: '#/components/schemas/CodeMappingInt'
+        isConsolidated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isFiscalYearEndChange:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIncomplete:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIrregularPeriod:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        reportedBasicAdjustedFundFromOperationsValue:
+          type: number
+          description: Adjusted FFO reported by the company. Normal calculation is FFO + Rent Increases - Recurring Capital expenditure - Routine maintenance costs.
+          format: double
+          nullable: true
+        reportedBasicFundFromOperationsValue:
+          type: number
+          description: Basic FFO reported by the company. Normal calculation is Net Income + Depreciation + Amortization - Gains on Sales of Property. It is used by real estate investment trusts to define then cash flow from trust operation.
+          format: double
+          nullable: true
+        reportedDilutedAdjustedFundFromOperationsValue:
+          type: number
+          description: Reported AFFO after dilution adjustments
+          format: double
+          nullable: true
+        reportedDilutedFundFromOperationsValue:
+          type: number
+          description: Reported FFO after dilution adjustments
+          format: double
+          nullable: true
+        reportPeriodLength:
+          type: integer
+          description: 'Indicates number of period length reported by the company: for instance; 12-month annual report has report period length as 12.'
+          format: int64
+          nullable: true
+        reportPeriodLengthType:
+          type: string
+          description: 'Indicates unit of period length reported by the company: for instance; 12-month annual report has report period length type as months. General period length types include days; weeks; months and quarters.'
+          nullable: true
+        reportRawEndDate:
+          type: string
+          description: The actual report date when the company reports its financial statements
+          nullable: true
+        templateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        typeOfPeriod:
+          type: string
+          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
+          nullable: true
+        unitOfReport:
+          type: integer
+          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
+          format: int64
+          nullable: true
+        numberOfMonths:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputFundFromOperations
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputBankReserveRatioDuration:
+      type: object
+      properties:
+        bankReserveRatioDurationFileDate:
+          type: string
+          description: The date of the company's filings where bank reserve ratio duration value was collected
+          nullable: true
+        isBestKnown:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isConsolidated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isFiscalYearEndChange:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIncomplete:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIrregularPeriod:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        netInterestMarginValue:
+          type: number
+          description: It's a measure of the difference between the interest income generated by banks or other financial institutions and the amount of interest paid out to their lenders ; relative to the amount of their (interest-earning) assets.
+          format: double
+          nullable: true
+        netInterestSpreadValue:
+          type: number
+          description: It's the difference between the average yield a bank receives from loans & other interest; accruing activities and the average rate it pays on deposits and borrowings.
+          format: double
+          nullable: true
+        reportPeriodLengthType:
+          type: string
+          description: 'Indicates unit of period length reported by the company: for instance; 12-month annual report has report period length type as months. General period length types include days; weeks; months and quarters.'
+          nullable: true
+        reportPeriodEndDate:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        numberOfMonths:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputBankReserveRatioDuration
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    CodeMappingLong:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingLong
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputBankReserveRatioSpot:
+      type: object
+      properties:
+        reportPeriodEndDate:
+          type: string
+          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        bankReserveRatioSpotFileDate:
+          type: string
+          description: The date of the company's filings where bank reserve ratio spot value was collected
+          nullable: true
+        commonEquityTier1CapitalRatioValue:
+          type: number
+          description: Common Equity Tier 1 Capital ratio comes by dividing Common Equity Tier 1 Capital with Risk-Weighted Assets. This ratio measures a bank's capital against its assets.
+          format: double
+          nullable: true
+        commonEquityTier1CapitalValue:
+          type: number
+          description: Component of Tier 1 capital that consists mostly of common stock held by a bank or other financial institution and accumulated other comprehensive income
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        documentFormType:
+          type: string
+          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
+          nullable: true
+        documentId:
+          type: integer
+          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
+          format: int64
+          nullable: true
+        fiscalYearEnd:
+          type: string
+          description: The company's fiscal year that it uses to report its financial statements
+          nullable: true
+        isBestKnown:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isCalculatedOrCopy:
+          $ref: '#/components/schemas/CodeMappingLong'
+        isConsolidated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isFiscalYearEndChange:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIncomplete:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIrregularPeriod:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        liquidityCoverageRatioValue:
+          type: number
+          description: Generic stress test that aims to anticipate market-wide shocks. The liquidity coverage ratio is designed to ensure financial institutions have the necessary assets on hand to ride out short-term liquidity disruptions.
+          format: double
+          nullable: true
+        nonPerformingAssetsLoansValue:
+          type: number
+          description: Nonperforming asset (NPA) refers to a classification for loans on the books of financial institutions that are in default or are in arrears on scheduled payments of principal or interest. In most cases; debt is classified as nonperforming when loan payments have not been made for a period of 90 days. While 90 days of nonpayment is the standard period of time for debt to be categorized as nonperforming; the amount of elapsed time may be shorter or longer depending on the terms and conditions set forth in each loan.
+          format: double
+          nullable: true
+        reportRawEndDate:
+          type: string
+          description: The actual report date when the company reports its financial statements
+          nullable: true
+        riskWeightedAssetValue:
+          type: number
+          description: Risk-weighted assets are used to determine the minimum amount of capital that must be held by banks and other institutions to reduce the risk of insolvency. The capital requirement is based on a risk assessment for each type of bank asset. For example; a loan that is secured by a letter of credit is considered to be riskier and requires more capital than a mortgage loan that is secured with collateral.
+          format: double
+          nullable: true
+        templateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        tier1CapitalRatioValue:
+          type: number
+          description: The tier 1 capital ratio is a banking firm's core equity capital divided by its total risk-weighted assets.
+          format: double
+          nullable: true
+        tier1CapitalValue:
+          type: number
+          description: Tier 1 capital; used to describe the capital adequacy of a bank; is core capital that includes equity capital and disclosed reserves. The Tier 1 Capital ratio compares a bank's equity capital to its total risk weighted assets. Risk weighted assets are all assets held by a bank that are weighted by credit risk. Most central banks set formulas for asset risk weights according to the Basel Committee's guidelines.
+          format: double
+          nullable: true
+        tier1LeverageRatioValue:
+          type: number
+          description: One of several financial measurements that look at how much capital comes in the form of debt (loans); or assesses the ability of a company to meet financial obligations.
+          format: double
+          nullable: true
+        tier2CapitalRatioValue:
+          type: number
+          description: The tier 2 capital ratio comes by dividing tier 2 capital with total risk-weighted assets.
+          format: double
+          nullable: true
+        tier2CapitalValue:
+          type: number
+          description: Tier 2 capital is designated as supplementary capital; and is composed of items such as revaluation reserves; undisclosed reserves; hybrid instruments and subordinated term debt.
+          format: double
+          nullable: true
+        totalCapitalRatioValue:
+          type: number
+          description: The ratio of Total capital to risk weighted assets.
+          format: double
+          nullable: true
+        totalCapitalValue:
+          type: number
+          description: Total capital is Tier 1 equity capital; consisting of equity capital; disclosed reserves and Tier 2 capital; made up of revaluation reserves; undisclosed reserves; hybrid instruments and subordinated term debt
+          format: double
+          nullable: true
+        typeOfPeriod:
+          type: string
+          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
+          nullable: true
+        unitOfReport:
+          type: integer
+          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
+          format: int64
+          nullable: true
+        numberOfMonths:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputBankReserveRatioSpot
+    OutputNetAssetValuePerShare:
+      type: object
+      properties:
+        reportPeriodEndDate:
+          type: string
+          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        adjustedBasicNetAssetValuePerShareValue:
+          type: number
+          description: Adjusted Basic Net Asset Value (NAV) is calculated by dividing the Adjusted Basic Net Asset Value (NAV) by the number of shares outstanding
+          format: double
+          nullable: true
+        adjustedDilutedNetAssetValuePerShareValue:
+          type: number
+          description: Adjusted Diluted Net Asset Value (NAV) per Share is calculated by dividing the Adjusted Diluted Net Asset Value (NAV) by the number of shares outstanding
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        documentFormType:
+          type: string
+          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
+          nullable: true
+        documentId:
+          type: integer
+          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
+          format: int32
+          nullable: true
+        epraNetDisposalValuePerShareValue:
+          type: number
+          description: 'The per share value of Net Disposal Value (EPRA): It is calculated by using Net Disposal Value (EPRA) / Number of fully diluted shares outstanding. The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        epraNetReinstatementValuePerShareValue:
+          type: number
+          description: 'The per share value of Net Reinstatement Value (EPRA): It is calculated using Net Reinstatement Value (EPRA) / Number of fully diluted shares outstanding. The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        epraNetTangibleAssetsPerShareValue:
+          type: number
+          description: 'The per share value of Net Tangible Assets (EPRA):  It is calculated by using Net Tangible Assets (EPRA) / Number of fully diluted shares outstanding. The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        fiscalYearEnd:
+          type: string
+          description: The company's fiscal year that it uses to report its financial statements
+          nullable: true
+        isBestKnown:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isCalculatedOrCopy:
+          $ref: '#/components/schemas/CodeMappingInt'
+        isConsolidated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isFiscalYearEndChange:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIncomplete:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIrregularPeriod:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        netAssetValuePerShareFileDate:
+          type: string
+          description: The date of the company's filings where net asset value per share was collected
+          nullable: true
+        reportRawEndDate:
+          type: string
+          description: The actual report date when the company reports its financial statements
+          nullable: true
+        templateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        typeOfPeriod:
+          type: string
+          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
+          nullable: true
+        unitOfReport:
+          type: integer
+          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
+          format: int32
+          nullable: true
+        numberOfMonths:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputNetAssetValuePerShare
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    CodeMappingInt:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingInt
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

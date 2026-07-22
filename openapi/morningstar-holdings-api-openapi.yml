@@ -1,0 +1,151 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts holdings API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: holdings
+paths:
+  /holdings:
+    get:
+      tags:
+      - holdings
+      summary: Get holdings for a portfolio
+      description: Get holdings for the portfolio(s) specified in the `portfolioIds` parameter.
+      operationId: getAnalysisUsingGET_4
+      parameters:
+      - name: x-api-key
+        in: header
+        description: Unique API key of a client
+        required: true
+        schema:
+          type: string
+          format: string
+      - name: portfolioIds
+        in: query
+        description: Unique identifier of a portfolio. Multiple values must be comma-separated.
+        required: true
+        explode: true
+        schema:
+          type: array
+          items:
+            type: string
+      - name: enddate
+        in: query
+        description: Return results with end date specified (yyyy-mm-dd, yyyymmdd or LastMonthEnd).
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiPortfolioAnalysisEntities'
+components:
+  schemas:
+    TopHoldingListDateEntity:
+      type: object
+      properties:
+        total:
+          type: string
+        top-holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Map_string_string'
+        validation-end-date:
+          type: string
+      title: TopHoldingListDateEntity
+    TopHoldingListEntity:
+      type: object
+      properties:
+        additionalProperties:
+          $ref: '#/components/schemas/TopHoldingListDateEntity'
+      title: TopHoldingListEntity
+    ApiPortfolioAnalysisEntity:
+      type: object
+      properties:
+        accountTypeName:
+          type: string
+        householdId:
+          type: string
+        lastUpdateTime:
+          type: string
+        name:
+          type: string
+        number:
+          type: string
+        portfolioId:
+          type: string
+        portfolioType:
+          type: string
+        portfolioTypeName:
+          type: string
+        snapshots:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiSnapshotEntity'
+        trackingMethod:
+          type: string
+          enum:
+          - positional
+          - transactional
+          - quick
+          - fixed
+        topHoldingList:
+          $ref: '#/components/schemas/TopHoldingListEntity'
+      title: ApiPortfolioAnalysisEntity
+    Map_string_string:
+      type: object
+      additionalProperties:
+        type: string
+    APIMetaStatusResponse:
+      type: object
+      properties:
+        hint:
+          type: string
+        response_status:
+          type: string
+      title: APIMetaStatusResponse
+    ApiSnapshotEntity:
+      type: object
+      properties:
+        date:
+          type: string
+        topNHoldingsCount:
+          type: integer
+          format: int32
+      title: ApiSnapshotEntity
+    ApiPortfolioAnalysisEntities:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/APIMetaStatusResponse'
+        errMsg:
+          type: string
+        portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiPortfolioAnalysisEntity'
+      title: ApiPortfolioAnalysisEntities
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

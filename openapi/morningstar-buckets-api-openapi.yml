@@ -1,0 +1,145 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts buckets API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: buckets
+paths:
+  /buckets:
+    get:
+      tags:
+      - buckets
+      summary: Get buckets
+      description: Get all buckets.
+      operationId: getBucketsMetadata
+      parameters:
+      - in: header
+        name: x-api-key
+        description: Unique API key of a client
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BucketList'
+        '400':
+          description: Invalid parameter value
+  /buckets/{bucketId}:
+    get:
+      tags:
+      - buckets
+      summary: Get a bucket
+      description: Get the bucket specified in the `bucketId` parameter.
+      operationId: getBucketsMetadataSingle
+      parameters:
+      - in: header
+        name: x-api-key
+        description: Unique API key of a client
+        required: true
+        schema:
+          type: string
+      - name: bucketId
+        in: path
+        description: Unique identifier of a bucket
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/BucketList'
+        '400':
+          description: Invalid parameter value
+        '404':
+          description: Not found
+components:
+  schemas:
+    Bucket:
+      required:
+      - bucketId
+      - bucketName
+      - bucketFullName
+      type: object
+      properties:
+        bucketId:
+          type: string
+          format: uuid
+          example: bb22bb22-2222-0000-0000-000000000000
+        bucketName:
+          type: string
+          format: string
+          description: The bucket name.
+          example: bucketSub2
+        bucketNameArray:
+          type: array
+          example:
+          - bucketSub2
+          - bucketSub1
+          - bucketMain
+          items:
+            type: string
+            description: The full bucket path.
+        bucketParentId:
+          type: string
+          format: uuid
+          example: bb11bb11-1111-0000-0000-000000000000
+          description: If empty, the bucket is in the root.
+        advisorId:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+          example: 2019-01-02T01:59Z
+        lastUpdated:
+          type: string
+          format: date-time
+          example: 2019-01-02T01:59Z
+    BucketList:
+      required:
+      - totalRecords
+      - displayRecords
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/BucketMetaData'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bucket'
+    BucketMetaData:
+      type: object
+      properties:
+        items:
+          type: integer
+          example: 1
+          description: Number of buckets found.
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

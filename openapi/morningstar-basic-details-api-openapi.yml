@@ -1,0 +1,2340 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Basic Details API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Basic Details
+paths:
+  /direct-web-services/v1/investments/{id}/equity-advisors:
+    get:
+      summary: Get Advisors view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      - name: languageId
+        in: query
+        description: "\nLanguage to filter results by. Language support varies depending on the data and package.\n\n  - `ENG` = English\n  - `SPA` = Spanish\n  - `FRA` = French\n  - `DEU` = German\n  - `ITA` = Italian\n  - `JPN` = Japanese\n  - `CHI` = Chinese Simplified\n  - `ZHO` = Chinese Traditional\n  - `KOR` = Korean"
+        schema:
+          type: string
+          example: ENG
+          x-enumDescriptions:
+            ENG: English
+            SPA: Spanish
+            FRA: French
+            DEU: German
+            ITA: Italian
+            JPN: Japanese
+            CHI: Chinese Simplified
+            ZHO: Chinese Traditional
+            KOR: Korean
+        examples:
+          languageExample1:
+            summary: English
+            value: ENG
+          languageExample2:
+            summary: Spanish
+            value: SPA
+          languageExample3:
+            summary: French
+            value: FRA
+          languageExample4:
+            summary: German
+            value: DEU
+          languageExample5:
+            summary: Italian
+            value: ITA
+          languageExample6:
+            summary: Japanese
+            value: JPN
+          languageExample7:
+            summary: Chinese Simplified
+            value: CHI
+          languageExample8:
+            summary: Chinese Traditional
+            value: ZHO
+          languageExample9:
+            summary: Korean
+            value: KOR
+      description: Most recent data supported.
+      operationId: getEquityAdvisorsDataset
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityAdvisors'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 907
+  /direct-web-services/v1/investments/{id}/equity-basic-details:
+    get:
+      summary: Get Basic Details package view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: addressType
+        in: query
+        required: true
+        schema:
+          enum:
+          - '1'
+          - '2'
+          type: string
+          x-enumDescriptions:
+            '1': Headquarters
+            '2': Registered Office
+        description: Address type to filter results by.
+        examples:
+          addressType1:
+            summary: 1 (Headquarters)
+            value: 1
+          addressType2:
+            summary: 2 (Registered Office)
+            value: 2
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: languageId
+        in: query
+        description: "\nLanguage to filter results by. Language support varies depending on the data and package.\n\n  - `ENG` = English\n  - `SPA` = Spanish\n  - `FRA` = French\n  - `DEU` = German\n  - `ITA` = Italian\n  - `JPN` = Japanese\n  - `CHI` = Chinese Simplified\n  - `ZHO` = Chinese Traditional\n  - `KOR` = Korean"
+        schema:
+          type: string
+          example: ENG
+          x-enumDescriptions:
+            ENG: English
+            SPA: Spanish
+            FRA: French
+            DEU: German
+            ITA: Italian
+            JPN: Japanese
+            CHI: Chinese Simplified
+            ZHO: Chinese Traditional
+            KOR: Korean
+        examples:
+          languageExample1:
+            summary: English
+            value: ENG
+          languageExample2:
+            summary: Spanish
+            value: SPA
+          languageExample3:
+            summary: French
+            value: FRA
+          languageExample4:
+            summary: German
+            value: DEU
+          languageExample5:
+            summary: Italian
+            value: ITA
+          languageExample6:
+            summary: Japanese
+            value: JPN
+          languageExample7:
+            summary: Chinese Simplified
+            value: CHI
+          languageExample8:
+            summary: Chinese Traditional
+            value: ZHO
+          languageExample9:
+            summary: Korean
+            value: KOR
+      description: "\nThe Basic Details package provides a range of data to round out the company profile, including business descriptions (in a range of languages), details of the advisers to the company, head office and registered office addresses, and the number of employees, alongside details of the IPO, the company’s legal structure, and details of the primary listing of their shares.\nThe package contains the following datasets:\n\n- Advisors\n- Business Description\n- Company Address\n- Company-Level Basic Details\n- Employee Number\n- Preferred Stock Details\n- Preferred Stock Payment Schedule\n- Preferred Stock Redemption Schedule\n- Security-Level Basic Details\n\nMost recent data supported.\n  \n  "
+      operationId: getEquityBasicDetailsPackage
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityBasicDetails'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 907
+  /direct-web-services/v1/investments/{id}/equity-business-description:
+    get:
+      summary: Get Business Description view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      - name: languageId
+        in: query
+        description: "\nLanguage to filter results by. Language support varies depending on the data and package.\n\n  - `ENG` = English\n  - `SPA` = Spanish\n  - `FRA` = French\n  - `DEU` = German\n  - `ITA` = Italian\n  - `JPN` = Japanese\n  - `CHI` = Chinese Simplified\n  - `ZHO` = Chinese Traditional\n  - `KOR` = Korean"
+        schema:
+          type: string
+          example: ENG
+          x-enumDescriptions:
+            ENG: English
+            SPA: Spanish
+            FRA: French
+            DEU: German
+            ITA: Italian
+            JPN: Japanese
+            CHI: Chinese Simplified
+            ZHO: Chinese Traditional
+            KOR: Korean
+        examples:
+          languageExample1:
+            summary: English
+            value: ENG
+          languageExample2:
+            summary: Spanish
+            value: SPA
+          languageExample3:
+            summary: French
+            value: FRA
+          languageExample4:
+            summary: German
+            value: DEU
+          languageExample5:
+            summary: Italian
+            value: ITA
+          languageExample6:
+            summary: Japanese
+            value: JPN
+          languageExample7:
+            summary: Chinese Simplified
+            value: CHI
+          languageExample8:
+            summary: Chinese Traditional
+            value: ZHO
+          languageExample9:
+            summary: Korean
+            value: KOR
+      description: Most recent and time series data supported.
+      operationId: getEquityBusinessDescriptionDataset
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityBusinessDescription'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 907
+  /direct-web-services/v1/investments/{id}/equity-company-address:
+    get:
+      summary: Get Company Address view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: addressType
+        in: query
+        required: true
+        schema:
+          enum:
+          - '1'
+          - '2'
+          type: string
+          x-enumDescriptions:
+            '1': Headquarters
+            '2': Registered Office
+        description: Address type to filter results by.
+        examples:
+          addressType1:
+            summary: 1 (Headquarters)
+            value: 1
+          addressType2:
+            summary: 2 (Registered Office)
+            value: 2
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      - name: languageId
+        in: query
+        description: "\nLanguage to filter results by. Language support varies depending on the data and package.\n\n  - `ENG` = English\n  - `SPA` = Spanish\n  - `FRA` = French\n  - `DEU` = German\n  - `ITA` = Italian\n  - `JPN` = Japanese\n  - `CHI` = Chinese Simplified\n  - `ZHO` = Chinese Traditional\n  - `KOR` = Korean"
+        schema:
+          type: string
+          example: ENG
+          x-enumDescriptions:
+            ENG: English
+            SPA: Spanish
+            FRA: French
+            DEU: German
+            ITA: Italian
+            JPN: Japanese
+            CHI: Chinese Simplified
+            ZHO: Chinese Traditional
+            KOR: Korean
+        examples:
+          languageExample1:
+            summary: English
+            value: ENG
+          languageExample2:
+            summary: Spanish
+            value: SPA
+          languageExample3:
+            summary: French
+            value: FRA
+          languageExample4:
+            summary: German
+            value: DEU
+          languageExample5:
+            summary: Italian
+            value: ITA
+          languageExample6:
+            summary: Japanese
+            value: JPN
+          languageExample7:
+            summary: Chinese Simplified
+            value: CHI
+          languageExample8:
+            summary: Chinese Traditional
+            value: ZHO
+          languageExample9:
+            summary: Korean
+            value: KOR
+      description: Most recent and time series data supported.
+      operationId: getEquityCompanyAddressDataset
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityCompanyAddress'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 907
+  /direct-web-services/v1/investments/{id}/equity-company-level-basic-details:
+    get:
+      summary: Get Company-Level Basic Details view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityCompanyLevelBasicDetailsDataset
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityCompanyLevelBasicDetails'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 907
+  /direct-web-services/v1/investments/{id}/equity-employee-number:
+    get:
+      summary: Get Employee Number view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityEmployeeNumberDataset
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityEmployeeNumber'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 907
+  /direct-web-services/v1/investments/{id}/equity-preferred-stock-details:
+    get:
+      summary: Get Preferred Stock Details view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityPreferredStockDetailsDataset
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityPreferredStockDetails'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+  /direct-web-services/v1/investments/{id}/equity-preferred-stock-payment-schedule:
+    get:
+      summary: Get Preferred Stock Payment Schedule view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityPreferredStockPaymentScheduleDataset
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityPreferredStockPaymentSchedule'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+  /direct-web-services/v1/investments/{id}/equity-preferred-stock-redemption-schedule:
+    get:
+      summary: Get Preferred Stock Redemption Schedule view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityPreferredStockRedemptionScheduleDataset
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityPreferredStockRedemptionSchedule'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+  /direct-web-services/v1/investments/{id}/equity-security-level-basic-details:
+    get:
+      summary: Get Security-Level Basic Details view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquitySecurityLevelBasicDetailsDataset
+      tags:
+      - Basic Details
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquitySecurityLevelBasicDetails'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 907
+components:
+  schemas:
+    OutputPreferredStockRedemptionSchedule:
+      type: object
+      properties:
+        currencyCode:
+          type: string
+          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
+          nullable: true
+        redemptionDate:
+          type: string
+          description: The date when the redeemable preferred shares were bought back by the company
+          nullable: true
+        redemptionPrice:
+          type: number
+          description: The price at which the redeemable preferred shares were bought back by the company
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputPreferredStockRedemptionSchedule
+    OutputCompanyProfile:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The effective date of the company profile
+          nullable: true
+        languageCode:
+          type: string
+          description: 3-character ISO code denoting the language of text for the company profile
+          nullable: true
+        longDescription:
+          type: string
+          description: A complete and often lengthy business description of the company; often a paragraph or more (up to 800 characters)
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyProfile
+    OutputPreferredStockSchedulePaymentDate:
+      type: object
+      properties:
+        scheduledDay:
+          type: integer
+          description: The date when the company plans to pay the dividend to its preferred stock holders
+          format: int32
+          nullable: true
+        scheduledMonth:
+          type: integer
+          description: The month when the company plans to pay the dividend to its preferred stock holders
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: OutputPreferredStockSchedulePaymentDate
+    OutputCompanyAddress:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          description: Indicates detailed address (line 1) of the company's headquarter or registered office
+          nullable: true
+        addressLine2:
+          type: string
+          description: Indicates detailed address (line 2) of the company's headquarter or registered office
+          nullable: true
+        addressLine3:
+          type: string
+          description: Indicates detailed address (line 3) of the company's headquarter or registered office
+          nullable: true
+        addressLine4:
+          type: string
+          description: Indicates detailed address (line 4) of the company's headquarter or registered office
+          nullable: true
+        addressType:
+          $ref: '#/components/schemas/CodeMappingString'
+        city:
+          type: string
+          description: Indicates city of the company's headquarter or registered office
+          nullable: true
+        countryCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        languageCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        phone:
+          type: string
+          description: Indicates phone number of the company's headquarter or registered office
+          nullable: true
+        postalCode:
+          type: string
+          description: Indicates postal code of the company's headquarter or registered office
+          nullable: true
+        stateProvince:
+          type: string
+          description: Indicates state and/or province of the company's headquarter or registered office
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyAddress
+    OutputCompanyInformation:
+      type: object
+      properties:
+        businessCountryCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        canNaics:
+          type: integer
+          description: An acronym for North American Industry Classification System (NAICS) specific to Canada; a 6-digit numerical classification assigned to individual companies. NAICS was developed jointly by the U.S.; Canada; and Mexico to provide new comparability in statistics about business activity across North America. It was intended to replace the U.S. Standard Industrial Classification (SIC) system.  The initial SIC and NAICS listed is the Primary code based on revenue generation; followed by Secondary SIC and NAICS when applicable. Both SIC and NAICS are manually collected and assigned.
+          format: int64
+          nullable: true
+        cik:
+          type: string
+          description: ''
+          nullable: true
+        companyStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        companyId:
+          type: string
+          description: ''
+          nullable: true
+        domicileCountryCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        expectedFiscalYearEnd:
+          type: string
+          description: The upcoming expected year end for the company; it is calculated based on the current year end (from latest available annual report) + 1 year
+          nullable: true
+        fiscalYearEnd:
+          $ref: '#/components/schemas/CodeMappingLong'
+        globalTemplateIndustryTemplateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        industryClassificationEffectiveDate:
+          type: string
+          description: The effective date when the Morningstar Industry Classification is updated for the company
+          nullable: true
+        ipoType:
+          type: string
+          description: This data point identifies two different processes a company can take to raise capital by listing shares on a public exchange; Initial public offering (Traditional IPO) and Direct Listing. IPO is the most common and traditional route; in which new shares are created; underwritten; and sold to the public. In a Direct Listing; no new shares are created; and only existing outstanding shares are sold with no underwriters involved. Traditional IPO and Direct Listing are the 2 types available starting in September 2021.  For historical data prior to September 2021; Traditional IPO is not available; the 2 possible values prior to September 2021 are Null and Direct Listing.
+          nullable: true
+        isBusinessDevelopmentCompany:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isic:
+          type: string
+          description: An acronym for International Standard Industrial Classification (ISIC); which was developed by the United Nations; and is the international reference classification of productive activities. Its main purpose is to provide a set of activity categories that can be utilized for the collection and reporting of statistics according to such activities. The majority of countries around the world have used ISIC as their national activity classification or have developed national classifications derived from ISIC.
+          nullable: true
+        isLimitedLiabilityCompany:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isLimitedPartnership:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isMasterLimitedPartnership:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isReit:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isShellCompany:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isSpecialPurposeAcquisitionCompany:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        legalName:
+          type: string
+          description: The full name of the registrant as specified in its charter; and most often found on the front cover of the 10K/10Q/20F filings or annual report
+          nullable: true
+        legalNameLanguageCode:
+          type: string
+          description: 3-character language code for the foreign legal name if/when applicable
+          nullable: true
+        lei:
+          type: string
+          description: The Legal Entity Identifier (LEI) is a 20-character; alpha-numeric code based on the ISO 17442 standard developed by the International Organization for Standardization (ISO). It connects to key reference information that enables clear and unique identification of legal entities participating in financial transactions.
+          nullable: true
+        morningstarIndustryCode:
+          $ref: '#/components/schemas/CodeMappingLong'
+        morningstarIndustryGroupCode:
+          $ref: '#/components/schemas/CodeMappingLong'
+        morningstarSectorCode:
+          $ref: '#/components/schemas/CodeMappingLong'
+        morningstarSuperSectorCode:
+          $ref: '#/components/schemas/CodeMappingLong'
+        nace:
+          type: string
+          description: NACE is a European standard classification of economic activities maintained by Eurostat that  is similar to SIC and NAICS in North America. The NACE code is 5 characters long;  is arranged in the following format 00.00 and provides the framework for collecting and presenting a large range of statistical data according to economic activity. The use of NACE is mandatory within the European Statistical System.
+          nullable: true
+        naics:
+          type: integer
+          description: An acronym for North American Industry Classification System (NAICS); a 6-digit numerical classification assigned to individual companies. NAICS was developed jointly by the U.S.; Canada; and Mexico to provide new comparability in statistics about business activity across North America. It was intended to replace the U.S. Standard Industrial Classification (SIC) system.  The initial SIC and NAICS listed is the Primary code based on revenue generation; followed by Secondary SIC and NAICS when applicable. Both SIC and NAICS are manually collected and assigned.
+          format: int64
+          nullable: true
+        operationStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        shortName:
+          type: string
+          description: '25-character max abbreviated name of the firm: In most cases; the short name will simply be the Legal Name less the Corporation; Corp.; Inc.; Incorporated; etc.'
+          nullable: true
+        sic:
+          type: integer
+          description: An acronym for Standard Industrial Classification System (SIC); it is a system for classifying a business according to economic activity
+          format: int64
+          nullable: true
+        standardName:
+          type: string
+          description: Standard name for the entity
+          nullable: true
+        stateOrCountryOfIncorporation:
+          type: string
+          description: 'Indicates the place where the company was incorporated: For companies incorporated in the US; the value is the US state. For companies incorporated outside the US; the value is the country where the company was incorporated.'
+          nullable: true
+        usaNaics:
+          type: integer
+          description: An acronym for North American Industry Classification System (NAICS) specific to the United States; a 6-digit numerical classification assigned to individual companies. NAICS was developed jointly by the U.S.; Canada; and Mexico to provide new comparability in statistics about business activity across North America. It was intended to replace the U.S. Standard Industrial Classification (SIC) system.  The initial SIC and NAICS listed is the Primary code based on revenue generation; followed by Secondary SIC and NAICS when applicable. Both SIC and NAICS are manually collected and assigned.
+          format: int64
+          nullable: true
+        webAddress:
+          type: string
+          description: Indicates website address of company's contact information
+          nullable: true
+        yearOfEstablishment:
+          type: integer
+          description: The year a company was founded
+          format: int64
+          nullable: true
+        isIpo:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+      additionalProperties: false
+      title: OutputCompanyInformation
+    OutputEmployeeNumber:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The effective date of the employee number
+          nullable: true
+        averageEmployeeNumber:
+          type: integer
+          description: The average number of employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
+          format: int64
+          nullable: true
+        fullTimeEmployeeNumber:
+          type: integer
+          description: The number of full-time employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
+          format: int64
+          nullable: true
+        partTimeEmployeeNumber:
+          type: integer
+          description: The number of part-time employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
+          format: int64
+          nullable: true
+        totalEmployeeNumber:
+          type: integer
+          description: The total number of employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: OutputEmployeeNumber
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputCompanyAdvisor:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The effective date of the company advisor
+          nullable: true
+        addressLine1:
+          type: string
+          description: Indicates detailed address (line 1) of advisor's contact information
+          nullable: true
+        addressLine2:
+          type: string
+          description: Indicates detailed address (line 2) of advisor's contact information
+          nullable: true
+        addressLine3:
+          type: string
+          description: Indicates detailed address (line 3) of advisor's contact information
+          nullable: true
+        addressLine4:
+          type: string
+          description: Indicates detailed address (line 4) of advisor's contact information
+          nullable: true
+        advisorLegalName:
+          type: string
+          description: The full name of the advisor as specified in its charter; and most often found on the public announcement
+          nullable: true
+        advisorType:
+          type: string
+          description: Indicates the type of advisor as reported by the company. The advisor types include Auditor; Nominated Adviser; Bank; Financial Adviser; Financial PR Adviser; Registrar; Solicitor; Stockbroker; Remuneration Consultant
+          nullable: true
+        cessationInformedDate:
+          type: string
+          description: Indicates the exact date disclosed in the Annual Report or RNS announcements on which the company has ceased the advisor
+          nullable: true
+        city:
+          type: string
+          description: Indicates city of advisor's contact information
+          nullable: true
+        country:
+          type: string
+          description: Indicates country of advisor's contact information
+          nullable: true
+        email:
+          type: string
+          description: Indicates email address of advisor's contact information
+          nullable: true
+        isJointRole:
+          type: boolean
+          description: Indicates that the firm has more than one auditor; in such a case; joint role is marked as 'Yes'
+          nullable: true
+        languageCode:
+          type: string
+          description: 3-character ISO code denoting the language of text for advisor's name and contact information
+          nullable: true
+        phone:
+          type: string
+          description: Indicates phone number of advisor's contact information
+          nullable: true
+        postalCode:
+          type: string
+          description: Indicates postal code of advisor's contact information
+          nullable: true
+        source:
+          type: string
+          description: 'Indicates the source from which data has been updated: Possible sources include Annual report; Website ; Exchange; RNS announcements or other authentic documents.'
+          nullable: true
+        stateProvince:
+          type: string
+          description: Indicates state and/or province of advisor's contact information
+          nullable: true
+        webAddress:
+          type: string
+          description: Indicates website address of advisor's contact information
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyAdvisor
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputShareClassInformation:
+      type: object
+      properties:
+        commonShareSubType:
+          type: string
+          description: Refers to the type of securities that can be found within the equity database. For the vast majority; this value will populate as null for regular common shares. For a minority of share classes; this will populate as either Participating Preferred; Closed-End Fund; Foreign Share; or Foreign Participated Preferred which reflects our limited coverage of these types of securities within our equity database.
+          nullable: true
+        conversionRatio:
+          type: number
+          description: The relationship between the chosen share class and the primary share class
+          format: double
+          nullable: true
+        cusip:
+          type: string
+          description: ''
+          nullable: true
+        directInvest:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        dividendReinvest:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        drRatio:
+          type: number
+          description: The number of underlying common shares backing each depositary receipt (DR) traded.
+          format: double
+          nullable: true
+        exchangeCode:
+          type: string
+          description: A symbol for the stock exchange name; usually consisting of 3 to 5 characters; examples include NYSE; NAS; LSE; OTCBB ($$$ is used for private/unlisted securities)
+          nullable: true
+        exchangeSubMarketGlobalId:
+          type: string
+          description: Indicates a different marketplace or the different market tiers within a stock exchange.
+          nullable: true
+        investmentId:
+          type: string
+          description: Morningstar Issuer Id/ Investment Id
+          nullable: true
+        investmentName:
+          type: string
+          description: Morningstar standard investment name
+          nullable: true
+        investmentPrimaryIssuer:
+          $ref: '#/components/schemas/CodeMappingString'
+        shareClassDescription:
+          type: string
+          description: ''
+          nullable: true
+        investmentStatus:
+          type: integer
+          description: '0: obsolete1: active9: other'
+          format: int32
+          nullable: true
+        investmentType:
+          type: string
+          description: 'The abbreviation for investment type classifications: Equity (EQ); Depositary Receipt (DR); Preferred Equity (PE); Unlisted Equity (UE)'
+          nullable: true
+        ipoDate:
+          type: string
+          description: The initial day that the share begins trading on a public exchange
+          nullable: true
+        ipoOfferPrice:
+          type: number
+          description: Indicates the price at which an issuer sells its shares under an initial public offering (IPO). The offer price is set by the issuer and its underwriters.
+          format: double
+          nullable: true
+        ipoOfferPriceRange:
+          type: string
+          description: The estimated offer price range (low-high) for a new IPO. The field should be used until the final IPO price becomes available; as populated in the data field IPO Offer Price.
+          nullable: true
+        isDr:
+          type: boolean
+          description: 'Indicates if the share class is a depositary receipt: TRUE denotes it is an ADR or GDR; otherwise FALSE'
+          nullable: true
+        isin:
+          type: string
+          description: ''
+          nullable: true
+        isMainShare:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isPrimaryPerformanceId:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        marketSymbol:
+          type: string
+          description: An arrangement of characters representing a particular security listed on an exchange or traded publicly generated and maintained by market data (also known as Realtime). For example; Morningstar's market symbol is 126.1.MORN where 126 refers to Realtime exchange code for NASDAQ; 1 refers to security type equity; and the last set of characters refers to company's actual symbol.
+          nullable: true
+        parValue:
+          type: number
+          description: Nominal value of a security determined by the issuing company
+          format: double
+          nullable: true
+        performanceStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        securityType:
+          type: string
+          description: 'Indicates security type classification at the share class level: Common Stock (ST00000001); Preferred Stock (ST00000002); Industry (ST00000003); Index (ST00000004); ETF (ST00000005); Closed-end Fund (ST00000006); Investment Trusts (ST00000007); Note (ST00000009); Warrant (ST00000008); Units (ST000000A1); Rights (ST000000B1); Unlisted Common (ST000000C1); Unlisted Preferred (ST000000C2)'
+          nullable: true
+        sedol:
+          type: string
+          description: The stock exchange daily official list (SEDOL) is a seven-character identification code assigned by the London Stock Exchange. For securities issued in the UK the Sedol may be converted to an ISIN.
+          nullable: true
+        segmentMicCode:
+          type: string
+          description: 'Indicates the Exchange ISO Market Segment Identifier Code (MIC). Reference: https://www.iso20022.org/market-identifier-codes ($$$ is used for private/unlisted securities)'
+          nullable: true
+        symbol:
+          type: string
+          description: 'An arrangement of characters (often letters) representing a particular security listed on an exchange or otherwise traded publicly: Note that Morningstar''s multi-share class symbols will often contain a period within the symbol; e.g. BRK.B for Berkshire Hathaway Class B'
+          nullable: true
+        tradingCurrency:
+          type: string
+          description: 3 Character ISO code of the currency that the exchange price is denominated in; i.e. the trading currency of the security
+          nullable: true
+        tradingStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        underlyingDrIssuerId:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputShareClassInformation
+    OutputContactInformation:
+      type: object
+      properties:
+        emailAddress:
+          type: string
+          description: The email address of person's contact information.
+          nullable: true
+      additionalProperties: false
+      title: OutputContactInformation
+    OutputPreferredStockSpecific:
+      type: object
+      properties:
+        conversionNote:
+          type: string
+          description: provides information if the preferred stock is convertible
+          nullable: true
+        conversionPerformanceId:
+          type: string
+          description: The share class Id of the share in which the preferred shares will convert into
+          nullable: true
+        conversionPrice:
+          type: number
+          description: The is price of conversion of preferred stock to common or some other security.
+          format: double
+          nullable: true
+        conversionRatio:
+          type: number
+          description: The is ratio of conversion of preferred stock to common or some other security.
+          format: double
+          nullable: true
+        couponType:
+          type: string
+          description: This denotes the coupon type attached to the preferred security like Fixed; Variable; etc.
+          nullable: true
+        dividendStatus:
+          type: string
+          description: Indicates if dividend payments occur either at regular/ irregular intervals or even or uneven dividend amount. Possible values are- 1.Regular; 2. Irregular & 3. Stopped. If a Dividend is paid either with irregular frequency or uneven amount; it is marked as 'IrregularSchedule'; whereas if Dividend frequency and Amount both are regular; DividendSchedule is marked as 'Regular.' Stopped is used ifcompany has stopped paying dividend payments going forward.
+          nullable: true
+        fixedAnnualCoupon:
+          type: number
+          description: The annual fixed rate of dividend paid on the preferred stock nominal value.
+          format: double
+          nullable: true
+        fixedCouponRate:
+          type: number
+          description: The fixed rate of dividend paid on the preferred stock nominal value.
+          format: double
+          nullable: true
+        floatingCouponRateCap:
+          type: number
+          description: This is upper limit to the floating rate dividend of preferred stock.
+          format: double
+          nullable: true
+        floatingCouponRateFloor:
+          type: number
+          description: This is lower limit to the floating rate dividend of preferred stock.
+          format: double
+          nullable: true
+        floatingRateAdjustmentFrequency:
+          type: integer
+          description: This indicates the adjustment frequency.
+          format: int64
+          nullable: true
+        floatingRateTerm:
+          type: string
+          description: The period for which the preferred shares will carry the floating rate of dividend
+          nullable: true
+        generalNote:
+          type: string
+          description: Refers to additional notes like large text extract for user's further reading
+          nullable: true
+        guarantorCompanyId:
+          type: string
+          description: Guarantor company id is the Morning star company ID which represents the guarantor of a fixed income security. Usually fixed income security issued by one company will be guarented by a related company (be it parent or anyother group company)
+          nullable: true
+        isConvertible:
+          type: boolean
+          description: 'Indicates if the preferred stock is convertible or not: TRUE denotes the instrument is convertible; otherwise FALSE'
+          nullable: true
+        isDividendCumulative:
+          type: boolean
+          description: The flag denotes if the preferred shares has a cumulative dividend feature attached
+          nullable: true
+        isExchangeable:
+          type: boolean
+          description: 'Indicates if the preferred stock is exchangeable or not: TRUE denotes the instrument is exchangeable; otherwise FALSE'
+          nullable: true
+        isRedeemable:
+          type: boolean
+          description: 'Indicates if the preference stock is redeemable or not: TRUE denotes the preference share is redeemable; otherwise FALSE'
+          nullable: true
+        isRedeemed:
+          type: boolean
+          description: The flag that helps denote if the preferred security is active or inactive
+          nullable: true
+        isSinkFund:
+          type: boolean
+          description: a flag to indicate if the preferred share will be redeemed through the sinking fund
+          nullable: true
+        isTrust:
+          type: boolean
+          description: A flag to indicate if preferred share is trust preferred. TRUE indicates it is Trust Preferred; otherwise FALSE
+          nullable: true
+        liquidationValue:
+          type: number
+          description: Liquidation value of Preferred Stock
+          format: double
+          nullable: true
+        maturityDate:
+          type: string
+          description: The final date on which principal value of preferred stock is expected to be repaid to the holder and the instrument will cease to legally exist
+          nullable: true
+        paymentSchedule:
+          type: string
+          description: The dividend payment frequency on preferred shares
+          nullable: true
+      additionalProperties: false
+      title: OutputPreferredStockSpecific
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    CodeMappingLong:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingLong
+    OutputPrimaryPerformanceIdDetails:
+      type: object
+      properties:
+        primaryExchangeCode:
+          type: string
+          description: An exchange code used for and specific to equity production processes and equity products such as Global Equity Data Feeds-GEDF ($$$ is used for private/unlisted securities)
+          nullable: true
+        primaryPerformanceId:
+          type: string
+          description: The Morningstar identifier for a share class of an investment.
+          nullable: true
+        primarySymbol:
+          type: string
+          description: 'An arrangement of characters (often letters) representing a particular security listed on an exchange or otherwise traded publicly: Note that Morningstar''s multi-share class symbols will often contain a period within the symbol; e.g. BRK.B for Berkshire Hathaway Class B'
+          nullable: true
+      additionalProperties: false
+      title: OutputPrimaryPerformanceIdDetails
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+  responses:
+    ResponseEquityPreferredStockPaymentSchedule:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              preferredStockSchedulePaymentDate:
+                $ref: '#/components/schemas/OutputPreferredStockSchedulePaymentDate'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityEmployeeNumber:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              employeeNumber:
+                $ref: '#/components/schemas/OutputEmployeeNumber'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquitySecurityLevelBasicDetails:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              primaryPerformanceIdDetails:
+                $ref: '#/components/schemas/OutputPrimaryPerformanceIdDetails'
+              shareClassInformation:
+                $ref: '#/components/schemas/OutputShareClassInformation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityAdvisors:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyAdvisor:
+                $ref: '#/components/schemas/OutputCompanyAdvisor'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityPreferredStockDetails:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              preferredStockSpecific:
+                $ref: '#/components/schemas/OutputPreferredStockSpecific'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityBasicDetails:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyInformation:
+                $ref: '#/components/schemas/OutputCompanyInformation'
+              contactInformation:
+                $ref: '#/components/schemas/OutputContactInformation'
+              primaryPerformanceIdDetails:
+                $ref: '#/components/schemas/OutputPrimaryPerformanceIdDetails'
+              shareClassInformation:
+                $ref: '#/components/schemas/OutputShareClassInformation'
+              companyAdvisor:
+                $ref: '#/components/schemas/OutputCompanyAdvisor'
+              companyProfile:
+                $ref: '#/components/schemas/OutputCompanyProfile'
+              companyAddress:
+                $ref: '#/components/schemas/OutputCompanyAddress'
+              employeeNumber:
+                $ref: '#/components/schemas/OutputEmployeeNumber'
+              preferredStockSpecific:
+                $ref: '#/components/schemas/OutputPreferredStockSpecific'
+              preferredStockSchedulePaymentDate:
+                $ref: '#/components/schemas/OutputPreferredStockSchedulePaymentDate'
+              preferredStockRedemptionSchedule:
+                $ref: '#/components/schemas/OutputPreferredStockRedemptionSchedule'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCompanyLevelBasicDetails:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyInformation:
+                $ref: '#/components/schemas/OutputCompanyInformation'
+              contactInformation:
+                $ref: '#/components/schemas/OutputContactInformation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityBusinessDescription:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyProfile:
+                $ref: '#/components/schemas/OutputCompanyProfile'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCompanyAddress:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyAddress:
+                $ref: '#/components/schemas/OutputCompanyAddress'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityPreferredStockRedemptionSchedule:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              preferredStockRedemptionSchedule:
+                $ref: '#/components/schemas/OutputPreferredStockRedemptionSchedule'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

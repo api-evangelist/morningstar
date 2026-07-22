@@ -1,0 +1,225 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Persons API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Persons
+paths:
+  /persons:
+    post:
+      tags:
+      - Persons
+      summary: Register a new user
+      description: "Add an Investor Person to the system and associate it to a Firm and optionally to an Advisor. Registering a new Person does not require prior authentication. </br> <span>&#8226;</span> The Firm to which the Person is to be added must have the \"Investor self-signup\" feature enabled.  </br> <span>&#8226;</span> The user is created as SSO, non-SSO, or UIM JWT as determined by the Firm’s configuration for creating new “clients”.  </br></br>**Request Headers**</br>Registering a new Person does not require prior authentication, so JSESSIONID or CSRF-TOKEN are not required. </br></br>A UIM Admin JWT can optionally be submitted to this endpoint using the Authorization header with the header value \"Bearer <token-value>\".  The UIM Admin JWT holds a Service Administrator level authentication context  and the uimGuid for the user to be created must be provided in the post body. The endpoint will validate the JWT, extract the UIM Guid, and store the UIM Guid on the Person. The UIM Guid must be unique across the ByAllAccounts system (across all Persons). If not, then the Person is not created and HTTP 409 Conflict is returned with the person URI.</br></br>The POST body parameters listed in Model below are to be submitted in in JSON format as shown in the Example Value. </br></br>**Response Body**</br>Location header:  URI to new resource. For example:</br>\n  {\n   \"uri\": \"https://www.byallaccounts.net/api/v1/persons/12345\"\n  }\n  </br>Where 12345 is the BAA Person Id for the new Person. "
+      operationId: postPersonsUsingPOST
+      requestBody:
+        description: param1
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PersonPost'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataRecord'
+        '400':
+          description: 'Bad Request. </br>Possible causes:</br> <span>&#8226;</span> The *field name* field is missing </br> <span>&#8226;</span> Missing required value </br> <span>&#8226;</span> The *field name* cannot exceed *max value* </br> <span>&#8226;</span> Invalid Role value </br> <span>&#8226;</span> Email addresses must be in the form x@x.x and cannot contain spaces  </br> <span>&#8226;</span> Firm *firm* not found </br> <span>&#8226;</span> Advisor not found </br> </br>One of these is set on the Firm to be required but is not found:</br> <span>&#8226;</span> taxId  </br> <span>&#8226;</span> firmTag1 </br> <span>&#8226;</span> firmTag2  </br> <span>&#8226;</span> firmTag3  '
+        '401':
+          description: Not Authorized. </br>Possible causes:</br> <span>&#8226;</span> Investor self-signup not allowed </br><span>&#8226;</span> UIM JWT not valid
+        '409':
+          description: Conflict. </br>Possible causes:</br><span>&#8226;</span>  UIM Guid must be unique (from UIM JWT) </br><span>&#8226;</span> firmTag1 must be unique
+        '500':
+          description: Internal Server Error
+      deprecated: false
+      x-codegen-request-body-name: param1
+  /persons/{id}:
+    get:
+      tags:
+      - Persons
+      summary: Get profile data for a user
+      description: 'Fetch the profile data of a Person specified by the `id` parameter.   '
+      operationId: getPersonUsingGET_1
+      parameters:
+      - name: id
+        in: path
+        description: The unique identifier of the person requested
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PersonDto'
+        '401':
+          description: 'Not Authorized </br> </br> Possible reasons:</br><span>&#8226;</span> Invalid JSESSIONID and/or CSRF-TOKEN</br><span>&#8226;</span>  Expired UIM JWT '
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+components:
+  schemas:
+    DataRecord:
+      title: DataRecord
+      type: object
+      properties:
+        data:
+          type: object
+          properties: {}
+    PersonPost:
+      title: PersonPost
+      required:
+      - emailAddress
+      - firstName
+      - lastName
+      - role
+      type: object
+      properties:
+        firstName:
+          type: string
+          description: First name of the Person
+          example: Chris
+        middleName:
+          type: string
+          description: Middle name of the Person
+          example: Pat
+        lastName:
+          type: string
+          description: Last name of the Person
+          example: Smith
+        role:
+          type: string
+          description: Role of the Person. Currently must be the value ""
+          example: investor
+        emailAddress:
+          type: string
+          description: Email address of the Person
+        phoneNumber:
+          type: string
+          description: Phone number of the Person. There are no format requirements
+          example: '6035551212'
+        firmTag1:
+          type: string
+          description: Firm tag 1. If specified, thevalue must be unique within teh Firm to which the new Person is to be added. If not,  HTTP 409 Conflict is returned. Is only required if the Firm configuration requires a value for this field
+          example: BAA-primary-user-identifier
+        firmTag2:
+          type: string
+          description: Firm tag 2. Is only required if the Firm configuration requires a value for this field
+          example: BAA-primary-user-identifier-Marketing
+        firmTag3:
+          type: string
+          description: Firm tag 3. Is only required if the Firm configuration requires a value for this field
+          example: BAA-primary-user-identifier-Sales
+        taxId:
+          type: string
+          description: Social Security Number or Tax ID of the Person. Is only required if the Firm configuration requires a value for this field
+          example: '111111111'
+        firmCode:
+          type: string
+          description: 'Vendor name value for the Firm to which this Investor should be added. The Firm must already exist. </br>At least one of firmCode or advisorId  must be specified in order identify to which firm to add the Person. If firmCode is specified and advisorId is not, then the Person is created without any association to an advisor. If both are specified, then they must not conflict, meaning the Advisor identified by advisorId must exist within the Firm identified by the firmCode. Otherwise, an HTTP  400 Bad Request is returned.  '
+          example: ABC-12345
+        advisorId:
+          type: integer
+          description: 'BAA Person Id for the Advisor to whom this Investor should be assigned after the Investor is created. The Advisor must already exist and be part of the Firm identified in firmCode (if firmCode is specified). </br>At least one of firmCode or advisorId must be specified in order identify to which firm to add the Person. If firmCode is specified and advisorId is not, then the Person is created without any association to an advisor. If both are specified, then they must not conflict, meaning the Advisor identified by advisorId must exist within the Firm identified by the firmCode. Otherwise, an HTTP  400 Bad Request is returned.  '
+          format: int64
+          example: 123
+        uimGuid:
+          type: string
+          description: 'Used in conjunction with Service Admin JWT.  The uimGuid for the user to be created. Must be unique across all Persons in the ByAllAccounts system. If not, HTTP 409 Conflict is returned with the person URI.  Ignored if a valid Service Admin JWT is not provided. </br> Required when a Service Admin JWT is submitted to the endpoint. '
+          example: C5E883D3-8B92-438C-A43B-E70455FA1F06
+      description: Profile data of a person to be added
+    PersonDto:
+      title: PersonDto
+      required:
+      - firstName
+      - id
+      - lastName
+      - userAgreementAccepted
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the Person
+          format: int64
+          example: 778899
+        firstName:
+          type: string
+          description: First name of the Person
+          example: Rosalind
+        middleName:
+          type: string
+          description: Middle name of the Person
+          example: Elsie
+        lastName:
+          type: string
+          description: Last name of the Person
+          example: Franklin
+        emailAddress:
+          type: string
+          description: Email address of the Person
+        phoneNumber:
+          type: string
+          description: Phone number of the Person
+          example: '5085551212'
+        taxId:
+          type: string
+          description: Social Security Number or Tax ID of the Person
+          example: '111111111'
+        isSSOUser:
+          type: boolean
+          description: true if Person is an SSO-enabled user
+          example: true
+        advisorId:
+          type: integer
+          description: Id of the Person's Advisor
+          format: int64
+        firmTag1:
+          type: string
+          description: Firm Tag 1
+          example: xxx
+        firmTag2:
+          type: string
+          description: Firm Tag 2
+          example: yyy
+        firmTag3:
+          type: string
+          description: Firm Tag 3
+          example: ZZZ
+        userAgreementAccepted:
+          type: boolean
+          description: Indicates whether the user agreement has been accepted
+          example: true
+        uimGuid:
+          type: string
+          description: UIM Guid for the Person if one was assigned at creation
+          example: C5E883D3-8B92-438C-A43B-E70455FA1F06
+      description: Profile data of a person
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,860 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Governance API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Governance
+paths:
+  /direct-web-services/v1/investments/{id}/equity-board-and-committee-attendance:
+    get:
+      summary: Get Board and Committee Attendance view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityBoardAndCommitteeAttendanceDataset
+      tags:
+      - Governance
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityBoardAndCommitteeAttendance'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 922
+  /direct-web-services/v1/investments/{id}/equity-executive-officers-and-board-of-directors:
+    get:
+      summary: Get Executive Officers and Board of Directors dataset view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityExecutiveOfficersAndBoardOfDirectorsDataset
+      tags:
+      - Governance
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityExecutiveOfficersAndBoardOfDirectors'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 922
+  /direct-web-services/v1/investments/{id}/equity-governance:
+    get:
+      summary: Get Governance package view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: '
+
+        The Governance package provides data relating to the executive leadership and board of directors of the companies. Global coverage includes the names and job titles of these individuals plus, for companies with shares listed on exchanges in the United States, and United Kingdom, biographical data and enhanced data relating to their tenure, meeting attendance, and committee membership.
+
+        The Governance package contains the following datasets:
+
+        Board and Committee Attendance
+
+        Executive Officers and Board of Directors
+
+        Most recent and time series data supported.'
+      operationId: getEquityGovernancePackage
+      tags:
+      - Governance
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityGovernance'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 922
+components:
+  schemas:
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputBoardAndCommitteeAttendance:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The company's fiscal year that it uses to report its financial results.
+          nullable: true
+        committeeId:
+          type: string
+          description: A unique identifier assigned to each committee.
+          nullable: true
+        committeeName:
+          type: string
+          description: Represents the name of the committee; a committee is a group of directors; which is formed by the Board of the Company; with the purpose of performing particular functions.
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        exceptionalPayment:
+          type: number
+          description: Any additional amount paid to the director for responsibilities other than the duties performed as part of the committees.
+          format: double
+          nullable: true
+        isCommitteeChairperson:
+          type: boolean
+          description: 'Flag to indicate whether the person is a chairperson of the committee: The chairperson is the presiding officer of an organized group such as a board/committee. The chairperson is responsible for making sure that each meeting is planned effectively; conducted according to the constitution and that matters are dealt with in an orderly; efficient manner. TRUE denotes the person is a chairperson of the committee; otherwise FALSE.'
+          nullable: true
+        isCompensationCommittee:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isExpensePaid:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        meetingAttendancePercentage:
+          type: number
+          description: Percentage of the board and committee meetings attended during the fiscal year.
+          format: double
+          nullable: true
+        meetingFeeAlternate:
+          type: number
+          description: Fees paid to the directors for attending board/committee alternate meetings (meetings other than the regular meetings).
+          format: double
+          nullable: true
+        meetingFeeChair:
+          type: number
+          description: Fees paid to the chairperson for attending board/committee meetings.
+          format: double
+          nullable: true
+        meetingFeeMember:
+          type: number
+          description: Fees paid to the directors for attending board/committee meetings.
+          format: double
+          nullable: true
+        numberOfMeetingsAlternate:
+          type: integer
+          description: Total number of meetings held other than in-person; e.g. telephonic meeting; written consent; etc...; during the fiscal year for each board and committee member.
+          format: int32
+          nullable: true
+        numberOfMeetingsPerson:
+          type: integer
+          description: Total number of meetings held in-person during the fiscal year for each board and committee.
+          format: int32
+          nullable: true
+        personId:
+          type: string
+          description: A unique identifier assigned to each director/officer.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        retainerFeeChair:
+          type: number
+          description: 'Annual retainer fees paid to the Board/Committee chair: Retainer is the cash amount that company pays its non-employee directors for performing their duties and responsibilities on various committees and board. It is paid monthly; quarterly; half yearly or yearly.'
+          format: double
+          nullable: true
+        retainerFeeMember:
+          type: number
+          description: 'Annual retainer fees paid to the board/committee member: Retainer is the cash amount that the company pays its non-employee directors for performing their duties and responsibilities on various committees and boards. It is paid monthly; quarterly; half yearly or yearly.'
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputBoardAndCommitteeAttendance
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputExecutiveOfficersAndBoardOfDirectors:
+      type: object
+      properties:
+        fiscalYear:
+          type: string
+          description: ''
+          nullable: true
+        reportDate:
+          type: string
+          description: ''
+          nullable: true
+        reportSource:
+          type: string
+          description: ''
+          nullable: true
+        personId:
+          type: string
+          description: ''
+          nullable: true
+        fullName:
+          type: string
+          description: ''
+          nullable: true
+        fullNamePrefix:
+          type: string
+          description: ''
+          nullable: true
+        fullNameSuffix:
+          type: string
+          description: ''
+          nullable: true
+        firstName:
+          type: string
+          description: ''
+          nullable: true
+        middleName:
+          type: string
+          description: ''
+          nullable: true
+        lastName:
+          type: string
+          description: ''
+          nullable: true
+        preferredName:
+          type: string
+          description: ''
+          nullable: true
+        gender:
+          type: string
+          description: ''
+          nullable: true
+        age:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        standardTitle:
+          type: string
+          description: ''
+          nullable: true
+        reportedTitle:
+          type: string
+          description: ''
+          nullable: true
+        isCeo:
+          $ref: '#/components/schemas/CodeMappingString'
+        isChairperson:
+          $ref: '#/components/schemas/CodeMappingString'
+        isOfficer:
+          $ref: '#/components/schemas/CodeMappingString'
+        officerSince:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        isLeadDirector:
+          $ref: '#/components/schemas/CodeMappingString'
+        isDirector:
+          $ref: '#/components/schemas/CodeMappingString'
+        isIndependentDirector:
+          $ref: '#/components/schemas/CodeMappingString'
+        directorType:
+          type: string
+          description: ''
+          nullable: true
+        directorSince:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        tenure:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        biography:
+          type: string
+          description: ''
+          nullable: true
+        positionStatus:
+          type: string
+          description: ''
+          nullable: true
+        inactiveStatusDate:
+          type: string
+          description: ''
+          nullable: true
+        annualGeneralMeetingRemark:
+          type: string
+          description: ''
+          nullable: true
+        transactionId:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputExecutiveOfficersAndBoardOfDirectors
+  responses:
+    ResponseEquityGovernance:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              'boardAndCommitteeAttendance:':
+                $ref: '#/components/schemas/OutputBoardAndCommitteeAttendance'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityBoardAndCommitteeAttendance:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              'boardAndCommitteeAttendance:':
+                $ref: '#/components/schemas/OutputBoardAndCommitteeAttendance'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityExecutiveOfficersAndBoardOfDirectors:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              enterpriseValueAverageRates:
+                $ref: '#/components/schemas/OutputExecutiveOfficersAndBoardOfDirectors'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

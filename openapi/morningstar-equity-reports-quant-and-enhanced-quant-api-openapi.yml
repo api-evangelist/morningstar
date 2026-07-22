@@ -1,0 +1,135 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts equity reports - quant and enhanced quant API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: equity reports - quant and enhanced quant
+paths:
+  /equity/v1/reports/quant/{companyIdentifier}:
+    get:
+      tags:
+      - equity reports - quant and enhanced quant
+      summary: Get a Quantitative Report
+      description: Get a Quantitative Report for the company specified in the `companyIdentifier` parameter. Quantitative Reports provide a detailed assessment of a company based on a quantitative analysis using a variety of company financial data and other data inputs. </br></br>You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter. </br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br> A URL returned in the response is used to access the document file.
+      operationId: QuantReport
+      parameters:
+      - name: companyIdentifier
+        in: path
+        description: Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.
+        required: true
+        schema:
+          type: string
+          default: 0P000003MH
+      - name: pageSize
+        in: query
+        description: Page size of output PDF
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: Letter
+          enum:
+          - Letter
+          - A4
+      - name: locale
+        in: query
+        description: Language and locale, for example, en-US
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: en-US
+          enum:
+          - en-US
+          - en-GB
+          - en-AU
+          - en-NZ
+          - fr-FR
+          - de-DE
+          - it-IT
+          - es-ES
+          - fi-Fi
+          - nb-NO
+          - nl-NL
+          - sv-SE
+      responses:
+        '200':
+          description: Success
+          content: {}
+  /equity/v1/reports/enhanced-quant/{companyIdentifier}:
+    get:
+      tags:
+      - equity reports - quant and enhanced quant
+      summary: Get an Enhanced Quantative Report
+      description: Get an Enhanced Quantitative Report for the company specified in the `companyIdentifier` parameter. Enhanced Quantitative Reports provide a detailed assessment of a company based on a quantitative analysis using a variety of company financial data and other data inputs, as well as additional commentary on the company.</br></br> You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`) .</br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter. </br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br> A URL returned in the response is used to access the document file.
+      operationId: EnhancedQuantReport
+      parameters:
+      - name: companyIdentifier
+        in: path
+        description: Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.
+        required: true
+        schema:
+          type: string
+          default: 0P000003MH
+      - name: pageSize
+        in: query
+        description: Page size of output PDF
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: Letter
+          enum:
+          - Letter
+          - A4
+      - name: locale
+        in: query
+        description: Language and locale, for example, en-US
+        required: false
+        style: form
+        explode: true
+        schema:
+          type: string
+          default: en-US
+          enum:
+          - en-US
+          - en-GB
+          - en-AU
+          - en-NZ
+          - fr-FR
+          - de-DE
+          - it-IT
+          - es-ES
+          - fi-Fi
+          - nb-NO
+          - nl-NL
+          - sv-SE
+      responses:
+        '200':
+          description: Success
+          content: {}
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

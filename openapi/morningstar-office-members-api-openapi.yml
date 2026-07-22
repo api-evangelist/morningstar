@@ -1,0 +1,410 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Office Members API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Office Members
+paths:
+  /households/{householdId}/members:
+    get:
+      tags:
+      - Office Members
+      summary: Get household's member list
+      description: Get list of all members for a household. </br></br> `householdId` can be  retrieved by using the <a href="https://developer.morningstar.com/apis/financial-planning/households-us/2.0.2">Households API</a>.
+      operationId: getMembers
+      parameters:
+      - in: header
+        name: x-api-key
+        description: Unique API key of a client
+        required: true
+        schema:
+          type: string
+      - name: householdId
+        in: path
+        description: Unique identifier of a household
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberList'
+        '400':
+          description: Invalid status value
+  /households/{householdId}/members/{memberId}:
+    get:
+      tags:
+      - Office Members
+      summary: Get member profile
+      description: Get a specific member profile.
+      operationId: getMember
+      parameters:
+      - in: header
+        name: x-api-key
+        description: Unique API key of a client
+        required: true
+        schema:
+          type: string
+      - name: householdId
+        in: path
+        description: Unique identifier of a household
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: memberId
+        in: path
+        description: Unique identifier of a member
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberProfile'
+        '400':
+          description: Invalid status value
+      security:
+      - bearerAuth: []
+    post:
+      tags:
+      - Office Members
+      summary: Update member profile
+      description: "Updates a member profile. </br></br> `relationshipId` cannot be changed to or from 1. </br></br> \n`relationshipId` mapping:</br></br> `1` = Self</br> `3` = Spouse</br> `6` = Attorney</br> `7` = Accountant</br> `8` = Aunt</br> `38` = Beneficiary</br> `33` = Brother</br> `10` = Child</br> `11` = Cousin</br> `37` = Daughter</br> `4` = Dependent</br> `12` = Ex-Spouse</br> `13` = Father</br> `14` = Friend</br> `15` = Granddaughter</br> `16` = Grandparent</br> `17` = Grandson</br> `39` = Grantor</br> `34` = Insurance Agent</br> `18` = Mother</br> `19` = Niece</br> `30` = Nephew</br> `5` = Others</br> `40` = Partner</br> `31` = Sister</br> `36` = Son</br> `35` = Trustee</br> `32` = Uncle</br></br> `firstName` and `lastName` do not support these characters: ~!#^`[]{}|\\;\"<>?/"
+      operationId: updateMember
+      requestBody:
+        description: The member to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - $ref: '#/components/schemas/UpdateMemberProfile'
+      parameters:
+      - in: header
+        name: x-api-key
+        description: Unique API key of a client
+        required: true
+        schema:
+          type: string
+      - name: householdId
+        in: path
+        description: Unique identifier of a household
+        required: true
+        schema:
+          type: string
+          format: uuid
+      - name: memberId
+        in: path
+        description: Unique identifier of a member
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberProfile'
+        '400':
+          description: Invalid status value
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MemberPost400'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    Member:
+      type: object
+      required:
+      - memberId
+      properties:
+        firstName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Sample
+        lastName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Client
+        address1:
+          type: string
+          format: string
+          maxLength: 50
+          example: 22 W. Washington St.
+        address2:
+          type: string
+          format: string
+          maxLength: 50
+          example: FL 7
+        address3:
+          type: string
+          format: string
+          maxLength: 50
+          example: Rm. 700
+        city:
+          type: string
+          format: string
+          maxLength: 30
+          example: Chicago
+        state:
+          type: string
+          format: string
+          maxLength: 20
+          example: IL
+        zipCode:
+          type: string
+          format: string
+          maxLength: 10
+          example: 60602
+        email:
+          type: string
+          format: string
+          maxLength: 60
+        memberId:
+          type: string
+          format: string
+          example: 1234567
+        name:
+          type: string
+          format: string
+          maxLength: 60
+          example: Sample Client
+        relationshipId:
+          type: string
+          format: string
+          example: 1
+        relationshipName:
+          type: string
+          format: string
+          example: Self
+    MemberProfile:
+      type: object
+      required:
+      - householdId
+      - memberId
+      properties:
+        householdId:
+          type: string
+          format: uuid
+        memberId:
+          type: string
+          format: string
+          example: 1234567
+        firstName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Sample
+        lastName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Client
+        socialSecurityNumber:
+          type: string
+          format: string
+          example: '********1234'
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1989-12-31'
+        desiredRetirementAge:
+          type: string
+          format: string
+          example: 75
+        address1:
+          type: string
+          format: string
+          maxLength: 50
+          example: 22 W. Washington St.
+        address2:
+          type: string
+          format: string
+          maxLength: 50
+          example: FL 7
+        address3:
+          type: string
+          format: string
+          maxLength: 50
+          example: Rm. 700
+        city:
+          type: string
+          format: string
+          maxLength: 30
+          example: Chicago
+        state:
+          type: string
+          format: string
+          maxLength: 20
+          example: IL
+        zipCode:
+          type: string
+          format: string
+          maxLength: 10
+          example: 60602
+        email:
+          type: string
+          format: string
+          maxLength: 60
+        homePhone:
+          type: string
+          format: string
+          maxLength: 20
+          example: 555-555555
+        workPhone:
+          type: string
+          format: string
+          maxLength: 20
+          example: 555-555555
+        relationshipId:
+          type: string
+          format: string
+          example: 1
+        status:
+          type: string
+          format: string
+          example: null
+    MemberPost400:
+      type: object
+      properties:
+        message:
+          type: string
+          format: string
+          example: Missing firstName property.
+        id:
+          type: string
+          format: uuid
+    UpdateMemberProfile:
+      type: object
+      required:
+      - firstName
+      - lastName
+      - relationshipId
+      properties:
+        firstName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Sample
+        lastName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Client
+        socialSecurityNumber:
+          type: string
+          format: string
+          example: 111-11-1234
+          description: If not included, will default to empty.
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1989-12-31'
+          description: YYYY-MM-DD, if not included, will default to empty.
+        desiredRetirementAge:
+          type: string
+          format: string
+          example: 75
+          description: If not included, will default to empty.
+        address1:
+          type: string
+          format: string
+          maxLength: 50
+          example: 22 W. Washington St.
+          description: If not included, will default to empty.
+        address2:
+          type: string
+          format: string
+          maxLength: 50
+          example: FL 7
+          description: If not included, will default to empty.
+        address3:
+          type: string
+          format: string
+          maxLength: 50
+          example: Rm. 700
+          description: If not included, will default to empty.
+        city:
+          type: string
+          format: string
+          maxLength: 30
+          example: Chicago
+          description: If not included, will default to empty.
+        state:
+          type: string
+          format: string
+          maxLength: 20
+          example: IL
+          description: If not included, will default to empty.
+        zipCode:
+          type: string
+          format: string
+          maxLength: 10
+          example: 60602
+          description: If not included, will default to empty.
+        email:
+          type: string
+          format: string
+          maxLength: 60
+          description: If not included, will default to empty.
+        homePhone:
+          type: string
+          format: string
+          maxLength: 20
+          example: 555-555555
+          description: If not included, will default to empty.
+        workPhone:
+          type: string
+          format: string
+          maxLength: 20
+          example: 555-555555
+          description: If not included, will default to empty.
+        relationshipId:
+          type: string
+          format: string
+          example: 1
+    MemberList:
+      type: object
+      required:
+      - id
+      properties:
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Member'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

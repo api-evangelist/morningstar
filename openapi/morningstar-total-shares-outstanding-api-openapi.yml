@@ -1,0 +1,1690 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Total Shares Outstanding API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Total Shares Outstanding
+paths:
+  /direct-web-services/v1/investments/{id}/equity-total-shares-outstanding:
+    get:
+      summary: Get Total Shares Outstanding Company Level view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: shareType
+        in: query
+        required: true
+        schema:
+          enum:
+          - all
+          - rights
+          - unit
+          - unlisted
+          - preferred
+          - treasury
+          - common
+          - adr
+          - cef
+          - warrant
+          - etf
+          - note
+          type: string
+          x-enumDescriptions:
+            all: Includes all share types.
+            adr: American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.
+            cef: Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.
+            common: Standard equity shares that represent ownership in a company, typically with voting rights.
+            etf: Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.
+            note: Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.
+            preferred: Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.
+            rights: Rights issued to existing shareholders to purchase additional shares, often at a discount.
+            treasury: Shares that were previously issued and later repurchased by the issuing company.
+            unlisted: Shares not listed on a formal stock exchange but may trade over-the-counter or privately.
+            unit: Combined security consisting of multiple components, such as shares and warrants, sold together.
+            warrant: Security that gives the holder the right to purchase company stock at a specific price before expiration.
+        description: "Filters results by share type.\n\n- `all` = Includes all share types. \n- `adr` = American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.\n- `cef` = Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.\n- `common` = Standard equity shares that represent ownership in a company, typically with voting rights.\n- `etf` = Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.\n- `note` = Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.\n- `preferred` = Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.\n- `rights` = Rights issued to existing shareholders to purchase additional shares, often at a discount.\n- `treasury` = Shares that were previously issued and later repurchased by the issuing company.\n- `unlisted` = Shares not listed on a formal stock exchange but may trade over-the-counter or privately.\n- `unit` = Combined security consisting of multiple components, such as shares and warrants, sold together.\n- `warrant` = Security that gives the holder the right to purchase company stock at a specific price before expiration."
+        examples:
+          shareTypeExample1:
+            summary: All share types
+            value: all
+          shareTypeExample2:
+            summary: American Depositary Receipt
+            value: adr
+          shareTypeExample3:
+            summary: Closed-End Fund
+            value: cef
+          shareTypeExample4:
+            summary: Common stock
+            value: common
+          shareTypeExample5:
+            summary: Exchange-Traded Fund
+            value: etf
+          shareTypeExample6:
+            summary: Note (debt security)
+            value: note
+          shareTypeExample7:
+            summary: Preferred stock
+            value: preferred
+          shareTypeExample8:
+            summary: Rights
+            value: rights
+          shareTypeExample9:
+            summary: Treasury shares
+            value: treasury
+          shareTypeExample10:
+            summary: Unlisted shares
+            value: unlisted
+          shareTypeExample11:
+            summary: Unit
+            value: unit
+          shareTypeExample12:
+            summary: Warrant
+            value: warrant
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: Most recent and time series data supported.
+      operationId: getEquityTotalSharesOutstandingPackage
+      tags:
+      - Total Shares Outstanding
+      x-cpqId: 905
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityTotalSharesOutstanding'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+  /direct-web-services/v1/investments/{id}/equity-total-shares-outstanding-company-level:
+    get:
+      summary: Get Total Shares Outstanding view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: shareType
+        in: query
+        required: true
+        schema:
+          enum:
+          - all
+          - rights
+          - unit
+          - unlisted
+          - preferred
+          - treasury
+          - common
+          - adr
+          - cef
+          - warrant
+          - etf
+          - note
+          type: string
+          x-enumDescriptions:
+            all: Includes all share types.
+            adr: American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.
+            cef: Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.
+            common: Standard equity shares that represent ownership in a company, typically with voting rights.
+            etf: Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.
+            note: Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.
+            preferred: Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.
+            rights: Rights issued to existing shareholders to purchase additional shares, often at a discount.
+            treasury: Shares that were previously issued and later repurchased by the issuing company.
+            unlisted: Shares not listed on a formal stock exchange but may trade over-the-counter or privately.
+            unit: Combined security consisting of multiple components, such as shares and warrants, sold together.
+            warrant: Security that gives the holder the right to purchase company stock at a specific price before expiration.
+        description: "Filters results by share type.\n\n- `all` = Includes all share types. \n- `adr` = American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.\n- `cef` = Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.\n- `common` = Standard equity shares that represent ownership in a company, typically with voting rights.\n- `etf` = Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.\n- `note` = Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.\n- `preferred` = Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.\n- `rights` = Rights issued to existing shareholders to purchase additional shares, often at a discount.\n- `treasury` = Shares that were previously issued and later repurchased by the issuing company.\n- `unlisted` = Shares not listed on a formal stock exchange but may trade over-the-counter or privately.\n- `unit` = Combined security consisting of multiple components, such as shares and warrants, sold together.\n- `warrant` = Security that gives the holder the right to purchase company stock at a specific price before expiration."
+        examples:
+          shareTypeExample1:
+            summary: All share types
+            value: all
+          shareTypeExample2:
+            summary: American Depositary Receipt
+            value: adr
+          shareTypeExample3:
+            summary: Closed-End Fund
+            value: cef
+          shareTypeExample4:
+            summary: Common stock
+            value: common
+          shareTypeExample5:
+            summary: Exchange-Traded Fund
+            value: etf
+          shareTypeExample6:
+            summary: Note (debt security)
+            value: note
+          shareTypeExample7:
+            summary: Preferred stock
+            value: preferred
+          shareTypeExample8:
+            summary: Rights
+            value: rights
+          shareTypeExample9:
+            summary: Treasury shares
+            value: treasury
+          shareTypeExample10:
+            summary: Unlisted shares
+            value: unlisted
+          shareTypeExample11:
+            summary: Unit
+            value: unit
+          shareTypeExample12:
+            summary: Warrant
+            value: warrant
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityTotalSharesOutstandingCompanyLevelDataset
+      tags:
+      - Total Shares Outstanding
+      x-cpqId: 905
+      x-dataset: true
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityTotalSharesOutstandingCompanyLevel'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+  /direct-web-services/v1/investments/{id}/equity-total-shares-outstanding-share-level:
+    get:
+      summary: Get Total Shares Outstanding Share Level view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: shareType
+        in: query
+        required: true
+        schema:
+          enum:
+          - all
+          - rights
+          - unit
+          - unlisted
+          - preferred
+          - treasury
+          - common
+          - adr
+          - cef
+          - warrant
+          - etf
+          - note
+          type: string
+          x-enumDescriptions:
+            all: Includes all share types.
+            adr: American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.
+            cef: Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.
+            common: Standard equity shares that represent ownership in a company, typically with voting rights.
+            etf: Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.
+            note: Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.
+            preferred: Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.
+            rights: Rights issued to existing shareholders to purchase additional shares, often at a discount.
+            treasury: Shares that were previously issued and later repurchased by the issuing company.
+            unlisted: Shares not listed on a formal stock exchange but may trade over-the-counter or privately.
+            unit: Combined security consisting of multiple components, such as shares and warrants, sold together.
+            warrant: Security that gives the holder the right to purchase company stock at a specific price before expiration.
+        description: "Filters results by share type.\n\n- `all` = Includes all share types. \n- `adr` = American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.\n- `cef` = Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.\n- `common` = Standard equity shares that represent ownership in a company, typically with voting rights.\n- `etf` = Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.\n- `note` = Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.\n- `preferred` = Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.\n- `rights` = Rights issued to existing shareholders to purchase additional shares, often at a discount.\n- `treasury` = Shares that were previously issued and later repurchased by the issuing company.\n- `unlisted` = Shares not listed on a formal stock exchange but may trade over-the-counter or privately.\n- `unit` = Combined security consisting of multiple components, such as shares and warrants, sold together.\n- `warrant` = Security that gives the holder the right to purchase company stock at a specific price before expiration."
+        examples:
+          shareTypeExample1:
+            summary: All share types
+            value: all
+          shareTypeExample2:
+            summary: American Depositary Receipt
+            value: adr
+          shareTypeExample3:
+            summary: Closed-End Fund
+            value: cef
+          shareTypeExample4:
+            summary: Common stock
+            value: common
+          shareTypeExample5:
+            summary: Exchange-Traded Fund
+            value: etf
+          shareTypeExample6:
+            summary: Note (debt security)
+            value: note
+          shareTypeExample7:
+            summary: Preferred stock
+            value: preferred
+          shareTypeExample8:
+            summary: Rights
+            value: rights
+          shareTypeExample9:
+            summary: Treasury shares
+            value: treasury
+          shareTypeExample10:
+            summary: Unlisted shares
+            value: unlisted
+          shareTypeExample11:
+            summary: Unit
+            value: unit
+          shareTypeExample12:
+            summary: Warrant
+            value: warrant
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityTotalSharesOutstandingShareLevelDataset
+      tags:
+      - Total Shares Outstanding
+      x-cpqId: 905
+      x-dataset: true
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityTotalSharesOutstandingShareLevel'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+  /direct-web-services/v1/investments/{id}/equity-total-shares-outstanding-treasury:
+    get:
+      summary: Get Total Shares Outstanding Treasury view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: shareType
+        in: query
+        required: true
+        schema:
+          enum:
+          - all
+          - rights
+          - unit
+          - unlisted
+          - preferred
+          - treasury
+          - common
+          - adr
+          - cef
+          - warrant
+          - etf
+          - note
+          type: string
+          x-enumDescriptions:
+            all: Includes all share types.
+            adr: American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.
+            cef: Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.
+            common: Standard equity shares that represent ownership in a company, typically with voting rights.
+            etf: Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.
+            note: Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.
+            preferred: Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.
+            rights: Rights issued to existing shareholders to purchase additional shares, often at a discount.
+            treasury: Shares that were previously issued and later repurchased by the issuing company.
+            unlisted: Shares not listed on a formal stock exchange but may trade over-the-counter or privately.
+            unit: Combined security consisting of multiple components, such as shares and warrants, sold together.
+            warrant: Security that gives the holder the right to purchase company stock at a specific price before expiration.
+        description: "Filters results by share type.\n\n- `all` = Includes all share types. \n- `adr` = American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.\n- `cef` = Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.\n- `common` = Standard equity shares that represent ownership in a company, typically with voting rights.\n- `etf` = Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.\n- `note` = Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.\n- `preferred` = Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.\n- `rights` = Rights issued to existing shareholders to purchase additional shares, often at a discount.\n- `treasury` = Shares that were previously issued and later repurchased by the issuing company.\n- `unlisted` = Shares not listed on a formal stock exchange but may trade over-the-counter or privately.\n- `unit` = Combined security consisting of multiple components, such as shares and warrants, sold together.\n- `warrant` = Security that gives the holder the right to purchase company stock at a specific price before expiration."
+        examples:
+          shareTypeExample1:
+            summary: All share types
+            value: all
+          shareTypeExample2:
+            summary: American Depositary Receipt
+            value: adr
+          shareTypeExample3:
+            summary: Closed-End Fund
+            value: cef
+          shareTypeExample4:
+            summary: Common stock
+            value: common
+          shareTypeExample5:
+            summary: Exchange-Traded Fund
+            value: etf
+          shareTypeExample6:
+            summary: Note (debt security)
+            value: note
+          shareTypeExample7:
+            summary: Preferred stock
+            value: preferred
+          shareTypeExample8:
+            summary: Rights
+            value: rights
+          shareTypeExample9:
+            summary: Treasury shares
+            value: treasury
+          shareTypeExample10:
+            summary: Unlisted shares
+            value: unlisted
+          shareTypeExample11:
+            summary: Unit
+            value: unit
+          shareTypeExample12:
+            summary: Warrant
+            value: warrant
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityTotalSharesOutstandingTreasuryDataset
+      tags:
+      - Total Shares Outstanding
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityTotalSharesOutstandingTreasury'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 905
+  /direct-web-services/v1/investments/{id}/equity-total-shares-outstanding-unadjusted:
+    get:
+      summary: Get Total Shares Outstanding Unadjusted view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: shareType
+        in: query
+        required: true
+        schema:
+          enum:
+          - all
+          - rights
+          - unit
+          - unlisted
+          - preferred
+          - treasury
+          - common
+          - adr
+          - cef
+          - warrant
+          - etf
+          - note
+          type: string
+          x-enumDescriptions:
+            all: Includes all share types.
+            adr: American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.
+            cef: Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.
+            common: Standard equity shares that represent ownership in a company, typically with voting rights.
+            etf: Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.
+            note: Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.
+            preferred: Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.
+            rights: Rights issued to existing shareholders to purchase additional shares, often at a discount.
+            treasury: Shares that were previously issued and later repurchased by the issuing company.
+            unlisted: Shares not listed on a formal stock exchange but may trade over-the-counter or privately.
+            unit: Combined security consisting of multiple components, such as shares and warrants, sold together.
+            warrant: Security that gives the holder the right to purchase company stock at a specific price before expiration.
+        description: "Filters results by share type.\n\n- `all` = Includes all share types. \n- `adr` = American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.\n- `cef` = Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.\n- `common` = Standard equity shares that represent ownership in a company, typically with voting rights.\n- `etf` = Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.\n- `note` = Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.\n- `preferred` = Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.\n- `rights` = Rights issued to existing shareholders to purchase additional shares, often at a discount.\n- `treasury` = Shares that were previously issued and later repurchased by the issuing company.\n- `unlisted` = Shares not listed on a formal stock exchange but may trade over-the-counter or privately.\n- `unit` = Combined security consisting of multiple components, such as shares and warrants, sold together.\n- `warrant` = Security that gives the holder the right to purchase company stock at a specific price before expiration."
+        examples:
+          shareTypeExample1:
+            summary: All share types
+            value: all
+          shareTypeExample2:
+            summary: American Depositary Receipt
+            value: adr
+          shareTypeExample3:
+            summary: Closed-End Fund
+            value: cef
+          shareTypeExample4:
+            summary: Common stock
+            value: common
+          shareTypeExample5:
+            summary: Exchange-Traded Fund
+            value: etf
+          shareTypeExample6:
+            summary: Note (debt security)
+            value: note
+          shareTypeExample7:
+            summary: Preferred stock
+            value: preferred
+          shareTypeExample8:
+            summary: Rights
+            value: rights
+          shareTypeExample9:
+            summary: Treasury shares
+            value: treasury
+          shareTypeExample10:
+            summary: Unlisted shares
+            value: unlisted
+          shareTypeExample11:
+            summary: Unit
+            value: unit
+          shareTypeExample12:
+            summary: Warrant
+            value: warrant
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityTotalSharesOutstandingUnadjustedDataset
+      tags:
+      - Total Shares Outstanding
+      x-cpqId: 905
+      x-dataset: true
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityTotalSharesOutstandingUnadjusted'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+  /direct-web-services/v1/investments/{id}/equity-total-shares-outstanding-unadjusted-treasury:
+    get:
+      summary: Get Total Shares Outstanding Unadjusted Treasury view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: shareType
+        in: query
+        required: true
+        schema:
+          enum:
+          - all
+          - rights
+          - unit
+          - unlisted
+          - preferred
+          - treasury
+          - common
+          - adr
+          - cef
+          - warrant
+          - etf
+          - note
+          type: string
+          x-enumDescriptions:
+            all: Includes all share types.
+            adr: American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.
+            cef: Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.
+            common: Standard equity shares that represent ownership in a company, typically with voting rights.
+            etf: Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.
+            note: Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.
+            preferred: Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.
+            rights: Rights issued to existing shareholders to purchase additional shares, often at a discount.
+            treasury: Shares that were previously issued and later repurchased by the issuing company.
+            unlisted: Shares not listed on a formal stock exchange but may trade over-the-counter or privately.
+            unit: Combined security consisting of multiple components, such as shares and warrants, sold together.
+            warrant: Security that gives the holder the right to purchase company stock at a specific price before expiration.
+        description: "Filters results by share type.\n\n- `all` = Includes all share types. \n- `adr` = American Depositary Receipt. Represents shares of a foreign company traded on U.S. exchanges.\n- `cef` = Closed-End Fund shares. Represents ownership in a pooled investment fund with a fixed number of shares.\n- `common` = Standard equity shares that represent ownership in a company, typically with voting rights.\n- `etf` = Exchange-Traded Fund shares. Represents ownership in a fund that tracks an index or asset group and trades on exchanges.\n- `note` = Debt security representing a loan made by an investor to a company, typically with a fixed interest rate and maturity date.\n- `preferred` = Shares that provide specific privileges, such as fixed dividends or priority over common stock in liquidation.\n- `rights` = Rights issued to existing shareholders to purchase additional shares, often at a discount.\n- `treasury` = Shares that were previously issued and later repurchased by the issuing company.\n- `unlisted` = Shares not listed on a formal stock exchange but may trade over-the-counter or privately.\n- `unit` = Combined security consisting of multiple components, such as shares and warrants, sold together.\n- `warrant` = Security that gives the holder the right to purchase company stock at a specific price before expiration."
+        examples:
+          shareTypeExample1:
+            summary: All share types
+            value: all
+          shareTypeExample2:
+            summary: American Depositary Receipt
+            value: adr
+          shareTypeExample3:
+            summary: Closed-End Fund
+            value: cef
+          shareTypeExample4:
+            summary: Common stock
+            value: common
+          shareTypeExample5:
+            summary: Exchange-Traded Fund
+            value: etf
+          shareTypeExample6:
+            summary: Note (debt security)
+            value: note
+          shareTypeExample7:
+            summary: Preferred stock
+            value: preferred
+          shareTypeExample8:
+            summary: Rights
+            value: rights
+          shareTypeExample9:
+            summary: Treasury shares
+            value: treasury
+          shareTypeExample10:
+            summary: Unlisted shares
+            value: unlisted
+          shareTypeExample11:
+            summary: Unit
+            value: unit
+          shareTypeExample12:
+            summary: Warrant
+            value: warrant
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityTotalSharesOutstandingUnadjustedTreasuryDataset
+      tags:
+      - Total Shares Outstanding
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityTotalSharesOutstandingUnadjustedTreasury'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 905
+components:
+  responses:
+    ResponseEquityTotalSharesOutstanding:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              performanceLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstanding'
+              companyLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputCompanyLevelTotalSharesOutstanding'
+              totalSharesOutstandingRaw:
+                $ref: '#/components/schemas/OutputTotalSharesOutstandingRaw'
+              performanceLevelTotalSharesOutstandingTreasury:
+                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstandingTreasury'
+              totalSharesOutstandingRawTreasury:
+                $ref: '#/components/schemas/OutputTotalSharesOutstandingRawTreasury'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTotalSharesOutstandingTreasury:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              performanceLevelTotalSharesOutstandingTreasury:
+                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstandingTreasury'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityTotalSharesOutstandingUnadjusted:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              totalSharesOutstandingRaw:
+                $ref: '#/components/schemas/OutputTotalSharesOutstandingRaw'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTotalSharesOutstandingUnadjustedTreasury:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              totalSharesOutstandingRawTreasury:
+                $ref: '#/components/schemas/OutputTotalSharesOutstandingRawTreasury'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTotalSharesOutstandingShareLevel:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              performanceLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstanding'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTotalSharesOutstandingCompanyLevel:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputCompanyLevelTotalSharesOutstanding'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+  schemas:
+    OutputPerformanceLevelTotalSharesOutstandingTreasury:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        treasuryShares:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputPerformanceLevelTotalSharesOutstandingTreasury
+    OutputCompanyLevelTotalSharesOutstanding:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        companyLevelTotalSharesOutstandings:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyLevelTotalSharesOutstanding
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputPerformanceLevelTotalSharesOutstanding:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        fileDate:
+          type: string
+          description: ''
+          nullable: true
+        fivePercentFloat:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        floatDate:
+          type: string
+          description: ''
+          nullable: true
+        floatPercentShare:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        floatShare:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        quotedValue:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        reasonOfShareChange:
+          type: string
+          description: ''
+          nullable: true
+        totalSharesOutstanding:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        unquotedValue:
+          type: string
+          description: ''
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputPerformanceLevelTotalSharesOutstanding
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputTotalSharesOutstandingRaw:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: The as of date of the total shares outstanding value
+          nullable: true
+        documentFileDate:
+          type: string
+          description: The date on which a company released its filing to the public
+          nullable: true
+        documentFormType:
+          type: string
+          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
+          nullable: true
+        documentId:
+          type: integer
+          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
+          format: int64
+          nullable: true
+        isFutureTotalSharesOutstanding:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        issuedSharesAsReported:
+          type: integer
+          description: The number of issued shares for a particular share class as reported in the document
+          format: int64
+          nullable: true
+        preSplitIssuedShares:
+          type: integer
+          description: The number of issued shares for a particular share with split adjustment if the company reports pre split shares number on post split date or vice versa
+          format: int64
+          nullable: true
+        preSplitTotalSharesOutstanding:
+          type: integer
+          description: The number of shares outstanding for a particular share class with split adjustment if company reports pre split on post split date or vice versa
+          format: int64
+          nullable: true
+        quotedSharesValue:
+          type: integer
+          description: The proportion of share class-level total shares outstanding that is listed and tradable on a stock market; Quoted value is only available for the Australian Stock Exchange (ASX)
+          format: int64
+          nullable: true
+        reasonOfShareChange:
+          type: string
+          description: 'The reason for the change in a company''s total shares outstanding from the previous record; examples could be share issuances or share buy-back: This field will only be populated when the total shares outstanding is collected from a press release'
+          nullable: true
+        totalSharesOutstandingAsReported:
+          type: integer
+          description: The number of shares outstanding for a particular share class as reported in the document. It can be derived using issued shares minus treasury shares.
+          format: int64
+          nullable: true
+        unquotedSharesValue:
+          type: integer
+          description: The proportion of share class-level total shares outstanding that is not listed and untradeable on a stock market; Unquoted value is only available for the Australian Stock Exchange (ASX)
+          format: int64
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputTotalSharesOutstandingRaw
+    OutputTotalSharesOutstandingRawTreasury:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        documentFormType:
+          type: string
+          description: ''
+          nullable: true
+        preSplitTreasuryShares:
+          type: string
+          description: ''
+          nullable: true
+        treasurySharesAsReported:
+          type: string
+          description: ''
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputTotalSharesOutstandingRawTreasury
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

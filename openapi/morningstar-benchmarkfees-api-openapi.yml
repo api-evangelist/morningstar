@@ -1,0 +1,104 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts BenchmarkFees API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: BenchmarkFees
+paths:
+  /v1/retirementplan/BenchmarkFees:
+    get:
+      tags:
+      - BenchmarkFees
+      summary: Get retirement plan benchmark fees
+      description: Get a list of standard retirement plan benchmark fees. The response will return a list of all benchmark fee models the user is entitled for. No parameters are required to be passed for this API.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BenchmarkFeeModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BenchmarkFeeModel'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BenchmarkFeeModel'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BenchmarkFeeModel'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+components:
+  schemas:
+    ErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+    BenchmarkFeeModel:
+      type: object
+      properties:
+        benchmarkName:
+          type: string
+          description: Name of the benchmark, including applicable plan size dollar amount range
+          nullable: true
+        benchmarkFeeRatio:
+          type: number
+          description: Typical plan-level fee for a retirement plan of this size
+          format: double
+        benchmarkFeeandExpenseAvg:
+          type: number
+          description: Average investment expenses for a retirement plan of this size
+          format: double
+      additionalProperties: false
+      description: Benchmark Fee Model
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

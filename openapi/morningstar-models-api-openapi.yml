@@ -1,0 +1,671 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts models API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: models
+paths:
+  /models:
+    get:
+      summary: Get flow models
+      description: 'Get all flow models. The response will include the unique ID of each model.  You use the ID with other endpoints to return data based on that model. Only models that your account is enabled for will be returned.
+
+        '
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: get_models
+      tags:
+      - models
+  /models/{flow_model_id}/category-forecast:
+    parameters:
+    - in: query
+      description: Number of months in time period
+      name: period
+      schema:
+        type: string
+        default: '12'
+    - in: query
+      description: Return accumulated data
+      name: accumulated
+      schema:
+        type: string
+        enum:
+        - 'true'
+        - 'false'
+        default: 'false'
+    - required: true
+      in: path
+      description: Unique identifier of a flow model
+      name: flow_model_id
+      schema:
+        type: string
+        enum:
+        - usa-univariate-category-fundflow
+    get:
+      summary: Get category forecasts for a flow model
+      description: Get all category forecasts for the model specified in the `flow_model_id` parameter.  You can specify a time period (in months) to narrow the results returned.  You can also request that only accumulated data is returned in the response.
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: get_category_forecast
+      tags:
+      - models
+  /models/{flow_model_id}/category-forecast/{category_id}:
+    parameters:
+    - in: query
+      description: Return accumulated data
+      name: accumulated
+      schema:
+        type: string
+        enum:
+        - 'true'
+        - 'false'
+        default: 'false'
+    - required: true
+      in: path
+      description: Unique identifier of a category
+      name: category_id
+      schema:
+        type: string
+        default: $FOCA$CL$$
+    - required: true
+      in: path
+      description: Unique identifier of a flow model
+      name: flow_model_id
+      schema:
+        type: string
+        enum:
+        - usa-univariate-category-fundflow
+    get:
+      summary: Get a category forecast for a flow model
+      description: Get category forecasts for the specified flow models and category.  You can specify a time period (in months) to narrow the results returned.  You can also request that only accumulated data is returned in the response.
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: get_category_forecast_with_id
+      tags:
+      - models
+  /models/{flow_model_id}/factors:
+    parameters:
+    - required: true
+      in: path
+      description: Unique identifier of a flow model
+      name: flow_model_id
+      schema:
+        type: string
+        default: usa-equity-shareclass-fundflow
+    get:
+      summary: Get flow model factors
+      description: 'Get a full list of the factors used in the flow model specified.  In the response, the factors will be organized according to groupings defined for US equity, US allocation, and US fixed income.
+
+        '
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: get_model_factor
+      tags:
+      - models
+  /models/{flow_model_id}/premia:
+    parameters:
+    - in: query
+      description: Frequency to base results on
+      name: frequency
+      schema:
+        type: string
+        enum:
+        - monthly
+        - quarterly
+        - annually
+        default: monthly
+    - in: query
+      description: Return accumulated data
+      name: accumulated
+      schema:
+        type: string
+        enum:
+        - 'true'
+        - 'false'
+        default: 'false'
+    - in: query
+      description: End date of time period
+      name: end
+      schema:
+        type: string
+        default: '2017-06-30T00:00:00.000Z'
+    - in: query
+      description: Start date of time period
+      name: start
+      schema:
+        type: string
+        default: '2017-01-01T00:00:00.000Z'
+    - in: path
+      description: Unique identifier of a flow model
+      name: flow_model_id
+      required: true
+      schema:
+        type: string
+        enum:
+        - usa-equity-shareclass-fundflow
+        - canada-equity-shareclass-fundflow
+        - europe-equity-shareclass-fundflow
+        - global-equity-shareclass-fundflow
+        - usa-allocation-shareclass-fundflow
+        - canada-allocation-shareclass-fundflow
+        - europe-allocation-shareclass-fundflow
+        - global-allocation-shareclass-fundflow
+        - usa-fixedincome-shareclass-fundflow
+        - canada-fixedincome-shareclass-fundflow
+        - europe-fixedincome-shareclass-fundflow
+        - global-fixedincome-shareclass-fundflow
+        - global-misc-shareclass-fundflow
+    get:
+      summary: Get premia data for a flow model
+      description: 'Get premia data for  the last 12 month average as of the latest month end  for the flow model specified in the `flow_model_id` parameter. The response will return premia for each factor in the model.  You use this information to understand which factors have driven fund flows, and to what extent, in a given asset class and region. </br></br> You can  request that only accumulated data is returned in the response.</br></br> Currently, 13 flow models are supported.
+
+        '
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: get_premia
+      tags:
+      - models
+  /models/{flow_model_id}/{fund_ids}/forecast-closure:
+    parameters:
+    - required: true
+      in: path
+      description: Unique identifier of a fund
+      name: fund_ids
+      schema:
+        type: string
+        default: FS00008OJ9,FS00008OL3
+    - required: true
+      in: path
+      description: Unique identifier of a flow model
+      name: flow_model_id
+      schema:
+        type: string
+        enum:
+        - usa-equity-shareclass-fundflow
+        - canada-equity-shareclass-fundflow
+        - europe-equity-shareclass-fundflow
+        - global-equity-shareclass-fundflow
+        - usa-allocation-shareclass-fundflow
+        - canada-allocation-shareclass-fundflow
+        - europe-allocation-shareclass-fundflow
+        - global-allocation-shareclass-fundflow
+        - usa-fixedincome-shareclass-fundflow
+        - canada-fixedincome-shareclass-fundflow
+        - europe-fixedincome-shareclass-fundflow
+        - global-fixedincome-shareclass-fundflow
+        - global-misc-shareclass-fundflow
+    get:
+      summary: Get closure probability forecast for a fund
+      description: Get a closure probability forecast for a specific fund and fund model.</br></br> Currently, 13 flow models are supported.
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: get_dead_fund_with_model_id
+      tags:
+      - models
+  /models/{flow_model_id}/{share_class_ids}/exposures:
+    parameters:
+    - in: query
+      description: Frequency to base results on
+      name: frequency
+      schema:
+        type: string
+        enum:
+        - monthly
+        - quarterly
+        - annually
+        default: monthly
+    - required: true
+      in: path
+      description: Unique identifier of a share class
+      name: share_class_ids
+      schema:
+        type: string
+        default: F00000VRI7,F00000S8VI
+    - in: query
+      description: End date of time period
+      name: end
+      schema:
+        type: string
+        default: '2018-12-31T00:00:00.000Z'
+    - in: query
+      description: Start date of time period
+      name: start
+      schema:
+        type: string
+        default: '2018-01-01T00:00:00.000Z'
+    - required: true
+      in: path
+      description: Unique identifier of a flow model
+      name: flow_model_id
+      schema:
+        type: string
+        enum:
+        - usa-equity-shareclass-fundflow
+        - canada-equity-shareclass-fundflow
+        - europe-equity-shareclass-fundflow
+        - global-equity-shareclass-fundflow
+        - usa-allocation-shareclass-fundflow
+        - canada-allocation-shareclass-fundflow
+        - europe-allocation-shareclass-fundflow
+        - global-allocation-shareclass-fundflow
+        - usa-fixedincome-shareclass-fundflow
+        - canada-fixedincome-shareclass-fundflow
+        - europe-fixedincome-shareclass-fundflow
+        - global-fixedincome-shareclass-fundflow
+        - global-misc-shareclass-fundflow
+    get:
+      summary: Get exposures for a share class
+      description: Get exposures forecast for a specific share class  and fund model. </br></br> Currently, 13 flow models are supported.
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: get_exposures_with_model_id
+      tags:
+      - models
+  /models/{flow_model_id}/{share_class_ids}/forecast-flow:
+    parameters:
+    - required: true
+      in: path
+      description: Unique identifier of a share class
+      name: share_class_ids
+      schema:
+        type: string
+        default: F00000VRI7,F00000S8VI
+    - in: path
+      description: Unique identifier of a flow model
+      name: flow_model_id
+      required: true
+      schema:
+        type: string
+        enum:
+        - usa-equity-shareclass-fundflow
+        - canada-equity-shareclass-fundflow
+        - europe-equity-shareclass-fundflow
+        - global-equity-shareclass-fundflow
+        - usa-allocation-shareclass-fundflow
+        - canada-allocation-shareclass-fundflow
+        - europe-allocation-shareclass-fundflow
+        - global-allocation-shareclass-fundflow
+        - usa-fixedincome-shareclass-fundflow
+        - canada-fixedincome-shareclass-fundflow
+        - europe-fixedincome-shareclass-fundflow
+        - global-fixedincome-shareclass-fundflow
+        - global-misc-shareclass-fundflow
+    get:
+      summary: Get growth forecast for a share class
+      description: Get growth forecast for a specific share class and fund model.  </br></br> Currently, 13 flow models are supported.
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: get_forecast_with_model_id
+      tags:
+      - models
+  /models/{risk_model_id}/factors:
+    get:
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Authentication required.
+        '403':
+          description: You do not have access permission..
+        '404':
+          description: Not found.
+        '500':
+          description: Internal server error.
+      summary: Get risk model factors
+      description: Get a full list of the factors used in the risk model specified. In the response, the factors will be organized according to groupings defined for equity models and multi-asset risk models.
+      operationId: get_factors
+      parameters:
+      - required: true
+        in: path
+        description: Unique identifer of a risk model
+        name: risk_model_id
+        schema:
+          type: string
+          default: morn-glb-eq-usd
+      tags:
+      - models
+  /models/{risk_model_id}/exposures:
+    get:
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Authentication required.
+        '403':
+          description: You do not have access permission..
+        '404':
+          description: Not found.
+        '500':
+          description: Internal server error.
+      summary: Get risk exposures for investment(s)
+      description: Based on a specific risk model, get risk exposures for the investment(s) specified in the `investment-ids` parameter. You can request data for a defined time period and frequency (monthy/quarterly). If a time period / frequency is not defined, the most recent data will be returned.
+      operationId: get_exposures
+      parameters:
+      - required: true
+        in: path
+        description: Unique identifier of a risk model
+        name: risk_model_id
+        schema:
+          type: string
+          default: morn-glb-eq-usd
+      - required: true
+        in: query
+        description: Unique Morningstar identifier for securities. Multiple values must be comma-separated.
+        name: investment-ids
+        schema:
+          type: string
+          default: 0P0000058R,0P000001RB,93313322
+      - in: query
+        description: Start date of time period. If start date and end date are not defined, most recent data will be returned.
+        name: start
+        schema:
+          type: string
+          default: '2012-06-01T00:00:00.000Z'
+      - in: query
+        description: End date of time period. If start date and end date are not defined, most recent data will be returned.
+        name: end
+        schema:
+          type: string
+          default: '2012-07-01T00:00:00.000Z'
+      - in: query
+        description: Frequency the response will be based on
+        name: frequency
+        schema:
+          type: string
+          enum:
+          - day_end
+          - month_start
+          - month_end
+          - quarter_start
+          - quarter_end
+          default: month_end
+      tags:
+      - models
+    post:
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Authentication required.
+        '403':
+          description: You do not have access permission..
+        '404':
+          description: Not found.
+        '500':
+          description: Internal server error.
+      summary: Calculate active exposure for investment
+      description: Based on a specific risk model and investment or portfolio, calculate the effect of active exposure on the most recent data.
+      operationId: post_exposures
+      parameters:
+      - required: true
+        in: path
+        description: Unique identifier of a risk model
+        name: risk_model_id
+        schema:
+          type: string
+          default: morn-glb-eq-usd
+      - in: query
+        description: Start date of time period. If start date and end date are not defined, most recent data will be returned.
+        name: start
+        schema:
+          type: string
+          default: '2012-06-20T00:00:00.000Z'
+      - in: query
+        description: End date of time period. If start date and end date are not defined, most recent data will be returned.
+        name: end
+        schema:
+          type: string
+          default: '2012-07-20T00:00:00.000Z'
+      - in: query
+        description: Frequency the response will be based on
+        name: frequency
+        schema:
+          type: string
+          enum:
+          - day_end
+          - month_end
+          - quarter_end
+          default: month_end
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Funds'
+        required: true
+      tags:
+      - models
+  /models/{risk_model_id}/{fund_id}/holding-exposures:
+    get:
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Authentication required.
+        '403':
+          description: You do not have access permission..
+        '404':
+          description: Not found.
+        '500':
+          description: Internal server error.
+      summary: Get risk exposure for the holdings of fund(s)
+      description: Based on a specific risk model, get risk exposure for each holding of the fund(s) specified in the `fund_id` parameter. In the `date` parameter, enter a date when the fund reported its portfolio holdings. If a date is not defined, the most recent data will be returned.
+      operationId: get_fund_exposures
+      parameters:
+      - required: true
+        in: path
+        description: Unique identifier of a risk model
+        name: risk_model_id
+        schema:
+          type: string
+          default: morn-glb-eq-usd
+      - required: true
+        in: path
+        description: Unique identifier for a fund. Multiple values must be comma-separated.
+        name: fund_id
+        schema:
+          type: string
+          default: 0P00002PNZ
+      - in: query
+        description: Date on which to perform the portfolio exposure. If it not defined, most recent data will be returned.
+        name: date
+        schema:
+          type: string
+          default: '2018-01-31T00:00:00.000Z'
+      tags:
+      - models
+  /models/{risk_model_id}/premia:
+    get:
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Authentication required.
+        '403':
+          description: You do not have access permission..
+        '404':
+          description: Not found.
+        '500':
+          description: Internal server error.
+      summary: Get risk premium for a risk model
+      description: Get risk premium for the risk model specified. The default frequency is monthly. You can request data for a defined time period. If a time period is not defined, the most recent data will be returned.
+      operationId: get_premias
+      parameters:
+      - required: true
+        in: path
+        description: Unique identifier of a risk model
+        name: risk_model_id
+        schema:
+          type: string
+          default: morn-glb-eq-usd
+      - required: false
+        in: query
+        description: Calculate cumulative premia.
+        name: cumulative
+        schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          default: 'false'
+      - in: query
+        description: Frequency the response will be based on
+        name: frequency
+        schema:
+          type: string
+          enum:
+          - daily
+          - monthly
+          - quarterly
+          - annually
+          default: monthly
+      - in: query
+        description: End date of time period. If start date and end date are not defined, most recent data will be returned.
+        name: end
+        schema:
+          type: string
+          default: '2012-07-31T00:00:00.000Z'
+      - in: query
+        description: Start date of time period. If start date and end date are not defined, most recent data will be returned.
+        name: start
+        schema:
+          type: string
+          default: '2012-06-01T00:00:00.000Z'
+      tags:
+      - models
+components:
+  schemas:
+    Holdings:
+      required:
+      - id
+      properties:
+        holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/holding'
+        id:
+          type: string
+      type: object
+    Funds:
+      properties:
+        portfolios:
+          type: array
+          example:
+          - id: test1
+            holdings:
+            - id: 0P0000058R
+              type: PerformanceId
+              weight: 60
+            - id: 0P000001RB
+              type: PerformanceId
+              weight: 40
+          - id: test2
+            holdings:
+            - id: 0P0000058R
+              type: PerformanceId
+              weight: 50
+            - id: FOUSA00CFZ
+              type: SecurityId
+              weight: 50
+          items:
+            $ref: '#/components/schemas/Holdings'
+      type: object
+    holding:
+      properties:
+        identifier:
+          type: string
+        weight:
+          type: number
+      type: object
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

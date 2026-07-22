@@ -1,0 +1,51 @@
+generated: '2026-07-22'
+method: derived
+source: openapi/ securitySchemes, https://mcp.morningstar.com/.well-known/oauth-authorization-server,
+  https://developer.morningstar.com/content/documentation/documentation/get-started/authentication/get-started-authentication.md
+standards:
+- id: oauth2
+  conforms: true
+  evidence: Direct Web Services docs state APIs use OAuth 2.0 - POST /token/oauth
+    with Basic credentials returns a 60-minute bearer token; the MCP server runs a
+    full authorization_code + refresh_token OAuth 2.0 server.
+- id: rfc8414-authorization-server-metadata
+  conforms: true
+  evidence: https://mcp.morningstar.com/.well-known/oauth-authorization-server
+    returns live AS metadata (saved in well-known/).
+- id: rfc9728-protected-resource-metadata
+  conforms: true
+  evidence: https://mcp.morningstar.com/.well-known/oauth-protected-resource/mcp
+    returns resource metadata, advertised via WWW-Authenticate resource_metadata.
+- id: rfc7636-pkce
+  conforms: true
+  evidence: code_challenge_methods_supported [S256] in the MCP AS metadata.
+- id: rfc7591-dynamic-client-registration
+  conforms: true
+  evidence: registration_endpoint https://mcp.morningstar.com/register in the MCP
+    AS metadata; the 401 challenge instructs clients to re-register automatically.
+- id: rfc7617-http-basic
+  conforms: true
+  evidence: token issuance authenticates with Base64 username:password Basic auth
+    (openapi securitySchemes type http/basic; auth docs).
+- id: oidc
+  conforms: false
+  evidence: openid/email/profile scopes are supported on the MCP server but
+    /.well-known/openid-configuration returns 404 - no published OIDC discovery.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: no application/problem+json responses in any of the 117 harvested specs.
+- id: mcp
+  conforms: true
+  evidence: hosted Model Context Protocol server at https://mcp.morningstar.com/mcp,
+    integrated in Claude, ChatGPT, Copilot Studio/App, Microsoft Foundry, and
+    Perplexity.
+- id: pagination
+  conforms: partial
+  evidence: page/pageSize parameters appear in a minority of specs (7 of 117);
+    most endpoints return bounded packages rather than paginated collections.
+- id: fapi
+  conforms: false
+  evidence: no FAPI conformance claims found in the developer documentation.
+- id: idempotency-key
+  conforms: false
+  evidence: no Idempotency-Key header or idempotency contract in specs or docs.

@@ -1,0 +1,860 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Ownership - Summary API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Ownership - Summary
+paths:
+  /direct-web-services/v1/investments/{id}/equity-ownership-summary:
+    get:
+      summary: Get Ownership Summary view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: ownerTypeGroup
+        in: query
+        required: true
+        schema:
+          enum:
+          - 13GDCompany
+          - ScheduleD
+          - Person
+          - MutualFundAdvisor
+          - MutualFund
+          - 13FCompany
+          - 13GDPerson
+          - 13GDOwner
+          - Institution
+          type: string
+        description: 'Filters results by owner type group.
+
+
+          - `13GDCompany` - 13GD owners are not required to indicate when their ownership stake drops below 5% but must report when ownership changes more than 1% since the initial filing. Form 13GD are filed on the SEC by both the purchaser and the issuer of the security.
+
+          - `13GDPerson` - U.S. specific, an individual who filed Schedule 13G because they own more than 5% of a company’s shares as a passive investor.
+
+          - `13GDOwner` - U.S. specific, a generic category for any owner disclosed under Schedule 13G, regardless of whether they are a person or entity.
+
+
+          - `13FCompany` - U.S. specific, though some shares may be held that are listed elsewhere. Shares held by U.S. institutional investment managers that manage over $100 million primarily in equities, shares of closed-end investment companies, and shares of exchange-traded funds. Their holdings are collected from 13-F filings filed with the SEC. 13F owners must file the number of shares held and fair market value of securities listed, as of the end of the most recent calendar quarter, per SEC requirements.
+
+          - `ScheduleD` - Schedule D refers to ownership data collected from Schedule D announcements, primarily released by insurance companies in the U.S.
+
+          - `MutualFund` - Collected globally. Shares held by individual funds. These are collected from the portfolio data provided for over 125,000 funds that feature equity holdings. The file includes the most recent fund holdings that are no longer subject to suppression.
+
+
+          - `MutualFundAdvisor` - Ownership held by entities managing mutual funds.
+
+
+          - `Person` - Individual ownership not tied to institutional or fund structures.
+
+          - `Institution` - Broad category for institutional ownership not otherwise classified.'
+        examples:
+          ownerTypeGroupExample1:
+            summary: 13GDCompany
+            value: 13GDCompany
+          ownerTypeGroupExample2:
+            summary: 13GDPerson
+            value: 13GDPerson
+          ownerTypeGroupExample3:
+            summary: 13GDOwner
+            value: 13GDOwner
+          ownerTypeGroupExample4:
+            summary: 13FCompany
+            value: 13FCompany
+          ownerTypeGroupExample5:
+            summary: ScheduleD
+            value: ScheduleD
+          ownerTypeGroupExample6:
+            summary: MutualFund
+            value: MutualFund
+          ownerTypeGroupExample7:
+            summary: MutualFundAdvisor
+            value: MutualFundAdvisor
+          ownerTypeGroupExample8:
+            summary: Person
+            value: Person
+          ownerTypeGroupExample9:
+            summary: Institution
+            value: Institution
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: Most recent data supported.
+      operationId: getEquityOwnershipSummaryPackage
+      tags:
+      - Ownership - Summary
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityOwnershipSummary'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 930
+  /direct-web-services/v1/investments/{id}/equity-ownership-summary-funds-and-regulatory-filings:
+    get:
+      summary: Get Ownership Summary Funds and Regulatory Filings view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: ownerTypeGroup
+        in: query
+        required: true
+        schema:
+          enum:
+          - 13GDCompany
+          - ScheduleD
+          - Person
+          - MutualFundAdvisor
+          - MutualFund
+          - 13FCompany
+          - 13GDPerson
+          - 13GDOwner
+          - Institution
+          type: string
+        description: 'Filters results by owner type group.
+
+
+          - `13GDCompany` - 13GD owners are not required to indicate when their ownership stake drops below 5% but must report when ownership changes more than 1% since the initial filing. Form 13GD are filed on the SEC by both the purchaser and the issuer of the security.
+
+          - `13GDPerson` - U.S. specific, an individual who filed Schedule 13G because they own more than 5% of a company’s shares as a passive investor.
+
+          - `13GDOwner` - U.S. specific, a generic category for any owner disclosed under Schedule 13G, regardless of whether they are a person or entity.
+
+
+          - `13FCompany` - U.S. specific, though some shares may be held that are listed elsewhere. Shares held by U.S. institutional investment managers that manage over $100 million primarily in equities, shares of closed-end investment companies, and shares of exchange-traded funds. Their holdings are collected from 13-F filings filed with the SEC. 13F owners must file the number of shares held and fair market value of securities listed, as of the end of the most recent calendar quarter, per SEC requirements.
+
+          - `ScheduleD` - Schedule D refers to ownership data collected from Schedule D announcements, primarily released by insurance companies in the U.S.
+
+          - `MutualFund` - Collected globally. Shares held by individual funds. These are collected from the portfolio data provided for over 125,000 funds that feature equity holdings. The file includes the most recent fund holdings that are no longer subject to suppression.
+
+
+          - `MutualFundAdvisor` - Ownership held by entities managing mutual funds.
+
+
+          - `Person` - Individual ownership not tied to institutional or fund structures.
+
+          - `Institution` - Broad category for institutional ownership not otherwise classified.'
+        examples:
+          ownerTypeGroupExample1:
+            summary: 13GDCompany
+            value: 13GDCompany
+          ownerTypeGroupExample2:
+            summary: 13GDPerson
+            value: 13GDPerson
+          ownerTypeGroupExample3:
+            summary: 13GDOwner
+            value: 13GDOwner
+          ownerTypeGroupExample4:
+            summary: 13FCompany
+            value: 13FCompany
+          ownerTypeGroupExample5:
+            summary: ScheduleD
+            value: ScheduleD
+          ownerTypeGroupExample6:
+            summary: MutualFund
+            value: MutualFund
+          ownerTypeGroupExample7:
+            summary: MutualFundAdvisor
+            value: MutualFundAdvisor
+          ownerTypeGroupExample8:
+            summary: Person
+            value: Person
+          ownerTypeGroupExample9:
+            summary: Institution
+            value: Institution
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityOwnershipSummaryFundsAndRegulatoryFilingsDataset
+      tags:
+      - Ownership - Summary
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityOwnershipSummaryFundsAndRegulatoryFilings'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 930
+  /direct-web-services/v1/investments/{id}/equity-ownership-summary-insiders:
+    get:
+      summary: Get Ownership Summary Insiders view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityOwnershipSummaryInsidersDataset
+      tags:
+      - Ownership - Summary
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityOwnershipSummaryInsiders'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 930
+components:
+  schemas:
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputCompanyLevelInsiderHolding:
+      type: object
+      properties:
+        amountOwned:
+          type: number
+          description: AmountOwned is calculated on the company level (InsiderAmountOwned of the previous month + current month acquired - current month disposed) and TSO is to be picked on the basis on share class level.
+          format: double
+          nullable: true
+        asOfDate:
+          type: string
+          description: This refers to date on which insider shareholding is reported.
+          nullable: true
+        percentOwned:
+          type: number
+          description: The percentage of a particular security's shares that are owned by insiders.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyLevelInsiderHolding
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputOwnershipDataSummary:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: ''
+          nullable: true
+        decreasedOwners:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        increasedOwners:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        newOwners:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        percentageOwnership:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        soldOutOwners:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        totalDecreasedShares:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        totalIncreasedShares:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        totalMarketValue:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        totalNewSharesBought:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        totalOwners:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        totalSharesOwned:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        totalSoldOutShares:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        ownerTypeGroup:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputOwnershipDataSummary
+    OutputCompanyLevelInsiderTransactionStatistics:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: This refers to date on which insider shareholding is reported.
+          nullable: true
+        buyerCount:
+          type: integer
+          description: The count of buy transactions of the insiders
+          format: int32
+          nullable: true
+        buyerShares:
+          type: number
+          description: The number of shares bought by an insider
+          format: double
+          nullable: true
+        sellerCount:
+          type: integer
+          description: The count of sell transactions of the insiders
+          format: int32
+          nullable: true
+        sellerShares:
+          type: number
+          description: The number of shares sold by an insider
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyLevelInsiderTransactionStatistics
+  responses:
+    ResponseEquityOwnershipSummaryFundsAndRegulatoryFilings:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownershipDataSummary:
+                $ref: '#/components/schemas/OutputOwnershipDataSummary'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityOwnershipSummary:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownershipDataSummary:
+                $ref: '#/components/schemas/OutputOwnershipDataSummary'
+              companyLevelInsiderHolding:
+                $ref: '#/components/schemas/OutputCompanyLevelInsiderHolding'
+              companyLevelInsiderTransactionStatistics:
+                $ref: '#/components/schemas/OutputCompanyLevelInsiderTransactionStatistics'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipSummaryInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyLevelInsiderHolding:
+                $ref: '#/components/schemas/OutputCompanyLevelInsiderHolding'
+              companyLevelInsiderTransactionStatistics:
+                $ref: '#/components/schemas/OutputCompanyLevelInsiderTransactionStatistics'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

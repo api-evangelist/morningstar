@@ -1,0 +1,57 @@
+generated: '2026-07-22'
+method: searched
+source: live probes of /.well-known/ on apis.yml and OpenAPI hosts
+hosts:
+- host: https://mcp.morningstar.com
+  documents:
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: morningstar-oauth-authorization-server.json
+    note: RFC 8414 authorization server metadata for the Morningstar MCP Server -
+      authorization_code + refresh_token grants, PKCE S256, dynamic client
+      registration endpoint, scopes offline_access/openid/email/profile.
+  - path: /.well-known/oauth-protected-resource/mcp
+    status: 200
+    file: morningstar-oauth-protected-resource.json
+    note: RFC 9728 protected resource metadata for https://mcp.morningstar.com/mcp,
+      advertised via the WWW-Authenticate resource_metadata parameter.
+  - path: /.well-known/oauth-protected-resource
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+- host: https://www.morningstar.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+- host: https://developer.morningstar.com
+  note: Returns HTTP 200 with the SPA HTML shell for every /.well-known/ path -
+    treated as not published.
+  documents:
+  - {path: /.well-known/security.txt, status: 200, html_shell: true}
+  - {path: /.well-known/openid-configuration, status: 200, html_shell: true}
+  - {path: /.well-known/oauth-authorization-server, status: 200, html_shell: true}
+  - {path: /.well-known/api-catalog, status: 200, html_shell: true}
+  - {path: /.well-known/ai-plugin.json, status: 200, html_shell: true}
+- host: https://www.us-api.morningstar.com
+  note: WAF returns HTTP 403 for anonymous /.well-known/ requests.
+  documents:
+  - {path: /.well-known/security.txt, status: 403}
+  - {path: /.well-known/openid-configuration, status: 403}
+  - {path: /.well-known/oauth-authorization-server, status: 403}
+  - {path: /.well-known/api-catalog, status: 403}
+- host: https://agents.morningstar.com
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+- host: https://www.byallaccounts.net
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}

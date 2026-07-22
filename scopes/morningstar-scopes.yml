@@ -1,0 +1,36 @@
+generated: '2026-07-22'
+method: searched
+source: https://mcp.morningstar.com/.well-known/oauth-authorization-server
+docs: https://developer.morningstar.com/direct-web-services/documentation/api-utilities/authentication-api/overview
+schemes:
+- name: Morningstar MCP OAuth
+  source: well-known/morningstar-oauth-authorization-server.json
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://mcp.morningstar.com/authorize
+    tokenUrl: https://mcp.morningstar.com/token
+    refresh_token: true
+    pkce: S256
+    dynamic_client_registration: https://mcp.morningstar.com/register
+scopes:
+- scope: offline_access
+  description: Refresh-token issuance for long-lived MCP client sessions.
+  flows: [authorizationCode]
+  sources: [well-known/morningstar-oauth-authorization-server.json]
+- scope: openid
+  description: OpenID-style identity scope supported by the MCP authorization
+    server (no OIDC discovery document is published).
+  flows: [authorizationCode]
+  sources: [well-known/morningstar-oauth-authorization-server.json]
+- scope: email
+  description: Access to the authenticated user's email claim.
+  flows: [authorizationCode]
+  sources: [well-known/morningstar-oauth-authorization-server.json]
+- scope: profile
+  description: Access to the authenticated user's profile claims.
+  flows: [authorizationCode]
+  sources: [well-known/morningstar-oauth-authorization-server.json]
+notes: Direct Web Services / Dynamic Services OAuth 2.0 access tokens (POST
+  /token/oauth) are unscoped opaque bearer tokens - entitlements are bound to the
+  licensed account, not to OAuth scopes. The only published scope surface is the
+  MCP server's authorization server metadata captured above.

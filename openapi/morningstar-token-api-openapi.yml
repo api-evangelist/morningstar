@@ -1,0 +1,117 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Token API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Token
+paths:
+  /token/oauth:
+    post:
+      summary: Generate a JSON Web Token (JWT)
+      description: 'Authenticates a client using HTTP Basic Auth and returns a signed JWT
+
+        bearer token for use in subsequent API requests.
+
+
+        Pass your credentials as a Base64-encoded `username:password` string in
+
+        the `Authorization` header. The returned `access_token` should be included
+
+        as a `Bearer` token in the `Authorization` header of all authenticated requests.'
+      operationId: createToken
+      tags:
+      - Token
+      security:
+      - basicAuth: []
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseToken'
+        '401':
+          $ref: '#/components/responses/ErrorResponse401'
+components:
+  responses:
+    ErrorResponse401:
+      description: '401: Unauthorized'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            ErrorResponseExample1:
+              $ref: '#/components/examples/ErrorResponseExample1'
+    ResponseToken:
+      description: '200: OK'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputToken'
+          examples:
+            ResponseTokenExample1:
+              $ref: '#/components/examples/ResponseTokenExample1'
+  examples:
+    ErrorResponseExample1:
+      summary: '401: Unauthorized'
+      value:
+        error_message: Incorrect username or password
+    ResponseTokenExample1:
+      summary: Output Authorization Token
+      value:
+        access_token: Rhci5jb20vaW50ZXJuYWxfY29tcGFueV9pZCI6IkNsaWVudDAiLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9kYXRhX3JvbGUiOlsiU2VhcmNoLkFDSURfU2VydmljZSJdLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9jb25maWdfaWQiOiJnbG9iYWxfYWRtaW5fYXBpcy4wMDFkMDAwMDAweDU5YjcuMjA2OTg0MzZfd2twbGMxaDciLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9tc3Rhcl9pZCI6IkZFMTUzOEM4LTg0RDMtNDlCRC05MzNELTdGQkEyOERGODAzMyIsImh0dHBzOi8vbW9ybmluZ3N0YXIuY29tL2VtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaHR0cHM6Ly9tb3JuaW5nc3Rhci5jb20vcGFzc3dvcmRDaGFuZ2VSZXF1aXJlZCI6ZmFsc2UsImh0dHBzOi8vbW9ybmluZ3N0YXIuY29tL3VpbV9yb2xlcyI6IkVBTVMsSU5WRVNUTUVOVEFQSV9JTlRFUk5BTF9TRVJWSUNFX0FDQ09VTlQiLCJpc3MiOiJodHRwczovL2xvZ2luLXByb2QubW9ybmluZ3N0YXIuY29tLyIsInN1YiI6ImF1dGgwfEZFMTUzOEM4LTg0RDMtNDlCRC05MzNELTdGQkEyOERGODAzMyIsImF1ZCI6WyJodHRwczovL2F1dGgwLWF3c3By
+        expires_in: 3599
+        token_type: Bearer
+  schemas:
+    ErrorResponse:
+      type: object
+      description: A response body returned when an error occurs.
+      required:
+      - error_message
+      properties:
+        error_message:
+          type: string
+          description: A human-readable description of the error.
+          examples:
+          - Incorrect username or password
+    OutputToken:
+      type: object
+      description: A successful authentication response containing a JWT bearer token.
+      required:
+      - access_token
+      - expires_in
+      - token_type
+      properties:
+        access_token:
+          type: string
+          description: The signed JWT to use as a `Bearer` token in subsequent authenticated requests.
+          examples:
+          - eyJhbGciOiJ example
+        expires_in:
+          type: integer
+          description: The number of seconds until the token expires. After expiry, request a new token.
+          examples:
+          - 3599
+        token_type:
+          type: string
+          description: The token type. Always `Bearer`.
+          examples:
+          - Bearer
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

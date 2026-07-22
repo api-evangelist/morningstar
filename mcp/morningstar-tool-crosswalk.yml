@@ -1,0 +1,91 @@
+generated: '2026-07-22'
+method: derived
+source: mcp/morningstar-mcp.yml + openapi/ (refined Direct Web Services / Dynamic
+  Services specs); MCP tool names and descriptions from the published docs - live
+  tools/list is OAuth-gated, so bindings are by name/semantics, not schema.
+surfaces:
+  openapi: openapi/ (117 refined per-tag specs from 41 harvested Morningstar OpenAPI documents)
+  mcp:
+    url: https://mcp.morningstar.com/mcp
+    gated: true
+    note: tools/list returns 401 invalid_token anonymously; a licensed Morningstar
+      account is required for authenticated introspection.
+  graphql: null
+crosswalk:
+- tool: morningstar-id-lookup-tool
+  category: entity-resolution
+  rest: [AutoComplete_GetAutoCompleteData]
+  binding: rest
+  confidence: medium
+  note: Entity detection maps most closely to the Dynamic Services autocomplete
+    endpoint (openapi/morningstar-autocomplete-api-openapi.yml); the tool also
+    resolves datapoint names, which the REST surface splits across
+    listEquityDataPoints / listManagedInvestmentDataPoints.
+- tool: morningstar-data-tool
+  category: investment-data
+  rest: [retrieveInvestmentDetails, postInvestments, Securities_GetSecuritiesDetails,
+    listEquityDataPoints, listManagedInvestmentDataPoints]
+  binding: rest
+  confidence: medium
+  note: AI-ready datapoints for funds/ETFs/stocks are served by the Investment
+    Details and Securities surfaces (openapi/morningstar-investment-details-api-openapi.yml,
+    openapi/morningstar-securities-api-openapi.yml, openapi/morningstar-data-points-api-openapi.yml).
+- tool: morningstar-fund-holdings-tool
+  category: holdings
+  rest: [getFullPortfolioHoldingsMonthEndOrQuarterEndMostRecentPackage, retrievePortfolioHoldingsDates]
+  binding: rest
+  confidence: medium
+  note: Top-holdings retrieval backed by the Portfolio Holdings package endpoints
+    (openapi/morningstar-portfolio-holdings-api-openapi.yml).
+- tool: morningstar-portfolio-analysis-tool
+  category: portfolio-analysis
+  rest: [generatePortfolioXRay, XRayV1_PostAsync]
+  binding: rest
+  confidence: medium
+  note: X-Ray methodology breakdowns map to the Portfolio X-Ray endpoints in both
+    Direct Web Services (openapi/morningstar-x-ray-api-openapi.yml) and the async
+    Dynamic Services variant (openapi/morningstar-x-rays-api-openapi.yml).
+- tool: morningstar-screener-tool
+  category: screening
+  rest: [queryEquityInvestments, queryManagedInvestments, Screener_GetScreenerData,
+    Screener_PostScreenerData]
+  binding: rest
+  confidence: medium
+  note: Screening criteria map to the equities / managed-investments screener
+    endpoints (openapi/morningstar-screener-api-openapi.yml).
+- tool: morningstar-analyst-research-tool
+  category: research
+  rest: [Get, Get2]
+  binding: rest
+  confidence: low
+  note: Analyst forward-looking reports most closely match the Equity Company
+    Research endpoints (openapi/morningstar-equity-company-research-api-openapi.yml);
+    the tool's retrieval-style slicing of reports has no exact public REST twin.
+mcp_only:
+- tool: morningstar-articles-tool
+  reason: Morningstar.com editorial articles, news, and commentary have no public
+    REST operation in the harvested specs - editorial search exists only inside
+    the docs-only Enterprise Component APIs surface.
+rest_only:
+- capability: authentication
+  operations: [createToken]
+- capability: agent-orchestration
+  operations: [run_morningstar_agent_v1_run_post, run_stream_morningstar_agent_v1_run_stream_post,
+    status_morningstar_agent_v1_status_get, ready_morningstar_agent_v1_ready_get]
+  note: The Morningstar Agent API wraps the MCP tools in a managed endpoint rather
+    than being wrapped by them.
+- capability: portfolio-engines
+  operations: [generatePortfolioXRay-adjacent engines - performance, hypothetical
+      performance, optimizer, risk score, scenario analysis (see openapi/)]
+- capability: financial-planning
+  operations: [households, household members, portfolios, retirement plan, OCR,
+    report retrieval (see openapi/)]
+- capability: time-series-and-market-data
+  operations: [time series sync/async, market data web services (no MCP exposure)]
+coverage:
+  tools_named: 7
+  tools_bound: 6
+  mcp_only: 1
+  rest_specs_total: 117
+  note: The 7 published MCP tools cover the discovery/research slice of a much
+    larger (~724-operation) REST estate; most REST capability has no MCP tool.

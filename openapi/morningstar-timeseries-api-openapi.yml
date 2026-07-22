@@ -1,0 +1,214 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts timeseries API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: timeseries
+paths:
+  /v1/timeseries/{namespace}/{tool}/{period}:
+    get:
+      tags:
+      - timeseries
+      summary: Get statistics in timeseries format for a namespace, tool and time period
+      description: 'Get latest statistics in timeseries format for the specified namespace, tool and time period.
+
+
+        . You can specify a date range for the query.'
+      operationId: GetTimeseries
+      parameters:
+      - name: namespace
+        description: Get statistics for this namespace
+        in: path
+        required: true
+        schema:
+          type: string
+          example: abco.opp.config
+      - name: tool
+        description: Get statistics for this tool
+        in: path
+        required: true
+        schema:
+          type: string
+          example: mwc-sc-screener
+      - name: period
+        description: Get statistics for this time period
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - day
+          - month
+          - quarter
+          example: day
+      - name: startDate
+        description: Get statistics logged on or after this date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+          example: '2020-04-01'
+      - name: endDate
+        description: Get statistics logged on or before this date
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+          example: '2020-04-01'
+      responses:
+        '200':
+          description: Statistics in timeseries format
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Statistics in timeseries format for a namespace, tool and date
+                properties:
+                  date:
+                    type: string
+                    example: '2022-02-01'
+                  namespace:
+                    type: string
+                    example: abco.opp.config
+                  tool:
+                    type: string
+                    example: mwc-sc-screener
+                  period:
+                    type: string
+                    example: day
+                  timeseries:
+                    type: array
+                    items:
+                      type: object
+                      description: Statistics for a specific event
+                      properties:
+                        date:
+                          type: string
+                          description: The date or end date for the time period
+                          example: '2022-02-01'
+                        loaded:
+                          type: object
+                          description: Load event statistics
+                          properties:
+                            count:
+                              type: number
+                              description: The number of times the loaded event was triggered
+                              example: '207'
+                            uniqueUsers:
+                              type: number
+                              description: The number of unique users
+                              example: '60'
+                            uniqueSessions:
+                              description: The number of unique sessions
+                              example: '80'
+                            mean:
+                              type: number
+                              description: The mean load time
+                              example: '250'
+                            median:
+                              type: number
+                              description: The median load time
+                              example: '260'
+                            percentile95:
+                              type: number
+                              description: The 95th percentile load time
+                              example: '310'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '401':
+          description: The user is not authorised to perform this operation
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '403':
+          description: The requested operation is forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '404':
+          description: The requested resource does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '500':
+          description: An unexpected error occured
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

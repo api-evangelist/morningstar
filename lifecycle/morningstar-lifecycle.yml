@@ -1,0 +1,31 @@
+generated: '2026-07-22'
+method: searched
+source: https://status.morningstar.com/, openapi/ servers[], https://developer.morningstar.com/content/documentation/documentation/get-started/authentication/get-started-authentication.md
+status_page: https://status.morningstar.com/
+versioning:
+  scheme: uri-path
+  evidence: versioned base paths across the estate - /v1 and /v2 segments in
+    OpenAPI servers (e.g. us-api.morningstar.com/ec/v1, /office-portfolio/v2,
+    /portfolioanalysis/v1, agents.morningstar.com/morningstar-agent/v1).
+  note: No portal-wide versioning policy document was found on
+    developer.morningstar.com (release-notes routes serve the SPA shell only).
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No published deprecation policy or RFC 8594 Sunset support found.
+sla:
+  url: null
+  note: SLAs are part of sales-gated licensing; nothing public.
+environments:
+  production: [us-api.morningstar.com, emea-api.morningstar.com, apac-api.morningstar.com,
+    agents.morningstar.com, mcp.morningstar.com, byallaccounts.net]
+  uat: [us-uat-api.morningstar.com, emea-uat-api.morningstar.com, apac-uat-api.morningstar.com,
+    office-integration-uat.morningstar.com]
+  note: UAT bases are published alongside production in the OpenAPI servers arrays
+    (see sandbox/morningstar-sandbox.yml).
+token_lifecycle:
+  access_token_ttl_minutes: 60
+  cached_reissue_window_minutes: 10
+  note: Tokens are valid for 60 minutes; requesting a new token within ten minutes
+    of issuance returns the same cached token.
+deprecated_operations: []

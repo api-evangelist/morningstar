@@ -1,0 +1,592 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Basic Reference API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Basic Reference
+paths:
+  /direct-web-services/v1/investments/{id}/equity-basic-reference:
+    get:
+      summary: Get Basic Reference package view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      description: '
+
+        The Basic Reference package contains the core data required to identify a company, stock, and specific listing of that stock. Data includes items such as ISINs (excluding those issued by CUSIP Global Services), trading symbols, details of the exchange on which the stock is listed, Legal Entity Identifiers (LEI), and the Securities and Exchange Commission’s Central Index Key. Most recent data supported.'
+      operationId: getEquityBasicReferenceDataset
+      tags:
+      - Basic Reference
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityBasicReference'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 911
+components:
+  schemas:
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputCompanyInformation:
+      type: object
+      properties:
+        businessCountryCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        canNaics:
+          type: integer
+          description: An acronym for North American Industry Classification System (NAICS) specific to Canada; a 6-digit numerical classification assigned to individual companies. NAICS was developed jointly by the U.S.; Canada; and Mexico to provide new comparability in statistics about business activity across North America. It was intended to replace the U.S. Standard Industrial Classification (SIC) system.  The initial SIC and NAICS listed is the Primary code based on revenue generation; followed by Secondary SIC and NAICS when applicable. Both SIC and NAICS are manually collected and assigned.
+          format: int64
+          nullable: true
+        cik:
+          type: string
+          description: ''
+          nullable: true
+        companyStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        companyId:
+          type: string
+          description: ''
+          nullable: true
+        domicileCountryCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        expectedFiscalYearEnd:
+          type: string
+          description: The upcoming expected year end for the company; it is calculated based on the current year end (from latest available annual report) + 1 year
+          nullable: true
+        fiscalYearEnd:
+          $ref: '#/components/schemas/CodeMappingLong'
+        globalTemplateIndustryTemplateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        industryClassificationEffectiveDate:
+          type: string
+          description: The effective date when the Morningstar Industry Classification is updated for the company
+          nullable: true
+        ipoType:
+          type: string
+          description: This data point identifies two different processes a company can take to raise capital by listing shares on a public exchange; Initial public offering (Traditional IPO) and Direct Listing. IPO is the most common and traditional route; in which new shares are created; underwritten; and sold to the public. In a Direct Listing; no new shares are created; and only existing outstanding shares are sold with no underwriters involved. Traditional IPO and Direct Listing are the 2 types available starting in September 2021.  For historical data prior to September 2021; Traditional IPO is not available; the 2 possible values prior to September 2021 are Null and Direct Listing.
+          nullable: true
+        isBusinessDevelopmentCompany:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isic:
+          type: string
+          description: An acronym for International Standard Industrial Classification (ISIC); which was developed by the United Nations; and is the international reference classification of productive activities. Its main purpose is to provide a set of activity categories that can be utilized for the collection and reporting of statistics according to such activities. The majority of countries around the world have used ISIC as their national activity classification or have developed national classifications derived from ISIC.
+          nullable: true
+        isLimitedLiabilityCompany:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isLimitedPartnership:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isMasterLimitedPartnership:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isReit:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isShellCompany:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isSpecialPurposeAcquisitionCompany:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        legalName:
+          type: string
+          description: The full name of the registrant as specified in its charter; and most often found on the front cover of the 10K/10Q/20F filings or annual report
+          nullable: true
+        legalNameLanguageCode:
+          type: string
+          description: 3-character language code for the foreign legal name if/when applicable
+          nullable: true
+        lei:
+          type: string
+          description: The Legal Entity Identifier (LEI) is a 20-character; alpha-numeric code based on the ISO 17442 standard developed by the International Organization for Standardization (ISO). It connects to key reference information that enables clear and unique identification of legal entities participating in financial transactions.
+          nullable: true
+        morningstarIndustryCode:
+          $ref: '#/components/schemas/CodeMappingLong'
+        morningstarIndustryGroupCode:
+          $ref: '#/components/schemas/CodeMappingLong'
+        morningstarSectorCode:
+          $ref: '#/components/schemas/CodeMappingLong'
+        morningstarSuperSectorCode:
+          $ref: '#/components/schemas/CodeMappingLong'
+        nace:
+          type: string
+          description: NACE is a European standard classification of economic activities maintained by Eurostat that  is similar to SIC and NAICS in North America. The NACE code is 5 characters long;  is arranged in the following format 00.00 and provides the framework for collecting and presenting a large range of statistical data according to economic activity. The use of NACE is mandatory within the European Statistical System.
+          nullable: true
+        naics:
+          type: integer
+          description: An acronym for North American Industry Classification System (NAICS); a 6-digit numerical classification assigned to individual companies. NAICS was developed jointly by the U.S.; Canada; and Mexico to provide new comparability in statistics about business activity across North America. It was intended to replace the U.S. Standard Industrial Classification (SIC) system.  The initial SIC and NAICS listed is the Primary code based on revenue generation; followed by Secondary SIC and NAICS when applicable. Both SIC and NAICS are manually collected and assigned.
+          format: int64
+          nullable: true
+        operationStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        shortName:
+          type: string
+          description: '25-character max abbreviated name of the firm: In most cases; the short name will simply be the Legal Name less the Corporation; Corp.; Inc.; Incorporated; etc.'
+          nullable: true
+        sic:
+          type: integer
+          description: An acronym for Standard Industrial Classification System (SIC); it is a system for classifying a business according to economic activity
+          format: int64
+          nullable: true
+        standardName:
+          type: string
+          description: Standard name for the entity
+          nullable: true
+        stateOrCountryOfIncorporation:
+          type: string
+          description: 'Indicates the place where the company was incorporated: For companies incorporated in the US; the value is the US state. For companies incorporated outside the US; the value is the country where the company was incorporated.'
+          nullable: true
+        usaNaics:
+          type: integer
+          description: An acronym for North American Industry Classification System (NAICS) specific to the United States; a 6-digit numerical classification assigned to individual companies. NAICS was developed jointly by the U.S.; Canada; and Mexico to provide new comparability in statistics about business activity across North America. It was intended to replace the U.S. Standard Industrial Classification (SIC) system.  The initial SIC and NAICS listed is the Primary code based on revenue generation; followed by Secondary SIC and NAICS when applicable. Both SIC and NAICS are manually collected and assigned.
+          format: int64
+          nullable: true
+        webAddress:
+          type: string
+          description: Indicates website address of company's contact information
+          nullable: true
+        yearOfEstablishment:
+          type: integer
+          description: The year a company was founded
+          format: int64
+          nullable: true
+        isIpo:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+      additionalProperties: false
+      title: OutputCompanyInformation
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputShareClassInformation:
+      type: object
+      properties:
+        commonShareSubType:
+          type: string
+          description: Refers to the type of securities that can be found within the equity database. For the vast majority; this value will populate as null for regular common shares. For a minority of share classes; this will populate as either Participating Preferred; Closed-End Fund; Foreign Share; or Foreign Participated Preferred which reflects our limited coverage of these types of securities within our equity database.
+          nullable: true
+        conversionRatio:
+          type: number
+          description: The relationship between the chosen share class and the primary share class
+          format: double
+          nullable: true
+        cusip:
+          type: string
+          description: ''
+          nullable: true
+        directInvest:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        dividendReinvest:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        drRatio:
+          type: number
+          description: The number of underlying common shares backing each depositary receipt (DR) traded.
+          format: double
+          nullable: true
+        exchangeCode:
+          type: string
+          description: A symbol for the stock exchange name; usually consisting of 3 to 5 characters; examples include NYSE; NAS; LSE; OTCBB ($$$ is used for private/unlisted securities)
+          nullable: true
+        exchangeSubMarketGlobalId:
+          type: string
+          description: Indicates a different marketplace or the different market tiers within a stock exchange.
+          nullable: true
+        investmentId:
+          type: string
+          description: Morningstar Issuer Id/ Investment Id
+          nullable: true
+        investmentName:
+          type: string
+          description: Morningstar standard investment name
+          nullable: true
+        investmentPrimaryIssuer:
+          $ref: '#/components/schemas/CodeMappingString'
+        shareClassDescription:
+          type: string
+          description: ''
+          nullable: true
+        investmentStatus:
+          type: integer
+          description: '0: obsolete1: active9: other'
+          format: int32
+          nullable: true
+        investmentType:
+          type: string
+          description: 'The abbreviation for investment type classifications: Equity (EQ); Depositary Receipt (DR); Preferred Equity (PE); Unlisted Equity (UE)'
+          nullable: true
+        ipoDate:
+          type: string
+          description: The initial day that the share begins trading on a public exchange
+          nullable: true
+        ipoOfferPrice:
+          type: number
+          description: Indicates the price at which an issuer sells its shares under an initial public offering (IPO). The offer price is set by the issuer and its underwriters.
+          format: double
+          nullable: true
+        ipoOfferPriceRange:
+          type: string
+          description: The estimated offer price range (low-high) for a new IPO. The field should be used until the final IPO price becomes available; as populated in the data field IPO Offer Price.
+          nullable: true
+        isDr:
+          type: boolean
+          description: 'Indicates if the share class is a depositary receipt: TRUE denotes it is an ADR or GDR; otherwise FALSE'
+          nullable: true
+        isin:
+          type: string
+          description: ''
+          nullable: true
+        isMainShare:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isPrimaryPerformanceId:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        marketSymbol:
+          type: string
+          description: An arrangement of characters representing a particular security listed on an exchange or traded publicly generated and maintained by market data (also known as Realtime). For example; Morningstar's market symbol is 126.1.MORN where 126 refers to Realtime exchange code for NASDAQ; 1 refers to security type equity; and the last set of characters refers to company's actual symbol.
+          nullable: true
+        parValue:
+          type: number
+          description: Nominal value of a security determined by the issuing company
+          format: double
+          nullable: true
+        performanceStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        securityType:
+          type: string
+          description: 'Indicates security type classification at the share class level: Common Stock (ST00000001); Preferred Stock (ST00000002); Industry (ST00000003); Index (ST00000004); ETF (ST00000005); Closed-end Fund (ST00000006); Investment Trusts (ST00000007); Note (ST00000009); Warrant (ST00000008); Units (ST000000A1); Rights (ST000000B1); Unlisted Common (ST000000C1); Unlisted Preferred (ST000000C2)'
+          nullable: true
+        sedol:
+          type: string
+          description: The stock exchange daily official list (SEDOL) is a seven-character identification code assigned by the London Stock Exchange. For securities issued in the UK the Sedol may be converted to an ISIN.
+          nullable: true
+        segmentMicCode:
+          type: string
+          description: 'Indicates the Exchange ISO Market Segment Identifier Code (MIC). Reference: https://www.iso20022.org/market-identifier-codes ($$$ is used for private/unlisted securities)'
+          nullable: true
+        symbol:
+          type: string
+          description: 'An arrangement of characters (often letters) representing a particular security listed on an exchange or otherwise traded publicly: Note that Morningstar''s multi-share class symbols will often contain a period within the symbol; e.g. BRK.B for Berkshire Hathaway Class B'
+          nullable: true
+        tradingCurrency:
+          type: string
+          description: 3 Character ISO code of the currency that the exchange price is denominated in; i.e. the trading currency of the security
+          nullable: true
+        tradingStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        underlyingDrIssuerId:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputShareClassInformation
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    CodeMappingLong:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingLong
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputDelistInformation:
+      type: object
+      properties:
+        delistingDate:
+          type: string
+          description: The effective date on which a security was delisted from an exchange
+          nullable: true
+      additionalProperties: false
+      title: OutputDelistInformation
+  responses:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityBasicReference:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyInformation:
+                $ref: '#/components/schemas/OutputCompanyInformation'
+              delistInformation:
+                $ref: '#/components/schemas/OutputDelistInformation'
+              shareClassInformation:
+                $ref: '#/components/schemas/OutputShareClassInformation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

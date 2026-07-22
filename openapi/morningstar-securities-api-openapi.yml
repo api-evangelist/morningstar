@@ -1,0 +1,295 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts securities API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: securities
+paths:
+  /securities/{securityId}:
+    get:
+      summary: Get information for the security specified
+      description: Information returned depends on the view specifed in the request.
+      tags:
+      - securities
+      operationId: LocalwithJWT
+      deprecated: false
+      parameters:
+      - name: securityId
+        description: Security ID
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: viewId
+        description: View ID
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: idType
+        description: Security ID type
+        in: query
+        required: false
+        schema:
+          type: string
+          default: msid
+      - name: languageId
+        description: Language ID - ISO 639-1
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: currencyId
+        description: Currency ID - ISO 4217 alphabetic code
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: responseViewFormat
+        description: Response view format - xml / json
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          headers: {}
+  /securities/{secIds}:
+    get:
+      tags:
+      - securities
+      summary: Get securities data
+      description: Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used  in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted.  The value(s) entered appear as the first data point in the output for each security. </br></br> Use the `dataPoints` parameter to specify the data returned in the response. You can enter  a data point ID or the corresponding short ID.  You can only specify data points your configuration is enabled for. </br></br>To override the default value in the Accept-Language HTTP header, use the `langCult` parameter. You can also define the currency of the data returned. Only one currency can be specified. </br></br>This call works with the `POST /securities/{secIds}` call to create and fetch the data.
+      operationId: Securities_GetSecuritiesDetails
+      parameters:
+      - name: secIds
+        in: path
+        description: Unique identifier of a security. Multiple entries must be pipe-separated '|'.
+        required: true
+        schema:
+          type: string
+          default: FOUSA06N2B|FEUSA04ABV
+      - name: universeIds
+        in: query
+        description: Unique five-letter identifier created by combining a two-letter Investment Type code and three-letter country code.</br> Multiple entries must be pipe-separated '|'.
+        required: false
+        schema:
+          type: string
+          default: FOUSA|FEUSA|FCUSA
+      - name: langCult
+        in: query
+        description: Language and locale, for example, en-US
+        required: false
+        schema:
+          type: string
+          default: en-US
+      - name: dataPoints
+        in: query
+        description: Unique identifier of a data point. Can be data point ID or short ID.
+        required: false
+        schema:
+          type: string
+          default: n|t
+      - name: currencyId
+        in: query
+        description: ISO 4217 currency code, for example 'USD'
+        required: false
+        schema:
+          type: string
+          default: USD
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+    post:
+      tags:
+      - securities
+      summary: Create securities data
+      description: Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used  in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted.  The value(s) entered appear as the first data point in the output for each security.  </br></br>Use the`dataPoints` parameter to specify the data returned in the response. You can enter  a data point ID or the corresponding short ID.  You can only specify data points your configuration is enabled for. </br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter. You can also define the currency of the data returned. Only one currency can be specified. </br></br>This call works with the `GET /securities/{secIds}` call to create and fetch the data..
+      operationId: Securities_PostSecuritiesDetails
+      parameters:
+      - name: secIds
+        in: path
+        description: Unique identifier of a security. Multiple entries must be pipe-separated '|'.
+        required: true
+        schema:
+          type: string
+          default: FOUSA06N2B|FEUSA04ABV
+      - name: universeIds
+        in: query
+        description: Unique five-letter identifier created by combining a two-letter Investment Type code and three-letter country code.</br>Multiple entries must be pipe-separated '|'.
+        required: false
+        schema:
+          type: string
+          default: FOUSA|FEUSA|FCUSA
+      - name: langCult
+        in: query
+        description: Language and locale, for example, en-US
+        required: false
+        schema:
+          type: string
+          default: en-US
+      - name: dataPoints
+        in: query
+        description: Unique identifier of a data point. Can be data point ID or short ID.
+        required: false
+        schema:
+          type: string
+          default: n|t
+      - name: currencyId
+        in: query
+        description: ISO 4217 currency code, for example, 'USD'
+        required: false
+        schema:
+          type: string
+          default: USD
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SecuritiesRequestModel'
+          text/json:
+            schema:
+              $ref: '#/components/schemas/SecuritiesRequestModel'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/SecuritiesRequestModel'
+          text/xml:
+            schema:
+              $ref: '#/components/schemas/SecuritiesRequestModel'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SecuritiesRequestModel'
+        description: POST call body. Contains with array of data points and array of securities.
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+  /securities/{secIds}/vabenefits:
+    get:
+      tags:
+      - securities
+      summary: Get benefits data for variable annuity subaccounts
+      description: Get benefits data for variable annunity subaccounts for the securities specified in the `secIds` paramter.
+      operationId: Securities_Get
+      parameters:
+      - name: secIds
+        in: path
+        description: Unique identifier of a security. Multiple entries must be pipe-separated '|'.
+        required: true
+        schema:
+          type: string
+          default: VAUSA0N0XD
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/SecuritiesInputModel'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+components:
+  schemas:
+    SecuritiesRequestModel:
+      type: object
+      properties:
+        dataPoints:
+          type: string
+        securityIds:
+          type: string
+    SecuritiesInputModel:
+      type: object
+      properties:
+        secIds:
+          type: string
+        universeIds:
+          type: string
+        dataPoints:
+          type: string
+        languageId:
+          type: string
+        currencyId:
+          type: string
+        assetAllocationType:
+          type: string
+        customBenchmark:
+          type: string
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

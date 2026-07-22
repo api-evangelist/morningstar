@@ -1,0 +1,1757 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Compensation API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Compensation
+paths:
+  /direct-web-services/v1/investments/{id}/equity-board-of-directors-compensation:
+    get:
+      summary: Get Board of Directors Compensation view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityBoardOfDirectorsCompensationDataset
+      tags:
+      - Compensation
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityBoardOfDirectorsCompensation'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 921
+  /direct-web-services/v1/investments/{id}/equity-compensation:
+    get:
+      summary: Get Compensation package view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: '
+
+
+        The Compensation package provides data on the annual compensation of directors and officers of companies with listed in the United States, and United Kingdom, plus, for those with shares listed in the United States, data on the share options held and exercised by those individuals and pay ratio data as reported by companies in line with the SEC disclosure requirements.
+
+        The package contains the following datasets:
+
+
+        - Board of Directors Compensation
+
+        - Executive Officers Compensation
+
+        - Options Exercised
+
+        - Outstanding Awards
+
+        - Pay Ratio
+
+        - Sock Option Grants
+
+
+        Most recent and time series data supported.'
+      operationId: getEquityCompensationPackage
+      tags:
+      - Compensation
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityCompensation'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 921
+  /direct-web-services/v1/investments/{id}/equity-executive-officers-compensation:
+    get:
+      summary: Get Executive Officers Compensation view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityExecutiveOfficersCompensationDataset
+      tags:
+      - Compensation
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityExecutiveOfficersCompensation'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 921
+  /direct-web-services/v1/investments/{id}/equity-options-exercised:
+    get:
+      summary: Get Options Exercised view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityOptionsExercisedDataset
+      tags:
+      - Compensation
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityOptionsExercised'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 921
+  /direct-web-services/v1/investments/{id}/equity-outstanding-awards:
+    get:
+      summary: Get Outstanding Awards view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityOutstandingAwardsDataset
+      tags:
+      - Compensation
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityOutstandingAwards'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 921
+  /direct-web-services/v1/investments/{id}/equity-pay-ratio:
+    get:
+      summary: Get Pay Ratio view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityPayRatioDataset
+      tags:
+      - Compensation
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityPayRatio'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 921
+  /direct-web-services/v1/investments/{id}/equity-stock-option-grants:
+    get:
+      summary: Get Stock Option Grants view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityStockOptionGrantsDataset
+      tags:
+      - Compensation
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityStockOptionGrants'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 921
+components:
+  schemas:
+    OutputExecutiveCompensationBoardOfDirectors:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its annual financial statements.
+          nullable: true
+        changeInPensionValue:
+          type: number
+          description: Amount contributed to a pension plan. A pension is a steady income given to a person upon retirement; typically in the form of a guaranteed annuity.
+          format: double
+          nullable: true
+        compensationYear:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        currencyCode:
+          type: string
+          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
+          nullable: true
+        feePaidInCash:
+          type: number
+          description: Fees paid to non-executive directors. This is the aggregate dollar amount of all fees earned in cash for services as a director; including annual retainer fees; committee and/or chairperson fees and meeting fees.
+          format: double
+          nullable: true
+        nonEquityIncentivePlan:
+          type: number
+          description: This includes incentive plan awards that are not stock or equity. Incentive plans generally provide for compensation intended to serve as an incentive for performance to occur over a specified period.
+          format: double
+          nullable: true
+        optionAwards:
+          type: number
+          description: Option award granted during the year. Awards of options; stock appreciation rights; and similar equity-based compensation that have option-like features that must be disclosed.
+          format: double
+          nullable: true
+        otherCompensation:
+          type: number
+          description: Any other compensation received during the year that doesn't fit the other compensation categories
+          format: double
+          nullable: true
+        personId:
+          type: string
+          description: A unique identifier assigned to each director/officer.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        stockAward:
+          type: integer
+          description: Stock awards granted during the year as a compensation. This is a grant of company stock in which the recipient's rights in the stock are restricted until the shares vest (or lapse in restrictions).
+          format: int64
+          nullable: true
+        totalCompensation:
+          type: number
+          description: Total compensation earned. This is the sum of the dollar amounts reported in each of the other compensation categories during the covered fiscal year.
+          format: double
+          nullable: true
+        transactionId:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: OutputExecutiveCompensationBoardOfDirectors
+    OutputExecutiveStockAndOptionGrants:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its annual financial statements.
+          nullable: true
+        basePrice:
+          type: number
+          description: The closing market price of common stock on the date of the grant.
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        equityMaximum:
+          type: number
+          description: Compensation earned for incentive plan awards that are stock or equity. Amounts in these columns represent the future cash payment maximum.
+          format: double
+          nullable: true
+        equityTarget:
+          type: number
+          description: Compensation earned for incentive plan awards that are stock or equity. Amounts in these columns represent future cash payment targets.
+          format: double
+          nullable: true
+        equityThreshold:
+          type: number
+          description: Compensation earned for incentive plan awards that are stock or equity. Amounts in these columns represent future cash payment thresholds.
+          format: double
+          nullable: true
+        grantDate:
+          type: string
+          description: The date an option or stock was granted.
+          nullable: true
+        grantDateFairValueOption:
+          type: number
+          description: The fair value of option awards on the date granted.
+          format: double
+          nullable: true
+        grantDateFairValueStock:
+          type: number
+          description: The fair value of stock on the date granted.
+          format: double
+          nullable: true
+        grantDateFairValueStockAndOptionAwards:
+          type: number
+          description: The fair value of stock and option awards on the date granted.
+          format: double
+          nullable: true
+        nonEquityMaximum:
+          type: number
+          description: Compensation earned for incentive plan awards that are not stock or equity. Amounts in these columns represent the future cash payment maximum.
+          format: double
+          nullable: true
+        nonEquityTarget:
+          type: number
+          description: Compensation earned for incentive plan awards that are not stock or equity. Amounts in these columns represent future cash payment targets.
+          format: double
+          nullable: true
+        nonEquityThreshold:
+          type: number
+          description: Compensation earned for incentive plan awards that are not stock or equity. Amounts in these columns represent future cash payment thresholds.
+          format: double
+          nullable: true
+        otherOptionAwards:
+          type: number
+          description: Represents the number of options on securities; granted during the fiscal year.
+          format: double
+          nullable: true
+        otherStockAwards:
+          type: integer
+          description: Represents the number of shares of stock or units granted during the fiscal year.
+          format: int64
+          nullable: true
+        personId:
+          type: string
+          description: A unique identifier assigned to each director/officer.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        transactionId:
+          type: integer
+          description: A unique identifier assigned to each transaction.
+          format: int64
+          nullable: true
+        typeOfAward:
+          type: string
+          description: This denotes the type of option award. Types of grants of plan-based awards received by an employee as part of compensation (e.g. Option; RSU; PSU) as reported in the filings.
+          nullable: true
+      additionalProperties: false
+      title: OutputExecutiveStockAndOptionGrants
+    OutputExecutiveOutstandingStockAndOptionAwards:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its annual financial statements.
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        equityIncentivePlanAwardsMarketOrPayoutValueOfUnearnedSharesUnitsOrOtherRightsThatHaveNotVested:
+          type: number
+          description: Represents the market or payout value of unearned shares; units or other rights that have not vested yet.
+          format: double
+          nullable: true
+        equityIncentivePlanAwardsNumberOfUnearnedSharesUnitsOrOtherRightsThatHaveNotVested:
+          type: number
+          description: Represents the number of unearned shares; units or other rights that have not vested.
+          format: double
+          nullable: true
+        exercisePrice:
+          type: number
+          description: The price at which the underlying security can be purchased. The exercise price is determined at the time the contract is formed.
+          format: double
+          nullable: true
+        expirationDate:
+          type: string
+          description: The day on which an options or futures contract is no longer valid and therefore ceases to exist; or the expiration date or expiry; which is the last date the option can be exercised.
+          nullable: true
+        grantDate:
+          type: string
+          description: The date an option or stock was granted.
+          nullable: true
+        marketValueOfSharesOrUnitsOfStockThatHaveNotVested:
+          type: number
+          description: Represents the market value of shares or units of stock that have not vested for the fiscal year.
+          format: double
+          nullable: true
+        numberOfSecuritiesUnderlyingUnexercisedOptionsExercisable:
+          type: integer
+          description: Represents the number of underlying options that are exercisable. The Employee has the right to Exercise (Sell or Transfer) the Options; after the vesting period.
+          format: int64
+          nullable: true
+        numberOfSecuritiesUnderlyingUnexercisedOptionsUnexercisable:
+          type: integer
+          description: Represents the number of underlying options that are unexercisable. The Employee does not have the right to Exercise (Sell or Transfer) the Options; after the Vesting Period.
+          format: int64
+          nullable: true
+        numberOfSecuritiesUnderlyingUnexercisedUnearnedOptions:
+          type: number
+          description: Represents the number of unexercised; unearned options during the fiscal year.
+          format: double
+          nullable: true
+        numberOfSharesOrUnitsOfStockThatHaveNotVested:
+          type: integer
+          description: Represents the number of shares or units of stock that have not vested during the fiscal year.
+          format: int64
+          nullable: true
+        personId:
+          type: string
+          description: A unique identifier assigned to each director/officer.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        transactionId:
+          type: string
+          description: A unique identifier assigned to each transaction.
+          nullable: true
+        typeOfAward:
+          type: string
+          description: This denotes the type of option award. Types of grants of plan-based awards received by an employee as part of compensation (e.g. Option; RSU; PSU) as reported in the filings.
+          nullable: true
+      additionalProperties: false
+      title: OutputExecutiveOutstandingStockAndOptionAwards
+    OutputExecutiveOptionsExercisedAndStockVested:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its annual financial statements.
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        grantDate:
+          type: string
+          description: The date an option or stock was granted.
+          nullable: true
+        numberOfSharesAcquiredOnOptionExercise:
+          type: integer
+          description: Shares acquired by exercising an option.
+          format: int64
+          nullable: true
+        numberOfSharesAcquiredOnStockVesting:
+          type: integer
+          description: Represents the number of shares that have been acquired on vesting by the employee.
+          format: int64
+          nullable: true
+        personId:
+          type: string
+          description: A unique identifier assigned to each director/officer.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        transactionId:
+          type: string
+          description: A unique identifier assigned to each transaction.
+          nullable: true
+        typeOfAward:
+          type: string
+          description: This denotes the type of option award. Types of grants of plan-based awards received by an employee as part of compensation (e.g. Option; RSU; PSU) as reported in the filings.
+          nullable: true
+        valueRealizedOnOptionExercise:
+          type: number
+          description: Value realized on exercise of an option. These amounts represent the difference between the option exercise price and the closing market price of the common stock on the date of exercise; multiplied by the number of shares of common stock covered by the options exercised. These are amounts actually realized by named executive officers during the most recently completed fiscal year as a result of option exercises.
+          format: double
+          nullable: true
+        valueRealizedOnStockVesting:
+          type: number
+          description: Amounts actually realized by named executive officers on equity compensation during the most recently completed fiscal year as a result of the vesting of stock awards.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputExecutiveOptionsExercisedAndStockVested
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputExecutiveOfficersCompensation:
+      type: object
+      properties:
+        compensationYear:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        personId:
+          type: string
+          description: ''
+          nullable: true
+        reportedYear:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportDate:
+          type: string
+          description: ''
+          nullable: true
+        reportSource:
+          type: string
+          description: ''
+          nullable: true
+        currencyCode:
+          type: string
+          description: ''
+          nullable: true
+        reportedTitle:
+          type: string
+          description: ''
+          nullable: true
+        bonus:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        restrictedStockAward:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        optionAwards:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        nonEquityIncentiveCompensation:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        changeInPensionValue:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        allOtherCompensation:
+          type: string
+          description: ''
+          nullable: true
+        totalCompensation:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        maximumPerformanceSharePotential:
+          type: string
+          description: ''
+          nullable: true
+        isRestated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        salary:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        transactionId:
+          type: string
+          description: ''
+          nullable: true
+        fiscalYearEndDate:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputExecutiveOfficersCompensation
+    OutputExecutivePayRatioInformation:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its annual financial statements.
+          nullable: true
+        additionalDescription:
+          type: string
+          description: 'Additional details related to the company''s calculation of the pay ratio. This could include: 1. Full time employees only 2. All employees 3. Excluded part time/temporary employees 4. Excluded one-time equity awards/grants 5. Annual realized compensation and/or 6. Other.'
+          nullable: true
+        ceoPay:
+          type: number
+          description: Total annual compensation of the CEO for the most recent fiscal year; as reported by the company.
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        fiftyPercentile:
+          type: number
+          description: Ratio of the CEO's total remuneration to the representative employee in the median; 50th percentile of UK employees' pay.
+          format: double
+          nullable: true
+        fiftyPercentileAmount:
+          type: number
+          description: Amount of the CEO's total remuneration to the representative employee in the median/50th percentile of UK employees' pay.
+          format: double
+          nullable: true
+        medianEmployeePay:
+          type: number
+          description: The total annual compensation value that lies at the midpoint or middle of all company employees; as reported by the company. Half of all total annual compensation values for employees at the company should lie above this value; and the other half should lie below it.
+          format: double
+          nullable: true
+        otherMethod:
+          type: string
+          description: Represents any other method used to calculate the Pay Ratio.
+          nullable: true
+        payRatio:
+          type: number
+          description: The ratio of the CEO's total compensation to the median employee's pay; as reported by the company. Public companies are required to publish this ratio in their annual reports.
+          format: double
+          nullable: true
+        payRatioCompensationMethod:
+          type: string
+          description: 'The method used by the company to determine the medial employee compensation. The possible methods used include: 1. Annual Total Compensation 2. Consistently Applied Compensation Measure or 3. Other Reasonable Method/Estimate.'
+          nullable: true
+        payRatioEmployeeCountMethod:
+          type: string
+          description: 'The method used to determine the number of employees included in calculation. The possible methods used include: 1. Statistical Sampling or 2. Other Reasonable Method/Estimate.'
+          nullable: true
+        personId:
+          type: string
+          description: A unique identifier assigned to each director/officer.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        seventyFivePercentile:
+          type: number
+          description: Ratio of the CEO's total remuneration to the representative employee in the 75th percentile (upper quartile).
+          format: double
+          nullable: true
+        seventyFivePercentileAmount:
+          type: number
+          description: Amount of the CEO's total remuneration to the representative employee in the 75th percentile (upper quartile) of employees' pay.
+          format: double
+          nullable: true
+        twentyFivePercentile:
+          type: number
+          description: Salary and total remuneration details for the UK employee at the 25th percentile. UK listed companies with more than 250 employees disclose annually the ratio of their CEO's pay to the median; lower quartile and upper quartile pay of their UK employees.
+          format: double
+          nullable: true
+        twentyFivePercentileAmount:
+          type: number
+          description: Amount of the CEO's total remuneration to the representative employee in the 25th percentile (lower quartile) of employees' pay.
+          format: double
+          nullable: true
+        payRatioId:
+          type: integer
+          description: A unique identifier assigned to each pay ratio.
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: OutputExecutivePayRatioInformation
+  responses:
+    ResponseEquityOptionsExercised:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executiveOptionsExercisedAndStockVested:
+                $ref: '#/components/schemas/OutputExecutiveOptionsExercisedAndStockVested'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOutstandingAwards:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executiveOutstandingStockAndOptionAwards:
+                $ref: '#/components/schemas/OutputExecutiveOutstandingStockAndOptionAwards'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityExecutiveOfficersCompensation:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executiveOfficersCompensation:
+                $ref: '#/components/schemas/OutputExecutiveOfficersCompensation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityPayRatio:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executivePayRatioInformation:
+                $ref: '#/components/schemas/OutputExecutivePayRatioInformation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityStockOptionGrants:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executiveStockAndOptionGrants:
+                $ref: '#/components/schemas/OutputExecutiveStockAndOptionGrants'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCompensation:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executiveCompensationBoardOfDirectors:
+                $ref: '#/components/schemas/OutputExecutiveCompensationBoardOfDirectors'
+              executivePayRatioInformation:
+                $ref: '#/components/schemas/OutputExecutivePayRatioInformation'
+              executiveOptionsExercisedAndStockVested:
+                $ref: '#/components/schemas/OutputExecutiveOptionsExercisedAndStockVested'
+              executiveOutstandingStockAndOptionAwards:
+                $ref: '#/components/schemas/OutputExecutiveOutstandingStockAndOptionAwards'
+              executiveStockAndOptionGrants:
+                $ref: '#/components/schemas/OutputExecutiveStockAndOptionGrants'
+              executiveOfficersCompensation:
+                $ref: '#/components/schemas/OutputExecutiveOfficersCompensation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityBoardOfDirectorsCompensation:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executiveCompensationBoardOfDirectors:
+                $ref: '#/components/schemas/OutputExecutiveCompensationBoardOfDirectors'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

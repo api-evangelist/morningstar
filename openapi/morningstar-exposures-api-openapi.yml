@@ -1,0 +1,74 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts exposures API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: exposures
+paths:
+  /exposures/snapshot:
+    post:
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: Authentication required.
+        '403':
+          description: You do not have access permission..
+        '404':
+          description: Not found.
+        '500':
+          description: Internal server error.
+      summary: Calculate active exposure for investment
+      description: Based on a specific risk model, calculate active exposure for a specific investment or portfolio. The most recent data will be returned.
+      operationId: post_snapshot
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExposureSnapshot'
+        required: true
+      tags:
+      - exposures
+components:
+  schemas:
+    ExposureSnapshot:
+      required:
+      - benchmarkIds
+      - investmentId
+      - riskModelId
+      properties:
+        riskModelId:
+          type: string
+          example: morn-glb-eq-usd
+        investmentId:
+          type: string
+          example: 0P0000058R
+        benchmarkIds:
+          type: array
+          example:
+          - 0P000001RB
+          - 0P00002Y8D
+          items:
+            type: string
+      type: object
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

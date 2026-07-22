@@ -1,0 +1,1290 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Data Points API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Data Points
+paths:
+  /direct-web-services/v1/investment-list/data-points:
+    get:
+      summary: List available data points.
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseGetDataPoints'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputErrorDetails'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputErrorDetails'
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OutputErrorDetails'
+      operationId: listInvestmentListDataPoints
+      tags:
+      - Data Points
+  /direct-web-services/v1/screeners/equities/data-points:
+    get:
+      operationId: listEquityDataPoints
+      tags:
+      - Data Points
+      summary: List all equity data points.
+      description: Returns the list of equity data points supported for screener queries. Metadata returned for each entry includes the operators supported.
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseDataPoints'
+  /direct-web-services/v1/screeners/managed-investments/data-points:
+    get:
+      operationId: listManagedInvestmentDataPoints
+      tags:
+      - Data Points
+      summary: List all managed investment data points.
+      description: Returns the list of managed investment data points supported for screener queries. Metadata returned for each entry includes the operators supported.
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseDataPoints_2'
+components:
+  examples:
+    ResponseDataPointsExample1:
+      summary: Managed Investments Data Points
+      value:
+        datapoints:
+        - type: decimal
+          name: annualReturnsHistorical.annualNetRet2021
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: true
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: decimal
+          name: riskStatistics.trackingError10YrMoEnd
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: true
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: decimal
+          name: esgFundLevelProductInvolvement.productInvolvementPercPesticides
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: decimal
+          name: 529CollegeInvestmentPackage.minAdditionalPurchaseResidentUsd
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: decimal
+          name: riskStatistics.treynorRatio15YrQtrEnd
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: true
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: int
+          name: investmentBasicDetails.currencyHedgeAttributionJita
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: int
+          name: feeLevelRanks.morningstarFeeLevelBroad
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: string
+          name: equityPortfolioStatistics.numberOfHoldings
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: decimal
+          name: gicsIndustryAndSubindustry.gicsGasUtilitiesPercLongRescaled
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: decimal
+          name: rg97FeeComponents.investmentManagementFeeProspective
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: int
+          name: performanceRanks.retPercRankCat3MoMoEnd
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: int
+          name: policyFees.rollingSurrender
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: decimal
+          name: morningstarRatingMostRecent.morningstarReturn5Yr
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: string
+          name: investmentBasicDetails.primaryProspectusBenchmarkId
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: decimal
+          name: mifidCostData.transactionCostsActualUk
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: string
+          name: investmentBasicDetails.prospectusObjective
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+        - type: decimal
+          name: riskStatistics.arithmeticMean5YrMoEnd
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: true
+          isLanguageDependent: false
+          isSortable: false
+          fuzzy: false
+    ResponseGetDataPointsExample1:
+      summary: Data Point Metadata
+      value:
+      - type: string
+        name: shareClassInformation.symbol
+      - type: string
+        name: shareClassInformation.tradingCurrency
+      - type: string
+        name: instrumentIdentifiers.vendorTickerSymbol
+      - type: string
+        name: instrumentIdentifiers.performanceId
+        alias: performanceId
+      - type: string
+        name: instrumentIdentifiers.isin
+      - type: string
+        name: instrumentIdentifiers.exchangeTickerSymbol
+      - type: string
+        name: instrumentIdentifiers.localCode
+      - type: string
+        name: reference.assetType
+      - type: string
+        name: reference.currency
+      - type: string
+        name: reference.instrumentDescription
+      - type: string
+        name: reference.countryCode
+      - type: string
+        name: reference.operatingMic
+      - type: string
+        name: reference.segmentMic
+      - type: string
+        name: reference.countryName
+    DataPointsResponseExample1:
+      summary: Equities Data Points
+      value:
+        dataPoints:
+        - type: decimal
+          name: esgCompanyLevel2DataCarbonEmissions.carbonIntensity
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: factorProfile.emergingAsiaPacificFactorMultiAssetModel
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: bool
+          name: esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: indexLevelsPrice.closeAsMovingAvg200DayMoEnd
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: shortInterest.percentageChanged
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: int
+          name: companyInformation.sic
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: int
+          name: esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: monthlyStandardDeviation.arithmeticMean24Month
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: dividendResidualRiskAndReturnSensitivity.beta24Month
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: pricesMostRecent.avgVolumeInMil5YrQtrEnd
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: shareClassInformation.symbol
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: factorProfile.styleFactorMultiAssetModel
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: int
+          name: esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: int
+          name: shareClassInformation.investmentStatus
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: pricesMostRecent.avgVolumeInMil10YrMoEnd
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: earningReport.commonDividendPerShareValueFY
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: int
+          name: esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: dividendResidualRiskAndReturnSensitivity.beta120Month
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: string
+          name: esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus
+          operators:
+          - eq
+          - in
+          isCurrencyDependent: false
+          isLanguageDependent: false
+          isSortable: true
+        - type: decimal
+          name: trailingReturn.trailing10YearReturn
+          operators:
+          - gt
+          - lt
+          - gte
+          - lte
+          - eq
+          - in
+          isCurrencyDependent: true
+          isLanguageDependent: false
+          isSortable: true
+        metadata:
+          requestId: f2e6ec6a-3f90-4b3c-a951-7558607a8d20
+          time: '2025-09-29T13:04:51.190876Z'
+  schemas:
+    ResponseDataPoints_2:
+      title: ResponseDataPoints
+      description: Data points and operators supported for screening.
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/ResponseDataPointsMetadata'
+        dataPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataPoint'
+          nullable: true
+      additionalProperties: false
+    ResponseDataPointsMetadata:
+      title: ResponseDataPointsMetadata
+      description: Request ID and timestamp for use in debugging and troubleshooting.
+      type: object
+      properties:
+        requestId:
+          description: Indicates the request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          type: string
+          nullable: true
+          readOnly: true
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+      additionalProperties: false
+    OutputDataPoint:
+      description: Data point filter options.
+      type: object
+      title: OutputDataPoint
+      properties:
+        name:
+          $ref: '#/components/schemas/DataPoint'
+        type:
+          description: Indicates the data type.
+          type: string
+          readOnly: true
+          enum:
+          - boolean
+          - date
+          - number
+          - string
+          x-enum-description:
+          - boolean (Supports eq operator.)
+          - date (Supports range operators, and equals and in queries. )
+          - number (Supports range operators, and equals and in queries. )
+          - string (Supports equals and in queries. Supports fuzzy searches for some data points.)
+          example: boolean
+          nullable: true
+        operators:
+          description: Indicates the range and compound operators supported by the data point.
+          type: array
+          readOnly: true
+          items:
+            type: string
+            enum:
+            - gt
+            - gte
+            - lt
+            - lte
+            - eq
+            - and
+            - or
+            - not
+            x-enum-description:
+            - gt (Greater than. Numbers or dates)
+            - gte (Greater than or equal to. Numbers or dates.)
+            - lt (Less than. Numbers or dates)"
+            - lte (Less than or equals. Supported by number and date data types.)
+            - eq (Equals. Supported by boolean, date, number, and string data types.)
+            - and (And. Compound operator)
+            - or (Or. Compound operator.)
+            - not (Not. Conpound operator)
+            example:
+            - gt
+            - lt
+          nullable: true
+        isSortable:
+          description: When true, indicates that data point can be used to sort results.
+          readOnly: true
+          nullable: true
+        isLanguageDependent:
+          description: When true, indicates the data point is language-dependent.
+          type: boolean
+          readOnly: true
+          nullable: true
+        isCurrencyDependent:
+          description: When true, indicates the data point is currency-dependent.
+          type: boolean
+          readOnly: true
+          nullable: true
+      additionalProperties: false
+    ResponseDataPoints:
+      title: ResponseDataPoints
+      description: Data points and operators supported for equities screening.
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/OutputDataPointsMetadata'
+        dataPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataPoints'
+          nullable: true
+      additionalProperties: false
+    OutputDataPoints:
+      description: Data point filter options.
+      type: object
+      title: OutputDataPoints
+      properties:
+        name:
+          description: Data points supported for filtering and sorting in screener queries. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/equities/data-points`, or browse the full reference in the data dictionary.
+          type: string
+          example: companyInformation.domicileCountryCode
+          externalDocs:
+            description: Data dictionary (Excel)
+            url: https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx
+        type:
+          description: Indicates the data type.
+          type: string
+          enum:
+          - boolean
+          - date
+          - number
+          - string
+          x-enumDescriptions:
+          - boolean (Supports eq operator.)
+          - date (Supports range operators, and equals and in queries. )
+          - number (Supports range operators, and equals and in queries. )
+          - string (Supports equals and in queries. Supports fuzzy searches for some data points.)
+          example: boolean
+          nullable: true
+        operators:
+          description: Indicates the range and compound operators supported by the data point.
+          type: array
+          items:
+            type: string
+            enum:
+            - gt
+            - gte
+            - lt
+            - lte
+            - eq
+            - and
+            - or
+            - not
+            x-enumDescriptions:
+            - gt (Greater than. Numbers or dates.)
+            - gte (Greater than or equal to. Numbers or dates.)
+            - lt (Less than. Numbers or dates.)
+            - lte (Less than or equals. Supported by number and date data types.)
+            - eq (Equals. Supported by boolean, date, number, and string data types.)
+            - and (And. Compound operator.)
+            - or (Or. Compound operator.)
+            - not (Not. Compound operator)
+            example:
+            - gt
+            - lt
+          nullable: true
+        isSortable:
+          description: When true, indicates that data point can be used to sort results.
+          type: boolean
+          nullable: true
+        isLanguageDependent:
+          description: When true, indicates the data point is language-dependent.
+          type: boolean
+          nullable: true
+        isCurrencyDependent:
+          description: When true, indicates the data point is currency-dependent.
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    OutputDataPointsMetadata:
+      description: Metadata returned in response to requests to `GET /screeners/equities/data-points` endpoint.
+      title: OutputDataPointsMetadata
+      type: object
+      properties:
+        requestId:
+          description: Indicates request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          type: string
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          type: string
+          format: date-time
+      additionalProperties: false
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+    OutputDataPointMetadata:
+      title: OutputDataPointMetadata
+      description: Metadata for an available data point.
+      type: object
+      required:
+      - name
+      - type
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          description: The data point identifier in dot-notation, used as the value in the `dataPoints` request array.
+          enum:
+          - annualReportFeesAndFinancialsMostRecent.totalExpenseRatio
+          - annualReturnsHistorical.annualRet2020
+          - annualReturnsHistorical.annualRet2021
+          - annualReturnsHistorical.annualRet2022
+          - annualReturnsHistorical.annualRet2023
+          - annualReturnsHistorical.annualRet2024
+          - assetAllocationBreakdown.assetAllocBondPercNet
+          - assetAllocationBreakdown.assetAllocCashPercNet
+          - assetAllocationBreakdown.assetAllocEquityPercNet
+          - assetAllocationBreakdown.assetAllocOtherPercNet
+          - basicReference.baseCurrency
+          - basicReference.countryAvailableForSale
+          - basicReference.domicile
+          - basicReference.firmName
+          - basicReference.fundCode
+          - basicReference.fundid
+          - basicReference.fundLegalName
+          - basicReference.inceptionDate
+          - basicReference.investmentType
+          - basicReference.isin
+          - basicReference.legalName
+          - basicReference.name
+          - basicReference.portfolioDate
+          - basicReference.primaryShare
+          - basicReference.shareClassType
+          - basicReference.ticker
+          - bestAndWorstRollingReturns.best3MoAsOfDateQtrEnd
+          - bestAndWorstRollingReturns.best3MoRetInceptionQtrEnd
+          - bestAndWorstRollingReturns.worst3MoAsOfDateQtrEnd
+          - bestAndWorstRollingReturns.worst3MoRetInceptionQtrEnd
+          - companyGrade.growthGrade
+          - companyGrade.profitabilityGrade
+          - companyInformation.cik
+          - companyInformation.companyId
+          - companyInformation.companyStatus
+          - companyInformation.domicileCountryCode
+          - companyInformation.globalTemplateIndustryTemplateCode
+          - companyInformation.legalName
+          - companyInformation.legalNameLanguageCode
+          - companyInformation.lei
+          - companyInformation.morningstarIndustryCode
+          - companyInformation.morningstarIndustryGroupCode
+          - companyInformation.morningstarSectorCode
+          - companyInformation.operationStatus
+          - companyInformation.shortName
+          - companyInformation.standardName
+          - companyInformation.webAddress
+          - countryAndRegionalExposureBreakdown.equityRegionEmergingPercLongRescaled
+          - countryAndRegionalExposureBreakdown.equityRegionGreaterAsiaPercLongRescaled
+          - countryAndRegionalExposureBreakdown.equityRegionGreaterEuropePercLongRescaled
+          - countryAndRegionalExposureBreakdown.equityRegionUnitedStatesPercLongRescaled
+          - dailyDividendResidualRiskAndReturnSensitivity.beta1260Day
+          - dailyReturnsMostRecent.returnDateDaily
+          - dailyReturnsMostRecent.totalRet1DayDaily
+          - dailyReturnsMostRecent.totalRet1MoDaily
+          - dailyReturnsMostRecent.totalRet1WkDaily
+          - dailyReturnsMostRecent.totalRet1YrDaily
+          - dailyReturnsMostRecent.totalRet3MoDaily
+          - dailyReturnsMostRecent.totalRet6MoDaily
+          - dailyReturnsMostRecent.totalRetAnnlzd10YrDaily
+          - dailyReturnsMostRecent.totalRetAnnlzd3YrDaily
+          - dailyReturnsMostRecent.totalRetAnnlzd5YrDaily
+          - dailyReturnsMostRecent.totalRetYtdDaily
+          - dailyStandardDeviation.arithmeticMean1008Day
+          - dailyStandardDeviation.arithmeticMean1260Day
+          - dailyStandardDeviation.arithmeticMean2520Day
+          - dailyStandardDeviation.arithmeticMean252Day
+          - dailyStandardDeviation.arithmeticMean504Day
+          - dailyStandardDeviation.arithmeticMean756Day
+          - dailyStandardDeviation.dailyStandardDeviationAsOfDate
+          - dailyStandardDeviation.standardDeviation1008Day
+          - dailyStandardDeviation.standardDeviation1260Day
+          - dailyStandardDeviation.standardDeviation2520Day
+          - dailyStandardDeviation.standardDeviation252Day
+          - dailyStandardDeviation.standardDeviation504Day
+          - dailyStandardDeviation.standardDeviation756Day
+          - delistInformation.delistingDate
+          - derivedStatisticsFromIndexLevelsTimeSeries.averageAnnualReportNetExpenseRatio
+          - derivedStatsIEMptCurrent.sharpeRatio3YrMoEnd
+          - derivedStatsIEMptCurrent.stdDev3YrMoEnd
+          - dividendResidualRiskAndReturnSensitivity.alpha12Month
+          - dividendResidualRiskAndReturnSensitivity.alpha36Month
+          - dividendResidualRiskAndReturnSensitivity.alpha60Month
+          - dividendResidualRiskAndReturnSensitivity.beta12Month
+          - dividendResidualRiskAndReturnSensitivity.beta36Month
+          - dividendResidualRiskAndReturnSensitivity.beta60Month
+          - dividendResidualRiskAndReturnSensitivity.rSquare12Month
+          - dividendResidualRiskAndReturnSensitivity.rSquare36Month
+          - dividendResidualRiskAndReturnSensitivity.rSquare60Month
+          - enterpriseValueCalculations.cashReturn
+          - enterpriseValueCalculations.enterpriseValue
+          - enterpriseValueCalculations.enterpriseValueToEbitdaRatio
+          - enterpriseValueCalculations.enterpriseValueToEbitRatio
+          - enterpriseValueCalculations.enterpriseValueToFreeCashFlowRatio
+          - enterpriseValueCalculations.enterpriseValueToRevenueRatio
+          - enterpriseValueCalculations.totalDebtToEnterpriseValue
+          - equityPortfolioStatistics.averageMarketCapMilLong
+          - equityPortfolioStatistics.equityStyleFactorDivYldLong
+          - equityPortfolioStatistics.numberOfHoldings
+          - equityPortfolioStatistics.percAssetInTop10Holdings
+          - equityPortfolioStatistics.porbRatioTtmLong
+          - equityPortfolioStatistics.poreRatioTtmLong
+          - equityPortfolioStatistics.roePercTtmLong
+          - equityResearchRatingsMostRecent.priceOrFairValue
+          - equityResearchRatingsMostRecent.stockCapitalAllocationRating
+          - esgFundLevelCarbonRisk.portfolioCarbonRiskScore
+          - esgFundLevelRatingsHistorical.morningstarSustainabilityRating
+          - esgFundLevelRatingsHistorical.portfolioCorporateSustainabilityScore
+          - esgFundLevelRatingsHistorical.portfolioEnvironmentalRiskScore
+          - esgFundLevelRatingsHistorical.portfolioGovernanceRiskScore
+          - esgFundLevelRatingsHistorical.portfolioSocialRiskScore
+          - esgFundLevelRatingsMostRecent.sustainabilityRatingDate
+          - feeLevelRanks.morningstarFeeLevelBroad
+          - financialHealthGrade.financialHealthGradeValue
+          - financialHealthGrade.probabilityOfDefault
+          - fixedIncomePortfolioStatisticsSurveyedAnalytics.averageCreditQuality
+          - fixedIncomePortfolioStatisticsSurveyedAnalytics.averageEffDurationSurvey
+          - fixedIncomePortfolioStatisticsSurveyedAnalytics.averageYtmSurvey
+          - fundAttributes.activelyManaged
+          - fundAttributes.fundOfFunds
+          - fundAttributes.indexFund
+          - fundAttributes.openForInvestment
+          - indexTick.indexPrice
+          - indexTick.indexPricePublicationTime
+          - instrumentIdentifiers.localCode
+          - instrumentIdentifiers.vendorTickerSymbol
+          - investmentBasicDetails.advisor
+          - investmentBasicDetails.distributor
+          - investmentBasicDetails.exchange
+          - investmentBasicDetails.exchangeCountry
+          - investmentBasicDetails.firmCountry
+          - investmentBasicDetails.managementCompany
+          - investmentBasicDetails.primaryProspectusBenchmark
+          - investmentBasicDetails.primaryProspectusBenchmarkId
+          - investmentBasicDetails.subadvisor
+          - managerBioAndDetailsMostRecent.managerName
+          - managerBioAndDetailsMostRecent.managerTenureAverage
+          - managerBioAndDetailsMostRecent.managerTenureLongest
+          - marketCapital.asOfDate
+          - marketCapital.companyLevelMarketCapital
+          - marketCapital.currencyCode
+          - marketCapital.shareLevelMarketCapital
+          - marketCapitalBreakdown.marketCapGiantPercLongRescaled
+          - marketCapitalBreakdown.marketCapLargePercLongRescaled
+          - marketCapitalBreakdown.marketCapMidPercLongRescaled
+          - marketCapitalBreakdown.marketCapSmallPercLongRescaled
+          - marketReturn.asOfDate
+          - marketReturn.nonDividendTotalReturnMonthToDate
+          - marketReturn.nonDividendTotalReturnOneDay
+          - marketReturn.totalGrossedUpReturnDateToDate
+          - marketReturn.totalGrossedUpReturnMonthToDate
+          - marketReturn.totalGrossedUpReturnQuarterToDate
+          - marketReturn.totalGrossedUpReturnWeekToDate
+          - marketReturn.totalGrossedUpReturnYearToDate
+          - marketReturn.totalReturnMonthToDate
+          - marketReturn.totalReturnOneDay
+          - marketReturn.totalReturnQuarterToDate
+          - marketReturn.totalReturnWeekToDate
+          - marketReturn.totalReturnYearToDate
+          - metadata.priceFrequencyFlag
+          - monthEndReturnStatistics.asOfDate
+          - monthEndReturnStatistics.best3MonthTotalReturnOverPast120Months
+          - monthEndReturnStatistics.best3MonthTotalReturnOverPast12Months
+          - monthEndReturnStatistics.best3MonthTotalReturnOverPast36Months
+          - monthEndReturnStatistics.best3MonthTotalReturnOverPast60Months
+          - monthEndReturnStatistics.worst3MonthTotalReturnOverPast120Months
+          - monthEndReturnStatistics.worst3MonthTotalReturnOverPast12Months
+          - monthEndReturnStatistics.worst3MonthTotalReturnOverPast36Months
+          - monthEndReturnStatistics.worst3MonthTotalReturnOverPast60Months
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.returnDateMoEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1MoMoEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrMoEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet1YrQtrEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet3MoMoEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRet6MoMoEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd10YrMoEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd10YrQtrEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrMoEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd3YrQtrEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrMoEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetAnnlzd5YrQtrEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetInceptionMoEnd
+          - monthEndTrailingPerformanceMonthEndAndQuarterEndMostRecent.totalRetYtdMoEnd
+          - monthlyStandardDeviation.arithmeticMean120Month
+          - monthlyStandardDeviation.arithmeticMean12Month
+          - monthlyStandardDeviation.arithmeticMean24Month
+          - monthlyStandardDeviation.arithmeticMean36Month
+          - monthlyStandardDeviation.arithmeticMean48Month
+          - monthlyStandardDeviation.arithmeticMean60Month
+          - monthlyStandardDeviation.asOfDate
+          - monthlyStandardDeviation.standardDeviation120Month
+          - monthlyStandardDeviation.standardDeviation12Month
+          - monthlyStandardDeviation.standardDeviation24Month
+          - monthlyStandardDeviation.standardDeviation36Month
+          - monthlyStandardDeviation.standardDeviation48Month
+          - monthlyStandardDeviation.standardDeviation60Month
+          - morningstarCategory.globalBroadCategoryGroup
+          - morningstarCategory.globalCategory
+          - morningstarCategory.morningstarCategoryId
+          - morningstarEquitySectorsBreakdown.equityEconSectorConsumerCyclicalPercLongRescaled
+          - morningstarEquitySectorsBreakdown.equityEconSectorConsumerDefensivePercLongRescaled
+          - morningstarEquitySectorsBreakdown.equityEconSectorEnergyPercLongRescaled
+          - morningstarEquitySectorsBreakdown.equityEconSectorFinancialServicesPercLongRescaled
+          - morningstarEquitySectorsBreakdown.equityEconSectorHealthcarePercLongRescaled
+          - morningstarEquitySectorsBreakdown.equityEconSectorTechnologyPercLongRescaled
+          - morningstarMedalistRatingMostRecent.morningstarMedalistRating
+          - morningstarMedalistRatingMostRecent.morningstarMedalistRatingDate
+          - morningstarMedalistRatingMostRecent.morningstarMedalistRatingParentPillar
+          - morningstarMedalistRatingMostRecent.morningstarMedalistRatingPeoplePillar
+          - morningstarMedalistRatingMostRecent.morningstarMedalistRatingProcessPillar
+          - morningstarPortfolioRiskScore.portfolioRiskScore
+          - morningstarPortfolioRiskScore.portfolioRiskScoreDate
+          - morningstarRatingMostRecent.morningstarRating10Yr
+          - morningstarRatingMostRecent.morningstarRating3Yr
+          - morningstarRatingMostRecent.morningstarRating5Yr
+          - morningstarRatingMostRecent.morningstarRatingOverall
+          - morningstarRatingMostRecent.ratingDate
+          - morningstarStyleBox.equityStyleBoxLong
+          - morningstarStyleBox.sizeScoreLong
+          - morningstarStyleBox.valueGrowthScoreLong
+          - msciCountryClassification.msciCountry
+          - netAssetsMonthEndMostRecent.firmTotalAssets
+          - netAssetsMonthEndMostRecent.fundSize
+          - netAssetsMonthEndMostRecent.netAssetsDate
+          - nonDividendResidualRiskAndReturnSensitivity.nonDividendBeta36Month
+          - nonDividendResidualRiskAndReturnSensitivity.nonDividendRSquare36Month
+          - performanceRanks.bearMarketRankPercMoEnd
+          - performanceRanks.totalRetPercRankCat10YrMoEnd
+          - performanceRanks.totalRetPercRankCat1YrMoEnd
+          - performanceRanks.totalRetPercRankCat3YrMoEnd
+          - performanceRanks.totalRetPercRankCat5YrMoEnd
+          - performanceRanks.totalRetPercRankCatYtdMoEnd
+          - performanceStatistics.midNetChange
+          - performanceStatistics.midPercentChange
+          - priceMultiples.capeRatio
+          - priceMultiples.normalizedPegRatio
+          - priceMultiples.normalizedPriceToEarningsRatio
+          - priceMultiples.normalizedPriceToEarningsRatioNormalizedProfitabilityMetrics
+          - priceMultiples.normalizedPriceToEbitdaRatio
+          - priceMultiples.normalizedPriceToEbitdarRatio
+          - priceMultiples.normalizedPriceToEbitRatio
+          - priceMultiples.priceEarningsToGrowthRatio
+          - priceMultiples.priceToAdjustedFundsFromOperations
+          - priceMultiples.priceToBookRatio
+          - priceMultiples.priceToCashFlowRatio
+          - priceMultiples.priceToCashRatio
+          - priceMultiples.priceToEarningsRatio
+          - priceMultiples.priceToEbitdaRatio
+          - priceMultiples.priceToEbitdarRatio
+          - priceMultiples.priceToEbitRatio
+          - priceMultiples.priceToFreeCashFlowRatio
+          - priceMultiples.priceToFundsFromOperations
+          - priceMultiples.priceToSalesRatio
+          - priceMultiples.priceToTangibleBookValueRatio
+          - priceMultiples.privateEps10
+          - priceMultiples.privateNetEarnings10
+          - priceMultiplestatistics.asOfDate
+          - pricesMostRecent.avgDailyVolume1Mo
+          - pricesMostRecent.avgDailyVolume1Yr
+          - pricesMostRecent.avgDailyVolume3Mo
+          - pricesMostRecent.below52WkHighPerc
+          - pricesMostRecent.datePrice52WkHigh
+          - pricesMostRecent.datePrice52WkLow
+          - pricesMostRecent.lastClose
+          - pricesMostRecent.monthEndPrice
+          - pricesMostRecent.monthEndPriceDate
+          - pricesMostRecent.navMoEnd
+          - pricesMostRecent.price52WkHigh
+          - pricesMostRecent.price52WkLow
+          - priceYields.earningsYield
+          - prospectusFees.managementFee
+          - prospectusFees.maxFrontLoad
+          - prospectusFees.prospectusGrossExpenseRatio
+          - prospectusFees.prospectusNetExpenseRatio
+          - purchaseDetails.closedToAllInv
+          - purchaseDetails.minimumAdditionalPurchase
+          - purchaseDetails.minimumInvestmentBaseCurrency
+          - purchaseDetails.shareClassClosedToNewInv
+          - purchaseDetails.surveyedKiidSrri
+          - quantitativeFairValues.asOfClosePriceDate
+          - quantitativeFairValues.closePrice
+          - quantitativeFairValues.quantitativeFairValue
+          - quantitativeFairValues.quantitativeFairValueDate
+          - quantitativeFairValues.quantitativeFairValueUncertainty
+          - quantitativeFairValues.quantitativeFairValueUncertaintyLabel
+          - quantitativeFairValues.quantitativeFinancialHealth
+          - quantitativeFairValues.quantitativeFiveStarPrice
+          - quantitativeFairValues.quantitativeMoat
+          - quantitativeFairValues.quantitativeOneStarPrice
+          - quantitativeRatings.quantitativePriceToFairValue
+          - quantitativeRatings.quantitativeStarRating
+          - quantitativeRatings.quantitativeValuationLabel
+          - reference.countryName
+          - reference.marketSectorCode
+          - reference.marketSegmentCode
+          - reference.morningstarVenueId
+          - returnsPerformanceCurrent.returnDateMoEnd
+          - riskStatistics.alpha3YrMoEnd
+          - riskStatistics.beta3YrMoEnd
+          - riskStatistics.downsideCaptureRatio3YrMoEnd
+          - riskStatistics.informationRatio3YrMoEnd
+          - riskStatistics.rSquared3YrMoEnd
+          - riskStatistics.sortinoRatio3YrMoEnd
+          - riskStatistics.trackingError3YrMoEnd
+          - riskStatistics.upsideCaptureRatio3YrMoEnd
+          - shareClassInformation.cusip
+          - shareClassInformation.exchangeCode
+          - shareClassInformation.exchangeSubMarketGlobalId
+          - shareClassInformation.investmentId
+          - shareClassInformation.investmentStatus
+          - shareClassInformation.investmentType
+          - shareClassInformation.ipoDate
+          - shareClassInformation.ipoOfferPrice
+          - shareClassInformation.isDr
+          - shareClassInformation.isMainShare
+          - shareClassInformation.isPrimaryPerformanceId
+          - shareClassInformation.marketSymbol
+          - shareClassInformation.performanceStatus
+          - shareClassInformation.securityType
+          - shareClassInformation.sedol
+          - shareClassInformation.segmentMicCode
+          - shareClassInformation.symbol
+          - shareClassInformation.tradingCurrency
+          - shareClassInformation.tradingStatus
+          - shortInterest.daysToCover
+          - shortInterest.percentageOfFloat
+          - shortInterest.percentageOfSharesOutstanding
+          - shortInterest.shortInterestValue
+          - trailingReturn.dailyMarketReturnIndex
+          - trailingReturn.trailing10YearReturn
+          - trailingReturn.trailing15YearReturn
+          - trailingReturn.trailing1DayReturn
+          - trailingReturn.trailing1MonthReturn
+          - trailingReturn.trailing1WeekReturn
+          - trailingReturn.trailing1YearReturn
+          - trailingReturn.trailing20YearReturn
+          - trailingReturn.trailing2MonthReturn
+          - trailingReturn.trailing2YearReturn
+          - trailingReturn.trailing3MonthReturn
+          - trailingReturn.trailing3YearReturn
+          - trailingReturn.trailing4YearReturn
+          - trailingReturn.trailing5YearReturn
+          - trailingReturn.trailing6MonthReturn
+          - trailingReturn.trailing6YearReturn
+          - trailingReturn.trailing7YearReturn
+          - trailingReturn.trailing8YearReturn
+          - trailingReturn.trailing9MonthReturn
+          - trailingReturn.trailing9YearReturn
+          - trailingReturn.trailingGrossedUp10YearReturn
+          - trailingReturn.trailingGrossedUp15YearReturn
+          - trailingReturn.trailingGrossedUp1DayReturn
+          - trailingReturn.trailingGrossedUp1MonthReturn
+          - trailingReturn.trailingGrossedUp1WeekReturn
+          - trailingReturn.trailingGrossedUp1YearReturn
+          - trailingReturn.trailingGrossedUp20YearReturn
+          - trailingReturn.trailingGrossedUp2MonthReturn
+          - trailingReturn.trailingGrossedUp2YearReturn
+          - trailingReturn.trailingGrossedUp3MonthReturn
+          - trailingReturn.trailingGrossedUp3YearReturn
+          - trailingReturn.trailingGrossedUp4YearReturn
+          - trailingReturn.trailingGrossedUp5YearReturn
+          - trailingReturn.trailingGrossedUp6MonthReturn
+          - trailingReturn.trailingGrossedUp6YearReturn
+          - trailingReturn.trailingGrossedUp7YearReturn
+          - trailingReturn.trailingGrossedUp8YearReturn
+          - trailingReturn.trailingGrossedUp9MonthReturn
+          - trailingReturn.trailingGrossedUp9YearReturn
+          - trailingReturn.trailingReturnAsOfDate
+          - yieldsMostRecent.secYield
+        alias:
+          type: string
+          description: An alternative identifier for this data point where one exists. When present, the alias may be used in place of `name` in requests.
+          examples:
+          - name
+          - performanceId
+        type:
+          type: string
+          description: The primitive type of the value returned for this data point.
+          enum:
+          - string
+          - decimal
+          - int
+          - bool
+    ResponseGetDataPoints:
+      title: ResponseGetDataPoints
+      description: List of supported data points and associated metadata.
+      type: array
+      items:
+        $ref: '#/components/schemas/OutputDataPointMetadata'
+  responses:
+    ResponseDataPoints_2:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseDataPoints_2'
+          examples:
+            Managed Investments Data Points (Example Truncated):
+              $ref: '#/components/examples/ResponseDataPointsExample1'
+    ResponseGetDataPoints:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseGetDataPoints'
+          examples:
+            ResponseGetDataPointsListExample1:
+              $ref: '#/components/examples/ResponseGetDataPointsExample1'
+    ResponseDataPoints:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseDataPoints'
+          examples:
+            Equities Data Points:
+              $ref: '#/components/examples/DataPointsResponseExample1'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

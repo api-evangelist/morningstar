@@ -1,0 +1,80 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts households API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: households
+paths:
+  /households:
+    get:
+      tags:
+      - households
+      summary: Get household IDs
+      description: Get all household IDs for an advisor. The household ID can be used with the Portfolios API to return information about household accounts.
+      operationId: getHouseholdAccountsUsingGET_1
+      parameters:
+      - name: x-api-key
+        in: header
+        description: Unique API key of a client
+        required: true
+        schema:
+          type: string
+          format: string
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ApiHouseholdResponseForHouseholds'
+components:
+  schemas:
+    APIMetaStatusResponse:
+      type: object
+      properties:
+        hint:
+          type: string
+        response_status:
+          type: string
+      title: APIMetaStatusResponse
+    HouseholdIndex:
+      type: object
+      properties:
+        householdType:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+      title: HouseholdIndex
+    ApiHouseholdResponseForHouseholds:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/APIMetaStatusResponse'
+        householdIds:
+          type: array
+          items:
+            $ref: '#/components/schemas/HouseholdIndex'
+      title: ApiHouseholdResponseForHouseholds
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

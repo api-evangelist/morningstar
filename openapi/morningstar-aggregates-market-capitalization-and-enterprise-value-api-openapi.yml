@@ -1,0 +1,657 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Aggregates Market Capitalization and Enterprise Value API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Aggregates Market Capitalization and Enterprise Value
+paths:
+  /direct-web-services/v1/investments/{id}/equity-aggregates-market-capitalization-and-enterprise-value:
+    get:
+      summary: Get Aggregates Market Capitalization and Enterprise Value view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          - industryCode
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: countryId
+        in: query
+        description: Specifies the country to filter results on. Accepts 3-character ISO 3166-1 country codes. The availability of data depends on the specific data points and investments queried
+        schema:
+          type: string
+        examples:
+          countryIdExample1:
+            summary: CAN (Canada)
+            value: CAN
+          countryIdExample2:
+            summary: JPN (Japan)
+            value: JPN
+      description: "The Aggregates – Market Capitalization and Enterprise Value package provides market capitalization and enterprise value data, both on diluted and undiluted basis, aggregated by industry classification, using Morningstar’s Morningstar Global Equity Classification Structure, to give industry-wide averages on a country-by-country basis to use to benchmark a company’s value relative to other companies in that industry, industry group, or sector.\n\nThe package contains the following dataset:\n\n  * Industry Aggregates - Market Capitalization and Enterprise Value\n\nMost recent and time series data supported."
+      operationId: getEquityAggregatesMarketCapitalizationAndEnterpriseValuePackage
+      tags:
+      - Aggregates Market Capitalization and Enterprise Value
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityAggregatesMarketCapitalizationAndEnterpriseValue'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 938
+  /direct-web-services/v1/investments/{id}/equity-industry-aggregates-market-capitalization-and-enterprise-value:
+    get:
+      summary: Get Industry Aggregates Market Capitalization and Enterprise Value data view.
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          - industryCode
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      - name: countryId
+        in: query
+        description: Specifies the country to filter results on. Accepts 3-character ISO 3166-1 country codes. The availability of data depends on the specific data points and investments queried
+        schema:
+          type: string
+        examples:
+          countryIdExample1:
+            summary: CAN (Canada)
+            value: CAN
+          countryIdExample2:
+            summary: JPN (Japan)
+            value: JPN
+      description: Most recent and time series data supported.
+      operationId: getEquityIndustryAggregatesMarketCapitalizationAndEnterpriseValueDataset
+      tags:
+      - Aggregates Market Capitalization and Enterprise Value
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityIndustryAggregatesMarketCapitalizationAndEnterpriseValue'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 938
+components:
+  schemas:
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputAggregationMarketCapital:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date of the industry aggregated value
+          nullable: true
+        companyLevelMarketCapitalNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        companyLevelMarketCapitalValue:
+          type: number
+          description: 'The aggregated value of Company Level Market Capital; is derived using all eligible companies who are constituents in the specified Morningstar Index. Company Level Market Capital: The most current company-level market capital derived by the summation of share-level market capital of the company''s primary share classes; Company-level market capital has the same currency as the trading currency of the share class.'
+          format: double
+          nullable: true
+        currencyCode:
+          type: string
+          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
+          nullable: true
+        numberOfCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
+          format: int32
+          nullable: true
+        countryCode:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputAggregationMarketCapital
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputAggregationEnterpriseValueCalculations:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date of the industry aggregated value
+          nullable: true
+        cashReturnNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        cashReturnValue:
+          type: number
+          description: 'The aggregated value of Cash Return; is derived using all eligible companies who are constituents in the specified Morningstar Index. Cash Return: This ratio represents a company''s free cash flow relative to its enterprise value. This can be used to measure how efficiently a company is using both its debt and equity to generate free cash flow. This is calculated using Free Cash Flow to Firm (FCFF) divided by Enterprise Value.'
+          format: double
+          nullable: true
+        currencyCode:
+          type: string
+          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
+          nullable: true
+        enterpriseValueNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        enterpriseValueToAssetsRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        enterpriseValueToAssetsRatioValue:
+          type: number
+          description: Enterprise Value To Assets Ratio Value
+          format: double
+          nullable: true
+        enterpriseValueToEbitdaRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        enterpriseValueToEbitdaRatioValue:
+          type: number
+          description: Enterprise Value To Ebitda Ratio Value
+          format: double
+          nullable: true
+        enterpriseValueToEbitRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        enterpriseValueToEbitRatioValue:
+          type: number
+          description: Enterprise Value To Ebit Ratio Value
+          format: double
+          nullable: true
+        enterpriseValueToFreeCashFlowRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        enterpriseValueToFreeCashFlowRatioValue:
+          type: number
+          description: Enterprise Value To Free Cash Flow Ratio Value
+          format: double
+          nullable: true
+        enterpriseValueToPreTaxIncomeRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        enterpriseValueToPreTaxIncomeRatioValue:
+          type: number
+          description: Enterprise Value To Pre Tax Income Ratio Value
+          format: double
+          nullable: true
+        enterpriseValueToRevenueRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        enterpriseValueToRevenueRatioValue:
+          type: number
+          description: Enterprise Value To Revenue Ratio Value
+          format: double
+          nullable: true
+        enterpriseValueValue:
+          type: number
+          description: Enterprise Value Value
+          format: double
+          nullable: true
+        normalizedEnterpriseValueToEbitdaRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        normalizedEnterpriseValueToEbitdaRatioValue:
+          type: number
+          description: Normalized Enterprise Value To Ebitda Ratio Value
+          format: double
+          nullable: true
+        normalizedEnterpriseValueToEbitRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        normalizedEnterpriseValueToEbitRatioValue:
+          type: number
+          description: Normalized Enterprise Value To Ebit Ratio Value
+          format: double
+          nullable: true
+        numberOfCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: OutputAggregationEnterpriseValueCalculations
+  responses:
+    ResponseEquityIndustryAggregatesMarketCapitalizationAndEnterpriseValue:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              aggregationEnterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputAggregationEnterpriseValueCalculations'
+              aggregationMarketCapital:
+                $ref: '#/components/schemas/OutputAggregationMarketCapital'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityAggregatesMarketCapitalizationAndEnterpriseValue:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              aggregationEnterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputAggregationEnterpriseValueCalculations'
+              aggregationMarketCapital:
+                $ref: '#/components/schemas/OutputAggregationMarketCapital'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

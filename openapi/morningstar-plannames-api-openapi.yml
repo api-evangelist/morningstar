@@ -1,0 +1,144 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts PlanNames API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: PlanNames
+paths:
+  /v1/retirementplan/PlanNames:
+    get:
+      tags:
+      - PlanNames
+      summary: Get plan names
+      description: 'Get a list of plan names. Enter a search string in the `q` parameter. The response will return a list of plan names that contain the search string.</br></br>You can filter the results returned in the response by specifying an advisor ID and/or the plan list source to query. The following `source` values are available: </br></br> - `RP` - Retirement plans from Morningstar''s plan list</br> - `BM`- Benchmark</br> - `DB` - Database for saved plans </br></br>You can also specify a maximum number of results to return via pageSize.</br></br> **Note:** The following fields are returned in the response but are not currently used. These are placeholders for future development.</br></br> - `planId`</br> - `externalPlanId`</br> - `lastModifiedDate`'
+      parameters:
+      - name: q
+        in: query
+        description: Search string to query
+        schema:
+          type: string
+          nullable: true
+          example: pruden
+      - name: advisorid
+        in: query
+        description: Unique identifier of an advisor
+        schema:
+          type: string
+          description: Advisor Id
+          nullable: true
+          example: '11133123'
+      - name: source
+        in: query
+        description: The source to request plan from
+        schema:
+          type: string
+          enum:
+          - RP
+          - BM
+          - DB
+          default: RP
+          nullable: true
+          example: RP
+      - name: pageSize
+        in: query
+        description: Maximum number of plan names to return
+        schema:
+          type: integer
+          format: int32
+          nullable: true
+          example: 20
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanNamesModel'
+            text/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanNamesModel'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanNamesModel'
+            text/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanNamesModel'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+            text/json:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+            text/xml:
+              schema:
+                $ref: '#/components/schemas/ErrorDetails'
+components:
+  schemas:
+    PlanNamesModel:
+      type: object
+      properties:
+        planId:
+          type: integer
+          description: Id unique to the specific plan
+          format: int64
+        planName:
+          type: string
+          description: Full name of retirement plan
+          nullable: true
+        externalPlanId:
+          type: string
+          description: ExternalPlanId
+          nullable: true
+        lastModifiedDate:
+          type: string
+          description: LastModifiedDate
+          nullable: true
+      additionalProperties: false
+      description: PlanNamesModel
+    ErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

@@ -1,0 +1,245 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts statistics API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: statistics
+paths:
+  /v1/statistics/{namespace}/{tool}/{period}:
+    get:
+      tags:
+      - statistics
+      summary: Get a statistics resource for a namespace, tool and time period
+      description: Get the latest statistics for the specified namespace, tool and time period. Specify the `date` parameter to get statistics for that date.
+      operationId: GetStatistics
+      parameters:
+      - name: namespace
+        description: Get statistics for this namespace
+        in: path
+        required: true
+        schema:
+          type: string
+          example: abco.opp.config
+      - name: tool
+        description: Get statistics for this tool
+        in: path
+        required: true
+        schema:
+          type: string
+          example: mwc-sc-screener
+      - name: period
+        description: Get statistics for this time period
+        in: path
+        required: true
+        schema:
+          type: string
+          enum:
+          - day
+          - month
+          - quarter
+          example: day
+      - name: date
+        description: Get statistics logged for this date. For month or quarter this is the end date for the period. If omitted returns the latest available statistics.
+        in: query
+        required: false
+        schema:
+          type: string
+          format: date
+          example: '2020-04-01'
+      responses:
+        '200':
+          description: Statistics for a namespace and tool over a time period (day, month or quarter)
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Statistics for a namespace, tool and date
+                properties:
+                  date:
+                    type: string
+                    example: '2022-02-01'
+                  namespace:
+                    type: string
+                    example: abco.opp.config
+                  tool:
+                    type: string
+                    example: mwc-sc-screener
+                  period:
+                    type: string
+                    example: day
+                  securities:
+                    type: object
+                    description: A breakdown of securities (by security identifier) and how often each was logged
+                  loaded:
+                    type: object
+                    description: Load event statistics
+                    properties:
+                      count:
+                        type: number
+                        description: The number of times the loaded event was triggered
+                        example: '207'
+                      uniqueUsers:
+                        type: number
+                        description: The number of unique users
+                        example: '60'
+                      uniqueSessions:
+                        description: The number of unique sessions
+                        example: '80'
+                      mean:
+                        type: number
+                        description: The mean load time
+                        example: '250'
+                      median:
+                        type: number
+                        description: The median load time
+                        example: '260'
+                      percentile95:
+                        type: number
+                        description: The 95th percentile load time
+                        example: '310'
+                  events:
+                    type: array
+                    items:
+                      type: object
+                      description: Statistics for a specific event
+                      properties:
+                        event:
+                          type: string
+                          description: The event name
+                          example: filterChanged
+                        type:
+                          type: string
+                          description: The event type - timed, count or breakdown
+                          example: breakdown
+                        source:
+                          type: string
+                          description: The component that was the source of the event
+                          example: mwc-sc-filters
+                        count:
+                          type: number
+                          description: The number of times the event was triggered
+                          example: 10
+                        breakdown:
+                          type: object
+                          description: A breakdown of the primary values for the event and how many times each was logged
+                          example:
+                            categoryChanged: 2
+                            companyChanged: 5
+                            distributionChanged: 3
+                        mean:
+                          type: number
+                          description: For timed events, the mean load time
+                          example: 100
+                        median:
+                          type: number
+                          description: For timed events, the median load time
+                          example: 150
+                        percentile95:
+                          type: number
+                          description: For timed events, the 95th percentile load time
+                          example: 190
+                        method:
+                          type: string
+                          description: For 'dataLoaded' events, the method of the call
+                          example: get
+                        url:
+                          type: string
+                          description: For 'dataLoaded' events, the URL that was called
+                          example: https://lt.morningstar.com/filters
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '401':
+          description: The user is not authorised to perform this operation
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '403':
+          description: The requested operation is forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '404':
+          description: The requested resource does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '500':
+          description: An unexpected error occured
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

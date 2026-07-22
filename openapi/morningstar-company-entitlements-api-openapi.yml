@@ -1,0 +1,595 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts company entitlements API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: company entitlements
+paths:
+  /company-entitlements:
+    get:
+      tags:
+      - company entitlements
+      summary: Get company entitlements
+      description: Get company entitlements for the company specified in the `companyId` parameter or for the entitlementIds specified in the `entitlementIds` parameter
+      operationId: GetEntitlements
+      parameters:
+      - name: companyId
+        description: Unique identifier of a company
+        in: query
+        required: false
+        schema:
+          type: string
+          example: 1234aeaf-4321-1a23-1234-23gf5c663g24
+      - name: entitlementIds
+        description: Comma-separated list of entitlementIds
+        in: query
+        required: false
+        schema:
+          type: string
+          example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1,1fa234a-1234-8x1x-0c11-x1y2131zf4d1
+      responses:
+        '200':
+          description: List of entitlements
+          content:
+            application/json:
+              schema:
+                type: array
+                description: List of entitlements
+                items:
+                  properties:
+                    entitlementId:
+                      type: string
+                      readOnly: true
+                      example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1
+                    companyId:
+                      type: string
+                      readOnly: false
+                      example: 1234aeaf-4321-1a23-1234-23gf5c663g24
+                    namespaces:
+                      type: array
+                      description: List of authorised namespaces
+                      items:
+                        type: string
+                      example:
+                      - namespace1
+                      - namespace2
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '404':
+          description: The requested resource does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+    post:
+      tags:
+      - company entitlements
+      summary: Create a company entitlement
+      description: "Create a company entitlement for the company and namespaces specified in the request body. A namespace in an entitlement can be:\n\n * a complete namespace, e.g. `abc.opp.screener`, to give the companyId access to that namespace only\n * a partial namespace, e.g. `abc.opp`, to give the companyId access to all namespaces that begin with that prefix, e.g. `abc.opp.screener` and `abc.opp.xray`"
+      operationId: createEntitlement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                entitlementId:
+                  type: string
+                  readOnly: true
+                  example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1
+                companyId:
+                  type: string
+                  readOnly: false
+                  example: 1234aeaf-4321-1a23-1234-23gf5c663g24
+                namespaces:
+                  type: array
+                  description: List of authorised namespaces
+                  items:
+                    type: string
+                  example:
+                  - namespace1
+                  - namespace2
+      responses:
+        '201':
+          description: An entitlement object
+          content:
+            application/json:
+              schema:
+                properties:
+                  entitlementId:
+                    type: string
+                    readOnly: true
+                    example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1
+                  companyId:
+                    type: string
+                    readOnly: false
+                    example: 1234aeaf-4321-1a23-1234-23gf5c663g24
+                  namespaces:
+                    type: array
+                    description: List of authorised namespaces
+                    items:
+                      type: string
+                    example:
+                    - namespace1
+                    - namespace2
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '401':
+          description: The user is not authorised to perform this operation
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '403':
+          description: The requested operation is forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '404':
+          description: The requested resource does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '409':
+          description: There is a request conflict with the target resource
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '500':
+          description: An unexpected error occured
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+  /company-entitlements/{entitlementId}:
+    get:
+      tags:
+      - company entitlements
+      summary: Get a company entitlement
+      description: Get the company entitlement specified by the `entitlementId` parameter
+      operationId: GetSingleEntitlement
+      parameters:
+      - name: entitlementId
+        description: Unique identifier of an entitlement
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1
+      responses:
+        '200':
+          description: An entitlement object
+          content:
+            application/json:
+              schema:
+                properties:
+                  entitlementId:
+                    type: string
+                    readOnly: true
+                    example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1
+                  companyId:
+                    type: string
+                    readOnly: false
+                    example: 1234aeaf-4321-1a23-1234-23gf5c663g24
+                  namespaces:
+                    type: array
+                    description: List of authorised namespaces
+                    items:
+                      type: string
+                    example:
+                    - namespace1
+                    - namespace2
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '401':
+          description: The user is not authorised to perform this operation
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '403':
+          description: The requested operation is forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '404':
+          description: The requested resource does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '500':
+          description: An unexpected error occured
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+    put:
+      tags:
+      - company entitlements
+      summary: Overwrite a company entitlement
+      description: Overwrite the company entitlement specified by the `entitlementId` parameter. The namespaces listed in the request body will replace the current namespaces for this entitlement. The `companyId` for this entitlement will not be updated.
+      operationId: UpdateEntitlement
+      parameters:
+      - name: entitlementId
+        description: Unique identifier of an entitlement
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              allOf:
+              - properties:
+                  entitlementId:
+                    type: string
+                    readOnly: true
+                    example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1
+                  companyId:
+                    type: string
+                    readOnly: false
+                    example: 1234aeaf-4321-1a23-1234-23gf5c663g24
+                  namespaces:
+                    type: array
+                    description: List of authorised namespaces
+                    items:
+                      type: string
+                    example:
+                    - namespace1
+                    - namespace2
+              - properties:
+                  companyId:
+                    readOnly: true
+      responses:
+        '200':
+          description: An entitlement object
+          content:
+            application/json:
+              schema:
+                properties:
+                  entitlementId:
+                    type: string
+                    readOnly: true
+                    example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1
+                  companyId:
+                    type: string
+                    readOnly: false
+                    example: 1234aeaf-4321-1a23-1234-23gf5c663g24
+                  namespaces:
+                    type: array
+                    description: List of authorised namespaces
+                    items:
+                      type: string
+                    example:
+                    - namespace1
+                    - namespace2
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '401':
+          description: The user is not authorised to perform this operation
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '403':
+          description: The requested operation is forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '404':
+          description: The requested resource does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '500':
+          description: An unexpected error occured
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+    delete:
+      tags:
+      - company entitlements
+      summary: Delete a company entitlement
+      description: Delete the company entitlement specified by the `entitlementId` parameter.
+      operationId: deleteEntitlement
+      parameters:
+      - name: entitlementId
+        description: Unique identifier of an entitlement
+        in: path
+        required: true
+        schema:
+          type: string
+          example: 1fa234a-5678-9d1d-0c11-x1y2131zf4d1
+      responses:
+        '204':
+          description: An empty object
+          content:
+            application/json:
+              schema:
+                type: object
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '401':
+          description: The user is not authorised to perform this operation
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '403':
+          description: The requested operation is forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '404':
+          description: The requested resource does not exist
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+        '500':
+          description: An unexpected error occured
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Generic error object
+                properties:
+                  errorId:
+                    type: string
+                    format: uuid
+                    example: 100380c0-8f94-11ea-bc55-0242ac130003
+                  message:
+                    type: string
+                    example: An error occurred
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

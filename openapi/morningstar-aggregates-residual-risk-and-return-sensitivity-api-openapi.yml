@@ -1,0 +1,689 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Aggregates Residual Risk and Return Sensitivity API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Aggregates Residual Risk and Return Sensitivity
+paths:
+  /direct-web-services/v1/investments/{id}/equity-aggregates-residual-risk-and-return-sensitivity:
+    get:
+      summary: Get Aggregates - Residual Risk and Return Sensitivity package view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          - industryCode
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: countryId
+        in: query
+        description: Specifies the country to filter results on. Accepts 3-character ISO 3166-1 country codes. The availability of data depends on the specific data points and investments queried
+        schema:
+          type: string
+        examples:
+          countryIdExample1:
+            summary: CAN (Canada)
+            value: CAN
+          countryIdExample2:
+            summary: JPN (Japan)
+            value: JPN
+      description: '
+
+        The Aggregates – Residual Risk And Return Sensitivity package provides measures of the excess returns of investment in a stock, along with its volatility and relative performance aggregated by industry classification, using Morningstar’s Morningstar Global Equity Classification Structure, to give industry-wide averages on a country-by-country basis to use to benchmark a company’s financial performance relative to other companies in that industry, industry group, or sector.
+
+        The package contains the following dataset:
+
+        - Industry Aggregates - Residual Risk and Return Sensitivity
+
+        Most recent and time series data supported.'
+      operationId: getEquityAggregatesResidualRiskAndReturnSensitivityPackage
+      tags:
+      - Aggregates Residual Risk and Return Sensitivity
+      x-cpqId: 939
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityAggregatesResidualRiskAndReturnSensitivity'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+  /direct-web-services/v1/investments/{id}/equity-industry-aggregates-residual-risk-and-return-sensitivity:
+    get:
+      summary: Get Industry Aggregates Residual Risk and Return Sensitivity view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          - industryCode
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      - name: countryId
+        in: query
+        description: Specifies the country to filter results on. Accepts 3-character ISO 3166-1 country codes. The availability of data depends on the specific data points and investments queried
+        schema:
+          type: string
+        examples:
+          countryIdExample1:
+            summary: CAN (Canada)
+            value: CAN
+          countryIdExample2:
+            summary: JPN (Japan)
+            value: JPN
+      description: Most recent and time series data supported.
+      operationId: getEquityIndustryAggregatesResidualRiskAndReturnSensitivityDataset
+      tags:
+      - Aggregates Residual Risk and Return Sensitivity
+      x-cpqId: 939
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityIndustryAggregatesResidualRiskAndReturnSensitivity'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+components:
+  schemas:
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputAggregationResidualRiskAndReturnSensitivity:
+      type: object
+      properties:
+        periodEndDate:
+          type: string
+          description: The month-end date of the industry aggregated value
+          nullable: true
+        alpha120MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        alpha120MonthValue:
+          type: number
+          description: 'The aggregated value of 120-Month Alpha; is derived using all eligible companies who are constituents in the specified Morningstar Index. 120-Month Alpha: A measure of excess return of a company''s security over a 120-month period relative to the return of a benchmark index that is considered to represent the market''s movement as a whole. The alpha uses a company''s total return; including dividends; as input for the calculation.'
+          format: double
+          nullable: true
+        alpha36MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        alpha36MonthValue:
+          type: number
+          description: 'The aggregated value of 36-Month Alpha; is derived using all eligible companies who are constituents in the specified Morningstar Index. 36-Month Alpha: A measure of excess return of a company''s security over a 36-month period relative to the return of a benchmark index that is considered to represent the market''s movement as a whole. The alpha uses a company''s total return; including dividends; as input for the calculation.'
+          format: double
+          nullable: true
+        alpha48MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        alpha48MonthValue:
+          type: number
+          description: 'The aggregated value of 48-Month Alpha; is derived using all eligible companies who are constituents in the specified Morningstar Index. 48-Month Alpha: A measure of excess return of a company''s security over a 48-month period relative to the return of a benchmark index that is considered to represent the market''s movement as a whole. The alpha uses a company''s total return; including dividends; as input for the calculation.'
+          format: double
+          nullable: true
+        alpha60MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        alpha60MonthValue:
+          type: number
+          description: 'The aggregated value of 60-Month Alpha; is derived using all eligible companies who are constituents in the specified Morningstar Index. 60-Month Alpha: A measure of excess return of a company''s security over a 60-month period relative to the return of a benchmark index that is considered to represent the market''s movement as a whole. The alpha uses a company''s total return; including dividends; as input for the calculation.'
+          format: double
+          nullable: true
+        beta120MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        beta120MonthValue:
+          type: number
+          description: 'The aggregated value of 120-Month Beta; is derived using all eligible companies who are constituents in the specified Morningstar Index. 120-Month Beta: A measure of the volatility; or systematic risk; of a company''s security over a 120-month period in comparison to the market as a whole. The beta uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market; A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        beta36MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        beta36MonthValue:
+          type: number
+          description: 'The aggregated value of 36-Month Beta; is derived using all eligible companies who are constituents in the specified Morningstar Index. 36-Month Beta: A measure of the volatility; or systematic risk; of a company''s security over a 36-month period in comparison to the market as a whole. The beta uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        beta48MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        beta48MonthValue:
+          type: number
+          description: 'The aggregated value of 48-Month Beta; is derived using all eligible companies who are constituents in the specified Morningstar Index. 48-Month Beta: A measure of the volatility; or systematic risk; of a company''s security over a 48-month period in comparison to the market as a whole. The beta uses a company''s total return; including dividends; as input for the calculation.: A beta of 1 indicates that the security''s price will move with the market; A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        beta60MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        beta60MonthValue:
+          type: number
+          description: 'The aggregated value of 60-Month Beta; is derived using all eligible companies who are constituents in the specified Morningstar Index. 60-Month Beta: A measure of the volatility; or systematic risk; of a company''s security over a 60-month period in comparison to the market as a whole. The beta uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market; A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendAlpha120MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        nonDividendAlpha120MonthValue:
+          type: number
+          description: 'The aggregated value of 120-Month Non-Dividend Alpha; is derived using all eligible companies who are constituents in the specified Morningstar Index. 120-Month Non-Dividend Alpha: A measure of excess return of a company''s security over a 120-month period relative to the return of a benchmark index that is considered to represent the market''s movement as a whole. The alpha uses a company''s price return; excluding dividends; as input for the calculation.'
+          format: double
+          nullable: true
+        nonDividendAlpha36MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        nonDividendAlpha36MonthValue:
+          type: number
+          description: 'The aggregated value of 36-Month Non-Dividend Alpha; is derived using all eligible companies who are constituents in the specified Morningstar Index. 36-Month Non-Dividend Alpha: A measure of excess return of a company''s security over a 36-month period relative to the return of a benchmark index that is considered to represent the market''s movement as a whole. The alpha uses a company''s price return; excluding dividends; as input for the calculation.'
+          format: double
+          nullable: true
+        nonDividendAlpha48MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        nonDividendAlpha48MonthValue:
+          type: number
+          description: 'The aggregated value of 48-Month Non-Dividend Alpha; is derived using all eligible companies who are constituents in the specified Morningstar Index. 48-Month Non-Dividend Alpha: A measure of excess return of a company''s security over a 48-month period relative to the return of a benchmark index that is considered to represent the market''s movement as a whole. The alpha uses a company''s price return; excluding dividends; as input for the calculation.'
+          format: double
+          nullable: true
+        nonDividendAlpha60MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        nonDividendAlpha60MonthValue:
+          type: number
+          description: 'The aggregated value of 60-Month Non-Dividend Alpha; is derived using all eligible companies who are constituents in the specified Morningstar Index. 60-Month Non-Dividend Alpha: A measure of excess return of a company''s security over a 60-month period relative to the return of a benchmark index that is considered to represent the market''s movement as a whole. The alpha uses a company''s price return; excluding dividends; as input for the calculation.'
+          format: double
+          nullable: true
+        nonDividendBeta120MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        nonDividendBeta120MonthValue:
+          type: number
+          description: 'The aggregated value of 120-Month Non-Dividend Beta; is derived using all eligible companies who are constituents in the specified Morningstar Index. 120-Month Non-Dividend Beta: A measure of the volatility; or systematic risk; of a company''s security over a 120-month period in comparison to the market as a whole. The beta uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market; A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta36MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        nonDividendBeta36MonthValue:
+          type: number
+          description: 'The aggregated value of 36-Month Non-Dividend Beta; is derived using all eligible companies who are constituents in the specified Morningstar Index. 36-Month Non-Dividend Beta: A measure of the volatility; or systematic risk; of a company''s security over a 36-month period in comparison to the market as a whole. The beta uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market; A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta48MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        nonDividendBeta48MonthValue:
+          type: number
+          description: 'The aggregated value of 48-Month Non-Dividend Beta; is derived using all eligible companies who are constituents in the specified Morningstar Index. 48-Month Non-Dividend Beta: A measure of the volatility; or systematic risk; of a company''s security over a 48-month period in comparison to the market as a whole. The beta uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta60MonthNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        nonDividendBeta60MonthValue:
+          type: number
+          description: 'The aggregated value of 60-Month Non-Dividend Beta; is derived using all eligible companies who are constituents in the specified Morningstar Index. 60-Month Non-Dividend Beta: A measure of the volatility; or systematic risk; of a company''s security over a 60-month period in comparison to the market as a whole. The beta uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market; A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        numberOfCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
+          format: int32
+          nullable: true
+        countryCode:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputAggregationResidualRiskAndReturnSensitivity
+  responses:
+    ResponseEquityIndustryAggregatesResidualRiskAndReturnSensitivity:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              aggregationResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputAggregationResidualRiskAndReturnSensitivity'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityAggregatesResidualRiskAndReturnSensitivity:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              aggregationResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputAggregationResidualRiskAndReturnSensitivity'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

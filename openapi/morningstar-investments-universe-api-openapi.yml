@@ -1,0 +1,1900 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Investments Universe API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Investments Universe
+paths:
+  /direct-web-services/v1/investments:
+    get:
+      tags:
+      - Investments Universe
+      operationId: getInvestmentsUniverse
+      summary: Query entitled universe to retrieve investment metadata
+      description: '
+
+        **Get Universe Entitlements**
+
+
+        Retrieve the **primary filters** your account is entitled for.
+
+
+        | Scenario| Request Inputs |
+
+        |-----------|-------|
+
+        | Get equities entitlements.| `GET /investments`|
+
+        | Get managed investments entitlements.| `GET /investments?source=managedInvestments` |
+
+
+        **Get Custom Universe**
+
+
+        Retrieve a custom universe in full.
+
+
+        | Scenario| Request Inputs |
+
+        |-----------|-------|
+
+        | Get equities custom universe.| `GET /investments?universe=MY_EQUITIES_ABC`|
+
+        | Get managed investments custom universe.| `GET /investments?source=managedInvestments&universe=MY_MANAGED_INVESTMENTS_XYZ`|
+
+
+        **Filter Equities**
+
+
+        Further narrow a custom universe or filter full universe.
+
+
+        | Scenario| Request Inputs |
+
+        |-----------|-------|
+
+        | Filter custom universe by primary filter.| `GET /investments?exchangeCode=XPAR&universe=MY_EQUITIES_ABC` |
+
+        | Filter custom universe by primary and secondary filter.| `GET /investments?exchangeCode=XPAR&securityType=ST00000001&universe=MY_EQUITIES_ABC` |
+
+        | Filter full universe by primary filter only.| `GET /investments?exchangeCode=XPAR` |
+
+        | Filter full universe by primary and 1 secondary filter.| `GET /investments?exchangeCode=XPAR&securityType=ST00000001` |
+
+        | Filter full universe by primary and 2 secondary filters.| `GET /investments?exchangeCode=XPAR&shareClassInformationInvestmentType=ST00000001&securityType=ST00000001` |
+
+
+
+        **Filter Managed Investments**
+
+
+        Further narrow a custom universe or filter full universe.
+
+
+        | Scenario| Request Inputs |
+
+        |-----------|-------|
+
+        | Filter custom universe by a primary filter.| `GET /investments?source=managedInvestments&domicileCode=USA&universe=MY_MANAGED_INVESTMENTS_XYZ`|
+
+        | Filter managed investments by a primary filter (`countryAvailableForSaleCode`) | `GET /investments?source=managedInvestments&countryAvailableForSaleCode=USA`|
+
+        | Filter managed investments by a primary filter (`domicileCode`) | `GET /investments?source=managedInvestments&domicileCode=USA`|
+
+
+
+        **Retrieve Results Using Pagination Tokens**
+
+
+        Set pagination preferences in inital request and retrieve paginated results using tokens.
+
+
+        | Scenario| Request Inputs |
+
+        |-----------|-------|
+
+        | Pagination settings initial request (default `pageSize`).| `GET /investments?exchangeCode=XPAR` |
+
+        | Pagination settings subsequent requests (default `pageSize`).| `GET /investments?exchangeCode=XPAR&paginationTokenNext=CJjVEBoTOhE`|
+
+        | Pagination settings initial request (explicit `pageSize`).| `GET /investments?exchangeCode=XPAR&pageSize=25` |
+
+        | Pagination settings subsequent requests (explicit `pageSize`).| `GET /investments?exchangeCode=XPAR&pageSize=25&paginationTokenNext=CJjVEBoTOhE`|'
+      parameters:
+      - name: universe
+        in: query
+        description: Filters results to a custom universe defined during implementation for the account.
+        schema:
+          type: string
+        example: MY_UNIVERSE_321
+      - name: source
+        in: query
+        description: Specifies the investment data type to query.
+        schema:
+          type: string
+          default: equities
+          enum:
+          - equities
+          - managedInvestments
+      - name: exchangeCode
+        in: query
+        description: Primary filter for equities. Filters results by exchange code.
+        example: XPAR
+        schema:
+          type: string
+      - name: securityType
+        in: query
+        description: "Secondary filter for equities. Accepts:\n\n  *   `ST00000001` - Common Stock\n  *   `ST00000002` - Preferred Stock\n  *   `ST00000003` - Industry\n  *   `ST00000004` - Index\n  *   `ST00000005` - ETF\n  *   `ST00000006` - Closed-end Fund\n  *   `ST00000007` - Investment Trusts\n  *   `ST00000008` - Warrant\n  *   `ST00000009` - Note\n  *   `ST000000A1` - Units\n  *   `ST000000B1` - Rights\n  *   `ST000000C1` - Unlisted Common\n  *   `ST000000C2` - Unlisted Preferred"
+        example: ST00000001
+        schema:
+          type: string
+          enum:
+          - ST00000001
+          - ST00000002
+          - ST00000003
+          - ST00000004
+          - ST00000005
+          - ST00000006
+          - ST00000007
+          - ST00000009
+          - ST00000008
+          - ST000000A1
+          - ST000000B1
+          - ST000000C1
+          - ST000000C2
+          x-enumDescriptions:
+            ST00000001: Common Stock
+            ST00000002: Preferred Stock
+            ST00000003: Industry
+            ST00000004: Index
+            ST00000005: ETF
+            ST00000006: Closed-end Fund
+            ST00000007: Investment Trusts
+            ST00000008: Warrant
+            ST00000009: Note
+            ST000000A1: Units
+            ST000000B1: Rights
+            ST000000C1: Unlisted Common
+            ST000000C2: Unlisted Preferred
+      - name: countryAvailableForSaleCode
+        in: query
+        description: Primary filter for managed investments. Accepts 3-character ISO 3166-1 country codes.
+        example: AUS
+        schema:
+          type: string
+      - name: domicileCode
+        in: query
+        description: Primary filter for managed investments. Accepts 3-character ISO 3166-1 country codes.
+        example: AUS
+        schema:
+          type: string
+      - name: shareClassInformationInvestmentType
+        in: query
+        description: "Secondary filter for equities.\n\nAccepts:\n\n  *   `EQ` - Equity\n  *   `DR` - Depository Receipt\n  *   `PE` - Preferred Equity\n  *   `UE` - Unlisted Equity"
+        example: EQ
+        schema:
+          type: string
+          enum:
+          - EQ
+          - DR
+          - PE
+          - UE
+          x-enumDescriptions:
+            EQ: Equity
+            DR: Depository Receipt
+            PE: Preferred Equity
+            UE: Unlisted Equity
+      - name: paginationTokenNext
+        in: query
+        description: Specifies the token to fetch the next page of results.
+        example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
+        schema:
+          type: string
+      - name: paginationTokenPrevious
+        in: query
+        description: Specifies the token to fetch the previous page of results.
+        example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
+        schema:
+          type: string
+      - name: pageSize
+        in: query
+        description: Specifies the number of records per page.
+        example: 25
+        schema:
+          maximum: 50
+          minimum: 1
+          type: integer
+          format: int32
+          default: 50
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseInvestments'
+        '400':
+          $ref: '#/components/responses/ErrorResponse400'
+components:
+  schemas:
+    DataPointString:
+      title: DataPointString
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+    DataModelBasicReference:
+      type: object
+      properties:
+        assetsUnderAdvisementDate:
+          type: string
+          description: ''
+          nullable: true
+        associatedShareClass:
+          type: string
+          description: ''
+          nullable: true
+        baseCurrency:
+          $ref: '#/components/schemas/DataPointString'
+        baseUnit:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        brandingCompanyAsOfDate:
+          type: string
+          description: ''
+          nullable: true
+        brandingName:
+          type: string
+          description: ''
+          nullable: true
+        brandingNameId:
+          type: string
+          description: ''
+          nullable: true
+        caFundCode:
+          type: string
+          description: ''
+          nullable: true
+        countryAfsPerformanceLevel:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataPointString'
+          description: ''
+          nullable: true
+        countryAvailableForSale:
+          type: array
+          items:
+            $ref: '#/components/schemas/DataPointString'
+          description: ''
+          nullable: true
+        countryRegisteredForSale:
+          $ref: '#/components/schemas/DataPointString'
+        custodianFee:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        custodianFeeAmountCn:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        delistingDate:
+          type: string
+          description: ''
+          nullable: true
+        domicile:
+          $ref: '#/components/schemas/DataPointString'
+        domicileCountry:
+          $ref: '#/components/schemas/DataPointString'
+        externalManagementCompany:
+          type: string
+          description: ''
+          nullable: true
+        firmLegalStructure:
+          $ref: '#/components/schemas/DataPointString'
+        firmName:
+          type: string
+          description: ''
+          nullable: true
+        firmNameId:
+          type: string
+          description: ''
+          nullable: true
+        firmType:
+          $ref: '#/components/schemas/DataPointString'
+        fundCode:
+          type: string
+          description: ''
+          nullable: true
+        fundid:
+          type: string
+          description: ''
+          nullable: true
+        fundLegalName:
+          type: string
+          description: ''
+          nullable: true
+        fundLegalStructure:
+          $ref: '#/components/schemas/DataPointString'
+        fundStandardName:
+          type: string
+          description: ''
+          nullable: true
+        germanWkn:
+          type: string
+          description: ''
+          nullable: true
+        grossAssetsCurrency:
+          $ref: '#/components/schemas/DataPointString'
+        iaPrimaryShareClass:
+          $ref: '#/components/schemas/DataPointString'
+        inceptionDate:
+          type: string
+          description: ''
+          nullable: true
+        inceptionDateOfFundSOldestShareClass:
+          type: string
+          description: ''
+          nullable: true
+        indexFamilyId:
+          type: string
+          description: ''
+          nullable: true
+        indexFamilyName:
+          type: string
+          description: ''
+          nullable: true
+        investmentType:
+          $ref: '#/components/schemas/DataPointString'
+        ipoAssetRaised:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        ipoEndDate:
+          type: string
+          description: ''
+          nullable: true
+        ipoStartDate:
+          type: string
+          description: ''
+          nullable: true
+        isin:
+          type: string
+          description: ''
+          nullable: true
+        itaCode:
+          type: string
+          description: ''
+          nullable: true
+        latestAccountingDate:
+          type: string
+          description: ''
+          nullable: true
+        legalName:
+          type: string
+          description: ''
+          nullable: true
+        lifeTriggerEventDate:
+          type: string
+          description: ''
+          nullable: true
+        lifeTriggerEventType:
+          $ref: '#/components/schemas/DataPointString'
+        listingDate:
+          type: string
+          description: ''
+          nullable: true
+        localFirmNameJp:
+          type: string
+          description: ''
+          nullable: true
+        localFirmNameKr:
+          type: string
+          description: ''
+          nullable: true
+        localFirmShortNameJp:
+          type: string
+          description: ''
+          nullable: true
+        localFundLegalNameKr:
+          type: string
+          description: ''
+          nullable: true
+        localLegalNameJp:
+          type: string
+          description: ''
+          nullable: true
+        localLegalNameKr:
+          type: string
+          description: ''
+          nullable: true
+        localNameAfrikaans:
+          type: string
+          description: ''
+          nullable: true
+        localNameCn:
+          type: string
+          description: ''
+          nullable: true
+        localNameHebrew:
+          type: string
+          description: ''
+          nullable: true
+        localNameHk:
+          type: string
+          description: ''
+          nullable: true
+        localNameJp:
+          type: string
+          description: ''
+          nullable: true
+        localNameKr:
+          type: string
+          description: ''
+          nullable: true
+        localNameSg:
+          type: string
+          description: ''
+          nullable: true
+        localNameThai:
+          type: string
+          description: ''
+          nullable: true
+        localNameTw:
+          type: string
+          description: ''
+          nullable: true
+        masterFundid:
+          type: string
+          description: ''
+          nullable: true
+        masterPortfolioId:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        maximumSwingFactorDownwards:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        maximumSwingFactorUpwards:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        mexCode:
+          type: string
+          description: ''
+          nullable: true
+        name:
+          type: string
+          description: ''
+          nullable: true
+        nameOfFundSOldestShareClass:
+          type: string
+          description: ''
+          nullable: true
+        obsoleteDate:
+          type: string
+          description: ''
+          nullable: true
+        obsoleteType:
+          $ref: '#/components/schemas/DataPointString'
+        oldestShareClass:
+          $ref: '#/components/schemas/DataPointString'
+        operationsDataReady:
+          $ref: '#/components/schemas/DataPointString'
+        performanceDataReady:
+          $ref: '#/components/schemas/DataPointString'
+        performanceId:
+          type: string
+          description: ''
+          nullable: true
+        performanceStartDate:
+          type: string
+          description: ''
+          nullable: true
+        pieConversionDate:
+          type: string
+          description: ''
+          nullable: true
+        portfolioCurrency:
+          $ref: '#/components/schemas/DataPointString'
+        portfolioDataReady:
+          $ref: '#/components/schemas/DataPointString'
+        portfolioDate:
+          type: string
+          description: ''
+          nullable: true
+        previousNameOfFirm:
+          type: string
+          description: ''
+          nullable: true
+        priceDataReady:
+          $ref: '#/components/schemas/DataPointString'
+        primaryShare:
+          $ref: '#/components/schemas/DataPointString'
+        priorFirmName:
+          type: string
+          description: ''
+          nullable: true
+        productFocus:
+          $ref: '#/components/schemas/DataPointString'
+        regionOfSale:
+          $ref: '#/components/schemas/DataPointString'
+        registrationDateTw:
+          type: string
+          description: ''
+          nullable: true
+        restructureDate:
+          type: string
+          description: ''
+          nullable: true
+        secidForImport:
+          type: string
+          description: ''
+          nullable: true
+        seriesName:
+          type: string
+          description: ''
+          nullable: true
+        shareClassType:
+          $ref: '#/components/schemas/DataPointString'
+        sharesPercDateCn:
+          type: string
+          description: ''
+          nullable: true
+        status:
+          $ref: '#/components/schemas/DataPointString'
+        swissValor:
+          type: string
+          description: ''
+          nullable: true
+        ticker:
+          type: string
+          description: ''
+          nullable: true
+        tickerOfFundSOldestShareClass:
+          type: string
+          description: ''
+          nullable: true
+        underlyingFundInceptionDate:
+          type: string
+          description: ''
+          nullable: true
+        underlyingFundName:
+          type: string
+          description: ''
+          nullable: true
+        underlyingFundSecid:
+          type: string
+          description: ''
+          nullable: true
+        usHeadquarters:
+          type: string
+          description: ''
+          nullable: true
+        valuationCountry:
+          $ref: '#/components/schemas/DataPointString'
+        virtualClass:
+          $ref: '#/components/schemas/DataPointString'
+      additionalProperties: false
+    ResponseInvestmentsMetadataExchanges:
+      title: ResponseInvestmentsMetadataExchanges
+      type: object
+      properties:
+        exchangeCode:
+          description: Exchange code.
+          example: SWA
+          readOnly: true
+        micCode:
+          description: Market Identifier Code (MIC).
+          type: string
+          example: XSWA
+    ErrorResponse:
+      title: ErrorResponse
+      type: object
+      properties:
+        statusCode:
+          type: string
+          description: Indicates the HTTP status code.
+          example: 400
+        errorCode:
+          type: string
+          description: Indicates the unique error identifier.
+          example: 400.InvestmentDetails.020
+        message:
+          type: string
+          description: Description of the error.
+          example: Invalid source input for CountryAvailableForSaleCode
+        requestId:
+          type: string
+          description: Indicates the unique request identifier.
+          example: 6631c374-2331-4c7e-b6f2-d0c0079f6ee
+      description: Status 400 Code and Message
+    DataModelDelistInformation:
+      type: object
+      properties:
+        delistingDate:
+          type: string
+          description: The effective date on which a security was delisted from an exchange
+          nullable: true
+      additionalProperties: false
+    DataModelShareClassInformation:
+      type: object
+      properties:
+        commonShareSubType:
+          type: string
+          description: Refers to the type of securities that can be found within the equity database. For the vast majority; this value will populate as null for regular common shares. For a minority of share classes; this will populate as either Participating Preferred; Closed-End Fund; Foreign Share; or Foreign Participated Preferred which reflects our limited coverage of these types of securities within our equity database.
+          nullable: true
+        conversionRatio:
+          type: number
+          description: The relationship between the chosen share class and the primary share class
+          format: double
+          nullable: true
+        cusip:
+          type: string
+          description: ''
+          nullable: true
+        directInvest:
+          $ref: '#/components/schemas/DataPointBoolean'
+        dividendReinvest:
+          $ref: '#/components/schemas/DataPointBoolean'
+        drRatio:
+          type: number
+          description: The number of underlying common shares backing each depositary receipt (DR) traded.
+          format: double
+          nullable: true
+        exchangeCode:
+          type: string
+          description: A symbol for the stock exchange name; usually consisting of 3 to 5 characters; examples include NYSE; NAS; LSE; OTCBB ($$$ is used for private/unlisted securities)
+          nullable: true
+        exchangeSubMarketGlobalId:
+          type: string
+          description: Indicates a different marketplace or the different market tiers within a stock exchange.
+          nullable: true
+        investmentId:
+          type: string
+          description: Morningstar Issuer Id/ Investment Id
+          nullable: true
+        investmentName:
+          type: string
+          description: Morningstar standard investment name
+          nullable: true
+        investmentPrimaryIssuer:
+          $ref: '#/components/schemas/DataPointString'
+        investmentStatus:
+          type: integer
+          description: '0: obsolete1: active9: other'
+          format: int32
+          nullable: true
+        investmentType:
+          type: string
+          description: 'The abbreviation for investment type classifications: Equity (EQ); Depositary Receipt (DR); Preferred Equity (PE); Unlisted Equity (UE)'
+          nullable: true
+        ipoDate:
+          type: string
+          description: The initial day that the share begins trading on a public exchange
+          nullable: true
+        ipoOfferPrice:
+          type: number
+          description: Indicates the price at which an issuer sells its shares under an initial public offering (IPO). The offer price is set by the issuer and its underwriters.
+          format: double
+          nullable: true
+        ipoOfferPriceRange:
+          type: string
+          description: The estimated offer price range (low-high) for a new IPO. The field should be used until the final IPO price becomes available; as populated in the data field IPO Offer Price.
+          nullable: true
+        isDr:
+          type: boolean
+          description: 'Indicates if the share class is a depositary receipt: TRUE denotes it is an ADR or GDR; otherwise FALSE'
+          nullable: true
+        isin:
+          type: string
+          description: ''
+          nullable: true
+        isMainShare:
+          $ref: '#/components/schemas/DataPointBoolean'
+        isPrimaryPerformanceId:
+          $ref: '#/components/schemas/DataPointBoolean'
+        marketSymbol:
+          type: string
+          description: An arrangement of characters representing a particular security listed on an exchange or traded publicly generated and maintained by market data (also known as Realtime). For example; Morningstar's market symbol is 126.1.MORN where 126 refers to Realtime exchange code for NASDAQ; 1 refers to security type equity; and the last set of characters refers to company's actual symbol.
+          nullable: true
+        parValue:
+          type: number
+          description: Nominal value of a security determined by the issuing company
+          format: double
+          nullable: true
+        performanceStatus:
+          $ref: '#/components/schemas/DataPointString'
+        securityType:
+          type: string
+          description: 'Indicates security type classification at the share class level: Common Stock (ST00000001); Preferred Stock (ST00000002); Industry (ST00000003); Index (ST00000004); ETF (ST00000005); Closed-end Fund (ST00000006); Investment Trusts (ST00000007); Note (ST00000009); Warrant (ST00000008); Units (ST000000A1); Rights (ST000000B1); Unlisted Common (ST000000C1); Unlisted Preferred (ST000000C2)'
+          nullable: true
+        sedol:
+          type: string
+          description: The stock exchange daily official list (SEDOL) is a seven-character identification code assigned by the London Stock Exchange. For securities issued in the UK the Sedol may be converted to an ISIN.
+          nullable: true
+        segmentMicCode:
+          type: string
+          description: 'Indicates the Exchange ISO Market Segment Identifier Code (MIC). Reference: https://www.iso20022.org/market-identifier-codes ($$$ is used for private/unlisted securities)'
+          nullable: true
+        symbol:
+          type: string
+          description: 'An arrangement of characters (often letters) representing a particular security listed on an exchange or otherwise traded publicly: Note that Morningstar''s multi-share class symbols will often contain a period within the symbol; e.g. BRK.B for Berkshire Hathaway Class B'
+          nullable: true
+        tradingCurrency:
+          type: string
+          description: 3 Character ISO code of the currency that the exchange price is denominated in; i.e. the trading currency of the security
+          nullable: true
+        tradingStatus:
+          $ref: '#/components/schemas/DataPointString'
+        underlyingDrIssuerId:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+    ResponseInvestmentsIdentifiers:
+      type: object
+      description: Investment identifiers.
+      properties:
+        performanceId:
+          type: string
+          description: Morningstar Performance ID.
+          example: 0P0001MIXG
+    ResponseInvestmentsMetadata:
+      title: ResponseInvestmentsMetadata
+      type: object
+      properties:
+        time:
+          description: Time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          type: string
+          format: date-time
+        requestId:
+          description: Unique identifier of a request.
+          type: string
+          example: 7ccd91c0-6146-4256-8aba-3a1f2e5d0203
+        paginationTokenNext:
+          type: string
+          description: Token to fetch next page of results.
+          example: CNOAQhoJKQBIuTktAQAAGhU6E3RlYW0gcGFydG5lcnMgZ3JvdXAaDDoKMHAwMDAwYTZ6dCIMOgowUDAwMDBBNlpU
+        paginationTokenPrevious:
+          type: string
+          description: Token to fetch previous page of results.
+          example: CKDjNhoJKQBIuTktAQAAGg06C2dkZiBzdWV6IHNhGgw6CjBwMDAwMDl3cW8iDDoKMFAwMDAwOVdRTw==
+        totalCount:
+          type: integer
+          description: Total number of results found.
+          example: 2162
+          format: int32
+        exchanges:
+          type: array
+          description: Exchange and MIC codes account is entitled for.
+          items:
+            $ref: '#/components/schemas/ResponseInvestmentsMetadataExchanges'
+          nullable: true
+        countryAvailableForSale:
+          description: Countries for which account is entitled for.
+          type: array
+          items:
+            type: string
+          nullable: true
+        domiciles:
+          description: Countries for which account is entitled.
+          type: array
+          items:
+            type: string
+          nullable: true
+    ResponseInvestments:
+      type: object
+      description: Response containing investment results and metadata.
+      properties:
+        investments:
+          type: array
+          description: List of investments returned by the query.
+          items:
+            $ref: '#/components/schemas/ResponseInvestment'
+        metadata:
+          $ref: '#/components/schemas/ResponseInvestmentsMetadata'
+      required:
+      - investments
+      - metadata
+    DataPointBoolean:
+      title: DataPointBoolean
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+    DataPointIntegerLong:
+      title: DataPointIntegerLong
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+    ResponseInvestment:
+      type: object
+      description: Investment entry returned as part of the universe lookup.
+      additionalProperties: true
+      properties:
+        identifiers:
+          $ref: '#/components/schemas/ResponseInvestmentsIdentifiers'
+        companyInformation:
+          $ref: '#/components/schemas/DataModelCompanyInformation'
+        delistInformation:
+          $ref: '#/components/schemas/DataModelDelistInformation'
+        shareClassInformation:
+          $ref: '#/components/schemas/DataModelShareClassInformation'
+        basicReference:
+          $ref: '#/components/schemas/DataModelBasicReference'
+    DataModelCompanyInformation:
+      type: object
+      properties:
+        businessCountryCode:
+          $ref: '#/components/schemas/DataPointString'
+        canNaics:
+          type: integer
+          description: An acronym for North American Industry Classification System (NAICS) specific to Canada; a 6-digit numerical classification assigned to individual companies. NAICS was developed jointly by the U.S.; Canada; and Mexico to provide new comparability in statistics about business activity across North America. It was intended to replace the U.S. Standard Industrial Classification (SIC) system.  The initial SIC and NAICS listed is the Primary code based on revenue generation; followed by Secondary SIC and NAICS when applicable. Both SIC and NAICS are manually collected and assigned.
+          format: int64
+          nullable: true
+        cik:
+          type: string
+          description: ''
+          nullable: true
+        companyStatus:
+          $ref: '#/components/schemas/DataPointString'
+        domicileCountryCode:
+          $ref: '#/components/schemas/DataPointString'
+        expectedFiscalYearEnd:
+          type: string
+          description: The upcoming expected year end for the company; it is calculated based on the current year end (from latest available annual report) + 1 year
+          nullable: true
+        fiscalYearEnd:
+          $ref: '#/components/schemas/DataPointIntegerLong'
+        globalTemplateIndustryTemplateCode:
+          $ref: '#/components/schemas/DataPointString'
+        industryClassificationEffectiveDate:
+          type: string
+          description: The effective date when the Morningstar Industry Classification is updated for the company
+          nullable: true
+        ipoType:
+          type: string
+          description: This data point identifies two different processes a company can take to raise capital by listing shares on a public exchange; Initial public offering (Traditional IPO) and Direct Listing. IPO is the most common and traditional route; in which new shares are created; underwritten; and sold to the public. In a Direct Listing; no new shares are created; and only existing outstanding shares are sold with no underwriters involved. Traditional IPO and Direct Listing are the 2 types available starting in September 2021.  For historical data prior to September 2021; Traditional IPO is not available; the 2 possible values prior to September 2021 are Null and Direct Listing.
+          nullable: true
+        isBusinessDevelopmentCompany:
+          $ref: '#/components/schemas/DataPointBoolean'
+        isic:
+          type: string
+          description: An acronym for International Standard Industrial Classification (ISIC); which was developed by the United Nations; and is the international reference classification of productive activities. Its main purpose is to provide a set of activity categories that can be utilized for the collection and reporting of statistics according to such activities. The majority of countries around the world have used ISIC as their national activity classification or have developed national classifications derived from ISIC.
+          nullable: true
+        isLimitedLiabilityCompany:
+          $ref: '#/components/schemas/DataPointBoolean'
+        isLimitedPartnership:
+          $ref: '#/components/schemas/DataPointBoolean'
+        isMasterLimitedPartnership:
+          $ref: '#/components/schemas/DataPointBoolean'
+        isReit:
+          $ref: '#/components/schemas/DataPointBoolean'
+        isShellCompany:
+          $ref: '#/components/schemas/DataPointBoolean'
+        isSpecialPurposeAcquisitionCompany:
+          $ref: '#/components/schemas/DataPointBoolean'
+        legalName:
+          type: string
+          description: The full name of the registrant as specified in its charter; and most often found on the front cover of the 10K/10Q/20F filings or annual report
+          nullable: true
+        legalNameLanguageCode:
+          type: string
+          description: 3-character language code for the foreign legal name if/when applicable
+          nullable: true
+        lei:
+          type: string
+          description: The Legal Entity Identifier (LEI) is a 20-character; alpha-numeric code based on the ISO 17442 standard developed by the International Organization for Standardization (ISO). It connects to key reference information that enables clear and unique identification of legal entities participating in financial transactions.
+          nullable: true
+        morningstarIndustryCode:
+          $ref: '#/components/schemas/DataPointIntegerLong'
+        morningstarIndustryGroupCode:
+          $ref: '#/components/schemas/DataPointIntegerLong'
+        morningstarSectorCode:
+          $ref: '#/components/schemas/DataPointIntegerLong'
+        morningstarSuperSectorCode:
+          $ref: '#/components/schemas/DataPointIntegerLong'
+        nace:
+          type: string
+          description: NACE is a European standard classification of economic activities maintained by Eurostat that  is similar to SIC and NAICS in North America. The NACE code is 5 characters long;  is arranged in the following format 00.00 and provides the framework for collecting and presenting a large range of statistical data according to economic activity. The use of NACE is mandatory within the European Statistical System.
+          nullable: true
+        naics:
+          type: integer
+          description: An acronym for North American Industry Classification System (NAICS); a 6-digit numerical classification assigned to individual companies. NAICS was developed jointly by the U.S.; Canada; and Mexico to provide new comparability in statistics about business activity across North America. It was intended to replace the U.S. Standard Industrial Classification (SIC) system.  The initial SIC and NAICS listed is the Primary code based on revenue generation; followed by Secondary SIC and NAICS when applicable. Both SIC and NAICS are manually collected and assigned.
+          format: int64
+          nullable: true
+        operationStatus:
+          $ref: '#/components/schemas/DataPointString'
+        shortName:
+          type: string
+          description: '25-character max abbreviated name of the firm: In most cases; the short name will simply be the Legal Name less the Corporation; Corp.; Inc.; Incorporated; etc.'
+          nullable: true
+        sic:
+          type: integer
+          description: An acronym for Standard Industrial Classification System (SIC); it is a system for classifying a business according to economic activity
+          format: int64
+          nullable: true
+        standardName:
+          type: string
+          description: Standard name for the entity
+          nullable: true
+        stateOrCountryOfIncorporation:
+          $ref: '#/components/schemas/DataPointString'
+        usaNaics:
+          type: integer
+          description: An acronym for North American Industry Classification System (NAICS) specific to the United States; a 6-digit numerical classification assigned to individual companies. NAICS was developed jointly by the U.S.; Canada; and Mexico to provide new comparability in statistics about business activity across North America. It was intended to replace the U.S. Standard Industrial Classification (SIC) system.  The initial SIC and NAICS listed is the Primary code based on revenue generation; followed by Secondary SIC and NAICS when applicable. Both SIC and NAICS are manually collected and assigned.
+          format: int64
+          nullable: true
+        webAddress:
+          type: string
+          description: Indicates website address of company's contact information
+          nullable: true
+        yearOfEstablishment:
+          type: integer
+          description: The year a company was founded
+          format: int64
+          nullable: true
+      additionalProperties: false
+  examples:
+    ResponseExample1:
+      summary: Get Equities Universe Entitlements
+      description: "- Response when input is `GET /investments`. \n- `equities` is the source type so a `source` value does not need to be specified."
+      value:
+        investments: []
+        metadata:
+          requestId: 68511d05-3d2e-480c-ae88-a14be0948f03
+          time: '2026-02-26T12:19:15.8950456Z'
+          exchanges:
+          - exchangeCode: SWA
+            micCode: XSWA
+          - exchangeCode: XTER
+            micCode: XETR
+          - exchangeCode: KAR
+            micCode: XKAR
+          - exchangeCode: ZAG
+            micCode: XZAG
+          - exchangeCode: MTAH
+            micCode: MTAH
+          - exchangeCode: BJSE
+            micCode: BJSE
+          - exchangeCode: OVSE
+            micCode: XLIT
+          countryAvailableForSale:
+          - ABW
+          - AFG
+          - AGO
+          - AIA
+          - ALA
+          - ALB
+          - AND
+          - ANT
+          - ARE
+          - ARG
+          - ARM
+          - ASM
+          - CYM
+          domiciles:
+          - ABW
+          - AFG
+          - AGO
+          - AIA
+          - ALA
+          - ALB
+          - AND
+          - ANT
+          - ARE
+          - ARG
+          - ARM
+          - ASM
+          - CYM
+    ResponseExample5:
+      summary: 'Pagination: Initial Request'
+      description: '- Response when input is `GET /investments?source=equities&exchangeCode=XTER&pageSize=1`.
+
+        - A `paginationTokenNext` value is returned. Use in subsequent request to fetch the next page of results.
+
+        - In subsequent request, all other inputs must be the same as those passed in the initial request.'
+      value:
+        investments:
+        - companyInformation:
+            cik: '1445930'
+            companyStatus:
+              value: Public
+              code: U
+            companyId: 0C000007ZR
+            globalTemplateIndustryTemplateCode:
+              value: Bank
+              code: B
+            legalName: (주)KB금융지주
+            legalNameLanguageCode: KOR
+            lei: 529900TKE4MXG3Q6GW86
+            operationStatus:
+              value: Normal
+              code: N
+            shortName: KB Financial Group
+            standardName: KB Financial Group Inc
+          shareClassInformation:
+            exchangeCode: XTER
+            investmentId: E0KOR01R2U
+            investmentStatus: 1
+            investmentType: DR
+            isDr: true
+            isin: US48241A1051
+            isMainShare:
+              value: 'NO'
+              code: false
+            isPrimaryPerformanceId:
+              value: 'NO'
+              code: false
+            marketSymbol: 213.1.KBIA
+            performanceStatus:
+              value: Deactive
+              code: D
+            securityType: ST00000001
+            segmentMicCode: XETR
+            symbol: KBIA
+            tradingCurrency: EUR
+          identifiers:
+            performanceId: 0P0000CJZY
+        metadata:
+          paginationTokenNext: CLf5DxoROg9hIHRvdXRl
+          totalCount: 11171
+          requestId: 1bb636c2-f182-420c-bea2-9a0f46b53ab7
+          time: '2026-02-26T12:35:39.1288129Z'
+          exchanges:
+          - exchangeCode: SWA
+            micCode: XSWA
+          - exchangeCode: XTER
+            micCode: XETR
+          - exchangeCode: KAR
+            micCode: XKAR
+          - exchangeCode: ZAG
+            micCode: XZAG
+          - exchangeCode: MTAH
+            micCode: MTAH
+          - exchangeCode: BJSE
+            micCode: BJSE
+          - exchangeCode: OVSE
+            micCode: XLIT
+          countryAvailableForSale:
+          - ABW
+          - AFG
+          - AGO
+          - AIA
+          - ALA
+          - ALB
+          - AND
+          - ANT
+          - ARE
+          - ARG
+          - ARM
+          - ASM
+          - CYM
+    ResponseExample3:
+      summary: Get Managed Investments Universe Entitlements
+      description: '- Response when input is `GET /investments?source=managedInvestments`.
+
+        - `source` is a required parameter.'
+      value:
+        investments: []
+        metadata:
+          requestId: 19869bfc-fb97-4517-b19b-a212df8f6e4c
+          time: '2026-02-26T12:40:36.1819168Z'
+          countryAvailableForSale:
+          - ABW
+          - AFG
+          - AGO
+          - BLR
+          - BLZ
+          - BMU
+          - BOL
+          - BRA
+          - BRB
+          - BRN
+          - BTN
+          - BVT
+          - BWA
+          - COK
+          - COL
+          - COM
+          - CPV
+          - CRI
+          - CSK
+          - CUB
+          - CUW
+          - CXR
+          - CYP
+          - USA
+          domiciles:
+          - ABW
+          - AFG
+          - AGO
+          - AIA
+          - ALA
+          - ALB
+          - AND
+          - ANT
+          - ARE
+          - ARG
+          - ARM
+          - ASM
+          - CYM
+          - USA
+    ResponseExample6:
+      summary: 'Pagination: Subsequent Request - Page Forward'
+      description: '- Response when input is `GET /investments?source=equities&exchangeCode=XTER&pageSize=1&paginationTokenNext=CLf5DxoROg9hIHRvdXRl`.
+
+        - Both a `paginationTokenNext` and `paginationTokenPrevious` value are returned.'
+      value:
+        investments:
+        - companyInformation:
+            companyStatus:
+              value: Private
+              code: V
+            companyId: 0C00006F23
+            globalTemplateIndustryTemplateCode:
+              value: Normal
+              code: N
+            legalName: A Toute Vitesse
+            legalNameLanguageCode: FRE
+            lei: 9695004DQQKJRQJKUP89
+            operationStatus:
+              value: Unknown/Unclassified
+              code: K
+            shortName: A Toute Vitesse
+            standardName: A Toute Vitesse
+          delistInformation:
+          - delistingDate: '2022-12-30'
+          shareClassInformation:
+            exchangeCode: XPAR
+            exchangeSubMarketGlobalId: EX$$$$XMLI
+            investmentId: F000000TMY
+            investmentStatus: 0
+            investmentType: EQ
+            ipoDate: '2004-02-12'
+            isDr: false
+            isin: FR0010050773
+            isMainShare:
+              value: 'YES'
+              code: true
+            isPrimaryPerformanceId:
+              value: 'YES'
+              code: true
+            marketSymbol: 160.1.MLATV
+            performanceStatus:
+              value: Deactive
+              code: D
+            securityType: ST00000001
+            segmentMicCode: XPAR
+            symbol: MLATV
+            tradingCurrency: EUR
+            tradingStatus:
+              value: trading
+              code: '0'
+          identifiers:
+            performanceId: 0P0000DKVQ
+        metadata:
+          paginationTokenNext: 5dyIMOgowUDAwMDA5VzlX
+          paginationTokenPrevious: CLf5DxoROg9hIHRvdXRl
+          totalCount: 11171
+          requestId: 029c6030-102e-4e67-9b30-b1feb4dbe5e9
+          time: '2026-02-26T12:53:19.3608212Z'
+          exchanges:
+          - exchangeCode: SWA
+            micCode: XSWA
+          - exchangeCode: XTER
+            micCode: XETR
+          - exchangeCode: KAR
+            micCode: XKAR
+          - exchangeCode: ZAG
+            micCode: XZAG
+          - exchangeCode: MTAH
+            micCode: MTAH
+          - exchangeCode: BJSE
+            micCode: BJSE
+          - exchangeCode: OVSE
+            micCode: XLIT
+          countryAvailableForSale:
+          - ABW
+          - AFG
+          - AGO
+          - AIA
+          - ALA
+          - ALB
+          - AND
+          - ANT
+          - ARE
+          - ARG
+          - ARM
+          - ASM
+          - CYM
+    ResponseExample2:
+      summary: Filter Equities Universe by Primary Filter
+      description: '- Response when input is `GET /investments?source=equities&exchangeCode=XTER&pageSize=5`.
+
+        - Secondary filters can be applied in addition to the primary filter. '
+      value:
+        investments:
+        - companyInformation:
+            cik: '1445930'
+            companyStatus:
+              value: Public
+              code: U
+            companyId: 0C000007ZR
+            globalTemplateIndustryTemplateCode:
+              value: Bank
+              code: B
+            legalName: (주)KB금융지주
+            legalNameLanguageCode: KOR
+            lei: 529900TKE4MXG3Q6GW86
+            operationStatus:
+              value: Normal
+              code: N
+            shortName: KB Financial Group
+            standardName: KB Financial Group Inc
+          shareClassInformation:
+            exchangeCode: XTER
+            investmentId: E0KOR01R2U
+            investmentStatus: 1
+            investmentType: DR
+            isDr: true
+            isin: US48241A1051
+            isMainShare:
+              value: 'NO'
+              code: false
+            isPrimaryPerformanceId:
+              value: 'NO'
+              code: false
+            marketSymbol: 213.1.KBIA
+            performanceStatus:
+              value: Deactive
+              code: D
+            securityType: ST00000001
+            segmentMicCode: XETR
+            symbol: KBIA
+            tradingCurrency: EUR
+          identifiers:
+            performanceId: 0P0000CJZY
+        - companyInformation:
+            cik: '1263043'
+            companyStatus:
+              value: Public
+              code: U
+            companyId: 0C00000KVZ
+            globalTemplateIndustryTemplateCode:
+              value: Bank
+              code: B
+            legalName: (주)신한금융지주회사
+            legalNameLanguageCode: KOR
+            lei: 988400EB8A6G49E5KO54
+            operationStatus:
+              value: Normal
+              code: N
+            shortName: Shinhan Finl Gr
+            standardName: Shinhan Financial Group Co Ltd
+          shareClassInformation:
+            exchangeCode: XTER
+            investmentId: E0USA04B6P
+            investmentStatus: 1
+            investmentType: DR
+            isDr: true
+            isin: US8245961003
+            isMainShare:
+              value: 'NO'
+              code: false
+            isPrimaryPerformanceId:
+              value: 'NO'
+              code: false
+            marketSymbol: 213.1.KSF1
+            performanceStatus:
+              value: Deactive
+              code: D
+            securityType: ST00000001
+            segmentMicCode: XETR
+            symbol: KSF1
+            tradingCurrency: EUR
+          identifiers:
+            performanceId: 0P0000T7Z0
+        - companyInformation:
+            cik: '1266467'
+            companyStatus:
+              value: Public
+              code: U
+            companyId: 0C000009MK
+            globalTemplateIndustryTemplateCode:
+              value: Normal
+              code: N
+            legalName: (주)웹젠
+            legalNameLanguageCode: KOR
+            operationStatus:
+              value: Normal
+              code: N
+            shortName: Webzen
+            standardName: Webzen Inc
+          delistInformation:
+          - delistingDate: '2019-06-10'
+          shareClassInformation:
+            exchangeCode: XTER
+            investmentId: E0KOR01R38
+            investmentStatus: 0
+            investmentType: DR
+            isDr: true
+            isin: US94846M1027
+            isMainShare:
+              value: 'NO'
+              code: false
+            isPrimaryPerformanceId:
+              value: 'NO'
+              code: false
+            marketSymbol: 213.1.WZN
+            performanceStatus:
+              value: Deactive
+              code: D
+            securityType: ST00000001
+            segmentMicCode: XETR
+            symbol: WZN
+            tradingCurrency: EUR
+          identifiers:
+            performanceId: 0P0000AZ63
+        - companyInformation:
+            cik: '892450'
+            companyStatus:
+              value: Public
+              code: U
+            companyId: 0C00000808
+            globalTemplateIndustryTemplateCode:
+              value: Normal
+              code: N
+            legalName: (주)케이티
+            legalNameLanguageCode: KOR
+            lei: 9884005ACF8449EANY26
+            operationStatus:
+              value: Normal
+              code: N
+            shortName: KT
+            standardName: KT Corp
+          shareClassInformation:
+            exchangeCode: XTER
+            investmentId: E0KOR011MM
+            investmentStatus: 1
+            investmentType: DR
+            isDr: true
+            isin: US48268K1016
+            isMainShare:
+              value: 'NO'
+              code: false
+            isPrimaryPerformanceId:
+              value: 'NO'
+              code: false
+            marketSymbol: 213.1.KTC
+            performanceStatus:
+              value: Deactive
+              code: D
+            securityType: ST00000001
+            segmentMicCode: XETR
+            symbol: KTC
+            tradingCurrency: EUR
+          identifiers:
+            performanceId: 0P0000BKDX
+        - companyInformation:
+            companyStatus:
+              value: Public
+              code: U
+            companyId: 0C00003BHU
+            globalTemplateIndustryTemplateCode:
+              value: Normal
+              code: N
+            legalName: (주)케이티앤지
+            legalNameLanguageCode: KOR
+            lei: 988400ZJV6ISYBLQX875
+            operationStatus:
+              value: Normal
+              code: N
+            shortName: KT&G
+            standardName: KT&G Corp
+          shareClassInformation:
+            exchangeCode: XTER
+            investmentId: F000000WED
+            investmentStatus: 1
+            investmentType: DR
+            isDr: true
+            isin: US48268G1004
+            isMainShare:
+              value: 'NO'
+              code: false
+            isPrimaryPerformanceId:
+              value: 'NO'
+              code: false
+            marketSymbol: 213.1.KTOA
+            performanceStatus:
+              value: Deactive
+              code: D
+            securityType: ST00000001
+            segmentMicCode: XETR
+            symbol: KTOA
+            tradingCurrency: KRW
+          identifiers:
+            performanceId: 0P0000BDWX
+        metadata:
+          paginationTokenNext: CJjVEBoTOhE3YyBzb2xhcnBhcmtlbiBhZxoMOgowcDAwMDE4MXp4Igw6CjBQMDAwMTgxWlg=
+          totalCount: 11171
+          requestId: 1bb636c2-f182-420c-bea2-9a0f46b53ab7
+          time: '2026-02-26T12:35:39.1288129Z'
+          exchanges:
+          - exchangeCode: SWA
+            micCode: XSWA
+          - exchangeCode: XTER
+            micCode: XETR
+          - exchangeCode: KAR
+            micCode: XKAR
+          - exchangeCode: ZAG
+            micCode: XZAG
+          - exchangeCode: MTAH
+            micCode: MTAH
+          - exchangeCode: BJSE
+            micCode: BJSE
+          - exchangeCode: OVSE
+            micCode: XLIT
+          countryAvailableForSale:
+          - ABW
+          - AFG
+          - AGO
+          - AIA
+          - ALA
+          - ALB
+          - AND
+          - ANT
+          - ARE
+          - ARG
+          - ARM
+          - ASM
+          - CYM
+    ErrorExample1:
+      summary: 400 - Invalid Input
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetails.020
+        message: Invalid source input for domicileCode
+        requestId: 539d62a5-3586-4070-965e-0f7f64712d79
+    ResponseExample4:
+      summary: Filter Managed Investments by Primary Filter.
+      description: "Response when input is \n  - `GET /investments?source=managedInvestments&countryAvailableForSaleCode=USA&pageSize=5`\n  - `GET /investments?source=managedinvestments&domicileCode=USA&pageSize=5`."
+      value:
+        investments:
+        - basicReference:
+            baseCurrency:
+              value: US Dollar
+              code: USD
+            brandingCompanyAsOfDate: '2026-01-31 00:00:00.0'
+            brandingName: Volatility Shares
+            brandingNameId: BN00000N8G
+            countryAfsPerformanceLevel:
+            - value: United States
+            countryAvailableForSale:
+            - value: United States
+              code: USA
+            countryRegisteredForSale:
+              value: USA:United States
+            domicile:
+              value: United States
+              code: USA
+            firmName: VS TRUST
+            firmNameId: 0C0000CCAB
+            fundid: FS0000HDJV
+            fundLegalName: -1x Short VIX Futures ETF
+            fundLegalStructure:
+              value: Grantor Trust
+              code: '28'
+            fundStandardName: -1x Short VIX Futures ETF
+            inceptionDate: '2022-03-28'
+            inceptionDateOfFundSOldestShareClass: '2022-03-28'
+            investmentType:
+              value: Exchange-Traded Fund
+              code: FE
+            isin: US92891H1014
+            secId: F00001DC2E
+            legalName: -1x Short VIX Futures ETF
+            listingDate: '2022-03-30'
+            masterPortfolioId: 2834999
+            name: -1x Short VIX Futures ETF
+            nameOfFundSOldestShareClass: -1x Short VIX Futures ETF
+            oldestShareClass:
+              value: 'Yes'
+              code: '1'
+            operationsDataReady:
+              value: 'Yes'
+              code: '1'
+            performanceDataReady:
+              value: 'Yes'
+              code: '1'
+            performanceId: 0P0001O9X4
+            performanceStartDate: '2022-03-28'
+            portfolioCurrency:
+              value: US Dollar
+              code: USD
+            portfolioDataReady:
+              value: 'Yes'
+              code: '1'
+            portfolioDate: '2026-02-23'
+            priceDataReady:
+              value: 'Yes'
+              code: '1'
+            primaryShare:
+              value: '1'
+            regionOfSale:
+              value: United States
+              code: USA
+            secidForImport: F00001DC2E
+            ticker: SVIX
+            tickerOfFundSOldestShareClass: SVIX
+            usHeadquarters: Volatility Shares LLC, 2000 PGA Boulevard, Suite 4440
+            virtualClass:
+              value: 'No'
+              code: '1'
+          identifiers:
+            securityId: F00001DC2E
+        - basicReference:
+            baseCurrency:
+              value: US Dollar
+              code: USD
+            brandingCompanyAsOfDate: '2026-01-31 00:00:00.0'
+            brandingName: BlackRock
+            brandingNameId: BN0000088H
+            countryAfsPerformanceLevel:
+            - value: United States
+            countryAvailableForSale:
+            - value: United States
+              code: USA
+            domicile:
+              value: United States
+              code: USA
+            firmName: BlackRock Institutional Trust Co NA
+            firmNameId: 0C00004HR3
+            fundid: FS0000JPDN
+            fundLegalName: 0-5 Year U.S. TIPS Non-Lendable Fund F
+            fundLegalStructure:
+              value: CIT
+              code: '43'
+            fundStandardName: 0-5 Year U.S. TIPS Non-Lendable Fund F
+            inceptionDate: '2025-06-02'
+            inceptionDateOfFundSOldestShareClass: '2025-06-02'
+            indexFamilyId: 0C0000AOSP
+            indexFamilyName: Bloomberg Index
+            investmentType:
+              value: Collective Investment Trusts
+              code: CZ
+            isin: US09263J7476
+            secId: F00001QTKI
+            legalName: 0-5 Year U.S. TIPS Non-Lendable Fund F
+            localFirmNameJp: ブラックロック・インスティテューショナル・トラスト・カンパニー・エヌ・エイ
+            masterPortfolioId: 3440841
+            name: 0-5 Year U.S. TIPS Non-Lendable Fund F
+            nameOfFundSOldestShareClass: 0-5 Year U.S. TIPS Non-Lendable Fund F
+            oldestShareClass:
+              value: 'Yes'
+              code: '1'
+            operationsDataReady:
+              value: 'Yes'
+              code: '1'
+            performanceDataReady:
+              value: 'Yes'
+              code: '1'
+            performanceId: 0P0001VPYJ
+            performanceStartDate: '2025-05-31'
+            portfolioCurrency:
+              value: US Dollar
+              code: USD
+            portfolioDataReady:
+              value: 'Yes'
+              code: '1'
+            portfolioDate: '2025-12-31'
+            priceDataReady:
+              value: 'Yes'
+              code: '1'
+            secidForImport: F00001QTKI
+            usHeadquarters: BlackRock Institutional Trust Company, N.A., 400 Howard Street, San Francisco, CA 94105, US
+            virtualClass:
+              value: 'No'
+              code: '1'
+          identifiers:
+            securityId: F00001QTKI
+        - basicReference:
+            baseCurrency:
+              value: US Dollar
+              code: USD
+            brandingCompanyAsOfDate: '2026-01-31 00:00:00.0'
+            brandingName: BlackRock
+            brandingNameId: BN0000088H
+            countryAfsPerformanceLevel:
+            - value: United States
+            countryAvailableForSale:
+            - value: United States
+              code: USA
+            domicile:
+              value: United States
+              code: USA
+            firmName: BlackRock Institutional Trust Co NA
+            firmNameId: 0C00004HR3
+            fundid: FS0000I9ZR
+            fundLegalName: 0-5 Year U.S. Treasury Inflation Protected Securities Fund F
+            fundLegalStructure:
+              value: CIT
+              code: '43'
+            fundStandardName: 0-5 Yr US TIPS Fd F
+            inceptionDate: '2015-07-31'
+            inceptionDateOfFundSOldestShareClass: '2015-07-31'
+            indexFamilyId: 0C0000AOSP
+            indexFamilyName: Bloomberg Index
+            investmentType:
+              value: Collective Investment Trusts
+              code: CZ
+            isin: US09258C3198
+            secId: F00001G5Y7
+            latestAccountingDate: '2022-12-31 00:00:00.0'
+            legalName: 0-5 Year U.S. Treasury Inflation Protected Securities Fund F
+            localFirmNameJp: ブラックロック・インスティテューショナル・トラスト・カンパニー・エヌ・エイ
+            masterPortfolioId: 1064068
+            name: 0-5 Yr US TIPS Fd F
+            nameOfFundSOldestShareClass: 0-5 Yr US TIPS Fd F
+            oldestShareClass:
+              value: 'Yes'
+              code: '1'
+            operationsDataReady:
+              value: 'Yes'
+              code: '1'
+            performanceDataReady:
+              value: 'Yes'
+              code: '1'
+            performanceId: 0P0001R3BS
+            performanceStartDate: '2015-07-31'
+            portfolioCurrency:
+              value: US Dollar
+              code: USD
+            portfolioDataReady:
+              value: 'Yes'
+              code: '1'
+            portfolioDate: '2025-12-31'
+            priceDataReady:
+              value: 'Yes'
+              code: '1'
+            productFocus:
+              value: Institutional
+              code: '1'
+            secidForImport: F00001G5Y7
+            sharesPercDateCn: '2022-12-31'
+            usHeadquarters: BlackRock Institutional Trust Company, N.A., 400 Howard Street, San Francisco, CA 94105, US
+            virtualClass:
+              value: 'No'
+              code: '1'
+          identifiers:
+            securityId: F00001G5Y7
+        - basicReference:
+            baseCurrency:
+              value: US Dollar
+              code: USD
+            countryAfsPerformanceLevel:
+            - value: United States
+            countryAvailableForSale:
+            - value: United States
+              code: USA
+            countryRegisteredForSale:
+              value: USA:United States
+            domicile:
+              value: Cayman Islands
+              code: CYM
+            firmName: 1 Main Capital Management, LLC
+            firmNameId: 0C0000DORK
+            fundid: FS0000IP81
+            fundLegalName: 1 MAIN CAPITAL PARTNERS, LTD..
+            fundLegalStructure:
+              value: Partnership (3C1)
+              code: '01'
+            fundStandardName: 1 Main Capital Partners..
+            inceptionDate: '2018-01-24'
+            inceptionDateOfFundSOldestShareClass: '2018-01-24'
+            investmentType:
+              value: Hedge Fund
+              code: FH
+            secId: F00001EPCJ
+            legalName: 1 MAIN CAPITAL PARTNERS L.P.
+            name: 1 MAIN CAPITAL PARTNERS L.P.
+            nameOfFundSOldestShareClass: 1 MAIN CAPITAL PARTNERS L.P.
+            oldestShareClass:
+              value: 'Yes'
+              code: '1'
+            operationsDataReady:
+              value: 'No'
+              code: '0'
+            performanceDataReady:
+              value: 'No'
+              code: '0'
+            performanceId: 0P0001Q1XY
+            performanceStartDate: '2018-01-24'
+            portfolioDataReady:
+              value: 'No'
+              code: '0'
+            priceDataReady:
+              value: 'No'
+              code: '0'
+            regionOfSale:
+              value: United States
+              code: USA
+            secidForImport: F00001EPCJ
+            usHeadquarters: 270 Lafayette Street
+            virtualClass:
+              value: 'No'
+              code: '1'
+          identifiers:
+            securityId: F00001EPCJ
+        - basicReference:
+            baseCurrency:
+              value: US Dollar
+              code: USD
+            countryAfsPerformanceLevel:
+            - value: United States
+            countryAvailableForSale:
+            - value: United States
+              code: USA
+            domicile:
+              value: United States
+              code: USA
+            firmName: XChangeFund
+            firmNameId: 0C0000LCZF
+            fundid: FS0000JQ03
+            fundLegalName: 1 XCF Incubator
+            fundLegalStructure:
+              value: Partnership (3C1)
+              code: '01'
+            fundStandardName: 1 XCF Incubator
+            inceptionDate: '2025-05-22'
+            investmentType:
+              value: Hedge Fund
+              code: FH
+            secId: F00001QWJ6
+            legalName: 1 XCF Incubator
+            name: 1 XCF Incubator
+            oldestShareClass:
+              value: 'No'
+              code: '0'
+            operationsDataReady:
+              value: 'No'
+              code: '0'
+            performanceDataReady:
+              value: 'No'
+              code: '0'
+            performanceId: 0P0001VT5Y
+            performanceStartDate: '2025-05-22'
+            portfolioDataReady:
+              value: 'No'
+              code: '0'
+            priceDataReady:
+              value: 'No'
+              code: '0'
+            regionOfSale:
+              value: United States
+              code: USA
+            secidForImport: F00001QWJ6
+            usHeadquarters: 91 S Drupe Ln
+            virtualClass:
+              value: 'No'
+              code: '1'
+          identifiers:
+            securityId: F00001QWJ6
+        metadata:
+          paginationTokenNext: WyIxIFhDRiBJbmN1YmF0b3IiLCJGMDAwMDFRV0o2Il0=
+          totalCount: 441961
+          requestId: ed74051f-5274-4eee-9ef6-21fc754823b5
+          time: '2026-02-26T12:46:12.1182492Z'
+          countryAvailableForSale:
+          - ABW
+          - AFG
+          - AGO
+          - BLR
+          - BLZ
+          - BMU
+          - BOL
+          - BRA
+          - BRB
+          - BRN
+          - BTN
+          - BVT
+          - BWA
+          - COK
+          - COL
+          - COM
+          - CPV
+          - CRI
+          - CSK
+          - CUB
+          - CUW
+          - CXR
+          - CYP
+          - USA
+          domiciles:
+          - ABW
+          - AFG
+          - AGO
+          - AIA
+          - ALA
+          - ALB
+          - AND
+          - ANT
+          - ARE
+          - ARG
+          - ARM
+          - ASM
+          - CYM
+          - USA
+  responses:
+    ErrorResponse400:
+      description: '400: Bad Request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            ErrorExample1:
+              $ref: '#/components/examples/ErrorExample1'
+    ResponseInvestments:
+      description: '200: OK'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseInvestments'
+          examples:
+            ResponseExample1:
+              $ref: '#/components/examples/ResponseExample1'
+            ResponseExample2:
+              $ref: '#/components/examples/ResponseExample2'
+            ResponseExample3:
+              $ref: '#/components/examples/ResponseExample3'
+            ResponseExample4:
+              $ref: '#/components/examples/ResponseExample4'
+            ResponseExample5:
+              $ref: '#/components/examples/ResponseExample5'
+            ResponseExample6:
+              $ref: '#/components/examples/ResponseExample6'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

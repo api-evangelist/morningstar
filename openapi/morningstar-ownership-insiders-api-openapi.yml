@@ -1,0 +1,1086 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Ownership - Insiders API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Ownership - Insiders
+paths:
+  /direct-web-services/v1/investments/{id}/equity-insider-trading-activities:
+    get:
+      summary: Get Insider Trading Activities view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Time series data supported.
+      operationId: getEquityInsiderTradingActivitiesDataset
+      tags:
+      - Ownership - Insiders
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityInsiderTradingActivities'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 927
+  /direct-web-services/v1/investments/{id}/equity-ownership-detail-insiders:
+    get:
+      summary: Get Ownership Detail Insiders view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Time series data supported.
+      operationId: getEquityOwnershipDetailInsidersDataset
+      tags:
+      - Ownership - Insiders
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityOwnershipDetailInsiders'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 927
+  /direct-web-services/v1/investments/{id}/equity-ownership-detail-ten-percent-insiders:
+    get:
+      summary: Get Ownership Detail Ten Percent Insiders view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityOwnershipDetailTenPercentInsidersDataset
+      tags:
+      - Ownership - Insiders
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityOwnershipDetailTenPercentInsiders'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 927
+  /direct-web-services/v1/investments/{id}/equity-ownership-insiders:
+    get:
+      summary: Get Ownership Insiders view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: Time series data supported.
+      operationId: getEquityOwnershipInsidersPackage
+      tags:
+      - Ownership - Insiders
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityOwnershipInsiders'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 927
+components:
+  schemas:
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputInsider:
+      type: object
+      properties:
+        isActive:
+          type: boolean
+          description: Flag indicating whether the person IsActive/Inactive
+          nullable: true
+        isTenPercentOwner:
+          type: boolean
+          description: Flag indicating owner of 10% securities. Insider is a director or senior officer of a publicly traded company that beneficially owns more than 10% of a company's voting shares.
+          nullable: true
+        ownerCik:
+          type: string
+          description: The Central Index Key (CIK) is used on the SEC's computer systems to identify individual people who have filed reports with the SEC.
+          nullable: true
+        personId:
+          type: string
+          description: The Morningstar identifier for the director nominee
+          nullable: true
+        personName:
+          type: string
+          description: A person's full name; including their first name and surname and often any middle names; Prefix & Suffix
+          nullable: true
+        gender:
+          type: string
+          description: ''
+          nullable: true
+        titleName:
+          type: string
+          description: ''
+          nullable: true
+        isOfficer:
+          type: boolean
+          description: ''
+          nullable: true
+        isDirector:
+          type: boolean
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputInsider
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputInsiderTradingActivity:
+      type: object
+      properties:
+        year:
+          type: integer
+          description: It denotes the fiscal year in which insider trading took place
+          format: int32
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        derivativeSubTradingTransactionAcquiredDisposeCode:
+          type: string
+          description: Code for securities acquired (A) or disposed of (D)
+          nullable: true
+        derivativeSubTradingTransactionDate:
+          type: string
+          description: Transaction date
+          nullable: true
+        derivativeSubTradingTransactionPricePerShare:
+          type: number
+          description: Price of derivative security
+          format: double
+          nullable: true
+        derivativeSubTradingTransactionShares:
+          type: number
+          description: Number of derivative securities acquired (A) or disposed of (D)
+          format: double
+          nullable: true
+        derivativeSubTradingTransactionTotalValue:
+          type: number
+          description: Total value for the transaction (price per share*no. of shares)
+          format: double
+          nullable: true
+        derivativeTradingConversionExercisePrice:
+          type: number
+          description: The price per share at which the owner of a traded option is entitled to buy or sell the underlying security.
+          format: double
+          nullable: true
+        derivativeTradingDateOriginalFiled:
+          type: string
+          description: Date on which original file was reported these details are found in the amended file
+          nullable: true
+        derivativeTradingExecutionDate:
+          type: string
+          description: Deemed execution date; if any
+          nullable: true
+        derivativeTradingExerciseDate:
+          type: string
+          description: Date exercisable
+          nullable: true
+        derivativeTradingExpirationDate:
+          type: string
+          description: Expiration Date
+          nullable: true
+        derivativeTradingNatureOfOwnership:
+          type: string
+          description: Nature of indirect beneficial ownership
+          nullable: true
+        derivativeTradingOwnershipType:
+          type: string
+          description: 'Ownership form: Direct (D) or Indirect (I)'
+          nullable: true
+        derivativeTradingSecurityTitle:
+          type: string
+          description: Title of security
+          nullable: true
+        derivativeTradingSharesOwnedPostTransaction:
+          type: number
+          description: Number of derivative securities beneficially owned following reported transaction(s)
+          format: double
+          nullable: true
+        derivativeTradingTransactionCode:
+          type: string
+          description: Code to identify the nature of the transaction resulting in an acquisition or disposition of a security
+          nullable: true
+        derivativeTradingUnderlyingSecurityShares:
+          type: number
+          description: Amount of securities underlying derivative security
+          format: double
+          nullable: true
+        derivativeTradingUnderlyingSecurityTitle:
+          type: string
+          description: Title of securities underlying derivative security
+          nullable: true
+        fileDate:
+          $ref: '#/components/schemas/CodeMappingString'
+        fileType:
+          $ref: '#/components/schemas/CodeMappingString'
+        isDerivativeSubTradingEquitySwapInvolved:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isDerivativeTrading10b51:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isDirector:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isNonDerivativeSubTradingEquitySwapInvolved:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isNonDerivativeTrading10b51:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isOfficer:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isOther:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isTenPercentOwner:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        nonDerivativeSubTradingCurrency:
+          type: string
+          description: Trading currency
+          nullable: true
+        nonDerivativeSubTradingNotificationDate:
+          type: string
+          description: Date notified by the Company
+          nullable: true
+        nonDerivativeSubTradingTransactionAcquiredDisposedCode:
+          type: string
+          description: Code for securities acquired (A) or disposed of (D)
+          nullable: true
+        nonDerivativeSubTradingTransactionCode:
+          type: string
+          description: Code to identify the nature of the transaction resulting in an acquisition or disposition of a security
+          nullable: true
+        nonDerivativeSubTradingTransactionDate:
+          type: string
+          description: Transaction date
+          nullable: true
+        nonDerivativeSubTradingTransactionPercentage:
+          type: number
+          description: Percentage of shares executed in the transaction
+          format: double
+          nullable: true
+        nonDerivativeSubTradingTransactionPricePerShare:
+          type: number
+          description: Price of derivative security
+          format: double
+          nullable: true
+        nonDerivativeSubTradingTransactionShares:
+          type: number
+          description: Number of derivative securities acquired (A) or disposed of (D)
+          format: double
+          nullable: true
+        nonDerivativeSubTradingTransactionType:
+          type: string
+          description: Type for securities acquired (A) or disposed of (D)
+          nullable: true
+        nonDerivativeSubTradingTransactionValue:
+          type: number
+          description: Total value for the transaction (price per share*no. of shares)
+          format: double
+          nullable: true
+        nonDerivativeTradingDateOriginalFiled:
+          type: string
+          description: Date on which original file was reported. Will be updated in Ammendment file
+          nullable: true
+        nonDerivativeTradingExecutionDate:
+          type: string
+          description: Deemed execution date; if any
+          nullable: true
+        nonDerivativeTradingHoldingDescript:
+          type: string
+          description: If an insider's interest is duplicated with other insiders or major shareholders; such as an insider representing a major shareholder on the board of directors; this is detailed in holding description. The content of this field is entered as 'dup 1'; 'dup A'; 'dup A and B' etc; where dup is abbreviated from duplicate. Related owners can be identified by the content of the field; for instance; where two owners of shares in the same company have reference to dup A in holding description there is a relationship between them that the local reporting regulations require to be disclosed to the market. This item relates only to insiders of LSE-listed companies. See data ID 46003 for the corresponding item in the UK major shareholder transactions file
+          nullable: true
+        nonDerivativeTradingNatureOfOwnership:
+          $ref: '#/components/schemas/CodeMappingString'
+        nonDerivativeTradingOwnershipType:
+          type: string
+          description: 'Ownership form: Direct (D) or Indirect (I)'
+          nullable: true
+        nonDerivativeTradingSecurityTitle:
+          type: string
+          description: Title of security
+          nullable: true
+        nonDerivativeTradingSharesOwnedPostTransaction:
+          type: number
+          description: Number of  securities beneficially owned following reported transaction(s)
+          format: double
+          nullable: true
+        nonDerivativeTradingSharesOwnedPostTransactionPercentage:
+          type: number
+          description: Insider's balance percentage shares holding (post-trading) for specific holding date
+          format: double
+          nullable: true
+        officerTitle:
+          type: string
+          description: Officer's reporting position
+          nullable: true
+        ownerCik:
+          type: string
+          description: The Central Index Key (CIK) is used on the SEC's computer systems to identify individual people who have filed reports with the SEC.
+          nullable: true
+        ownerName:
+          type: string
+          description: The entity that owns the security. Examples of owners are 13F filing institutions; 13D and 13G beneficial owners; and advisor companies
+          nullable: true
+        personId:
+          type: string
+          description: The Morningstar identifier for the director nominee
+          nullable: true
+        reportingDate:
+          $ref: '#/components/schemas/CodeMappingString'
+        transactionId:
+          type: string
+          description: A unique identifier assigned to each transaction.
+          nullable: true
+      additionalProperties: false
+      title: OutputInsiderTradingActivity
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputInsiderHoldingsDetail:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: Date upon which the shares are held by shareholder; or the transaction happens
+          nullable: true
+        holdingDescription:
+          type: string
+          description: If an insider's interest is duplicated with other insiders or major shareholders; such as an insider representing a major shareholder on the board of directors; this is detailed in holding description. The content of this field is entered as 'dup 1'; 'dup A'; 'dup A and B' etc; where dup is abbreviated from duplicate. Related owners can be identified by the content of the field; for instance; where two owners of shares in the same company have reference to dup A in holding description there is a relationship between them that the local reporting regulations require to be disclosed to the market. This item relates only to insiders of LSE-listed companies. See data ID 46003 for the corresponding item in the UK major shareholder transactions file
+          nullable: true
+        isActive:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        numberOfShares:
+          type: number
+          description: Number of shares of the security owned by the shareholder; or the Number of shares after transaction
+          format: double
+          nullable: true
+        personId:
+          type: string
+          description: The Morningstar identifier for the director nominee
+          nullable: true
+        personName:
+          type: string
+          description: A person's full name; including their first name and surname and often any middle names; Prefix & Suffix
+          nullable: true
+        shareClassLevelPercentage:
+          type: number
+          description: Percentage of share holding  at shareclass level
+          format: double
+          nullable: true
+        sharesPercentage:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputInsiderHoldingsDetail
+  responses:
+    ResponseEquityInsiderTradingActivities:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insiderTradingActivity:
+                $ref: '#/components/schemas/OutputInsiderTradingActivity'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityOwnershipDetailInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insiderHoldingsDetail:
+                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insiderTradingActivity:
+                $ref: '#/components/schemas/OutputInsiderTradingActivity'
+              insiderHoldingsDetail:
+                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityOwnershipDetailTenPercentInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insider:
+                $ref: '#/components/schemas/OutputInsider'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

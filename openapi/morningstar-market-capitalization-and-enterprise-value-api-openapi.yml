@@ -1,0 +1,593 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Market Capitalization and Enterprise Value API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Market Capitalization and Enterprise Value
+paths:
+  /direct-web-services/v1/investments/{id}/equity-market-capitalization-and-enterprise-value:
+    get:
+      summary: Get Market Capitalization and Enterprise Value view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: Most recent and time series data supported.
+      operationId: getEquityMarketCapitalizationAndEnterpriseValueDataset
+      tags:
+      - Market Capitalization and Enterprise Value
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityMarketCapitalizationAndEnterpriseValue'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 904
+components:
+  schemas:
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputFloatMarketCapital:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the market price was udpated
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        floatMarketCapitalCompanyLevel:
+          type: integer
+          description: The most current float-adjusted company level market capital derived by the summation of float-adjusted share-level market capital of the company's primary share classes; It has the same currency as the trading currency of the share class.
+          format: int64
+          nullable: true
+        floatMarketCapitalShareLevel:
+          type: integer
+          description: The most current float-adjusted share class-level market capital derived by the most recent closing price for a particular share class multiplied by the most recent float shares for that particular share class; It has the same currency as the trading currency of the share class
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: OutputFloatMarketCapital
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputDilutedEnterpriseValueCalculations:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the diluted enterprise value data points are calculated
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        dilutedEnterpriseValue:
+          type: number
+          description: The data point represents the entire value of a company; assuming the conversion/exchange of all convertible/exchangeable securities; stock options; restricted stock units and warrants. The value can be used to measure a company's theoretical total purchase price. It is calculated by summing up the Company's Net Debt with and Market Capital based on a total amount of shares outstanding that assume conversion/exchange of all instruments previously noted .
+          format: double
+          nullable: true
+        dilutedEnterpriseValueToAssets:
+          type: number
+          description: The data point represents a company's diluted enterprise value relative to its total assets which can be used to measure a company's fair value. It is calculated using Diluted Enterprise Value divided by Total Assets.
+          format: double
+          nullable: true
+        dilutedEnterpriseValueToEbit:
+          type: number
+          description: The data point represents a company's diluted enterprise value relative to its EBIT which can be used to measure a company's fair value. It is calculated using Diluted Enterprise Value divided by EBIT (TTM).
+          format: double
+          nullable: true
+        dilutedEnterpriseValueToEbitda:
+          type: number
+          description: The data point represents a company's diluted enterprise value relative to its EBITDA which can be used to measure a company's fair value. It is calculated using Diluted Enterprise Value divided by EBITDA (TTM).
+          format: double
+          nullable: true
+        dilutedEnterpriseValueToForwardEbitda:
+          type: number
+          description: The data point represents a company's diluted enterprise value relative to its estimated EBITDA which can be used to forecast a company's fair value using forward looking estimated EBITDA. It is calculated using Diluted Enterprise Value divided by Consensus Estimate for Current Fiscal Year EBITDA.
+          format: double
+          nullable: true
+        dilutedEnterpriseValueToForwardRevenue:
+          type: number
+          description: The data point represents a company's diluted enterprise value relative to its estimated revenue which can be used to forecast a company's fair value using forward looking estimated revenue. It is calculated using Diluted Enterprise Value divided by Consensus Estimate for Current Fiscal Year Revenue.
+          format: double
+          nullable: true
+        dilutedEnterpriseValueToFreeCashFlow:
+          type: number
+          description: The data point represents a company's diluted enterprise value relative to its free cash flow which can be used to measure a company's fair value. It is calculated using Enterprise Value divided by Free Cash Flow (TTM).
+          format: double
+          nullable: true
+        dilutedEnterpriseValueToNormalizedEbit:
+          type: number
+          description: The data point represents a company's diluted enterprise value relative to its normalized EBIT which can be used to measure a company's fair value. It is calculated using Diluted Enterprise Value divided by Normalized EBIT (TTM).
+          format: double
+          nullable: true
+        dilutedEnterpriseValueToNormalizedEbitda:
+          type: number
+          description: The data point represents a company's diluted enterprise value relative to its normalized EBITDA which can be used to measure a company's fair value. It is calculated using Diluted Enterprise Value divided by Normalized EBITDA (TTM).
+          format: double
+          nullable: true
+        dilutedEnterpriseValueToRevenue:
+          type: number
+          description: The data point represents a company's diluted enterprise value relative to its revenue which can be used to measure a company's fair value. It is calculated using Diluted Enterprise Value divided by Total Revenue (TTM).
+          format: double
+          nullable: true
+        dilutiveEquity:
+          type: number
+          description: The additional equity value that arises from the conversion/exchange of all convertible and/or exchangeable securities; stock options; restricted stock units and warrants issued by a firm. This is calculated by summing up the expected increase in equity derived from each of the respective securities; restricted stock units; warrants and in-the-money stock options.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputDilutedEnterpriseValueCalculations
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputMarketCapital:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the market capital datapoints are calculated
+          nullable: true
+        companyLevelMarketCapital:
+          type: integer
+          description: The most current company-level market capital derived by the summation of share-level market capital of the company's primary share classes; Company-level market capital has the same currency as the trading currency of the share class.
+          format: int64
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        shareLevelMarketCapital:
+          type: integer
+          description: The most current share class-level market capital derived by the most recent closing price for a particular share class multiplied by the most recent reported shares outstanding for that particular share class; Share-level market capital has the same currency as the trading currency of the shares class
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: OutputMarketCapital
+    OutputDilutedMarketCapital:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the diluted market capital data points are calculated
+          nullable: true
+        currencyCode:
+          type: string
+          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
+          nullable: true
+        dilutedCompanyLevelMarketCapital:
+          type: integer
+          description: Diluted Market Capitalization represents the summation of the firm's standard company-level market capitalization and the additional market capitalization that would arise from (i) convertible equity on an as-converted basis and (ii) exchangeable equity on an as-exchanged basis.  Diluted Market Capitalization does not include potential dilutive shares that can arise from existing stock options; warrants; rights; convertible debt; etc. if exercised/converted; and; is quoted in the same currency as the trading currency of the share class.
+          format: int64
+          nullable: true
+        dilutedMarketCapitalFromConvertibleSecurities:
+          type: number
+          description: The diluted market capital from convertible securities on as-converted basis. Convertible securities are normally reported in the company's financial report; along with its conversion factor and underlying equity component/stock to which the convertible securities will convert. Convertible securities include preferred stocks.
+          format: double
+          nullable: true
+        dilutedMarketCapitalFromExchangeableSecurities:
+          type: number
+          description: The diluted market capital from exchangeable securities on as-exchanged basis. Exchangeable securities are normally reported in the company's financial report; along with its exchangeable factor and underlying equity component/stock into which the exchangeable securities will exchange. Exchangeable securities include securities disclosed in non-controlling interest/minority interest section of the company's balance sheet and general partnership interest.
+          format: double
+          nullable: true
+        dilutedMarketCapitalFromStockOptionsRestrictedStockUnitsAndWarrants:
+          type: integer
+          description: The diluted market capital from dilutive securities on as-issued/exercised basis. Dilutive securities include stock options; compensation-issued securities such as restricted stock units (RSUs) or performance stock options; and warrants.
+          format: int64
+          nullable: true
+        dilutedSharesFromConvertibleSecurities:
+          type: number
+          description: The additional dilutive shares that could be added to current shares outstanding if all convertible securities are converted to the company's common/ordinary shares. Convertible securities are normally reported in the company's financial report; along with its conversion factor and underlying equity component/stock to which the convertible securities will convert. Convertible securities include preferred stocks.
+          format: double
+          nullable: true
+        dilutedSharesFromExchangeableSecurities:
+          type: number
+          description: The additional dilutive shares that could be added to current shares outstanding if all exchangeable securities are exchanged for the company's common/ordinary shares. Exchangeable securities are normally reported in the company's financial report; along with its exchangeable factor and underlying equity component/stock into which the exchangeable securities can be exchanged. Exchangeable securities include securities disclosed in the non-controlling interest/minority interest section of the company's balance sheet and general partnership interest.
+          format: double
+          nullable: true
+        dilutedSharesFromStockOptionsRestrictedStockUnitsAndWarrants:
+          type: number
+          description: The additional dilutive shares that could be added to current Shares Outstanding if all 'in-the-money' dilutive securities (such as stock options and warrants) were exercised.
+          format: double
+          nullable: true
+        fullyDilutedOverhangPotentialDilution:
+          type: number
+          description: This is a measure of the potential dilution to which common shareholders are exposed due to the possible awards of stock-based compensation and/or warrants. It is normally represented as a percentage and is calculated using dilutive shares from stock-based compensation and/or warrants divided by the sum of total diluted shares outstanding.
+          format: double
+          nullable: true
+        overhangPotentialDilution:
+          type: number
+          description: This is a measure of the potential dilution to which common shareholders are exposed due to the possible awards of stock-based compensation and/or warrants. It is normally represented as a percentage and is calculated using dilutive shares from stock-based compensation and/or warrants divided by the current total basic shares outstanding.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputDilutedMarketCapital
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputEnterpriseValueCalculations:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when enterprise value data points are calculated
+          nullable: true
+        analystNormalizedEnterpriseValueToEbitdaRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its Normalized EBITDA.  The ratio can be used to measure a company's fair value.  This is calculated using Enterprise Value divided by Normalized EBITDA which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
+          format: double
+          nullable: true
+        analystNormalizedEnterpriseValueToEbitRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its Normalized EBIT.  The ratio can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT; which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
+          format: double
+          nullable: true
+        cashReturn:
+          type: number
+          description: This ratio represents a company's free cash flow relative to its enterprise value. This can be used to measure how efficiently the company is using its capital; both equity and debt; to generate free cash flow. In other words; cash return shows how much free cash flow a company generates as a percentage of how much it would cost an investor to buy out the entire business. This is calculated using Free Cash Flow to Firm divided by Enterprise Value.
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        enterpriseValue:
+          type: number
+          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Cap + Preferred Stock/Units + Non-Controlling/Minority Interests in Equity + Net Debt.
+          format: double
+          nullable: true
+        enterpriseValueIncludingCash:
+          type: number
+          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Capital + Total Preferred Stock/Units/Securities + Non-Controlling/Minority Interests in Equity + Total Debt
+          format: double
+          nullable: true
+        enterpriseValueToAssetsRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its total assets. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Assets.
+          format: double
+          nullable: true
+        enterpriseValueToEbitdaRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBITDA (TTM).
+          format: double
+          nullable: true
+        enterpriseValueToEbitRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBIT (TTM).
+          format: double
+          nullable: true
+        enterpriseValueToFreeCashFlowRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its free cash flow. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Free Cash Flow (TTM).
+          format: double
+          nullable: true
+        enterpriseValueToPretaxIncomeRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its pre-tax income. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Pre-Tax Income (TTM).
+          format: double
+          nullable: true
+        enterpriseValueToRevenueRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to revenue. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Revenue (TTM).
+          format: double
+          nullable: true
+        normalizedEnterpriseValueToEbitdaRatio:
+          type: number
+          description: This ratio represents the value of a company's enterprise value relative to its Normalized EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBITDA (TTM).
+          format: double
+          nullable: true
+        normalizedEnterpriseValueToEbitRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its Normalized EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT (TTM).
+          format: double
+          nullable: true
+        totalDebtToEnterpriseValue:
+          type: number
+          description: This ratio represents the value of a company's total debt relative to its enterprise value. This can be used to measure the company's financial leverage. This is calculated using Total Debt divided by Enterprise Value.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputEnterpriseValueCalculations
+  responses:
+    ResponseEquityMarketCapitalizationAndEnterpriseValue:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dilutedEnterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputDilutedEnterpriseValueCalculations'
+              dilutedMarketCapital:
+                $ref: '#/components/schemas/OutputDilutedMarketCapital'
+              enterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputEnterpriseValueCalculations'
+              floatMarketCapital:
+                $ref: '#/components/schemas/OutputFloatMarketCapital'
+              marketCapital:
+                $ref: '#/components/schemas/OutputMarketCapital'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

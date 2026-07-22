@@ -1,0 +1,148 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts equity - rps document API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: equity - rps document
+paths:
+  /equity/v1/research_document/{documentId}/{reportView}:
+    get:
+      tags:
+      - equity - rps document
+      summary: Get a Research Publishing System (RPS) document
+      description: 'Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.</br></br>**Note** The three **equity - rps document** endpoints return almost the same content. In addition to the content also returned by the other two endpoints, this endpoint must be used for Thematic Research documents, as this research is not associated with any specific company. We recommend you use this endpoint as it is the simplest and returns all document types including thematic research.</br></br>The following document types can be retrieved using this endpoint: </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br>- Thematic Research</br></br>A URL returned in the response is used to access the document file. '
+      operationId: GetRpsDocument3
+      parameters:
+      - name: documentId
+        in: path
+        description: Unique Research Publishing System (RPS) identifier for a document.
+        required: true
+        schema:
+          type: string
+          default: '901224'
+      - name: reportView
+        in: path
+        description: View of report. Currently, only `download` is supported.
+        required: true
+        schema:
+          type: string
+          default: download
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  properties: {}
+        '400':
+          description: Bad Request
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+  /equity/v1/company/{companyIdentifier}/report_type/rps_document/{documentId}/{reportView}:
+    get:
+      tags:
+      - equity - rps document
+      summary: Get a Research Publishing System (RPS) document
+      description: 'Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.</br></br>You must enter a `companyIdentifier` value when using this endpoint. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>The following document types can be retrieved using this endpoint\: </br></br> - Company Report</br> - Stock Analyst Notes</br>- Valuation Model</br></br>**Note** To retrieve Thematic Research, use the `/equity/v1/research_document/{documentId}/{reportView}` endpoint.'
+      operationId: GetRpsDocument
+      parameters:
+      - name: companyIdentifier
+        in: path
+        description: Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.
+        required: true
+        schema:
+          type: string
+          default: 0P00000246
+      - name: documentId
+        in: path
+        description: Unique Research Publishing System (RPS) identifier for a document
+        required: true
+        schema:
+          type: string
+          default: '901224'
+      - name: reportView
+        in: path
+        description: View of report. Currently, only `download` is supported.
+        required: true
+        schema:
+          type: string
+          default: download
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  properties: {}
+        '400':
+          description: Bad Request
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+  /equity/v1/{companyIdentifier}/rps_document/{documentId}/{reportView}:
+    get:
+      tags:
+      - equity - rps document
+      summary: Get a Research Publishing System (RPS) document
+      description: 'Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.</br></br>You must enter a `companyIdentifier` value when using this endpoint. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>The following document types can be retrieved using this endpoint\: </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br></br>**Note** To retrieve Thematic Research, use the `/equity/v1/research_document/{documentId}/{reportView}` endpoint.'
+      operationId: GetRpsDocument2
+      parameters:
+      - name: companyIdentifier
+        in: path
+        description: Unique identifier of a company. Valid values are performance ID or `exchange:ticker` value.
+        required: true
+        schema:
+          type: string
+          default: 0P00000246
+      - name: documentId
+        in: path
+        description: Unique Research Publishing System (RPS) identifier for a document
+        required: true
+        schema:
+          type: string
+          default: '901224'
+      - name: reportView
+        in: path
+        description: View of report. Currently, only `download` is supported.
+        required: true
+        schema:
+          type: string
+          default: download
+      responses:
+        '200':
+          description: Success
+          content: {}
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

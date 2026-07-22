@@ -1,0 +1,124 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts sensitivity analysis API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: sensitivity analysis
+paths:
+  /sensitivity-analysis:
+    post:
+      summary: Calculate the impact of individual factors on future fund growth
+      description: 'Calculate the impact of individual factors on future gowth for a specifc fund model.  You can change the value of certain factors to analyze how sensitive the fund is to those values.
+
+        '
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: The user is not authenticated.
+        '403':
+          description: The user don't have permission.
+        '404':
+          description: Not Found.
+        '500':
+          description: Internal Server Error.
+      operationId: post_sensitivity_analysis
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Exposure'
+        required: true
+      tags:
+      - sensitivity analysis
+components:
+  schemas:
+    Exposure:
+      required:
+      - flowModelId
+      - fundShareClassId
+      properties:
+        flowModelId:
+          type: string
+          example: usa-equity-shareclass-fundflow
+        fundShareClassId:
+          type: string
+          example: F00000VRI7
+        fundOfFunds:
+          type: number
+          example: 1
+        indexFund:
+          type: number
+          example: 1
+        sociallyResponsibleFund:
+          type: number
+          example: 1
+        oneStar:
+          type: number
+        twoStar:
+          type: number
+        threeStar:
+          type: number
+        fourStar:
+          type: number
+        fiveStar:
+          type: number
+          example: 1
+        organicGrowthRate1Month:
+          type: number
+          example: 1
+        avgNetExpRatioRank:
+          type: number
+          example: 1
+        netExpenseRatio:
+          type: number
+          example: 1
+        assetWeightedMgrTenure:
+          type: number
+          example: 1
+        topHoldingWeighting:
+          type: number
+          example: 1
+        trailing12MExcessRet:
+          type: number
+          example: 1
+        fundSize:
+          type: number
+          example: 1
+        firmAUM:
+          type: number
+          example: 2500000000
+        fundAge:
+          type: number
+          example: 1
+        cumulative12MonthFlows:
+          type: number
+          example: 1
+        cumulativeOutFlows:
+          type: number
+          example: 1
+        categoryAvgRet1M:
+          type: number
+          example: 1
+      type: object
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

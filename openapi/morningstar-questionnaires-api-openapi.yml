@@ -1,0 +1,608 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Questionnaires API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Questionnaires
+paths:
+  /v1/questionnaires/risk-questionnaires/{id}:
+    get:
+      tags:
+      - Questionnaires
+      summary: Get risk tolerance questionnaire
+      description: 'Get questions and possible options for the risk tolerance questionnaire. Questions and options can be stored for future requests. There are two versions of the questionnaire.
+
+        '
+      operationId: requestRiskQuestionnaire
+      parameters:
+      - name: id
+        in: path
+        description: Unique identifier of a questionnaire
+        required: true
+        schema:
+          type: string
+          enum:
+          - FM10S30
+          - FM25V30
+      - name: Accept-Language
+        in: header
+        description: Specifies the locale.
+        required: true
+        schema:
+          type: string
+          enum:
+          - en-US
+          - en-CA
+          - en-AU
+          - en-GB
+          - en-IN
+          - fr-CA
+        example: en-US
+      - name: X-API-RequestId
+        in: header
+        description: Initial request identifier
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Questionnaire'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404'
+        '500':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+        '502':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse502'
+  /v1/questionnaires/experience-questionnaires/{questionnaireId}:
+    get:
+      tags:
+      - Questionnaires
+      summary: Get Experience questionnaire
+      description: 'Get questions and possible options for the experience questionnaire. Questions and options can be stored for future requests. The experience questionnaire captures the Professional Judgement Matrix considerations and does not contribute to the risk tolerance scoring. Please select the appropriate language and country parameters to ensure you retrieve the correct version for your region. </br></br> **Important:** Select the relevant language and country parameters to ensure you retrieve the correct version for your region.
+
+        '
+      operationId: requestExperienceQuestionnaire
+      parameters:
+      - name: questionnaireId
+        in: path
+        description: Unique identifier of a questionnaire
+        required: true
+        schema:
+          type: string
+          enum:
+          - EXP10
+      - name: Accept-Language
+        in: header
+        description: Specifies the locale.
+        required: true
+        schema:
+          type: string
+          enum:
+          - en-US
+          - en-CA
+          - en-AU
+          - en-GB
+          - en-IN
+          - fr-CA
+        example: en-US
+      - name: X-API-RequestId
+        in: header
+        description: Initial request identifier
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Questionnaire'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404'
+        '500':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+        '502':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse502'
+  /v1/questionnaires/kyc-questionnaires/{questionnaireId}:
+    get:
+      tags:
+      - Questionnaires
+      summary: Get Know Your Client questionnaire
+      description: 'Get questions and possible options for the know-your-client questionnaire. Questions and options can be stored for future requests. The know-your-client questionnaire captures demographic data for research purposes only and does not contribute to the risk tolerance scoring.  </br></br> **Important:** Select the relevant language and country parameters to ensure you retrieve the correct version for your region.
+
+        '
+      operationId: requestKycQuestionnaire
+      parameters:
+      - name: questionnaireId
+        in: path
+        description: Unique identifier of a questionnaire
+        required: true
+        schema:
+          type: string
+          enum:
+          - KYC10
+      - name: Accept-Language
+        in: header
+        description: Specifies the locale.
+        required: true
+        schema:
+          type: string
+          enum:
+          - en-US
+          - en-CA
+          - en-AU
+          - en-GB
+          - en-IN
+          - fr-CA
+        example: en-US
+      - name: X-API-RequestId
+        in: header
+        description: Initial request identifier
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Questionnaire'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404'
+        '500':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+        '502':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse502'
+  /questionnaires/risk-questionnaires/{questionnaireId}:
+    get:
+      summary: Get risk tolerance questionnaire
+      description: Get questions and possible options for the Risk Tolerance questionnaire.
+      tags:
+      - Questionnaires
+      operationId: requestRiskQuestionnaire
+      parameters:
+      - name: questionnaireId
+        in: path
+        description: Unique identifier of a questionnaire
+        required: true
+        schema:
+          type: string
+          enum:
+          - FM10S30
+          - FM25V30
+      - name: Accept-Language
+        in: header
+        description: Indicate the locale for the request. e.g. en-US, fr-CA
+        required: true
+        schema:
+          type: string
+          enum:
+          - en-US
+          - en-CA
+          - en-GB
+          - en-AU
+          - en-IN
+          - fr-CA
+      - name: X-API-RequestId
+        in: header
+        description: Initial request identifier
+        example: 436c05d4-27b6-4a92-b7f1-5a829d55373a
+        required: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Bearer access token authorization
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Questionnaire'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404'
+        '502':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse502'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+  /questionnaires/experience-questionnaires/{questionnaireId}:
+    get:
+      summary: Get experience questionnaire
+      description: Get questions and possible options for the Experience questionnaire.
+      tags:
+      - Questionnaires
+      operationId: requestExperienceQuestionnaire
+      parameters:
+      - name: questionnaireId
+        in: path
+        description: Unique identifier of a questionnaire
+        required: true
+        schema:
+          type: string
+          enum:
+          - EXP10
+      - name: Accept-Language
+        in: header
+        description: Indicate the locale for the request. e.g. en-US, fr-CA
+        required: true
+        schema:
+          type: string
+          enum:
+          - en-US
+          - en-CA
+          - en-GB
+          - fr-CA
+      - name: X-API-RequestId
+        in: header
+        description: Initial request identifier
+        example: 436c05d4-27b6-4a92-b7f1-5a829d55373a
+        required: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Bearer access token authorization
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Questionnaire'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404'
+        '502':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse502'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+  /questionnaires/kyc-questionnaires/{questionnaireId}:
+    get:
+      summary: Get know your client questionnaire
+      description: Get questions and possible options for the Know Your Client questionnaire.
+      tags:
+      - Questionnaires
+      operationId: requestKycQuestionnaire
+      parameters:
+      - name: questionnaireId
+        in: path
+        description: Unique identifier of a questionnaire
+        required: true
+        schema:
+          type: string
+          enum:
+          - KYC10
+      - name: Accept-Language
+        in: header
+        description: Indicate the locale for the request. e.g. en-US, fr-CA
+        required: true
+        schema:
+          type: string
+          enum:
+          - en-US
+          - en-CA
+          - en-GB
+          - en-AU
+          - en-IN
+          - fr-CA
+      - name: X-API-RequestId
+        in: header
+        description: Initial request identifier
+        example: 436c05d4-27b6-4a92-b7f1-5a829d55373a
+        required: false
+        schema:
+          type: string
+      - name: Authorization
+        in: header
+        description: Bearer access token authorization
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Questionnaire'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404'
+        '502':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse502'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+components:
+  schemas:
+    Question:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Question unique identifier
+          example: FM10-1
+        titleText:
+          type: string
+          description: Question title text
+          example: Self-Rating
+        multipleSelect:
+          type: boolean
+          description: Multiple selections for the question, if this is true the question allows multiple answers
+          example: false
+        displayOrder:
+          type: integer
+          description: Question display order
+          example: 1
+        paragraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paragraph'
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option'
+    Paragraph:
+      title: Paragraph
+      type: object
+      properties:
+        text:
+          type: string
+          description: Paragraph text
+          example: Compared to others, how do you rate your willingness to take financial risks?
+        htmlMarkup:
+          type: boolean
+          description: True if the text field is an HTML markup, otherwise text field is plain text
+          example: false
+        image:
+          type: boolean
+          description: True if the paragraph is an image, otherwise is text
+          example: true
+        imageHref:
+          type: string
+          description: Image URL
+          example: https://www.morningstart.com/finametrica/images/risk.png
+    Option:
+      title: Option
+      type: object
+      properties:
+        id:
+          type: string
+          description: Option unique identifier
+          example: FM10-1-1
+        text:
+          type: string
+          description: Option text
+          example: Extremely low risk taker.
+        displayOrder:
+          type: integer
+          description: Question display order
+          example: 1
+        htmlMarkup:
+          type: boolean
+          description: True if the text field is an HTML markup, otherwise text field is plain text
+          example: false
+        image:
+          type: boolean
+          description: True if the option is an image, otherwise is text
+          example: false
+        imageHref:
+          type: string
+          description: Image URL
+          example: https://www.morningstart.com/finametrica/images/risk.png
+    ErrorResponse400:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    Questionnaire:
+      title: Questionnaire
+      type: object
+      properties:
+        title:
+          type: string
+          description: Questionnaire title
+          example: FinaMetrica 10
+        id:
+          type: string
+          description: Questionnaire unique identifier
+          example: FM10S30
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+    ErrorResponse500:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse502:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Received an invalid response from the upstream server
+        status:
+          type: string
+          description: Error Status
+          example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse404:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
+          type: string
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

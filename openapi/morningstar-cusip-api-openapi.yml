@@ -1,0 +1,507 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts CUSIP API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: CUSIP
+paths:
+  /direct-web-services/v1/investments/{id}/cusip:
+    get:
+      summary: Get CUSIP package view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: languageId
+        in: query
+        description: "\nLanguage to filter results by. Language support varies depending on the data and package.\n\n  - `ENG` = English\n  - `SPA` = Spanish\n  - `FRA` = French\n  - `DEU` = German\n  - `ITA` = Italian\n  - `JPN` = Japanese\n  - `CHI` = Chinese Simplified\n  - `ZHO` = Chinese Traditional\n  - `KOR` = Korean"
+        schema:
+          type: string
+          example: ENG
+          x-enumDescriptions:
+            ENG: English
+            SPA: Spanish
+            FRA: French
+            DEU: German
+            ITA: Italian
+            JPN: Japanese
+            CHI: Chinese Simplified
+            ZHO: Chinese Traditional
+            KOR: Korean
+        examples:
+          languageExample1:
+            summary: English
+            value: ENG
+          languageExample2:
+            summary: Spanish
+            value: SPA
+          languageExample3:
+            summary: French
+            value: FRA
+          languageExample4:
+            summary: German
+            value: DEU
+          languageExample5:
+            summary: Italian
+            value: ITA
+          languageExample6:
+            summary: Japanese
+            value: JPN
+          languageExample7:
+            summary: Chinese Simplified
+            value: CHI
+          languageExample8:
+            summary: Chinese Traditional
+            value: ZHO
+          languageExample9:
+            summary: Korean
+            value: KOR
+      description: '
+
+        The CUSIP package provides the CUSIP, and associated ISINs, of issued shares, for clients holding the appropriate CUSIP license with CUSIP Global Services.
+
+
+        Most recent data supported.'
+      operationId: getCusipPackage
+      tags:
+      - CUSIP
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseCusip'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 17
+components:
+  schemas:
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputShareClassInformation:
+      type: object
+      properties:
+        commonShareSubType:
+          type: string
+          description: Refers to the type of securities that can be found within the equity database. For the vast majority; this value will populate as null for regular common shares. For a minority of share classes; this will populate as either Participating Preferred; Closed-End Fund; Foreign Share; or Foreign Participated Preferred which reflects our limited coverage of these types of securities within our equity database.
+          nullable: true
+        conversionRatio:
+          type: number
+          description: The relationship between the chosen share class and the primary share class
+          format: double
+          nullable: true
+        cusip:
+          type: string
+          description: ''
+          nullable: true
+        directInvest:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        dividendReinvest:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        drRatio:
+          type: number
+          description: The number of underlying common shares backing each depositary receipt (DR) traded.
+          format: double
+          nullable: true
+        exchangeCode:
+          type: string
+          description: A symbol for the stock exchange name; usually consisting of 3 to 5 characters; examples include NYSE; NAS; LSE; OTCBB ($$$ is used for private/unlisted securities)
+          nullable: true
+        exchangeSubMarketGlobalId:
+          type: string
+          description: Indicates a different marketplace or the different market tiers within a stock exchange.
+          nullable: true
+        investmentId:
+          type: string
+          description: Morningstar Issuer Id/ Investment Id
+          nullable: true
+        investmentName:
+          type: string
+          description: Morningstar standard investment name
+          nullable: true
+        investmentPrimaryIssuer:
+          $ref: '#/components/schemas/CodeMappingString'
+        shareClassDescription:
+          type: string
+          description: ''
+          nullable: true
+        investmentStatus:
+          type: integer
+          description: '0: obsolete1: active9: other'
+          format: int32
+          nullable: true
+        investmentType:
+          type: string
+          description: 'The abbreviation for investment type classifications: Equity (EQ); Depositary Receipt (DR); Preferred Equity (PE); Unlisted Equity (UE)'
+          nullable: true
+        ipoDate:
+          type: string
+          description: The initial day that the share begins trading on a public exchange
+          nullable: true
+        ipoOfferPrice:
+          type: number
+          description: Indicates the price at which an issuer sells its shares under an initial public offering (IPO). The offer price is set by the issuer and its underwriters.
+          format: double
+          nullable: true
+        ipoOfferPriceRange:
+          type: string
+          description: The estimated offer price range (low-high) for a new IPO. The field should be used until the final IPO price becomes available; as populated in the data field IPO Offer Price.
+          nullable: true
+        isDr:
+          type: boolean
+          description: 'Indicates if the share class is a depositary receipt: TRUE denotes it is an ADR or GDR; otherwise FALSE'
+          nullable: true
+        isin:
+          type: string
+          description: ''
+          nullable: true
+        isMainShare:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isPrimaryPerformanceId:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        marketSymbol:
+          type: string
+          description: An arrangement of characters representing a particular security listed on an exchange or traded publicly generated and maintained by market data (also known as Realtime). For example; Morningstar's market symbol is 126.1.MORN where 126 refers to Realtime exchange code for NASDAQ; 1 refers to security type equity; and the last set of characters refers to company's actual symbol.
+          nullable: true
+        parValue:
+          type: number
+          description: Nominal value of a security determined by the issuing company
+          format: double
+          nullable: true
+        performanceStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        securityType:
+          type: string
+          description: 'Indicates security type classification at the share class level: Common Stock (ST00000001); Preferred Stock (ST00000002); Industry (ST00000003); Index (ST00000004); ETF (ST00000005); Closed-end Fund (ST00000006); Investment Trusts (ST00000007); Note (ST00000009); Warrant (ST00000008); Units (ST000000A1); Rights (ST000000B1); Unlisted Common (ST000000C1); Unlisted Preferred (ST000000C2)'
+          nullable: true
+        sedol:
+          type: string
+          description: The stock exchange daily official list (SEDOL) is a seven-character identification code assigned by the London Stock Exchange. For securities issued in the UK the Sedol may be converted to an ISIN.
+          nullable: true
+        segmentMicCode:
+          type: string
+          description: 'Indicates the Exchange ISO Market Segment Identifier Code (MIC). Reference: https://www.iso20022.org/market-identifier-codes ($$$ is used for private/unlisted securities)'
+          nullable: true
+        symbol:
+          type: string
+          description: 'An arrangement of characters (often letters) representing a particular security listed on an exchange or otherwise traded publicly: Note that Morningstar''s multi-share class symbols will often contain a period within the symbol; e.g. BRK.B for Berkshire Hathaway Class B'
+          nullable: true
+        tradingCurrency:
+          type: string
+          description: 3 Character ISO code of the currency that the exchange price is denominated in; i.e. the trading currency of the security
+          nullable: true
+        tradingStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        underlyingDrIssuerId:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputShareClassInformation
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputCusip:
+      type: object
+      properties:
+        custodian:
+          type: string
+          description: ''
+          nullable: true
+        underlyingFundCusip:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputCusip
+  responses:
+    ResponseCusip:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              cusip:
+                $ref: '#/components/schemas/OutputCusip'
+              shareClassInformation:
+                $ref: '#/components/schemas/OutputShareClassInformation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

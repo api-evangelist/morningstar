@@ -1,0 +1,394 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Quantitative Equity Rating Analysis API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Quantitative Equity Rating Analysis
+paths:
+  /direct-web-services/v1/investments/{id}/quantitative-equity-rating-analysis:
+    get:
+      summary: Get Quantitative Equity Rating Analysis view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: quantitativeSmartTextType
+        in: query
+        required: true
+        schema:
+          enum:
+          - Moat
+          - Valuation
+          type: string
+        description: Morningstar Quantitative Smart Text document type to filter results by.
+        examples:
+          smartTextTypeExample1:
+            summary: Moat
+            value: Moat
+          smartTextTypeExample2:
+            summary: Valuation
+            value: Valuation
+      - name: languageId
+        in: query
+        description: "\nLanguage to filter results by. Language support varies depending on the data and package.\n\n  - `ENG` = English\n  - `SPA` = Spanish\n  - `FRA` = French\n  - `DEU` = German\n  - `ITA` = Italian\n  - `JPN` = Japanese\n  - `CHI` = Chinese Simplified\n  - `ZHO` = Chinese Traditional\n  - `KOR` = Korean"
+        schema:
+          type: string
+          example: ENG
+          x-enumDescriptions:
+            ENG: English
+            SPA: Spanish
+            FRA: French
+            DEU: German
+            ITA: Italian
+            JPN: Japanese
+            CHI: Chinese Simplified
+            ZHO: Chinese Traditional
+            KOR: Korean
+        examples:
+          languageExample1:
+            summary: English
+            value: ENG
+          languageExample2:
+            summary: Spanish
+            value: SPA
+          languageExample3:
+            summary: French
+            value: FRA
+          languageExample4:
+            summary: German
+            value: DEU
+          languageExample5:
+            summary: Italian
+            value: ITA
+          languageExample6:
+            summary: Japanese
+            value: JPN
+          languageExample7:
+            summary: Chinese Simplified
+            value: CHI
+          languageExample8:
+            summary: Chinese Traditional
+            value: ZHO
+          languageExample9:
+            summary: Korean
+            value: KOR
+      description: Most recent and time series data supported.
+      operationId: getEquityQuantitativeEquityRatingAnalysisDataset
+      tags:
+      - Quantitative Equity Rating Analysis
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseQuantitativeEquityRatingAnalysis'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+components:
+  schemas:
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputQuantitativeEquitySmartText:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The date of the data or ratings within the SmartText.
+          nullable: true
+        language:
+          $ref: '#/components/schemas/CodeMappingString'
+        quantitativeSmarttext:
+          type: string
+          description: Detailed text providing insights into the company's Economic Moat and valuation.
+          nullable: true
+        quantitativeSmarttextPublishDate:
+          type: string
+          description: Date and time of the SmartText publication
+          nullable: true
+        quantitativeSmarttextType:
+          type: string
+          description: Specifies the focus of the Quantitative SmartText; indicating whether the text primarily provides an analysis of the company's valuation or its Economic Moat
+          nullable: true
+      additionalProperties: false
+      title: OutputQuantitativeEquitySmartText
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+  responses:
+    ResponseQuantitativeEquityRatingAnalysis:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              quantitativeEquitySmartText:
+                $ref: '#/components/schemas/OutputQuantitativeEquitySmartText'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

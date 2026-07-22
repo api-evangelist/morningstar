@@ -1,0 +1,47 @@
+generated: '2026-07-22'
+method: derived
+source: openapi/ (117 refined specs), https://developer.morningstar.com/content/documentation/documentation/get-started/authentication/get-started-authentication.md,
+  https://developer.morningstar.com/content/documentation/morningstar-ai-integrations/morningstar-agent/overview/morningstar-agent-overview.md
+authentication:
+  style: oauth2-token-endpoint
+  detail: Base64 username:password Basic auth to POST /token/oauth issues an
+    unscoped bearer token valid for 60 minutes (same token re-issued within a
+    10-minute cache window); bearer sent as Authorization header on every call.
+  artifact: authentication/morningstar-authentication.yml
+regional_bases:
+  style: region-prefixed hosts
+  hosts: [www.us-api.morningstar.com, www.emea-api.morningstar.com, www.apac-api.morningstar.com]
+  note: The same product path is served per region; tokens are requested from the
+    matching regional /token endpoint.
+sync_vs_async:
+  pattern: Direct Web Services ships synchronous and asynchronous variants of
+    heavy surfaces (time series, investment details, X-Ray) - async endpoints
+    accept a job request and results are fetched separately.
+idempotency:
+  supported: false
+  note: No Idempotency-Key header or documented idempotency contract anywhere in
+    the specs or docs.
+pagination:
+  style: mixed
+  params: [page, pageSize, limit]
+  note: Only a minority of endpoints paginate (7 of 117 specs declare pageSize);
+    most return bounded data packages keyed by identifier lists.
+field_selection:
+  style: datapoint-lists
+  note: Responses are shaped by requesting explicit Morningstar datapoint ids/names
+    rather than sparse-fieldset query params; the datapoint universe is documented
+    per product (see skills/morningstar-datapoint-finder.md buckets).
+request_tracing:
+  header: X-Context-ID
+  note: The Morningstar Agent API returns X-Context-ID on every response; passing
+    it back maintains conversational context across turns. No request-id tracing
+    header is documented for the data APIs.
+versioning:
+  scheme: uri-path
+  artifact: lifecycle/morningstar-lifecycle.yml
+error_envelope:
+  shape: JSON body with message/error fields per API family; no shared
+    application/problem+json envelope (see errors/morningstar-problem-types.yml).
+rate_limits:
+  signaling: none documented publicly; capacity is governed by the sales-gated
+    license.

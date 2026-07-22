@@ -1,0 +1,453 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Portfolio Holdings Dates API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Portfolio Holdings Dates
+paths:
+  /direct-web-services/v1/investments/{id}/portfolio-holdings-dates:
+    post:
+      summary: Retrieve portfolio holdings date
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      tags:
+      - Portfolio Holdings Dates
+      description: 'This endpoint is used to retrieve dates for which data is available for a portfolio.
+
+
+        These dates are used to specify a portfolio date when requesting investment details for the following views:
+
+
+        - `full-look-through-portfolio-holdings`
+
+        - `full-portfolio-holdings-month-end-or-quarter-end-most-recent`'
+      operationId: retrievePortfolioHoldingsDates
+      requestBody:
+        $ref: '#/components/requestBodies/RequestPortfolioHoldingsDates'
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponsePortfolioHoldingsDates'
+        '400':
+          $ref: '#/components/responses/ResponsePortfolioHoldingsDatesBadRequest'
+components:
+  responses:
+    ResponsePortfolioHoldingsDates:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponsePortfolioHoldingsDates'
+          examples:
+            ResponsePortfolioHoldingsDatesExample1:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample1'
+            ResponsePortfolioHoldingsDatesExample2:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample2'
+    ResponsePortfolioHoldingsDatesBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+          examples:
+            ResponsePortfolioHoldingsDateBadRequestExample1:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesBadRequestExample1'
+  schemas:
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    OutputPortfolioHoldingsDates:
+      type: object
+      properties:
+        portfolioDate:
+          type: string
+          description: Portfolio date in YYYY-MM-DD format
+          nullable: true
+        holdingsView:
+          type: string
+          description: Holdings view identifier
+          nullable: true
+      additionalProperties: false
+      description: Portfolio date information
+      title: OutputPortfolioHoldingsDates
+    ResponsePortfolioHoldingsDates:
+      type: object
+      properties:
+        portfolioDates:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPortfolioHoldingsDates'
+          description: List of available portfolio dates
+          nullable: true
+        identifiers:
+          $ref: '#/components/schemas/OutputIdentifiers'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+      additionalProperties: false
+      description: Response model for portfolio holdings dates endpoint
+      title: ResponsePortfolioHoldingsDates
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    RequestPortfolioHoldingsDates:
+      type: object
+      properties:
+        holdingsView:
+          type: string
+          description: Holdings view to retrieve. Allowed values are `10`, `25`, or `full`.
+          nullable: true
+          enum:
+          - '10'
+          - '25'
+          - full
+        type:
+          type: string
+          description: Type of portfolio dates to retrieve. Allowed values are `mostRecent`, `timeSeries`, or `staticDates`.
+          nullable: true
+          enum:
+          - mostRecent
+          - timeSeries
+          - staticDates
+        frequency:
+          type: string
+          description: Frequency used when `type` is `timeSeries`. Allowed values are `d` (daily) or `m` (monthly).
+          nullable: true
+          enum:
+          - d
+          - m
+        startDate:
+          type: string
+          description: Start date in `YYYY-MM-DD` format. Required when `type` is `timeSeries`.
+          nullable: true
+        endDate:
+          type: string
+          description: End date in `YYYY-MM-DD` format. Required when `type` is `timeSeries`.
+          nullable: true
+        dates:
+          type: array
+          minItems: 1
+          maxItems: 10
+          items:
+            type: string
+          description: Array of dates in `YYYY-MM-DD` format. Required when `type` is `staticDates`. A maximum of 10 items is allowed.
+          nullable: true
+        idType:
+          type: string
+          description: Type of identifier provided in the `id` field.
+          default: performanceId
+          nullable: true
+          enum:
+          - performanceId
+          - securityId
+          - cusip
+          - isin
+          - sedol
+          - tradingSymbol
+          - fundCode
+          - msid
+          - ticker
+        baseCurrency:
+          type: string
+          description: Base currency used to resolve the investment identifier.
+          nullable: true
+        domicile:
+          type: string
+          description: Domicile used to resolve the investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Exchange country used to resolve the investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          example: EX$$$$XNAS
+          description: Specifies exchange identifier used to look up investment. See the data dictionary for full list of accepted values.
+          externalDocs:
+            description: Investment Details Managed Investments Data Dictionary (Excel)
+            url: https://developer.morningstar.com/content/hidden-from-navigation/InvestmentDetailsManagedInvestmentsDataDictionary.xlsx
+      additionalProperties: false
+      description: Request model for portfolio holdings dates endpoint
+      required:
+      - holdingsView
+      - type
+      title: RequestPortfolioHoldingsDates
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+  examples:
+    ResponsePortfolioHoldingsDatesExample2:
+      summary: Top 10 Time Series
+      value:
+        portfolioDates:
+        - portfolioDate: '2025-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2024-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2024-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2023-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2023-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2022-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2022-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2021-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2021-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2020-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2020-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2019-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2019-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2018-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2016-12-31'
+          holdingsView: '10'
+        identifiers:
+          performanceId: 0P00018P7K
+        metadata:
+          requestId: d50bc56a-bf63-440e-b6b1-ffc7d14c0ca3
+          time: '2026-06-17T17:36:52.137352Z'
+    RequestPortfolioHoldingsDatesExample3:
+      summary: 'Date Type: Time Series and Frequency'
+      value:
+        holdingsView: '10'
+        type: timeSeries
+        startDate: '2014-06-30'
+        endDate: '2024-06-30'
+        frequency: m
+    RequestPortfolioHoldingsDatesExample2:
+      summary: 'Data Type: Time Series'
+      value:
+        holdingsView: '10'
+        type: timeSeries
+        startDate: '2014-06-30'
+        endDate: '2024-06-30'
+    ResponsePortfolioHoldingsDatesExample1:
+      summary: Top 10 Most Recent
+      value:
+        portfolioDates:
+        - portfolioDate: '2025-12-31'
+          holdingsView: '10'
+        identifiers:
+          performanceId: 0P00018P7K
+        metadata:
+          requestId: 3a11f005-394f-4f89-a17f-41d2ffe549f3
+          time: '2026-06-17T17:28:34.6382675Z'
+    RequestPortfolioHoldingsDatesExample4:
+      summary: 'Date Type: Static Dates'
+      value:
+        holdingsView: '10'
+        type: staticDates
+        dates:
+        - '2024-06-30'
+        - '2024-12-31'
+        - '2023-12-31'
+        - '2023-06-30'
+        - '2016-12-31'
+        - '2018-12-31'
+        - '2019-06-30'
+        - '2013-06-30'
+    ResponsePortfolioHoldingsDatesBadRequestExample1:
+      summary: Required Parameter Missing
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetails.001
+        message: The EndDate parameter is required.
+        requestId: cd8d3278-a273-4765-87aa-e0beff1f2975
+    RequestPortfolioHoldingsDatesExample1:
+      summary: 'Data Type: Most Recent'
+      value:
+        holdingsView: full
+        type: mostRecent
+  requestBodies:
+    RequestPortfolioHoldingsDates:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestPortfolioHoldingsDates'
+          examples:
+            RequestPortfolioHoldingsDatesExample1:
+              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample1'
+            RequestPortfolioHoldingsDatesExample2:
+              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample2'
+            RequestPortfolioHoldingsDatesExample3:
+              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample3'
+            RequestPortfolioHoldingsDatesExample4:
+              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample4'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

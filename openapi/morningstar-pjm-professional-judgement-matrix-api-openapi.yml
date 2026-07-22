@@ -1,0 +1,400 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts PJM (Professional Judgement Matrix) API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: PJM (Professional Judgement Matrix)
+paths:
+  /v1/pjm:
+    post:
+      tags:
+      - PJM (Professional Judgement Matrix)
+      summary: Submit new Professional Judgement Matrix configuration
+      description: 'Submit a custom Professional Judgement Matrix configuration. In the response, a unique pjmid for the submitted configuration is returned. The identifier can be used for future retrieval of the custom Professional Judgement Matrix configuration.
+
+
+        For each consideration, define the risk tolerance score cap for each option. For example,  `“basic knowledge” : 68` means that the suitability score of a client with basic investment knowledge will be capped at 68. Refer to the [Morningstar Risk Profiler Methodology](https://developer.morningstar.com/content/hidden-from-navigation/MorningstarRiskProfilerMethodology_v4.pdf) documentation for further details.
+
+
+        If a custom Professional Judgement Matrix configuration is not defined, the engine will use the default configuration as defined in the Morningstar Risk Profiler Methodology documentation to calculate the suitability score.
+
+        '
+      operationId: submitPjmConfiguration
+      parameters:
+      - name: X-API-RequestId
+        in: header
+        description: Initial request identifier
+        schema:
+          type: string
+      requestBody:
+        description: Payload
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PjmRequestPayload'
+        required: true
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PjmResponsePayload'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+        '502':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse502'
+      x-codegen-request-body-name: pjmRequest
+  /v1/pjm/{pjmId}:
+    get:
+      tags:
+      - PJM (Professional Judgement Matrix)
+      summary: Get Professional Judgement Matrix configuration
+      description: Get a specific Professional Judgement Matrix configuration. The configuration is identified by the value in the `pjmId` parameter. This ID was returned in the response when the configuration was created.
+      operationId: getPjmConfiguration
+      parameters:
+      - name: pjmId
+        in: path
+        description: Unique identifier of a Professional Judgement Matrix configuration
+        required: true
+        schema:
+          type: string
+      - name: Accept-Language
+        in: header
+        description: Specifies the locale.
+        required: true
+        schema:
+          type: string
+          enum:
+          - en-US
+          - en-CA
+          - en-AU
+          - en-GB
+          - en-IN
+          - fr-CA
+        example: en-US
+      - name: X-API-RequestId
+        in: header
+        description: Initial request identifier
+        schema:
+          type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PjmResponsePayload'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse404'
+        '500':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+        '502':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse502'
+components:
+  schemas:
+    TimeHorizonPayload:
+      title: TimeHorizonPayload
+      type: object
+      properties:
+        less1:
+          type: integer
+          description: Less than 1 year
+          example: 0
+        year1:
+          type: integer
+          description: 1 year
+          example: 1
+        year2:
+          type: integer
+          description: 2 years
+          example: 2
+        year3:
+          type: integer
+          description: 3 years
+          example: 3
+        year4:
+          type: integer
+          description: 4 years
+          example: 4
+        year5:
+          type: integer
+          description: 5 years
+          example: 5
+        year6:
+          type: integer
+          description: 6 years
+          example: 6
+        year7:
+          type: integer
+          description: 7 years
+          example: 7
+        year8:
+          type: integer
+          description: 8 years
+          example: 8
+        year9:
+          type: integer
+          description: 9 years
+          example: 9
+        year10:
+          type: integer
+          description: 10 years
+          example: 10
+        year11:
+          type: integer
+          description: 11 years
+          example: 11
+        year12:
+          type: integer
+          description: 12 years
+          example: 12
+        year13:
+          type: integer
+          description: 13 years
+          example: 13
+        year14:
+          type: integer
+          description: 14 years
+          example: 14
+        year15:
+          type: integer
+          description: 15 years
+          example: 15
+        year16:
+          type: integer
+          description: 16 years
+          example: 16
+        year17:
+          type: integer
+          description: 17 years
+          example: 17
+        year18:
+          type: integer
+          description: 18 years
+          example: 18
+        year19:
+          type: integer
+          description: 19 years
+          example: 19
+        year20:
+          type: integer
+          description: 20 years
+          example: 20
+        more20:
+          type: integer
+          description: More than 20 years
+          example: 50
+      description: Configurable to set the maximum score depending on the selection provided up a maximum of 22 options
+    PjmResponsePayload:
+      title: PjmResponsePayload
+      type: object
+      properties:
+        pjmId:
+          type: string
+          description: Record unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        createdAt:
+          type: string
+          description: Record creation dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        timeHorizon:
+          $ref: '#/components/schemas/TimeHorizonPayload'
+        knowledge:
+          $ref: '#/components/schemas/KnowledgePayload'
+        experience:
+          $ref: '#/components/schemas/ExperiencePayload'
+        composure:
+          $ref: '#/components/schemas/ComposurePayload'
+    ComposurePayload:
+      title: ComposurePayload
+      type: object
+      properties:
+        never:
+          type: integer
+          description: Not experienced a financial downturn
+          example: 50
+        noImpact:
+          type: integer
+          description: No impact, Didn't make any changes to the investment plan.
+          example: 60
+        boughtShares:
+          type: integer
+          description: Saw an opportunity and bought more shares
+          example: 90
+        soldShares:
+          type: integer
+          description: Was nervous and sold shares
+          example: 90
+        unknown:
+          type: integer
+          description: Unknown
+          example: 100
+      description: Configurable to cap the max score based on the 4 possible responses
+    ErrorResponse400:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    PjmRequestPayload:
+      title: PjmRequestPayload
+      type: object
+      properties:
+        timeHorizon:
+          $ref: '#/components/schemas/TimeHorizonPayload'
+        knowledge:
+          $ref: '#/components/schemas/KnowledgePayload'
+        experience:
+          $ref: '#/components/schemas/ExperiencePayload'
+        composure:
+          $ref: '#/components/schemas/ComposurePayload'
+    ErrorResponse500:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ExperiencePayload:
+      title: ExperiencePayload
+      type: object
+      properties:
+        noPrior:
+          type: integer
+          description: No prior equity investment experience
+          example: 68
+        prior:
+          type: integer
+          description: Prior equity investment experience
+          example: 90
+        unknown:
+          type: integer
+          description: Unknown
+          example: 100
+      description: Configurable to cap the max score based on the 2 possible responses
+    ErrorResponse502:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Received an invalid response from the upstream server
+        status:
+          type: string
+          description: Error Status
+          example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    KnowledgePayload:
+      title: KnowledgePayload
+      type: object
+      properties:
+        basicKnowledge:
+          type: integer
+          description: Don't have or very little knowledge about investing
+          example: 50
+        moderateKnowledge:
+          type: integer
+          description: Have basic to moderate knowledge about investing
+          example: 60
+        veryKnowledge:
+          type: integer
+          description: Very knowledgeable about investing
+          example: 90
+        unknown:
+          type: integer
+          description: Unknown
+          example: 100
+      description: Configurable to cap the max score based on the 3 possible responses
+    ErrorResponse404:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
+          type: string
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

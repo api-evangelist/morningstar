@@ -1,0 +1,216 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Positions API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Positions
+paths:
+  /positions:
+    get:
+      tags:
+      - Positions
+      summary: Get a collection of all positions
+      description: Get a collection of all positions. You can specify the number of the page to return and the number of records per page.
+      operationId: getPositionsUsingGET
+      parameters:
+      - name: page
+        in: query
+        description: Page number
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      - name: size
+        in: query
+        description: Number of records per page
+        schema:
+          type: integer
+          format: int32
+          default: 25
+      responses:
+        '200':
+          description: Ok
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Page«Position,DefaultSummaryDto»'
+        '400':
+          description: Bad Request
+        '401':
+          description: Not Authorized
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      deprecated: false
+components:
+  schemas:
+    DefaultSummaryDto:
+      title: DefaultSummaryDto
+      type: object
+    CurrencyValue:
+      title: CurrencyValue
+      type: object
+      properties:
+        amount:
+          type: number
+          readOnly: true
+          example: 2078.34
+        currencyCode:
+          type: string
+          description: ISO 4217 currency code
+          readOnly: true
+          example: USD
+    DateNoTime:
+      title: DateNoTime
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+    Page«Position,DefaultSummaryDto»:
+      title: Page«Position,DefaultSummaryDto»
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Position'
+        isFirst:
+          type: boolean
+          description: True if and only if this is the first page of data in the result set
+          example: true
+        isLast:
+          type: boolean
+          description: True if and only if this is the last page of data in the result set
+          example: true
+        pageNumber:
+          type: integer
+          description: Page number of this page
+          format: int32
+          example: 0
+        pageSize:
+          type: integer
+          description: Number of records per page
+          format: int32
+          example: 25
+        summary:
+          $ref: '#/components/schemas/DefaultSummaryDto'
+        totalElements:
+          type: integer
+          description: Total number of elements in result set
+          format: int64
+          example: 1
+        totalPages:
+          type: integer
+          description: Total number of pages in result set
+          format: int32
+          example: 1
+      description: A page of data records
+    Position:
+      title: Position
+      required:
+      - accountId
+      - assetLiabilityIndicator
+      - id
+      - name
+      type: object
+      properties:
+        ticker:
+          type: string
+          description: Ticker symbol of the position
+          example: SIEGY
+        cusip:
+          type: string
+          description: Committee on Uniform Security Identification Procedures (CUSIP) for this of the position
+          example: '826197501'
+        name:
+          type: string
+          description: Name of the position
+          example: Siemens AG
+        morningstarSecId:
+          type: string
+          description: Morningstar security identifier of the position
+          example: E0DEU00CVS
+        morningstarPerfId:
+          type: string
+          description: Morningstar performance identifier of the position
+          example: 0P000004XO
+        units:
+          type: number
+          description: Units of the position
+          example: 12
+        unitPrice:
+          $ref: '#/components/schemas/CurrencyValue'
+        marketValue:
+          $ref: '#/components/schemas/CurrencyValue'
+        lastUpdated:
+          type: string
+          description: Date and time stamp of last update
+          format: date-time
+          example: '2021-08-19T13:08:10.000Z'
+        assetLiabilityIndicator:
+          type: string
+          description: Valid values are *Asset* or *Liability*
+          example: Asset
+        secType:
+          type: string
+          description: Security type of the position. Can be BOND, CASH, MUTUALFUND, OPTION, OTHER, or STOCK
+          example: Bond
+        costBasis:
+          $ref: '#/components/schemas/CurrencyValue'
+        couponRate:
+          type: number
+          description: The interest payment rate of a debt instrument
+          example: 24
+        maturityDate:
+          $ref: '#/components/schemas/DateNoTime'
+        originalFace:
+          type: number
+          description: The original face or par value for a security that amortizes or accretes (e.g., a mortgage)
+          example: 12484
+        paydownFactor:
+          type: number
+          description: The paydown factor value for bond if provided by the financial institution
+          example: 12484
+        fiSuppliedSecType:
+          type: string
+          description: The security type as supplied by the financial institution
+          example: '5566'
+        id:
+          type: integer
+          description: Unique ID of the position
+          format: int64
+          example: 778899
+        accountId:
+          type: integer
+          description: ID for the Account that contains this Position
+          format: int64
+          example: 778899
+        securityId:
+          type: integer
+          description: ID for Security owned by this Position
+          format: int64
+          example: 778899
+      description: Positions
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

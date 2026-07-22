@@ -1,0 +1,166 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Solutions API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Solutions
+paths:
+  /v2/solutions/comfort-ranges:
+    get:
+      tags:
+      - Solutions
+      summary: Get comfort ranges
+      description: '
+
+        **Get portfolio risk score or growth asset percentage comfort ranges**
+
+
+
+
+        **Get risk tolerance or suitability score ranges for a specific portfolio**
+
+        '
+      operationId: getComfortRanges
+      parameters:
+      - name: X-API-RequestId
+        in: header
+        description: Initial request identifier
+        schema:
+          type: string
+      - name: rangeType
+        in: query
+        description: Indicate the comfort range type for the request.
+        required: true
+        schema:
+          type: string
+          enum:
+          - SCORE
+          - GROWTH
+      - name: score
+        in: query
+        description: Indicate the Portfolio Risk Score value (0-100) in which the score ranges will be retrieved for the request.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComfortRangesPayloadResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse400'
+        '500':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse500'
+        '502':
+          description: Internal server communication failure
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse502'
+components:
+  schemas:
+    ComfortRangesPayloadResponse:
+      title: ComfortRangesPayload
+      type: object
+      properties:
+        tooMuchRisk:
+          $ref: '#/components/schemas/Ranges'
+        marginalUpper:
+          $ref: '#/components/schemas/Ranges'
+        okRisk:
+          $ref: '#/components/schemas/Ranges'
+        marginalLower:
+          $ref: '#/components/schemas/Ranges'
+        tooLittleRisk:
+          $ref: '#/components/schemas/Ranges'
+    Ranges:
+      title: Range
+      type: object
+      properties:
+        low:
+          type: integer
+          description: Low range
+          example: 10
+        id:
+          type: integer
+          description: High range
+          example: 30
+    ErrorResponse400:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse500:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse502:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Received an invalid response from the upstream server
+        status:
+          type: string
+          description: Error Status
+          example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

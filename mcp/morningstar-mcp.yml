@@ -1,0 +1,54 @@
+generated: '2026-07-22'
+method: searched
+status: published
+source: https://developer.morningstar.com/content/documentation/morningstar-ai-integrations/morningstar-mcp-server/overview/morningstar-mcp-server.md
+server:
+  name: morningstar
+  transport: http
+  url: https://mcp.morningstar.com/mcp
+  docs: https://developer.morningstar.com/direct-web-services/documentation/morningstar-ai-integrations/morningstar-mcp-server/overview
+  authentication:
+    type: oauth2
+    flows: [authorizationCode]
+    authorization_endpoint: https://mcp.morningstar.com/authorize
+    token_endpoint: https://mcp.morningstar.com/token
+    registration_endpoint: https://mcp.morningstar.com/register
+    pkce: S256
+    scopes: [offline_access, openid, email, profile]
+    metadata: well-known/morningstar-oauth-authorization-server.json
+    note: A licensed Morningstar account is required. Anonymous tools/list returns
+      HTTP 401 invalid_token with resource_metadata pointing at
+      /.well-known/oauth-protected-resource/mcp, so live tool inputSchemas need
+      authenticated introspection - the tool list below is from the published docs.
+  integrations: [Claude, ChatGPT, Copilot Studio, Copilot App, Microsoft Foundry, Perplexity]
+tools:
+- name: morningstar-analyst-research-tool
+  description: Returns relevant portions of Morningstar's analyst- and
+    quantitative-driven forward-looking investment reports.
+- name: morningstar-articles-tool
+  description: Returns relevant portions of articles, news, and commentary published
+    on Morningstar.com and other Morningstar products.
+- name: morningstar-data-tool
+  description: Retrieves Morningstar's AI-ready data for global mutual funds, ETFs,
+    and stocks.
+- name: morningstar-fund-holdings-tool
+  description: Retrieves the top holdings for a list of mutual funds or ETFs.
+- name: morningstar-id-lookup-tool
+  description: Acts as the MCP server's entity detection layer, identifying the
+    relevant investments and data points to hand off to other tools.
+- name: morningstar-portfolio-analysis-tool
+  description: Analyzes a portfolio of holdings or a fund using Morningstar's X-Ray
+    methodology, delivering breakdowns across asset allocation, sector exposure,
+    geographic region, investment style, and risk/return metrics.
+- name: morningstar-screener-tool
+  description: Retrieves a list of investments that match given criteria.
+related:
+- url: https://github.com/Morningstar/morningstar-mcp-server
+  note: Archived predecessor repo (Datapoint Tool + Articles Tool); development
+    moved off-GitHub to the hosted server.
+- url: https://github.com/Morningstar/morningstar-plugins
+  note: Official Claude Code / Codex plugin whose skills all connect to
+    mcp.morningstar.com/mcp (see skills/).
+- url: https://developer.morningstar.com/direct-web-services/documentation/morningstar-ai-integrations/morningstar-agent/overview
+  note: The Morningstar Agent API (agents.morningstar.com) is a managed
+    orchestration layer over the same MCP tools.

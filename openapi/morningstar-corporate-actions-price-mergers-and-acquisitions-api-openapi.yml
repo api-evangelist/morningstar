@@ -1,0 +1,1885 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Corporate Actions Price Mergers and Acquisitions API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Corporate Actions Price Mergers and Acquisitions
+paths:
+  /direct-web-services/v1/investments/{id}/equity-capital-repayment:
+    get:
+      summary: Get Capital Repayment view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityCapitalRepaymentDataset
+      tags:
+      - Corporate Actions Price Mergers and Acquisitions
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityCapitalRepayment'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 914
+  /direct-web-services/v1/investments/{id}/equity-cash-dividend:
+    get:
+      summary: Get Cash Dividend view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: corporateActionType
+        in: query
+        required: true
+        schema:
+          enum:
+          - SS
+          - SD
+          - CD
+          - SC
+          - SP
+          - RI
+          - CR
+          type: string
+          x-enumDescriptions:
+            SS: Stock Split
+            SD: Stock Dividend
+            CD: Cash Dividend
+            SC: Special Cash
+            SP: Spin Off
+            RI: Rights Issue
+            CR: Capital Repayment
+        description: "Filters results by corporate actions type. Accepts:\n\n  - `CD` = Cash dividend\n  - `CR` = Capital repayment\n  - `SC` = Special cash\n  - `SD` = Stock dividend\n  - `SP` = Spin off\n  - `SS` = Stock split\n  - `RI` = Rights issue"
+        examples:
+          corporateActionsTypeExample1:
+            summary: SS (Stock Split)
+            value: SS
+          corporateActionsTypeExample2:
+            summary: SD (Stock Dividend)
+            value: SD
+          corporateActionsTypeExample3:
+            summary: CD (Cash Dividend)
+            value: CD
+          corporateActionsTypeExample4:
+            summary: SC (Special Cash)
+            value: SC
+          corporateActionsTypeExample5:
+            summary: SP (Spin Off)
+            value: SP
+          corporateActionsTypeExample6:
+            summary: RI (Rights Issue)
+            value: RI
+          corporateActionsTypeExample7:
+            summary: CR (Capital Repayment)
+            value: CR
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityCashDividendDataset
+      tags:
+      - Corporate Actions Price Mergers and Acquisitions
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityCashDividend'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 914
+  /direct-web-services/v1/investments/{id}/equity-corporate-actions-price-mergers-and-acquisitions:
+    get:
+      summary: Get Corporate Actions Price Mergers and Acquisitions package view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: corporateActionType
+        in: query
+        required: true
+        schema:
+          enum:
+          - SS
+          - SD
+          - CD
+          - SC
+          - SP
+          - RI
+          - CR
+          type: string
+          x-enumDescriptions:
+            SS: Stock Split
+            SD: Stock Dividend
+            CD: Cash Dividend
+            SC: Special Cash
+            SP: Spin Off
+            RI: Rights Issue
+            CR: Capital Repayment
+        description: "Filters results by corporate actions type. Accepts:\n\n  - `CD` = Cash dividend\n  - `CR` = Capital repayment\n  - `SC` = Special cash\n  - `SD` = Stock dividend\n  - `SP` = Spin off\n  - `SS` = Stock split\n  - `RI` = Rights issue"
+        examples:
+          corporateActionsTypeExample1:
+            summary: SS (Stock Split)
+            value: SS
+          corporateActionsTypeExample2:
+            summary: SD (Stock Dividend)
+            value: SD
+          corporateActionsTypeExample3:
+            summary: CD (Cash Dividend)
+            value: CD
+          corporateActionsTypeExample4:
+            summary: SC (Special Cash)
+            value: SC
+          corporateActionsTypeExample5:
+            summary: SP (Spin Off)
+            value: SP
+          corporateActionsTypeExample6:
+            summary: RI (Rights Issue)
+            value: RI
+          corporateActionsTypeExample7:
+            summary: CR (Capital Repayment)
+            value: CR
+      - name: eventStatus
+        in: query
+        schema:
+          enum:
+          - Completed
+          - Announced
+          - Approved
+          - Withdrawn
+          - Terminated
+          - Rejected
+          - Other
+          - Postponed
+          type: string
+          x-enumDescriptions:
+            Completed: Event completed
+            Announced: Event announced
+            Approved: Event approved
+            Withdrawn: Event withdrawn
+            Terminated: Event terminated
+            Rejected: Event rejected
+            Postponed: Event postponed
+            Other: Other status
+        description: "Filters results by event status.\n\n  - `Completed` = Event completed\n  - `Announced` = Event announced\n  - `Approved` = Event approved\n  - `Withdrawn` = Event withdrawn\n  - `Terminated` = Event terminated\n  - `Rejected` = Event rejected\n  - `Postponed` = Event postponed\n  - `Other` = Other status"
+        examples:
+          eventTypeExample1:
+            summary: Completed
+            value: Completed
+          eventTypeExample2:
+            summary: Announced
+            value: Announced
+          eventTypeExample3:
+            summary: Approved
+            value: Approved
+          eventTypeExample4:
+            summary: Withdrawn
+            value: Withdrawn
+          eventTypeExample5:
+            summary: Terminated
+            value: Terminated
+          eventTypeExample6:
+            summary: Rejected
+            value: Rejected
+          eventTypeExample7:
+            summary: Postponed
+            value: Postponed
+          eventTypeExample8:
+            summary: Other
+            value: Other
+      - name: transactionType
+        in: query
+        schema:
+          enum:
+          - Offer
+          - Merger
+          type: string
+          x-enumDescriptions:
+            Offer: Direct offer to shareholders.
+            Merger: Combination of two companies to form a single new entity.
+        description: '
+
+          Filters results by transaction type.
+
+
+          - `Offer` = Direct offer to shareholders.
+
+          - `Merger` = Combination of two companies to form a single new entity.'
+        examples:
+          transactionTypeExample1:
+            summary: Offer (Direct offer to shareholders)
+            value: Offer
+          transactionTypeExample2:
+            summary: Merger (Merger of companies to form single new entity.)
+            value: Merger
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: "The Corporate Actions – Price, Mergers and Acquisitions package provides data on dividends and other payments to shareholders, stock splits, rights issues, and spin offs, as well as mergers and acquisitions made by the issuing companies, and the adjustment factors relating to these corporate actions.\n\nThe package contains the following datasets:\n\n  - Capital Repayment\n\n  - Cash Dividend\n\n  - Mergers and Acquisitions\n\n  - Rights Issue\n\n  - Spin Off\n\n  - Stock Split\n\nTime series data supported."
+      operationId: getEquityCorporateActionsPriceMergersAndAcquisitionsPackage
+      tags:
+      - Corporate Actions Price Mergers and Acquisitions
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityCorporateActionsPriceMergersAndAcquisitions'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 914
+  /direct-web-services/v1/investments/{id}/equity-mergers-and-acquisitions:
+    get:
+      summary: Get Mergers and Acquisitions view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: eventStatus
+        in: query
+        schema:
+          enum:
+          - Completed
+          - Announced
+          - Approved
+          - Withdrawn
+          - Terminated
+          - Rejected
+          - Other
+          - Postponed
+          type: string
+          x-enumDescriptions:
+            Completed: Event completed
+            Announced: Event announced
+            Approved: Event approved
+            Withdrawn: Event withdrawn
+            Terminated: Event terminated
+            Rejected: Event rejected
+            Postponed: Event postponed
+            Other: Other status
+        description: "Filters results by event status.\n\n  - `Completed` = Event completed\n  - `Announced` = Event announced\n  - `Approved` = Event approved\n  - `Withdrawn` = Event withdrawn\n  - `Terminated` = Event terminated\n  - `Rejected` = Event rejected\n  - `Postponed` = Event postponed\n  - `Other` = Other status"
+        examples:
+          eventTypeExample1:
+            summary: Completed
+            value: Completed
+          eventTypeExample2:
+            summary: Announced
+            value: Announced
+          eventTypeExample3:
+            summary: Approved
+            value: Approved
+          eventTypeExample4:
+            summary: Withdrawn
+            value: Withdrawn
+          eventTypeExample5:
+            summary: Terminated
+            value: Terminated
+          eventTypeExample6:
+            summary: Rejected
+            value: Rejected
+          eventTypeExample7:
+            summary: Postponed
+            value: Postponed
+          eventTypeExample8:
+            summary: Other
+            value: Other
+      - name: transactionType
+        in: query
+        schema:
+          enum:
+          - Offer
+          - Merger
+          type: string
+          x-enumDescriptions:
+            Offer: Direct offer to shareholders.
+            Merger: Combination of two companies to form a single new entity.
+        description: '
+
+          Filters results by transaction type.
+
+
+          - `Offer` = Direct offer to shareholders.
+
+          - `Merger` = Combination of two companies to form a single new entity.'
+        examples:
+          transactionTypeExample1:
+            summary: Offer (Direct offer to shareholders)
+            value: Offer
+          transactionTypeExample2:
+            summary: Merger (Merger of companies to form single new entity.)
+            value: Merger
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Time series data supported.
+      operationId: getEquityMergersAndAcquisitionsDataset
+      tags:
+      - Corporate Actions Price Mergers and Acquisitions
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityMergersAndAcquisitions'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 914
+  /direct-web-services/v1/investments/{id}/equity-rights-issue:
+    get:
+      summary: Get Rights Issue view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityRightsIssueDataset
+      tags:
+      - Corporate Actions Price Mergers and Acquisitions
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityRightsIssue'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 914
+  /direct-web-services/v1/investments/{id}/equity-spin-off:
+    get:
+      summary: Get Spin-off view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquitySpinOffDataset
+      tags:
+      - Corporate Actions Price Mergers and Acquisitions
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquitySpinOff'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 914
+  /direct-web-services/v1/investments/{id}/equity-stock-split:
+    get:
+      summary: Get Stock Split view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: corporateActionType
+        in: query
+        required: true
+        schema:
+          enum:
+          - SS
+          - SD
+          - CD
+          - SC
+          - SP
+          - RI
+          - CR
+          type: string
+          x-enumDescriptions:
+            SS: Stock Split
+            SD: Stock Dividend
+            CD: Cash Dividend
+            SC: Special Cash
+            SP: Spin Off
+            RI: Rights Issue
+            CR: Capital Repayment
+        description: "Filters results by corporate actions type. Accepts:\n\n  - `CD` = Cash dividend\n  - `CR` = Capital repayment\n  - `SC` = Special cash\n  - `SD` = Stock dividend\n  - `SP` = Spin off\n  - `SS` = Stock split\n  - `RI` = Rights issue"
+        examples:
+          corporateActionsTypeExample1:
+            summary: SS (Stock Split)
+            value: SS
+          corporateActionsTypeExample2:
+            summary: SD (Stock Dividend)
+            value: SD
+          corporateActionsTypeExample3:
+            summary: CD (Cash Dividend)
+            value: CD
+          corporateActionsTypeExample4:
+            summary: SC (Special Cash)
+            value: SC
+          corporateActionsTypeExample5:
+            summary: SP (Spin Off)
+            value: SP
+          corporateActionsTypeExample6:
+            summary: RI (Rights Issue)
+            value: RI
+          corporateActionsTypeExample7:
+            summary: CR (Capital Repayment)
+            value: CR
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityStockSplitDataset
+      tags:
+      - Corporate Actions Price Mergers and Acquisitions
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityStockSplit'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 914
+components:
+  schemas:
+    OutputCapitalRepayment:
+      type: object
+      properties:
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
+          nullable: true
+        adjustmentFactor:
+          type: number
+          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        payDate:
+          type: string
+          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
+          nullable: true
+        recordDate:
+          type: string
+          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
+          nullable: true
+        subscriptionPrice:
+          type: number
+          description: Price at which the rights issue or capital repayment is offered by the company
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputCapitalRepayment
+    OutputMergerAcquisition:
+      type: object
+      properties:
+        acquirerCompanyName:
+          type: string
+          description: Name of the acquirer company
+          nullable: true
+        acquirerPerformanceId:
+          type: string
+          description: Morningstar Share Class Id of the acquirer company
+          nullable: true
+        cashPerShare:
+          type: number
+          description: Cash amount offered/paid to acquire target on a per share basis
+          format: double
+          nullable: true
+        cashPerShareCurrency:
+          type: string
+          description: Currency of the cash amount offered/paid to acquire target on a per share basis
+          nullable: true
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        eventId:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        eventStatus:
+          type: string
+          description: 'Indicates status of the event: Announced; Approved; Rejected; Withdrawn; Postponed; Completed; Terminated; Other'
+          nullable: true
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective
+          nullable: true
+        fractionShare:
+          type: string
+          description: 'Indicates fraction settlement: Cash; Disregard; Rounded; Other'
+          nullable: true
+        newShareRatio:
+          type: number
+          description: Number of new shares after the event
+          format: double
+          nullable: true
+        oldShareRatio:
+          type: number
+          description: Number of old shares before the event
+          format: double
+          nullable: true
+        payType:
+          type: string
+          description: 'Indicates the type of payment: Cash; Stock; Cash and Stock; Cash or Stock; Other'
+          nullable: true
+        percentAcquired:
+          type: integer
+          description: Percentage of the target's shares acquired in the transaction
+          format: int32
+          nullable: true
+        targetCompanyId:
+          type: string
+          description: Morningstar Company Id of the target company
+          nullable: true
+        targetCompanyName:
+          type: string
+          description: Name of the target company
+          nullable: true
+        targetPerformanceId:
+          type: string
+          description: Morningstar Share Class Id of the target company
+          nullable: true
+        totalTransactionCurrency:
+          type: string
+          description: Currency of the total value of the transaction paid by the acquirer
+          nullable: true
+        totalTransactionValue:
+          type: number
+          description: Total value of the transaction paid by the acquirer
+          format: double
+          nullable: true
+        transactionType:
+          type: string
+          description: 'Indicates the type of transaction: offer or merger'
+          nullable: true
+      additionalProperties: false
+      title: OutputMergerAcquisition
+    OutputSpinOff:
+      type: object
+      properties:
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
+          nullable: true
+        adjustmentFactor:
+          type: number
+          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
+          format: double
+          nullable: true
+        childCompanyId:
+          type: string
+          description: A unique Morningstar Company Id that indicates the child company spun off
+          nullable: true
+        childPerformanceId:
+          type: string
+          description: A unique Morningstar Share Class Id that indicates the share class for the child company spun off
+          nullable: true
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        fractionShare:
+          type: string
+          description: 'Indicates how fractions are treated in the event of a spin-off: Possible values include Cash; Disregard; Rounded; and Other'
+          nullable: true
+        numberOfShares:
+          type: number
+          description: The number of child company shares offered in a spin-off
+          format: double
+          nullable: true
+        payDate:
+          type: string
+          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
+          nullable: true
+        recordDate:
+          type: string
+          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
+          nullable: true
+      additionalProperties: false
+      title: OutputSpinOff
+    OutputRightsIssue:
+      type: object
+      properties:
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
+          nullable: true
+        adjustmentFactor:
+          type: number
+          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        existingShare:
+          type: number
+          description: Indicates the old shares prior to a rights issue offering
+          format: double
+          nullable: true
+        newShare:
+          type: number
+          description: Indicates the new shares to be issued in a rights issue offering
+          format: double
+          nullable: true
+        payDate:
+          type: string
+          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
+          nullable: true
+        recordDate:
+          type: string
+          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
+          nullable: true
+        subscriptionPrice:
+          type: number
+          description: Price at which the rights issue or capital repayment is offered by the company
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputRightsIssue
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputStockSplit:
+      type: object
+      properties:
+        recordDate:
+          type: string
+          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
+          nullable: true
+        adjustmentFactor:
+          type: number
+          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
+          format: double
+          nullable: true
+        corporateActionType:
+          type: string
+          description: 'Indicates type of stock split event: Stock Split (SS) or Stock Dividend (SD)'
+          nullable: true
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
+          nullable: true
+        isFunctionalStockSplit:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        payDate:
+          type: string
+          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
+          nullable: true
+        splitFrom:
+          type: number
+          description: Indicates the old shares (pre-split) of split ratio
+          format: double
+          nullable: true
+        splitTo:
+          type: number
+          description: Indicates the new shares (post-split) of split ratio
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputStockSplit
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    CodeMappingShort:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingShort
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputCashDividend:
+      type: object
+      properties:
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
+          nullable: true
+        cashGrossAmount:
+          type: number
+          description: Gross or Pre-Tax Dividend Amount (per share)
+          format: double
+          nullable: true
+        cashNetAmount:
+          type: number
+          description: Net of Tax Dividend Amount (per share)
+          format: double
+          nullable: true
+        corporateActionType:
+          type: string
+          description: 'Indicates the type of cash dividend payment: Cash Dividend (CD) or Special Cash (SC)'
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        dividendAmountType:
+          type: string
+          description: Indicates if the dividend payment has increased; decreased or remained the same compared to the last payment
+          nullable: true
+        dividendSchedule:
+          type: string
+          description: Indicates if dividend payments occur either at regular / irregular intervals or even / uneven dividend amounts. Possible values include Regular; Irregular and Stopped. If a Dividend is paid either with an irregular frequency or uneven amount; it is marked as 'Irregular Schedule'. If Dividend frequency and Amount both are regular; Dividend Schedule is marked as 'Regular.'  Stopped is used to denote that a company will no longer be paying dividends going forward.
+          nullable: true
+        fiscalYearEnd:
+          type: string
+          description: The company's fiscal year that it uses to report its financial statements
+          nullable: true
+        frankedAmount:
+          type: number
+          description: Dividend paid by a company out of profits on which the company has already paid tax. The investor is entitled to an imputation credit; or reduction in the amount of income tax that must be paid; up to the amount of tax already paid by the company. It is most common in Australia.
+          format: double
+          nullable: true
+        frankedCredit:
+          type: number
+          description: A franking credit is a nominal unit of tax paid by companies using dividend imputation. Franking credits are passed on to shareholders along with dividends. This is calculated using Franked amount * Tax rate/(1-Tax Rate)
+          format: double
+          nullable: true
+        frankedRate:
+          type: number
+          description: Tax rate at which the dividend is franked
+          format: double
+          nullable: true
+        frequency:
+          $ref: '#/components/schemas/CodeMappingShort'
+        grossedUpAmount:
+          type: number
+          description: Gross-up dividend amount including cash dividend and franked credit available for that dividend
+          format: double
+          nullable: true
+        interimPeriodEnd:
+          type: string
+          description: Corresponding Interim Period End Date of the announced Dividend (only reported for Cash Dividend)
+          nullable: true
+        isDirectInvestment:
+          type: boolean
+          description: 'Indicates if the share class has a plan allowing individual investors to invest in public companies without going through a stockbroker: YES denotes it has a direct investment plan; otherwise; NO'
+          nullable: true
+        isDividendReinvestmentPlan:
+          type: boolean
+          description: 'Indicates if the share class has a shareholder election plan to re-invest cash dividends into additional shares: YES denotes it has a dividend reinvestment plan; otherwise; NO'
+          nullable: true
+        payDate:
+          type: string
+          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
+          nullable: true
+        recordDate:
+          type: string
+          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
+          nullable: true
+        taxRate:
+          type: number
+          description: Withholding tax rate; the tax rate that is applicable to derive the Net Amount
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputCashDividend
+  responses:
+    ResponseEquityRightsIssue:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              rightsIssue:
+                $ref: '#/components/schemas/OutputRightsIssue'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquitySpinOff:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              spinOff:
+                $ref: '#/components/schemas/OutputSpinOff'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityMergersAndAcquisitions:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              mergerAcquisition:
+                $ref: '#/components/schemas/OutputMergerAcquisition'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCorporateActionsPriceMergersAndAcquisitions:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              capitalRepayment:
+                $ref: '#/components/schemas/OutputCapitalRepayment'
+              cashDividend:
+                $ref: '#/components/schemas/OutputCashDividend'
+              mergerAcquisition:
+                $ref: '#/components/schemas/OutputMergerAcquisition'
+              rightsIssue:
+                $ref: '#/components/schemas/OutputRightsIssue'
+              spinOff:
+                $ref: '#/components/schemas/OutputSpinOff'
+              stockSplit:
+                $ref: '#/components/schemas/OutputStockSplit'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityCapitalRepayment:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              capitalRepayment:
+                $ref: '#/components/schemas/OutputCapitalRepayment'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityStockSplit:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              stockSplit:
+                $ref: '#/components/schemas/OutputStockSplit'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCashDividend:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              cashDividend:
+                $ref: '#/components/schemas/OutputCashDividend'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

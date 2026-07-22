@@ -1,0 +1,96 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts equity - moat framework API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: equity - moat framework
+paths:
+  /equity/v1/moat_framework/{moatType}/{reportView}:
+    get:
+      tags:
+      - equity - moat framework
+      summary: Get a Moat Framework Report
+      description: Get a Moat Framework Report for the industry group specified in the `moatType` parameter. For a full list of moat types, see the [Documentation](/apis/investment-analysis/research/overview#moat-type-id) page.</br></br>A URL returned in the response is used to access the document file.
+      operationId: MoatGet
+      parameters:
+      - name: moatType
+        in: path
+        description: Unique identifier of a moat type
+        required: true
+        schema:
+          type: string
+          default: aerospace_defense
+      - name: reportView
+        in: path
+        description: View of report. Currently, only `latest` is supported.
+        required: true
+        schema:
+          type: string
+          default: latest
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: object
+                  properties: {}
+        '400':
+          description: Bad Request
+          content: {}
+        '401':
+          description: Unauthorized
+          content: {}
+        '404':
+          description: Not Found
+          content: {}
+  /equity/v1/moat_framework/moat_type/{moatType}/{reportView}:
+    get:
+      tags:
+      - equity - moat framework
+      summary: Get a Moat Framework Report
+      description: Get a Moat Framework Report for the industry group specified in the `moatType` parameter. For a full list of moat types, see the [Documentation](/apis/investment-analysis/research/overview#moat-type-id) page.</br></br>A URL returned in the response is used to access the document file.
+      operationId: MoatGet2
+      parameters:
+      - name: moatType
+        in: path
+        description: Unique identifier of a moat type
+        required: true
+        schema:
+          type: string
+          default: aerospace_defense
+      - name: reportView
+        in: path
+        description: View of report. Currently, only `latest` is supported.
+        required: true
+        schema:
+          type: string
+          default: latest
+      responses:
+        '200':
+          description: Success
+          content: {}
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

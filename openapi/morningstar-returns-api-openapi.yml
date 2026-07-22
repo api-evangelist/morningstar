@@ -1,0 +1,1371 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Returns API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Returns
+paths:
+  /direct-web-services/v1/investments/{id}/equity-monthly-return-statistics:
+    get:
+      summary: Get Monthly Return Statistics view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityMonthlyReturnStatisticsDataset
+      tags:
+      - Returns
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityMonthlyReturnStatistics'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 913
+  /direct-web-services/v1/investments/{id}/equity-returns:
+    get:
+      summary: Get Returns view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: Most recent data supported.
+      operationId: getEquityReturnsPackage
+      tags:
+      - Returns
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityReturns'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 913
+  /direct-web-services/v1/investments/{id}/equity-returns-to-date:
+    get:
+      summary: Get Returns to Date view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityReturnsToDateDataset
+      tags:
+      - Returns
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityReturnsToDate'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 913
+  /direct-web-services/v1/investments/{id}/equity-trailing-return-statistics:
+    get:
+      summary: Get Trailing Returns view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityTrailingReturnStatisticsDataset
+      tags:
+      - Returns
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityTrailingReturnStatistics'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 913
+  /direct-web-services/v1/investments/{id}/equity-trailing-returns:
+    get:
+      summary: Get Trailing Return Statistics view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent data supported.
+      operationId: getEquityTrailingReturnsDataset
+      tags:
+      - Returns
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityTrailingReturns'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 913
+components:
+  schemas:
+    OutputMonthEndReturnStatistics:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the best and worst 3 months total return datapoints are calculated
+          nullable: true
+        best3MonthTotalReturnOverPast120Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 120 months.
+          format: double
+          nullable: true
+        best3MonthTotalReturnOverPast12Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 12 months.
+          format: double
+          nullable: true
+        best3MonthTotalReturnOverPast36Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 36 months.
+          format: double
+          nullable: true
+        best3MonthTotalReturnOverPast60Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 60 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast120Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 120 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast12Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 12 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast36Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 36 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast60Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 60 months.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputMonthEndReturnStatistics
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputTrailingReturn:
+      type: object
+      properties:
+        trailingReturnAsOfDate:
+          type: string
+          description: The calendar date when the trailing return datapoints are calculated
+          nullable: true
+        dailyMarketReturnIndex:
+          type: number
+          description: The total return calculation representing the value of one share purchased and owned since the stock's IPO indexed to a starting value of $10; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing10YearReturn:
+          type: number
+          description: The total return calculated over a 10 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing15YearReturn:
+          type: number
+          description: The total return calculated over a 15 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing1DayReturn:
+          type: number
+          description: The total return calculated over a 1 day period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing1MonthReturn:
+          type: number
+          description: The total return calculated over a 1 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing1WeekReturn:
+          type: number
+          description: The total return calculated over a 1 week period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing1YearReturn:
+          type: number
+          description: The total return calculated over a 1 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing20YearReturn:
+          type: number
+          description: The total return calculated over a 20 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing2MonthReturn:
+          type: number
+          description: The total return calculated over a 2 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing2YearReturn:
+          type: number
+          description: The total return calculated over a 2 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing3MonthReturn:
+          type: number
+          description: The total return calculated over a 3 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing3YearReturn:
+          type: number
+          description: The total return calculated over a 3 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing4YearReturn:
+          type: number
+          description: The total return calculated over a 4 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing5YearReturn:
+          type: number
+          description: The total return calculated over a 5 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing6MonthReturn:
+          type: number
+          description: The total return calculated over a 6 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing6YearReturn:
+          type: number
+          description: The total return calculated over a 6 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing7YearReturn:
+          type: number
+          description: The total return calculated over a 7 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing8YearReturn:
+          type: number
+          description: The total return calculated over a 8 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing9MonthReturn:
+          type: number
+          description: The total return calculated over a 9 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailing9YearReturn:
+          type: number
+          description: The total return calculated over a 9 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.
+          format: double
+          nullable: true
+        trailingGrossedUp10YearReturn:
+          type: number
+          description: The total return calculated over a 10 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp15YearReturn:
+          type: number
+          description: The total return calculated over a 15 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp1DayReturn:
+          type: number
+          description: The total return calculated over 1 day period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp1MonthReturn:
+          type: number
+          description: The total return calculated over 1 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp1WeekReturn:
+          type: number
+          description: The total return calculated over a 1 week period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp1YearReturn:
+          type: number
+          description: The total return calculated over a 1 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp20YearReturn:
+          type: number
+          description: The total return calculated over a 20 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp2MonthReturn:
+          type: number
+          description: The total return calculated over 2 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp2YearReturn:
+          type: number
+          description: The total return calculated over a 2 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp3MonthReturn:
+          type: number
+          description: The total return calculated over 3 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp3YearReturn:
+          type: number
+          description: The total return calculated over a 3 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp4YearReturn:
+          type: number
+          description: The total return calculated over a 4 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp5YearReturn:
+          type: number
+          description: The total return calculated over a 5 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp6MonthReturn:
+          type: number
+          description: The total return calculated over 6 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp6YearReturn:
+          type: number
+          description: The total return calculated over a 6 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp7YearReturn:
+          type: number
+          description: The total return calculated over a 7 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp8YearReturn:
+          type: number
+          description: The total return calculated over a 8 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp9MonthReturn:
+          type: number
+          description: The total return calculated over 9 month period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+        trailingGrossedUp9YearReturn:
+          type: number
+          description: The total return calculated over a 9 year period; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.This data point is only calculated for AUS and NZL exchanges.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputTrailingReturn
+    OutputMonthlyStandardDeviation:
+      type: object
+      properties:
+        arithmeticMean120Month:
+          type: number
+          description: The mean or average of the monthly market return over a 120-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean12Month:
+          type: number
+          description: The mean or average of the monthly market return over a 12-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean24Month:
+          type: number
+          description: The mean or average of the monthly market return over a 24-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean36Month:
+          type: number
+          description: The mean or average of the monthly market return over a 36-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean48Month:
+          type: number
+          description: The mean or average of the monthly market return over a 48-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean60Month:
+          type: number
+          description: The mean or average of the monthly market return over a 60-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        asOfDate:
+          type: string
+          description: The calendar date when the monthly standard deviation data points are calculated
+          nullable: true
+        standardDeviation120Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 120-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation12Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 12-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation24Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 24-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation36Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 36-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation48Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 48-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation60Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 60-month period and its mean.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputMonthlyStandardDeviation
+    OutputMarketReturn:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the market return data points are calculated
+          nullable: true
+        nonDividendTotalReturnMonthToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-month period. It is calculated by using the change in price (adjusted for splits and spin-offs) for the month to date; divided by the share price at the beginning of the 1-month period.
+          format: double
+          nullable: true
+        nonDividendTotalReturnOneDay:
+          type: number
+          description: The data point represents the rate of return observed over a 1-day period. It is calculated by using the change in price (adjusted for splits and spin-offs) for today; divided by the share price from yesterday.
+          format: double
+          nullable: true
+        totalGrossedUpReturnDateToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-day period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for today; and dividing this sum by the share price from yesterday.
+          format: double
+          nullable: true
+        totalGrossedUpReturnMonthToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-month period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the month to date; and dividing this sum by the share price at the beginning of the 1-month period.
+          format: double
+          nullable: true
+        totalGrossedUpReturnQuarterToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-quarter period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the quarter to date; and dividing this sum by the share price at the beginning of the 1-quarter period.
+          format: double
+          nullable: true
+        totalGrossedUpReturnWeekToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-week period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the week to date; and dividing this sum by the share price at the beginning of the 1-week period.
+          format: double
+          nullable: true
+        totalGrossedUpReturnYearToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-year period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the year to date; and dividing this sum by the share price at the beginning of the 1-year period.
+          format: double
+          nullable: true
+        totalReturnMonthToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-month period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the month to date; and dividing this sum by the share price at the beginning of the 1-month period.
+          format: double
+          nullable: true
+        totalReturnOneDay:
+          type: number
+          description: The data point represents the rate of return observed over a 1-day period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for today; and dividing this sum by the share price from yesterday.
+          format: double
+          nullable: true
+        totalReturnQuarterToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-quarter period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the quarter to date; and dividing this sum by the share price at the beginning of  the 1-quarter period.
+          format: double
+          nullable: true
+        totalReturnWeekToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-week period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the week to date; and dividing this sum by the share price at the beginning of the 1-week period.
+          format: double
+          nullable: true
+        totalReturnYearToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-year period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the year to date; and dividing this sum by the share price at the beginning of the 1-year period.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputMarketReturn
+    OutputDailyStandardDeviation:
+      type: object
+      properties:
+        dailyStandardDeviationAsOfDate:
+          type: string
+          description: The calendar date when the standard deviation data points are calculated
+          nullable: true
+        arithmeticMean1008Day:
+          type: number
+          description: The mean or average of the daily market return over a 1008-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean1260Day:
+          type: number
+          description: The mean or average of the daily market return over a 1260-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean2520Day:
+          type: number
+          description: The mean or average of the daily market return over a 2520-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean252Day:
+          type: number
+          description: The mean or average of the daily market return over a 252-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean504Day:
+          type: number
+          description: The mean or average of the daily market return over a 504-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean756Day:
+          type: number
+          description: The mean or average of the daily market return over a 756-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        standardDeviation1008Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 1008-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation1260Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 1260-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation2520Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 2520-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation252Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 252-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation504Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 504-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation756Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 756-day period and its mean.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputDailyStandardDeviation
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+  responses:
+    ResponseEquityReturnsToDate:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              marketReturn:
+                $ref: '#/components/schemas/OutputMarketReturn'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTrailingReturnStatistics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dailyStandardDeviation:
+                $ref: '#/components/schemas/OutputDailyStandardDeviation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityMonthlyReturnStatistics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              monthEndReturnStatistics:
+                $ref: '#/components/schemas/OutputMonthEndReturnStatistics'
+              monthlyStandardDeviation:
+                $ref: '#/components/schemas/OutputMonthlyStandardDeviation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityTrailingReturns:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              trailingReturn:
+                $ref: '#/components/schemas/OutputTrailingReturn'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityReturns:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              monthEndReturnStatistics:
+                $ref: '#/components/schemas/OutputMonthEndReturnStatistics'
+              monthlyStandardDeviation:
+                $ref: '#/components/schemas/OutputMonthlyStandardDeviation'
+              marketReturn:
+                $ref: '#/components/schemas/OutputMarketReturn'
+              dailyStandardDeviation:
+                $ref: '#/components/schemas/OutputDailyStandardDeviation'
+              trailingReturn:
+                $ref: '#/components/schemas/OutputTrailingReturn'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

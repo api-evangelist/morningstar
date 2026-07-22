@@ -1,0 +1,849 @@
+openapi: 3.0.1
+info:
+  version: 1.0.0
+  title: Authorization Tokens Accounts Style Box API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+
+    To request a token, click Authorize and enter the following credentials:
+
+
+    * Username - Your Client ID.
+
+    * Password - Your Client Secret.'
+servers:
+- url: https://www.us-api.morningstar.com/token
+  description: PROD US
+- url: https://www.emea-api.morningstar.com/token
+  description: PROD EMEA
+- url: https://www.apac-api.morningstar.com/token
+  description: PROD APAC
+security:
+- BasicAuth: []
+tags:
+- name: Style Box
+paths:
+  /direct-web-services/v1/investments/{id}/equity-stock-grades:
+    get:
+      summary: Get Stock Grades view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityStockGradesDataset
+      tags:
+      - Style Box
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityStockGrades'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 902
+  /direct-web-services/v1/investments/{id}/equity-style-box:
+    get:
+      summary: Get Style Box package view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: regionId
+        in: query
+        description: "Filters style box breakpoints by region.\n\n  * `1` = United States\n  * `2` = Canada\n  * `3` = Latin America\n  * `4` = Europe\n  * `5` = Japan\n  * `6` = Australia/New Zealand\n  * `7` = Asia excluding Japan"
+        required: true
+        schema:
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          type: string
+          example: '1'
+          x-enumDescriptions:
+            '1': United States
+            '2': Canada
+            '3': Latin America
+            '4': Europe
+            '5': Japan
+            '6': Australia/New Zealand
+            '7': Asia excluding Japan
+        examples:
+          regionIdExample1:
+            summary: 1 (United States)
+            value: 1
+          regionIdExample2:
+            summary: 2 (Canada)
+            value: 2
+          regionIdExample3:
+            summary: 3 (Latin America)
+            value: 3
+          regionIdExample4:
+            summary: 4 (Europe)
+            value: 4
+          regionIdExample5:
+            summary: 5 (Japan)
+            value: 5
+          regionIdExample6:
+            summary: 6 (Australia/New Zealand)
+            value: 6
+          regionIdExample7:
+            summary: 7 (Asia Excluding Japan)
+            value: 7
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          - styleboxRegionId
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      description: Most recent and time series data supported.
+      operationId: getEquityStyleBoxPackage
+      tags:
+      - Style Box
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityStyleBox'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 902
+  /direct-web-services/v1/investments/{id}/equity-style-box-breakpoints:
+    get:
+      summary: Get Style Box view
+      parameters:
+      - name: id
+        in: path
+        description: "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+        required: true
+        schema:
+          type: string
+          example: 0P00000046
+        examples:
+          performanceId:
+            summary: Morningstar Performance ID
+            value: 0P00000046
+          isin:
+            summary: ISIN
+            value: US0042391096
+      - name: regionId
+        in: query
+        description: "Filters style box breakpoints by region.\n\n  * `1` = United States\n  * `2` = Canada\n  * `3` = Latin America\n  * `4` = Europe\n  * `5` = Japan\n  * `6` = Australia/New Zealand\n  * `7` = Asia excluding Japan"
+        required: true
+        schema:
+          enum:
+          - '1'
+          - '2'
+          - '3'
+          - '4'
+          - '5'
+          - '6'
+          - '7'
+          type: string
+          example: '1'
+          x-enumDescriptions:
+            '1': United States
+            '2': Canada
+            '3': Latin America
+            '4': Europe
+            '5': Japan
+            '6': Australia/New Zealand
+            '7': Asia excluding Japan
+        examples:
+          regionIdExample1:
+            summary: 1 (United States)
+            value: 1
+          regionIdExample2:
+            summary: 2 (Canada)
+            value: 2
+          regionIdExample3:
+            summary: 3 (Latin America)
+            value: 3
+          regionIdExample4:
+            summary: 4 (Europe)
+            value: 4
+          regionIdExample5:
+            summary: 5 (Japan)
+            value: 5
+          regionIdExample6:
+            summary: 6 (Australia/New Zealand)
+            value: 6
+          regionIdExample7:
+            summary: 7 (Asia Excluding Japan)
+            value: 7
+      - name: idType
+        in: query
+        description: 'Specifies the type of the value passed in the `id` parameter.
+
+          Morningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe.'
+        schema:
+          enum:
+          - performanceId
+          - isin
+          - securityId
+          - cusip
+          - tradingSymbol
+          - fundCode
+          - msid
+          - styleboxRegionId
+          type: string
+          default: performanceId
+      - name: baseCurrency
+        in: query
+        description: Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes.
+        schema:
+          type: string
+        examples:
+          baseCurrencyExample1:
+            summary: US Dollar
+            value: USD
+          baseCurrencyExample2:
+            summary: Swiss Franc
+            value: CHF
+      - name: domicile
+        in: query
+        description: Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          domicileExample1:
+            summary: CAN (Canada)
+            value: CAN
+          domicileExample2:
+            summary: JPN (Japan)
+            value: JPN
+          domicileExample3:
+            summary: USE (United States)
+            value: USA
+      - name: exchangeCountry
+        in: query
+        description: Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes.
+        schema:
+          type: string
+        examples:
+          exchangeCountryExample1:
+            summary: CAN (Canada)
+            value: CAN
+          exchangeCountryExample2:
+            summary: JPN (Japan)
+            value: JPN
+          exchangeCountryExample3:
+            summary: USA (USA)
+            value: USA
+      - name: exchangeId
+        in: query
+        description: Exchange identifier to use for investment lookup.
+        schema:
+          type: string
+          externalDocs:
+            description: List of exchange IDs.
+            url: https://developer.morningstar.com/content/hidden-from-navigation/DwsIdLookUpExchangeIds.xlsx
+        examples:
+          exchangeIdExample1:
+            summary: NASDAQ - ALL Markets (NAS)
+            value: EX$$$$XNAS
+          exchangeIdExample2:
+            summary: London Stock Exchange (LSE)
+            value: EX$$$$XLON
+      - name: startDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series start date. Accepts `yyyy-MM-dd`.
+        examples:
+          startDateExample1:
+            summary: Example 1
+            value: '2025-06-01'
+          startDateExample2:
+            summary: Example 2
+            value: '2025-06-30'
+      - name: endDate
+        in: query
+        schema:
+          type: string
+          format: yyyy-MM-dd
+        description: Time series end date. Accepts `yyyy-MM-dd`.
+        examples:
+          endDateExample1:
+            summary: Example 1
+            value: '2025-12-01'
+          endDateExample2:
+            summary: Example 2
+            value: '2025-12-31'
+      - name: viewType
+        in: query
+        required: true
+        schema:
+          enum:
+          - dataset
+          - package
+          type: string
+      description: Most recent and time series data supported.
+      operationId: getEquityStyleBoxBreakpointsDataset
+      tags:
+      - Style Box
+      responses:
+        '200':
+          $ref: '#/components/responses/ResponseEquityStyleBoxBreakpoints'
+        '400':
+          $ref: '#/components/responses/ResponseBadRequest'
+        '500':
+          $ref: '#/components/responses/ResponseInternalServerError'
+      x-cpqId: 902
+components:
+  schemas:
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputCompanyGrade:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the company grade is calculated.
+          nullable: true
+        growthGrade:
+          type: string
+          description: A Morningstar proprietary descriptor; determined by an algorithm that assigns a stock a grade - A; B; C; D or F - based on the firm's trend in revenue per share. Grades are generated monthly for firms in the U.S. and Canadian markets using revenue data from the past three to five years. (Companies that do not have enough data to assign a grade are labeled N/A.) In calculating the revenue per share growth rate; the slope of the regression line will be divided by the arithmetic average of historical revenue per share figures. The result of the regression is a normalized historical increase or decrease in the rate of growth for revenue per share.
+          nullable: true
+        profitabilityGrade:
+          type: string
+          description: 'A Morningstar proprietary descriptor; determined by an algorithm that assigns a stock a grade - A; B; C; D or F -  based on the valuation of  the firm''s return on shareholders'' equity (ROE).  Grades are generated monthly for firms in the U.S. and Canadian markets using ROE values from the past three to five years.  (There are some companies that do not have enough data to assign a grade and these are labeled N/A.) The profitability grade is based on the valuation of the following three components; which are assigned different weights: the historical growth rate of ROE; the average value of historical ROE; and the level of ROE in the latest fiscal year of the company.'
+          nullable: true
+        stockType:
+          $ref: '#/components/schemas/CodeMappingInt'
+      additionalProperties: false
+      title: OutputCompanyGrade
+    OutputMarketCapitalBreakpoint:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The calendar date when the market capital breakpoints datapoints are calculated
+          nullable: true
+        marketCapitalLevel:
+          type: string
+          description: Indicates the cumulative market capitalization value for stock style (size) breakpoints
+          nullable: true
+        marketCapitalSizeLevel:
+          type: string
+          description: 'Indicates the stock style (size) based on market capital breakpoints for each region: Giant-cap (G); Large-cap (L); Mid-cap (M); and Small-cap (S)'
+          nullable: true
+      additionalProperties: false
+      title: OutputMarketCapitalBreakpoint
+    CodeMappingDecimal:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingDecimal
+    OutputFinancialHealthGrade:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when Financial Health Grade data points are published
+          nullable: true
+        distanceToDefault:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        financialHealthGradeValue:
+          type: string
+          description: Financial health (A;B;C;D and F) grades will be assigned based on relative rankings of companies' distance to default scores within the qualified universe of Morningstar stocks
+          nullable: true
+        probabilityOfDefault:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputFinancialHealthGrade
+    OutputStockStyle:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The calendar date when stock style datapoints are calculated
+          nullable: true
+        growthScore:
+          type: number
+          description: A high overall growth score indicates that a stock's per-share earnings; book value; revenues; and cash flow are expected to grow quickly relative to other stocks in the same scoring group. A weak growth orientation does not necessarily mean that a stock has a strong value orientation.
+          format: double
+          nullable: true
+        regionId:
+          $ref: '#/components/schemas/CodeMappingLong'
+        sizeScore:
+          type: number
+          description: Rather than a fixed number of large cap or small cap stocks; Morningstar uses a flexible system that isn't adversely affected by overall movements in the market. The Morningstar stock universe represents approximately 99% of the U.S. market for actively traded stocks. Giant-cap stocks are defined as the group that accounts for the top 40% of the capitalization of the Morningstar domestic stock universe; large-cap stocks represent the next 30%; mid-cap stocks represent the next 20%; small-cap stocks represent the next 7%; and micro-cap stocks represent the remaining 3%. Each stock is given a Size Score that ranges from -100 (very micro) to 400 (very giant). When classifying stocks to a Style Box; giant is included in large and micro is included in small.
+          format: double
+          nullable: true
+        styleBox:
+          $ref: '#/components/schemas/CodeMappingDecimal'
+        styleScore:
+          type: number
+          description: The scores for a stock's value and growth characteristics determine its horizontal placement. The Value-Growth Score is a reflection of the aggregate expectations of market participants for the future growth and required rate of return for a stock. We infer these expectations from the relation between current market prices and future growth and cost of capital expectations under the assumption of rational market participants and a simple model of stock value.
+          format: double
+          nullable: true
+        valueScore:
+          type: number
+          description: A high value score indicates that a stock's price is relatively low; given the anticipated per-sharing earnings; book value; revenues; cash flow; and dividends that the stock provides to investors. A high price relative to these measures indicates that a stock's value orientation is weak; but it does not necessarily mean that the stock is growth-oriented.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputStockStyle
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    CodeMappingLong:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingLong
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    CodeMappingInt:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingInt
+  responses:
+    ResponseEquityStockGrades:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyGrade:
+                $ref: '#/components/schemas/OutputCompanyGrade'
+              financialHealthGrade:
+                $ref: '#/components/schemas/OutputFinancialHealthGrade'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityStyleBox:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              stockStyle:
+                $ref: '#/components/schemas/OutputStockStyle'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityStyleBoxBreakpoints:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              marketCapitalBreakpoint:
+                $ref: '#/components/schemas/OutputMarketCapitalBreakpoint'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic

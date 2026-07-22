@@ -1,0 +1,20 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Morningstar securities
+  version: 1.0.0
+extends: openapi/morningstar-securities-api-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist:
+      provider: morningstar
+      profile: https://raw.githubusercontent.com/api-evangelist/morningstar/refs/heads/main/apis.yml
+      authentication: authentication/morningstar-authentication.yml
+      conventions: conventions/morningstar-conventions.yml
+      errors: errors/morningstar-problem-types.yml
+      agentic-access: agentic-access/morningstar-agentic-access.yml
+      mcp: mcp/morningstar-mcp.yml
+- target: $
+  update:
+    x-apievangelist-note: Credentials are sales-gated through Morningstar onboarding; tokens from POST
+      /token/oauth are valid 60 minutes.
