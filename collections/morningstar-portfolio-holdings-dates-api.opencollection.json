@@ -1,0 +1,48 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Portfolio Holdings Dates API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Portfolio Holdings Dates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Retrieve portfolio holdings date",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/investments/:id/portfolio-holdings-dates",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "This endpoint is used to retrieve dates for which data is available for a portfolio.\n\nThese dates are used to specify a portfolio date when requesting investment details for the following views:\n\n- `full-look-through-portfolio-holdings`\n- `full-portfolio-holdings-month-end-or-quarter-end-most-recent`"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

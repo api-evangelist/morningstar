@@ -1,0 +1,794 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Clients API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clients",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a unique identifier for a client",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/v2/clients/generate-id",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "A client ID is required when submitting a client’s questionnaire responses and when retrieving reports for a specific client. To create a client ID, pass an external identifier (e.g., a client’s email address) in the body of the request. The response will return a unique identifier for the client, which can then be used for future interactions."
+        },
+        {
+          "info": {
+            "name": "Get Risk Tolerance questionnaire response history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v2/clients/risks/questionnaires",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              }
+            ]
+          },
+          "docs": "Retrieve a lsit of a client's previously submitted risk questionnaire responses. A unique identifier for each response is returned. Use the identifier to retrieve a specific response.\n"
+        },
+        {
+          "info": {
+            "name": "Submit a client's risk tolerance questionnaire responses",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/v2/clients/risks/questionnaires",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a client’s risk tolerance questionnaire responses. A risk tolerance score and a unique identifier for the submitted responses is returnd. The identifier can be used to retrieve the client's responses at a later date."
+        },
+        {
+          "info": {
+            "name": "Submit an agreed risk tolerance score",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://www.us-api.morningstar.com/token/v1/clients/risks/questionnaires/:id/agreed-score",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a response to a questionnaire"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit an agreed risk tolerance score for a specific set of risk tolerance questionnaire responses submitted by a client. **Important:** We recommend that financial professionals resolve any differences (or inconsistencies) in answers in the risk tolerance report with the client through discussion and adjusting the score where appropriate. This discussion and the agreed score should be documented and signed off by the client. The agreed score will be used for further analysis."
+        },
+        {
+          "info": {
+            "name": "Calculate suitability score",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/v2/clients/solutions/calculate-suitability-score",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              },
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Using the Professional Judgment Matrix (PJM) framework, calculates the suitability score and score constraints of an investment/portfolio."
+        },
+        {
+          "info": {
+            "name": "Get Experience questionnaire response history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v1/clients/experience/questionnaires",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              }
+            ]
+          },
+          "docs": "Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the respones the client has given to past questionnaires."
+        },
+        {
+          "info": {
+            "name": "Submit a client's Experience questionnaire responses",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/v1/clients/experience/questionnaires",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a client’s experience questionnaire responses. A unique identifier for the submitted responses is returned. The identifier can be used to retrieve the client's responses at a later date.\n"
+        },
+        {
+          "info": {
+            "name": "Get Experience response",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v1/clients/experience/questionnaires/:id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a response to a questionnaire"
+              }
+            ]
+          },
+          "docs": "Get a specific Experience questionnaire response for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted."
+        },
+        {
+          "info": {
+            "name": "Get Know Your Client response history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v1/clients/kyc/questionnaires",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              }
+            ]
+          },
+          "docs": "Get Know Your Client questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the respones the client has given to past questionnaires."
+        },
+        {
+          "info": {
+            "name": "Submit Know Your Client response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/v1/clients/kyc/questionnaires",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a client’s know-your-client questionnaire responses. A unique identifier for the submitted responses is returned. The identifier can be used to retrieve the client's responses at a later date.\n"
+        },
+        {
+          "info": {
+            "name": "Get Know Your Client response",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v1/clients/kyc/questionnaires/:id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a response to a questionnaire"
+              }
+            ]
+          },
+          "docs": "Get a specific Know Your Client questionnaire response for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted."
+        },
+        {
+          "info": {
+            "name": "Get a specific risk tolerance report for a client",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v2/clients/risks/reports/:id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a response to a questionnaire"
+              },
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "ignoreSections",
+                "value": "YOUR_DIFFERENCES,FOOTNOTES",
+                "type": "query",
+                "description": "Determines the sections NOT to include in the report.If not specified, all the sections will be included. Multiple valuses must be comma-separated."
+              }
+            ]
+          },
+          "docs": "Get a client’s risk tolerance report based on the most recently submitted responses to the risk tolerance questionnaire."
+        },
+        {
+          "info": {
+            "name": "Create unique identifier for a client",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/clients/generate-id",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a unique identifier for a client. You use this alphanumeric ID to identify your client within FinaMetrica. You must include the ID when submitting and retrieving a client's responses. The ID is generated based on the `externalId` (for example, client's email address) that is sent in the request. If your client already has an ID, you do not need to generate a new one. The ID will never expire."
+        },
+        {
+          "info": {
+            "name": "Get risk tolerance responses history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/clients/risks/questionnaires",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              }
+            ]
+          },
+          "docs": "Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the responses the client has given to past questionnaires."
+        },
+        {
+          "info": {
+            "name": "Submit risk tolerance response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/clients/risks/questionnaires",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a client’s responses to the risk tolerance questionnaire and return a risk tolerance score. In the response, a unique identifier for the questionnaire will be returned. The identifier can be used to retrieve the answers at any time in the future."
+        },
+        {
+          "info": {
+            "name": "Get risk tolerance response and score",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/clients/risks/questionnaires/:responseId",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "responseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a response to a questionnaire"
+              }
+            ]
+          },
+          "docs": "Get a specific risk questionnaire response and score for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted."
+        },
+        {
+          "info": {
+            "name": "Submit risk tolerance agreed score",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://www.us-api.morningstar.com/token/clients/risks/questionnaires/:responseId/agreed-score",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "responseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a response to a questionnaire"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a client’s agreed score. Before submitting a score, it must be discussed with the client and the client must agree with the score."
+        },
+        {
+          "info": {
+            "name": "Calculate suitability score",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/clients/solutions/calculate-suitability-score",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Accept-Language",
+                "value": ""
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Using the Professional Judgment Matrix (PJM) framework, calculates the suitability score and score constraints of an investment/portfolio."
+        },
+        {
+          "info": {
+            "name": "Get comfort growth or comfort score ranges for a given portfolio risk score",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/clients/solutions/comfort-ranges",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "rangeType",
+                "value": "",
+                "type": "query",
+                "description": "Comfort range type."
+              },
+              {
+                "name": "score",
+                "value": "",
+                "type": "query",
+                "description": "Score value. Value must be in the range 0 - 110."
+              },
+              {
+                "name": "region",
+                "value": "",
+                "type": "query",
+                "description": "Region or country value."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "Version of the Comfort score ranges"
+              }
+            ]
+          },
+          "docs": "Get comfort growth or comfort score ranges for a given portfolio risk score."
+        },
+        {
+          "info": {
+            "name": "Get experience responses history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/clients/experience/questionnaires",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              }
+            ]
+          },
+          "docs": "Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the responses the client has given to past questionnaires."
+        },
+        {
+          "info": {
+            "name": "Submit experience response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/clients/experience/questionnaires",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "questionnarieRequired",
+                "value": "true",
+                "type": "query",
+                "description": "Flag to change the nature of the questions in the Experience questionnaire"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a client’s responses to the experience questionnaire. In the response, a unique identifier for the questionnaire will be returned. The identifier can be used to retrieve the answers at any time in the future."
+        },
+        {
+          "info": {
+            "name": "Get experience response",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/clients/experience/questionnaires/:responseId",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "responseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a response to a questionnaire"
+              }
+            ]
+          },
+          "docs": "Get a specific experience questionnaire response for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted."
+        },
+        {
+          "info": {
+            "name": "Get know your client responses history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/clients/kyc/questionnaires",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              }
+            ]
+          },
+          "docs": "Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the responses the client has given to past questionnaires."
+        },
+        {
+          "info": {
+            "name": "Submit know your client response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/clients/kyc/questionnaires",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a client’s responses to the know your client questionnaire. In the response, a unique identifier for the questionnaire will be returned. The identifier can be used to retrieve the answers at any time in the future."
+        },
+        {
+          "info": {
+            "name": "Get know your client response",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/clients/kyc/questionnaires/:responseId",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "responseId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a response to a questionnaire"
+              }
+            ]
+          },
+          "docs": "Get a specific know your client questionnaire response for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

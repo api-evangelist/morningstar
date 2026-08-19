@@ -1,0 +1,387 @@
+{
+  "item": [
+    {
+      "id": "05ff8c17-e4a8-4b61-a135-4003c748decb",
+      "name": "Consensus Recommendations",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "25e7667c-324e-446a-b9a9-e0ee2ed4bf98",
+          "name": "Get Consensus Recommendations package view",
+          "request": {
+            "name": "Get Consensus Recommendations package view",
+            "description": {
+              "content": "\n\nThe Consensus Recommendations package provides an aggregated recommendation calculated from those provided to us from our contributing brokers, along with details of how many brokers provided a recommendation across the range of buy to sell for each stock under coverage.\n\nMost recent and time series data supported.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-web-services",
+                "v1",
+                "investments",
+                ":id",
+                "equity-consensus-recommendations"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "idType",
+                  "value": "performanceId",
+                  "description": "Specifies the type of the value passed in the `id` parameter.\nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+                },
+                {
+                  "disabled": false,
+                  "key": "baseCurrency",
+                  "value": "<string>",
+                  "description": "Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes."
+                },
+                {
+                  "disabled": false,
+                  "key": "domicile",
+                  "value": "<string>",
+                  "description": "Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchangeCountry",
+                  "value": "<string>",
+                  "description": "Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchangeId",
+                  "value": "<string>",
+                  "description": "Exchange identifier to use for investment lookup."
+                },
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<yyyy-MM-dd>",
+                  "description": "Time series start date. Accepts `yyyy-MM-dd`."
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<yyyy-MM-dd>",
+                  "description": "Time series end date. Accepts `yyyy-MM-dd`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) \nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "52861806-7945-41d5-84c3-6535b6022fe2",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "investments",
+                    ":id",
+                    "equity-consensus-recommendations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "idType",
+                      "value": "performanceId"
+                    },
+                    {
+                      "key": "baseCurrency",
+                      "value": "USD"
+                    },
+                    {
+                      "key": "domicile",
+                      "value": "CAN"
+                    },
+                    {
+                      "key": "exchangeCountry",
+                      "value": "CAN"
+                    },
+                    {
+                      "key": "exchangeId",
+                      "value": "EX$$$$XNAS"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "2025-06-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2025-12-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) \nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"consensusRawRecommendations\": {\n    \"asOfDate\": \"string\",\n    \"buy\": 6570,\n    \"hold\": 7008,\n    \"meanLabel\": \"string\",\n    \"meanRating\": 6660.519813493387,\n    \"noOpinion\": 4606,\n    \"outPerform\": 3080,\n    \"sell\": 4814,\n    \"underPerform\": 6973\n  },\n  \"identifiers\": {\n    \"performanceId\": \"string\",\n    \"securityId\": \"string\",\n    \"cusip\": \"string\",\n    \"isin\": \"string\",\n    \"sedol\": \"string\",\n    \"tradingSymbol\": \"string\",\n    \"fundCode\": \"string\",\n    \"msid\": \"string\",\n    \"ticker\": \"string\"\n  },\n  \"metadata\": {\n    \"requestId\": \"string\",\n    \"time\": \"1998-10-31T07:15:44.169Z\",\n    \"portfolioDate\": \"string\",\n    \"portfolioCurrency\": \"string\",\n    \"messages\": [\n      {\n        \"type\": \"string\",\n        \"code\": \"string\",\n        \"investments\": [\n          {\n            \"id\": \"string\",\n            \"idType\": \"string\",\n            \"status\": \"string\",\n            \"datapointId\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"errorCode\": \"string\",\n            \"performanceId\": \"string\",\n            \"companyId\": \"string\",\n            \"baseCurrency\": \"string\",\n            \"domicile\": \"string\",\n            \"exchangeCountry\": \"string\",\n            \"exchangeId\": \"string\"\n          },\n          {\n            \"id\": \"string\",\n            \"idType\": \"string\",\n            \"status\": \"string\",\n            \"datapointId\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"errorCode\": \"string\",\n            \"performanceId\": \"string\",\n            \"companyId\": \"string\",\n            \"baseCurrency\": \"string\",\n            \"domicile\": \"string\",\n            \"exchangeCountry\": \"string\",\n            \"exchangeId\": \"string\"\n          }\n        ],\n        \"message\": \"string\"\n      },\n      {\n        \"type\": \"string\",\n        \"code\": \"string\",\n        \"investments\": [\n          {\n            \"id\": \"string\",\n            \"idType\": \"string\",\n            \"status\": \"string\",\n            \"datapointId\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"errorCode\": \"string\",\n            \"performanceId\": \"string\",\n            \"companyId\": \"string\",\n            \"baseCurrency\": \"string\",\n            \"domicile\": \"string\",\n            \"exchangeCountry\": \"string\",\n            \"exchangeId\": \"string\"\n          },\n          {\n            \"id\": \"string\",\n            \"idType\": \"string\",\n            \"status\": \"string\",\n            \"datapointId\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"errorCode\": \"string\",\n            \"performanceId\": \"string\",\n            \"companyId\": \"string\",\n            \"baseCurrency\": \"string\",\n            \"domicile\": \"string\",\n            \"exchangeCountry\": \"string\",\n            \"exchangeId\": \"string\"\n          }\n        ],\n        \"message\": \"string\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e6cc8f5-1e17-4d54-ab12-56f1780df088",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "investments",
+                    ":id",
+                    "equity-consensus-recommendations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "idType",
+                      "value": "performanceId"
+                    },
+                    {
+                      "key": "baseCurrency",
+                      "value": "USD"
+                    },
+                    {
+                      "key": "domicile",
+                      "value": "CAN"
+                    },
+                    {
+                      "key": "exchangeCountry",
+                      "value": "CAN"
+                    },
+                    {
+                      "key": "exchangeId",
+                      "value": "EX$$$$XNAS"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "2025-06-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2025-12-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) \nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 9897,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"requestId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99b49b6f-3d72-41a9-acb3-4c11d924b110",
+              "name": "Internal Server",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "investments",
+                    ":id",
+                    "equity-consensus-recommendations"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "idType",
+                      "value": "performanceId"
+                    },
+                    {
+                      "key": "baseCurrency",
+                      "value": "USD"
+                    },
+                    {
+                      "key": "domicile",
+                      "value": "CAN"
+                    },
+                    {
+                      "key": "exchangeCountry",
+                      "value": "CAN"
+                    },
+                    {
+                      "key": "exchangeId",
+                      "value": "EX$$$$XNAS"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "2025-06-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2025-12-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) \nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 9897,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"requestId\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "7c6cc232-e7a4-46d6-b54a-4102bf7a2c30",
+    "name": "Authorization Tokens Accounts Consensus Recommendations API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,430 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts models API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "models",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get flow models",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models"
+          },
+          "docs": "Get all flow models. The response will include the unique ID of each model.  You use the ID with other endpoints to return data based on that model. Only models that your account is enabled for will be returned.\n"
+        },
+        {
+          "info": {
+            "name": "Get category forecasts for a flow model",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:flow_model_id/category-forecast",
+            "params": [
+              {
+                "name": "period",
+                "value": "",
+                "type": "query",
+                "description": "Number of months in time period"
+              },
+              {
+                "name": "accumulated",
+                "value": "",
+                "type": "query",
+                "description": "Return accumulated data"
+              },
+              {
+                "name": "flow_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a flow model"
+              }
+            ]
+          },
+          "docs": "Get all category forecasts for the model specified in the `flow_model_id` parameter.  You can specify a time period (in months) to narrow the results returned.  You can also request that only accumulated data is returned in the response."
+        },
+        {
+          "info": {
+            "name": "Get a category forecast for a flow model",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:flow_model_id/category-forecast/:category_id",
+            "params": [
+              {
+                "name": "accumulated",
+                "value": "",
+                "type": "query",
+                "description": "Return accumulated data"
+              },
+              {
+                "name": "category_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a category"
+              },
+              {
+                "name": "flow_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a flow model"
+              }
+            ]
+          },
+          "docs": "Get category forecasts for the specified flow models and category.  You can specify a time period (in months) to narrow the results returned.  You can also request that only accumulated data is returned in the response."
+        },
+        {
+          "info": {
+            "name": "Get flow model factors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:flow_model_id/factors",
+            "params": [
+              {
+                "name": "flow_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a flow model"
+              }
+            ]
+          },
+          "docs": "Get a full list of the factors used in the flow model specified.  In the response, the factors will be organized according to groupings defined for US equity, US allocation, and US fixed income.\n"
+        },
+        {
+          "info": {
+            "name": "Get premia data for a flow model",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:flow_model_id/premia",
+            "params": [
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Frequency to base results on"
+              },
+              {
+                "name": "accumulated",
+                "value": "",
+                "type": "query",
+                "description": "Return accumulated data"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time period"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time period"
+              },
+              {
+                "name": "flow_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a flow model"
+              }
+            ]
+          },
+          "docs": "Get premia data for  the last 12 month average as of the latest month end  for the flow model specified in the `flow_model_id` parameter. The response will return premia for each factor in the model.  You use this information to understand which factors have driven fund flows, and to what extent, in a given asset class and region. </br></br> You can  request that only accumulated data is returned in the response.</br></br> Currently, 13 flow models are supported.\n"
+        },
+        {
+          "info": {
+            "name": "Get closure probability forecast for a fund",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:flow_model_id/:fund_ids/forecast-closure",
+            "params": [
+              {
+                "name": "fund_ids",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a fund"
+              },
+              {
+                "name": "flow_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a flow model"
+              }
+            ]
+          },
+          "docs": "Get a closure probability forecast for a specific fund and fund model.</br></br> Currently, 13 flow models are supported."
+        },
+        {
+          "info": {
+            "name": "Get exposures for a share class",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:flow_model_id/:share_class_ids/exposures",
+            "params": [
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Frequency to base results on"
+              },
+              {
+                "name": "share_class_ids",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a share class"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time period"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time period"
+              },
+              {
+                "name": "flow_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a flow model"
+              }
+            ]
+          },
+          "docs": "Get exposures forecast for a specific share class  and fund model. </br></br> Currently, 13 flow models are supported."
+        },
+        {
+          "info": {
+            "name": "Get growth forecast for a share class",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:flow_model_id/:share_class_ids/forecast-flow",
+            "params": [
+              {
+                "name": "share_class_ids",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a share class"
+              },
+              {
+                "name": "flow_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a flow model"
+              }
+            ]
+          },
+          "docs": "Get growth forecast for a specific share class and fund model.  </br></br> Currently, 13 flow models are supported."
+        },
+        {
+          "info": {
+            "name": "Get risk model factors",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:risk_model_id/factors",
+            "params": [
+              {
+                "name": "risk_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifer of a risk model"
+              }
+            ]
+          },
+          "docs": "Get a full list of the factors used in the risk model specified. In the response, the factors will be organized according to groupings defined for equity models and multi-asset risk models."
+        },
+        {
+          "info": {
+            "name": "Get risk exposures for investment(s)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:risk_model_id/exposures",
+            "params": [
+              {
+                "name": "risk_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a risk model"
+              },
+              {
+                "name": "investment-ids",
+                "value": "",
+                "type": "query",
+                "description": "Unique Morningstar identifier for securities. Multiple values must be comma-separated."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time period. If start date and end date are not defined, most recent data will be returned."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time period. If start date and end date are not defined, most recent data will be returned."
+              },
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Frequency the response will be based on"
+              }
+            ]
+          },
+          "docs": "Based on a specific risk model, get risk exposures for the investment(s) specified in the `investment-ids` parameter. You can request data for a defined time period and frequency (monthy/quarterly). If a time period / frequency is not defined, the most recent data will be returned."
+        },
+        {
+          "info": {
+            "name": "Calculate active exposure for investment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/models/:risk_model_id/exposures",
+            "params": [
+              {
+                "name": "risk_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a risk model"
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time period. If start date and end date are not defined, most recent data will be returned."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time period. If start date and end date are not defined, most recent data will be returned."
+              },
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Frequency the response will be based on"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a specific risk model and investment or portfolio, calculate the effect of active exposure on the most recent data."
+        },
+        {
+          "info": {
+            "name": "Get risk exposure for the holdings of fund(s)",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:risk_model_id/:fund_id/holding-exposures",
+            "params": [
+              {
+                "name": "risk_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a risk model"
+              },
+              {
+                "name": "fund_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier for a fund. Multiple values must be comma-separated."
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Date on which to perform the portfolio exposure. If it not defined, most recent data will be returned."
+              }
+            ]
+          },
+          "docs": "Based on a specific risk model, get risk exposure for each holding of the fund(s) specified in the `fund_id` parameter. In the `date` parameter, enter a date when the fund reported its portfolio holdings. If a date is not defined, the most recent data will be returned."
+        },
+        {
+          "info": {
+            "name": "Get risk premium for a risk model",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/models/:risk_model_id/premia",
+            "params": [
+              {
+                "name": "risk_model_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a risk model"
+              },
+              {
+                "name": "cumulative",
+                "value": "",
+                "type": "query",
+                "description": "Calculate cumulative premia."
+              },
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Frequency the response will be based on"
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time period. If start date and end date are not defined, most recent data will be returned."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time period. If start date and end date are not defined, most recent data will be returned."
+              }
+            ]
+          },
+          "docs": "Get risk premium for the risk model specified. The default frequency is monthly. You can request data for a defined time period. If a time period is not defined, the most recent data will be returned."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

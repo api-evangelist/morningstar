@@ -1,0 +1,65 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts statement details API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "statement details",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Extract statement details",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/statement-details",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Extract portfolio statement information from the base64-encoded PDF/image sent in the request. Information is extracted based on the logic defined, where available, for the custodian specified in the `documentShortName` or `documentName` values in the request body.</br></br>The request supports the following file types:</br></br> -JPG </br> -JPEG</br> - PNG </br> - PDF </br></br>When sending a PDF, you can specify the page numbers to extract information from. For example, `1,3,6,9` or `1,3,6,8-1"
+        },
+        {
+          "info": {
+            "name": "Get statement details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/statement-details/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of request"
+              }
+            ]
+          },
+          "docs": "Get the portfolio statement information extracted by the `POST /statement-details` request. </br></br>The unique job ID returned by the POST request is automatically included in this GET request's URL. \n</br></br>The response contains a JSON obect with an array of security details such as ticker, name, market value, and so on."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

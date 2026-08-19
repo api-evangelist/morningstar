@@ -1,0 +1,116 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Office Members API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Office Members",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get household's member list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/households/:householdId/members",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "householdId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a household"
+              }
+            ]
+          },
+          "docs": "Get list of all members for a household. </br></br> `householdId` can be  retrieved by using the <a href=\"https://developer.morningstar.com/apis/financial-planning/households-us/2.0.2\">Households API</a>."
+        },
+        {
+          "info": {
+            "name": "Get member profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/households/:householdId/members/:memberId",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "householdId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a household"
+              },
+              {
+                "name": "memberId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a member"
+              }
+            ]
+          },
+          "docs": "Get a specific member profile."
+        },
+        {
+          "info": {
+            "name": "Update member profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/households/:householdId/members/:memberId",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "householdId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a household"
+              },
+              {
+                "name": "memberId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a member"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a member profile. </br></br> `relationshipId` cannot be changed to or from 1. </br></br> \n`relationshipId` mapping:</br></br> `1` = Self</br> `3` = Spouse</br> `6` = Attorney</br> `7` = Accountant</br> `8` = Aunt</br> `38` = Beneficiary</br> `33` = Brother</br> `10` = Child</br> `11` = Cousin</br> `37` = Daughter</br> `4` = Dependent</br> `12` = Ex-Spouse</br> `13` = Father</br> `14` = Friend</br> `15` = Granddaughter</br> `16` = Grandparent</br> `17` = Grandson</br> `39` = Grantor</br> "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

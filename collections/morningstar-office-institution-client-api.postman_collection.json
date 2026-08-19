@@ -1,0 +1,406 @@
+{
+  "item": [
+    {
+      "id": "57df455a-92b1-4abc-a689-37af71ac76e6",
+      "name": "Office Institution Client",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "032312b1-4fec-4e85-ab2e-f4b99902f49a",
+          "name": "Get Institution Client profile",
+          "request": {
+            "name": "Get Institution Client profile",
+            "description": {
+              "content": "Get a specific institution client profile.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "households",
+                ":householdId",
+                "institution"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "householdId",
+                  "description": "(Required) Unique identifier of a household"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Unique API key of a client",
+                "key": "x-api-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "9cc5b4cb-5986-4ea5-ad2a-baf6888ae704",
+              "name": "Successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "households",
+                    ":householdId",
+                    "institution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "householdId",
+                      "description": "(Required) Unique identifier of a household"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique API key of a client",
+                    "key": "x-api-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"profile\": {\n    \"institutionName\": \"Sample\",\n    \"institutionType\": \"string\",\n    \"isUSCorporation\": \"string\",\n    \"institutionId\": \"********1234\",\n    \"incorporationState\": \"CA\",\n    \"dateOfIncorporation\": \"1989-12-31\",\n    \"taxIdType\": \"ssn\",\n    \"address1\": \"22 W. Washington St.\",\n    \"address2\": \"FL 7\",\n    \"address3\": \"Rm. 700\",\n    \"city\": \"Chicago\",\n    \"state\": \"IL\",\n    \"zipCode\": \"string\",\n    \"phone\": \"string\",\n    \"fax\": \"555-555555\"\n  },\n  \"primaryContact\": {\n    \"firstName\": \"Sample\",\n    \"lastName\": \"Client\",\n    \"title\": \"Sample title\",\n    \"role\": \"string\",\n    \"dateOfBirth\": \"1991-12-31\",\n    \"socialSecurityNumber\": \"********1234\",\n    \"email\": \"string\",\n    \"workPhone\": \"555-44444\",\n    \"cellPhone\": \"555-555555\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "201bbf0a-7fb5-42e2-9603-90a28a2ac1c2",
+              "name": "Invalid status value",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "households",
+                    ":householdId",
+                    "institution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "householdId",
+                      "description": "(Required) Unique identifier of a household"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique API key of a client",
+                    "key": "x-api-key",
+                    "value": "<string>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5386ca3e-867f-4876-b582-a6a44412c732",
+          "name": "Update institution client profile",
+          "request": {
+            "name": "Update institution client profile",
+            "description": {
+              "content": "Updates an Institution Client profile. </br></br> `institutionType` mapping:</br></br> `1` = Sole Proprietorship</br> `2` = Trust</br> `3` = Charitable Trust</br> `4` = Rovocable Trust</br> `5` = Corporation</br> `6` = Investment Club</br> `7` = Association</br> `8` = Non-Profit Organization</br> `9` = Partnership</br> `10` = Limited Partnership</br> `11` = Family Limited Partnership</br> `12` = LLP </br> `13` = LLC</br> `14` = Estate</br></br>  `isUSCorporation` = `1` or `0` </br></br> `taxIdType` = `ssn` or `tin` </br></br> `role` mapping: </br></br> `1` = Authorized Signer</br> `2` = Other</br> `3` = Trustee</br> `4` = Successor Trustee</br> `5` = Custodian</br></br> `institutionName`, `firstName`, and `lastName` do not support these characters: ~!#^`[]{}|\\;\"<>?/",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "households",
+                ":householdId",
+                "institution"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "householdId",
+                  "description": "(Required) Unique identifier of a household"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Unique API key of a client",
+                "key": "x-api-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"profile\": {\n    \"institutionName\": \"<string>\",\n    \"institutionType\": \"<string>\",\n    \"institutionId\": \"<string>\",\n    \"isUSCorporation\": \"<string>\",\n    \"taxIdType\": \"<string>\",\n    \"dateOfIncorporation\": \"<date>\",\n    \"incorporationState\": \"<string>\",\n    \"address1\": \"<string>\",\n    \"address2\": \"<string>\",\n    \"address3\": \"<string>\",\n    \"city\": \"<string>\",\n    \"state\": \"<string>\",\n    \"zipCode\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"<string>\"\n  },\n  \"primaryContact\": {\n    \"firstName\": \"<string>\",\n    \"lastName\": \"<string>\",\n    \"role\": \"<string>\",\n    \"title\": \"<string>\",\n    \"dateOfBirth\": \"<date>\",\n    \"socialSecurityNumber\": \"<string>\",\n    \"email\": \"<string>\",\n    \"workPhone\": \"<string>\",\n    \"cellPhone\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "afcd85d3-1a39-4677-842f-03207ec70746",
+              "name": "Successful operation",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "households",
+                    ":householdId",
+                    "institution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "householdId",
+                      "description": "(Required) Unique identifier of a household"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique API key of a client",
+                    "key": "x-api-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile\": {\n    \"institutionName\": \"Sample\",\n    \"institutionType\": \"<string>\",\n    \"institutionId\": \"111-11-1234\",\n    \"isUSCorporation\": \"<string>\",\n    \"taxIdType\": \"ssn\",\n    \"dateOfIncorporation\": \"1989-12-31\",\n    \"incorporationState\": \"CA\",\n    \"address1\": \"22 W. Washington St.\",\n    \"address2\": \"FL 7\",\n    \"address3\": \"Rm. 700\",\n    \"city\": \"Chicago\",\n    \"state\": \"IL\",\n    \"zipCode\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"555-555555\"\n  },\n  \"primaryContact\": {\n    \"firstName\": \"Sample\",\n    \"lastName\": \"Client\",\n    \"role\": \"<string>\",\n    \"title\": \"Sample title\",\n    \"dateOfBirth\": \"1991-12-31\",\n    \"socialSecurityNumber\": \"111-11-1234\",\n    \"email\": \"<string>\",\n    \"workPhone\": \"555-44444\",\n    \"cellPhone\": \"555-555555\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"profile\": {\n    \"institutionName\": \"Sample\",\n    \"institutionType\": \"string\",\n    \"isUSCorporation\": \"string\",\n    \"institutionId\": \"********1234\",\n    \"incorporationState\": \"CA\",\n    \"dateOfIncorporation\": \"1989-12-31\",\n    \"taxIdType\": \"ssn\",\n    \"address1\": \"22 W. Washington St.\",\n    \"address2\": \"FL 7\",\n    \"address3\": \"Rm. 700\",\n    \"city\": \"Chicago\",\n    \"state\": \"IL\",\n    \"zipCode\": \"string\",\n    \"phone\": \"string\",\n    \"fax\": \"555-555555\"\n  },\n  \"primaryContact\": {\n    \"firstName\": \"Sample\",\n    \"lastName\": \"Client\",\n    \"title\": \"Sample title\",\n    \"role\": \"string\",\n    \"dateOfBirth\": \"1991-12-31\",\n    \"socialSecurityNumber\": \"********1234\",\n    \"email\": \"string\",\n    \"workPhone\": \"555-44444\",\n    \"cellPhone\": \"555-555555\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d56aef89-5654-40bf-a186-9078a213640b",
+              "name": "Invalid status value",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "households",
+                    ":householdId",
+                    "institution"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "householdId",
+                      "description": "(Required) Unique identifier of a household"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique API key of a client",
+                    "key": "x-api-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"profile\": {\n    \"institutionName\": \"Sample\",\n    \"institutionType\": \"<string>\",\n    \"institutionId\": \"111-11-1234\",\n    \"isUSCorporation\": \"<string>\",\n    \"taxIdType\": \"ssn\",\n    \"dateOfIncorporation\": \"1989-12-31\",\n    \"incorporationState\": \"CA\",\n    \"address1\": \"22 W. Washington St.\",\n    \"address2\": \"FL 7\",\n    \"address3\": \"Rm. 700\",\n    \"city\": \"Chicago\",\n    \"state\": \"IL\",\n    \"zipCode\": \"<string>\",\n    \"phone\": \"<string>\",\n    \"fax\": \"555-555555\"\n  },\n  \"primaryContact\": {\n    \"firstName\": \"Sample\",\n    \"lastName\": \"Client\",\n    \"role\": \"<string>\",\n    \"title\": \"Sample title\",\n    \"dateOfBirth\": \"1991-12-31\",\n    \"socialSecurityNumber\": \"111-11-1234\",\n    \"email\": \"<string>\",\n    \"workPhone\": \"555-44444\",\n    \"cellPhone\": \"555-555555\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Missing firstName property.\",\n  \"id\": \"8374f9f1-6523-2f6e-2c08-3e6d92f32102\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "cb803103-e70e-4094-a12f-83ae9e0fdd81",
+    "name": "Authorization Tokens Accounts Office Institution Client API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

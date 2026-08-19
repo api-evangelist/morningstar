@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Time Series API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Time Series",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request time series data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/time-series/v1",
+            "headers": [
+              {
+                "name": "prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Each request supports up to 100 investments. Data point limits apply per frequency — see the API overview for details."
+        },
+        {
+          "info": {
+            "name": "Retrieve time series data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/time-series/v1/result/:resultId",
+            "params": [
+              {
+                "name": "resultId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieves the completed time series data associated with a previously submitted asynchronous request. This endpoint is used to fetch the final results once asynchronous processing has finished."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

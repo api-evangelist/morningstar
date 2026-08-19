@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Analyst Highlights API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Analyst Highlights",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request analyst highlights for a list of investments.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/ai-insights/analyst-highlights",
+            "headers": [
+              {
+                "name": "Prefer",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "\n#### Request Input\nRequest analyst highlights for the investments specified in the request body. The API accepts:\n\n  * `performanceId` - Morningstar performance ID.\n  * `securityId` - Morningstar security ID. \n  * `isin`\n  * `cusip`\n  * `tradingSymbol`\n  * `fundCode`\n  * `msid` \n  \n  When querying identifiers that may not be globally unique (such as `tradingSymbol`), you can apply additional filters (`baseCurrency`, `domicile`, and `exchangeCountry`) to narrow the results and improve specificit"
+        },
+        {
+          "info": {
+            "name": "Retrieve analyst highlights.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/ai-insights/results/:resultId",
+            "params": [
+              {
+                "name": "resultId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "When the asynchronous processing job is completed, this endpoint is returned in the `Location` header of the `302 Found` response returned by the `/jobs/{jobId}` endpoint.\n\n  When this endpoint is called, it returns:\n\n  * The AI insights for the investments it successfully identifies and where data is available.\n  * A metadata object listing any input identifiers that could not be matched or for which no data is available.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,215 @@
+{
+  "item": [
+    {
+      "id": "15f99ec8-a8db-4839-831d-1ac84facf788",
+      "name": "Portfolio Holdings Dates",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3f1e400a-a14a-4f97-a5ac-7c7b4589ca38",
+          "name": "Retrieve portfolio holdings date",
+          "request": {
+            "name": "Retrieve portfolio holdings date",
+            "description": {
+              "content": "This endpoint is used to retrieve dates for which data is available for a portfolio.\n\nThese dates are used to specify a portfolio date when requesting investment details for the following views:\n\n- `full-look-through-portfolio-holdings`\n- `full-portfolio-holdings-month-end-or-quarter-end-most-recent`",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-web-services",
+                "v1",
+                "investments",
+                ":id",
+                "portfolio-holdings-dates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) \nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"holdingsView\": \"<string>\",\n  \"type\": \"<string>\",\n  \"frequency\": \"<string>\",\n  \"startDate\": \"<string>\",\n  \"endDate\": \"<string>\",\n  \"dates\": [\n    \"<string>\"\n  ],\n  \"idType\": \"performanceId\",\n  \"baseCurrency\": \"<string>\",\n  \"domicile\": \"<string>\",\n  \"exchangeCountry\": \"<string>\",\n  \"exchangeId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9cb70862-dd5f-4cd5-9c54-994d4929f72b",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "investments",
+                    ":id",
+                    "portfolio-holdings-dates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) \nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"portfolioDates\": [\n    {\n      \"portfolioDate\": \"2025-12-31\",\n      \"holdingsView\": \"10\"\n    }\n  ],\n  \"identifiers\": {\n    \"performanceId\": \"0P00018P7K\"\n  },\n  \"metadata\": {\n    \"requestId\": \"3a11f005-394f-4f89-a17f-41d2ffe549f3\",\n    \"time\": \"2026-06-17T17:28:34.6382675Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4a44b291-5a99-4d64-97ea-acad9271a4fa",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "investments",
+                    ":id",
+                    "portfolio-holdings-dates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) \nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"errorCode\": \"400.investmentDetails.001\",\n  \"message\": \"The EndDate parameter is required.\",\n  \"requestId\": \"cd8d3278-a273-4765-87aa-e0beff1f2975\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e100f283-46df-48d2-9bee-63fbd824ff6b",
+    "name": "Authorization Tokens Accounts Portfolio Holdings Dates API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

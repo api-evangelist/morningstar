@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Screener API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Screener",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query equity investments and return selected data points.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/screeners/equities",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Query equity investments and return selected data points."
+        },
+        {
+          "info": {
+            "name": "Query managed investments and return selected data points.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/screeners/managed-investments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns the investments that meet the conditions defined in the `queries` object. Returns `performanceId` by default and any other data points specified in the `dataPoints` array."
+        },
+        {
+          "info": {
+            "name": "Get securites and associated data points",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/screener",
+            "params": [
+              {
+                "name": "startIndex",
+                "value": "",
+                "type": "query",
+                "description": "Row to start query from. Zero-based index; first row is '0.'"
+              },
+              {
+                "name": "securityType",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a security type"
+              },
+              {
+                "name": "results",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of rows to return"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort by data point"
+              },
+              {
+                "name": "dir",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in ascending/descending direction"
+              },
+              {
+                "name": "output",
+                "value": "",
+                "type": "query",
+                "description": "Format of the returned content"
+              },
+              {
+                "name": "langcult",
+                "value": "",
+                "type": "query",
+                "description": "Language and locale, for example, en-US"
+              },
+              {
+                "name": "universe",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a universe"
+              },
+              {
+                "name": "securityDataPoints",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a data point. Can be data point ID or short ID. Multiple values must be pipe-separated."
+              },
+              {
+                "name": "filters",
+                "value": "fundSize:{\"min\":\"100000000\",\"max\":\"500000000\"},starRating:[4,5]}",
+                "type": "query",
+                "description": "Data point ID with either min/max values, or a list of specific values. Multiple criteria must be comma-separated."
+              }
+            ]
+          },
+          "docs": "Specify search and filter criteria to limit the number of results returned. You can define the format of the returned content - JSON or XML. </br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter."
+        },
+        {
+          "info": {
+            "name": "Create security and associated data points",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/screener",
+            "params": [
+              {
+                "name": "securityDataPoints",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a data point. Can be data point ID or short ID. Multiple values must be pipe-separated."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create security and associated data points"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,714 @@
+{
+  "item": [
+    {
+      "id": "00341e9a-6a81-496f-9ec9-915ad9c26376",
+      "name": "PJM (Professional Judgement Matrix)",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2088cf3e-62a8-4e19-b563-593e9f86a0e6",
+          "name": "Submit new Professional Judgement Matrix configuration",
+          "request": {
+            "name": "Submit new Professional Judgement Matrix configuration",
+            "description": {
+              "content": "Submit a custom Professional Judgement Matrix configuration. In the response, a unique pjmid for the submitted configuration is returned. The identifier can be used for future retrieval of the custom Professional Judgement Matrix configuration.\n\nFor each consideration, define the risk tolerance score cap for each option. For example,  `“basic knowledge” : 68` means that the suitability score of a client with basic investment knowledge will be capped at 68. Refer to the [Morningstar Risk Profiler Methodology](https://developer.morningstar.com/content/hidden-from-navigation/MorningstarRiskProfilerMethodology_v4.pdf) documentation for further details.\n\nIf a custom Professional Judgement Matrix configuration is not defined, the engine will use the default configuration as defined in the Morningstar Risk Profiler Methodology documentation to calculate the suitability score.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "pjm"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "Initial request identifier",
+                "key": "X-API-RequestId",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timeHorizon\": {\n    \"less1\": \"<integer>\",\n    \"year1\": \"<integer>\",\n    \"year2\": \"<integer>\",\n    \"year3\": \"<integer>\",\n    \"year4\": \"<integer>\",\n    \"year5\": \"<integer>\",\n    \"year6\": \"<integer>\",\n    \"year7\": \"<integer>\",\n    \"year8\": \"<integer>\",\n    \"year9\": \"<integer>\",\n    \"year10\": \"<integer>\",\n    \"year11\": \"<integer>\",\n    \"year12\": \"<integer>\",\n    \"year13\": \"<integer>\",\n    \"year14\": \"<integer>\",\n    \"year15\": \"<integer>\",\n    \"year16\": \"<integer>\",\n    \"year17\": \"<integer>\",\n    \"year18\": \"<integer>\",\n    \"year19\": \"<integer>\",\n    \"year20\": \"<integer>\",\n    \"more20\": \"<integer>\"\n  },\n  \"knowledge\": {\n    \"basicKnowledge\": \"<integer>\",\n    \"moderateKnowledge\": \"<integer>\",\n    \"veryKnowledge\": \"<integer>\",\n    \"unknown\": \"<integer>\"\n  },\n  \"experience\": {\n    \"noPrior\": \"<integer>\",\n    \"prior\": \"<integer>\",\n    \"unknown\": \"<integer>\"\n  },\n  \"composure\": {\n    \"never\": \"<integer>\",\n    \"noImpact\": \"<integer>\",\n    \"boughtShares\": \"<integer>\",\n    \"soldShares\": \"<integer>\",\n    \"unknown\": \"<integer>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "219265e5-ca3d-4e58-93b1-545369cab28b",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "pjm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Initial request identifier",
+                    "key": "X-API-RequestId",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeHorizon\": {\n    \"less1\": 0,\n    \"year1\": 1,\n    \"year2\": 2,\n    \"year3\": 3,\n    \"year4\": 4,\n    \"year5\": 5,\n    \"year6\": 6,\n    \"year7\": 7,\n    \"year8\": 8,\n    \"year9\": 9,\n    \"year10\": 10,\n    \"year11\": 11,\n    \"year12\": 12,\n    \"year13\": 13,\n    \"year14\": 14,\n    \"year15\": 15,\n    \"year16\": 16,\n    \"year17\": 17,\n    \"year18\": 18,\n    \"year19\": 19,\n    \"year20\": 20,\n    \"more20\": 50\n  },\n  \"knowledge\": {\n    \"basicKnowledge\": 50,\n    \"moderateKnowledge\": 60,\n    \"veryKnowledge\": 90,\n    \"unknown\": 100\n  },\n  \"experience\": {\n    \"noPrior\": 68,\n    \"prior\": 90,\n    \"unknown\": 100\n  },\n  \"composure\": {\n    \"never\": 50,\n    \"noImpact\": 60,\n    \"boughtShares\": 90,\n    \"soldShares\": 90,\n    \"unknown\": 100\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"pjmId\": \"95000cf-9f72-4au7-811b-35dc66dd95a\",\n  \"createdAt\": \"2020-08-04T20:07:36+0000\",\n  \"timeHorizon\": {\n    \"less1\": 0,\n    \"year1\": 1,\n    \"year2\": 2,\n    \"year3\": 3,\n    \"year4\": 4,\n    \"year5\": 5,\n    \"year6\": 6,\n    \"year7\": 7,\n    \"year8\": 8,\n    \"year9\": 9,\n    \"year10\": 10,\n    \"year11\": 11,\n    \"year12\": 12,\n    \"year13\": 13,\n    \"year14\": 14,\n    \"year15\": 15,\n    \"year16\": 16,\n    \"year17\": 17,\n    \"year18\": 18,\n    \"year19\": 19,\n    \"year20\": 20,\n    \"more20\": 50\n  },\n  \"knowledge\": {\n    \"basicKnowledge\": 50,\n    \"moderateKnowledge\": 60,\n    \"veryKnowledge\": 90,\n    \"unknown\": 100\n  },\n  \"experience\": {\n    \"noPrior\": 68,\n    \"prior\": 90,\n    \"unknown\": 100\n  },\n  \"composure\": {\n    \"never\": 50,\n    \"noImpact\": 60,\n    \"boughtShares\": 90,\n    \"soldShares\": 90,\n    \"unknown\": 100\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5fb80133-4ef2-4edf-875e-754b315abff1",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "pjm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Initial request identifier",
+                    "key": "X-API-RequestId",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeHorizon\": {\n    \"less1\": 0,\n    \"year1\": 1,\n    \"year2\": 2,\n    \"year3\": 3,\n    \"year4\": 4,\n    \"year5\": 5,\n    \"year6\": 6,\n    \"year7\": 7,\n    \"year8\": 8,\n    \"year9\": 9,\n    \"year10\": 10,\n    \"year11\": 11,\n    \"year12\": 12,\n    \"year13\": 13,\n    \"year14\": 14,\n    \"year15\": 15,\n    \"year16\": 16,\n    \"year17\": 17,\n    \"year18\": 18,\n    \"year19\": 19,\n    \"year20\": 20,\n    \"more20\": 50\n  },\n  \"knowledge\": {\n    \"basicKnowledge\": 50,\n    \"moderateKnowledge\": 60,\n    \"veryKnowledge\": 90,\n    \"unknown\": 100\n  },\n  \"experience\": {\n    \"noPrior\": 68,\n    \"prior\": 90,\n    \"unknown\": 100\n  },\n  \"composure\": {\n    \"never\": 50,\n    \"noImpact\": 60,\n    \"boughtShares\": 90,\n    \"soldShares\": 90,\n    \"unknown\": 100\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Server cannot or will not process the request due to something that is perceived to be a client error\",\n  \"status\": \"BAD_REQUEST\",\n  \"timestamp\": \"2020-08-05T13:40:25+0000\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f4ec1e46-dcf5-4362-a33e-9b242d26533f",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "pjm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Initial request identifier",
+                    "key": "X-API-RequestId",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeHorizon\": {\n    \"less1\": 0,\n    \"year1\": 1,\n    \"year2\": 2,\n    \"year3\": 3,\n    \"year4\": 4,\n    \"year5\": 5,\n    \"year6\": 6,\n    \"year7\": 7,\n    \"year8\": 8,\n    \"year9\": 9,\n    \"year10\": 10,\n    \"year11\": 11,\n    \"year12\": 12,\n    \"year13\": 13,\n    \"year14\": 14,\n    \"year15\": 15,\n    \"year16\": 16,\n    \"year17\": 17,\n    \"year18\": 18,\n    \"year19\": 19,\n    \"year20\": 20,\n    \"more20\": 50\n  },\n  \"knowledge\": {\n    \"basicKnowledge\": 50,\n    \"moderateKnowledge\": 60,\n    \"veryKnowledge\": 90,\n    \"unknown\": 100\n  },\n  \"experience\": {\n    \"noPrior\": 68,\n    \"prior\": 90,\n    \"unknown\": 100\n  },\n  \"composure\": {\n    \"never\": 50,\n    \"noImpact\": 60,\n    \"boughtShares\": 90,\n    \"soldShares\": 90,\n    \"unknown\": 100\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Internal Server Error\",\n  \"status\": \"INTERNAL_SERVER_ERROR\",\n  \"timestamp\": \"2020-08-05T13:40:25+0000\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a94df34b-780f-44fa-8e1c-7f9c789ad3cc",
+              "name": "Internal server communication failure",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "pjm"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Initial request identifier",
+                    "key": "X-API-RequestId",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"timeHorizon\": {\n    \"less1\": 0,\n    \"year1\": 1,\n    \"year2\": 2,\n    \"year3\": 3,\n    \"year4\": 4,\n    \"year5\": 5,\n    \"year6\": 6,\n    \"year7\": 7,\n    \"year8\": 8,\n    \"year9\": 9,\n    \"year10\": 10,\n    \"year11\": 11,\n    \"year12\": 12,\n    \"year13\": 13,\n    \"year14\": 14,\n    \"year15\": 15,\n    \"year16\": 16,\n    \"year17\": 17,\n    \"year18\": 18,\n    \"year19\": 19,\n    \"year20\": 20,\n    \"more20\": 50\n  },\n  \"knowledge\": {\n    \"basicKnowledge\": 50,\n    \"moderateKnowledge\": 60,\n    \"veryKnowledge\": 90,\n    \"unknown\": 100\n  },\n  \"experience\": {\n    \"noPrior\": 68,\n    \"prior\": 90,\n    \"unknown\": 100\n  },\n  \"composure\": {\n    \"never\": 50,\n    \"noImpact\": 60,\n    \"boughtShares\": 90,\n    \"soldShares\": 90,\n    \"unknown\": 100\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Received an invalid response from the upstream server\",\n  \"status\": \"BAD_GATEWAY\",\n  \"timestamp\": \"2020-08-05T13:40:25+0000\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "02fe4e9d-9b68-4104-864b-7e6c7c8452cc",
+          "name": "Get Professional Judgement Matrix configuration",
+          "request": {
+            "name": "Get Professional Judgement Matrix configuration",
+            "description": {
+              "content": "Get a specific Professional Judgement Matrix configuration. The configuration is identified by the value in the `pjmId` parameter. This ID was returned in the response when the configuration was created.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "pjm",
+                ":pjmId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "pjmId",
+                  "description": "(Required) Unique identifier of a Professional Judgement Matrix configuration"
+                }
+              ]
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Specifies the locale.",
+                "key": "Accept-Language",
+                "value": "<string>"
+              },
+              {
+                "disabled": false,
+                "description": "Initial request identifier",
+                "key": "X-API-RequestId",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4209d44c-2b64-4110-915a-733188d05626",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "pjm",
+                    ":pjmId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "pjmId",
+                      "description": "(Required) Unique identifier of a Professional Judgement Matrix configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Specifies the locale.",
+                    "key": "Accept-Language",
+                    "value": "en-US"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Initial request identifier",
+                    "key": "X-API-RequestId",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"pjmId\": \"95000cf-9f72-4au7-811b-35dc66dd95a\",\n  \"createdAt\": \"2020-08-04T20:07:36+0000\",\n  \"timeHorizon\": {\n    \"less1\": 0,\n    \"year1\": 1,\n    \"year2\": 2,\n    \"year3\": 3,\n    \"year4\": 4,\n    \"year5\": 5,\n    \"year6\": 6,\n    \"year7\": 7,\n    \"year8\": 8,\n    \"year9\": 9,\n    \"year10\": 10,\n    \"year11\": 11,\n    \"year12\": 12,\n    \"year13\": 13,\n    \"year14\": 14,\n    \"year15\": 15,\n    \"year16\": 16,\n    \"year17\": 17,\n    \"year18\": 18,\n    \"year19\": 19,\n    \"year20\": 20,\n    \"more20\": 50\n  },\n  \"knowledge\": {\n    \"basicKnowledge\": 50,\n    \"moderateKnowledge\": 60,\n    \"veryKnowledge\": 90,\n    \"unknown\": 100\n  },\n  \"experience\": {\n    \"noPrior\": 68,\n    \"prior\": 90,\n    \"unknown\": 100\n  },\n  \"composure\": {\n    \"never\": 50,\n    \"noImpact\": 60,\n    \"boughtShares\": 90,\n    \"soldShares\": 90,\n    \"unknown\": 100\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "66ddba79-5c29-44e3-b097-3139f613dd21",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "pjm",
+                    ":pjmId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "pjmId",
+                      "description": "(Required) Unique identifier of a Professional Judgement Matrix configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Specifies the locale.",
+                    "key": "Accept-Language",
+                    "value": "en-US"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Initial request identifier",
+                    "key": "X-API-RequestId",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Server cannot or will not process the request due to something that is perceived to be a client error\",\n  \"status\": \"BAD_REQUEST\",\n  \"timestamp\": \"2020-08-05T13:40:25+0000\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0adae0d9-bf28-4546-9f17-1341eee31358",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "pjm",
+                    ":pjmId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "pjmId",
+                      "description": "(Required) Unique identifier of a Professional Judgement Matrix configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Specifies the locale.",
+                    "key": "Accept-Language",
+                    "value": "en-US"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Initial request identifier",
+                    "key": "X-API-RequestId",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Server can't find the requested resource\",\n  \"status\": \"NOT_FOUND\",\n  \"timestamp\": \"2020-08-05T13:40:25+0000\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e05dbcd5-f427-4146-ad24-dae0cbd4fc44",
+              "name": "Internal server communication failure",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "pjm",
+                    ":pjmId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "pjmId",
+                      "description": "(Required) Unique identifier of a Professional Judgement Matrix configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Specifies the locale.",
+                    "key": "Accept-Language",
+                    "value": "en-US"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Initial request identifier",
+                    "key": "X-API-RequestId",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Internal Server Error\",\n  \"status\": \"INTERNAL_SERVER_ERROR\",\n  \"timestamp\": \"2020-08-05T13:40:25+0000\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "502e0008-019d-4bcc-abf3-dd0d65c35e9d",
+              "name": "Internal server communication failure",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "pjm",
+                    ":pjmId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "pjmId",
+                      "description": "(Required) Unique identifier of a Professional Judgement Matrix configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Specifies the locale.",
+                    "key": "Accept-Language",
+                    "value": "en-US"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "Initial request identifier",
+                    "key": "X-API-RequestId",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Gateway",
+              "code": 502,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"Received an invalid response from the upstream server\",\n  \"status\": \"BAD_GATEWAY\",\n  \"timestamp\": \"2020-08-05T13:40:25+0000\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "683c71bd-fb60-404b-b739-0a03e215dfb3",
+    "name": "Authorization Tokens Accounts PJM (Professional Judgement Matrix) API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

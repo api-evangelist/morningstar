@@ -1,0 +1,44 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Activities API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Activities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Monitor the status of asynchronous authentication or aggregation activities",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/activities/summary",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "Scope of activity. Value can be *session*, to include only session-specific activity progress, or *global* to also include activity progress from other sessions for this user. Cannot be set to *session* for users autheticated with Morningtar Authentication.  The default is *session* for  session-based users and *global* for users authenticated by Morningstar Authentication.</br></br>Note: the *global* setting currently does not return status for accounts aggregating outside the current session."
+              }
+            ]
+          },
+          "docs": "Determine if asynchronous activities are in progress for the  authenticated  investor. The endpoint can monitor activities for just the current session, or it can include other sessions of the user depending  on the `scope` parameter setting.  Asynchronous activities include:  </br>  </br><span>&#8226;</span> authenticating credentials </br>  <span>&#8226;</span> discovering, adding, and aggregating accounts</br>  <span>&#8226;</span> aggregating accounts </br></br>This endpoint  returns a singl"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

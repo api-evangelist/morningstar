@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Corporate Actions API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Corporate Actions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Dividend Amount History time series.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/time-series/v1/corporate-actions/dividend-amount-history/:ids",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "path",
+                "description": "\nComma-separated list of up to 25 investment identifiers to query.\n\nAccepts:\n\n- Morningstar Performance ID (default)\n- Morningstar Security ID\n- Morningstar IDs (MSID)\n- ISIN\n- CUSIP\n- Trading symbol\n- Category ID   \n  Important: When a category ID is passed, the corresponding `identifierType` can be `performanceId` or `securityId`. The value must be URL-encoded. For example, if the category ID is `LC00002226;CA]FO`, the URL-encoded value is `LC00002226;CA%5DFO`."
+              },
+              {
+                "name": "idTypes",
+                "value": "",
+                "type": "query",
+                "description": "\nComma-separated list specifying the type of each value passed in the `ids` parameter.<br>\nRules:\n\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n*   Empty values default to `performanceId`\n\nExample:\n\n*   `ids=id1,id2,id3`\n*   `id1` and `id3` are performance IDs\n*   `id2` is a security ID\n*   `idTypes=,securityId`\n\nAccepted values:\n\n*   `performanceId` (default)\n*   `isin`\n*   `securityId`\n*   `cusip`\n*   `tradingSymbol`\n*   `msid`"
+              },
+              {
+                "name": "baseCurrency",
+                "value": "",
+                "type": "query",
+                "description": "\nComma-separated list of 3-character ISO 4217 currency codes (for example, `CAD`, `EUR`, `JPY`).<br>\n\n*   Filters results based on currency\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n\nExample:\n\n*   `ids=id1,id2,id3,id4,id5`\n*   Base currency passed for `id2` and `id4`\n*   `baseCurrency=,USD,,USD`"
+              },
+              {
+                "name": "domicile",
+                "value": "",
+                "type": "query",
+                "description": "\nComma-separated list of 3-character ISO 3166‑1 country codes (for example, `CAN`, `IRL`, `IND`). \nRules:\n\n*   Filters results based on domicile\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n\nExample:\n\n*   `ids=id1,id2,id3,id4,id5`\n*   Domicile passed for `id2` and `id4`\n*   `domicile=,USA,,USA`"
+              },
+              {
+                "name": "exchangeCountry",
+                "value": "",
+                "type": "query",
+                "description": "\nComma-separated list of 3-character ISO 3166‑1 country codes (for example, `CAN`, `IRL`, `IND`).\n\n\n*   Filters results based on domicile\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n\nExample:\n\n*   `ids=id1,id2,id3,id4,id5`\n*   Exchange country passed for `id2` and `id4`\n*   `exchangeCountry=,USA,,USA`"
+              },
+              {
+                "name": "exchangeId",
+                "value": "",
+                "type": "query",
+                "description": "\nComma-separated list of exchange IDs (for example, `EX$$$$XMEX`, `EX$$$$XNAS`).\n\n*   Filters results based on exchange ID\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n\nExample:\n\n*   `ids=id1,id2,id3,id4,id5`\n*   Exchange ID passed for `id2` and `id4`\n*   `exchangeId=,EX$$$$XMEX,,EX$$$$XNAS`"
+              },
+              {
+                "name": "frequency",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the time interval between data points."
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the start date for the time series. Accepted format is `yyyy-MM-dd`.\n"
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the end date for the time series. Accepted format is `yyyy-MM-dd`.\n"
+              },
+              {
+                "name": "timePeriod",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the size of the time window for the data range. \n\n- Used in combination with `timePeriodUnit` to specify relative time ranges. \n\n- When `startDate`, `endDate`, `timePeriod` and `timePeriodUnit` are provided, `timePeriod` and `timePeriodUnit` take precedence."
+              },
+              {
+                "name": "timePeriodUnit",
+                "value": "",
+                "type": "query",
+                "description": "\nSpecifies the time period unit. \n\n- Used in combination with `timePeriod` to specify relative time ranges. \n\n- When `startDate`, `endDate`, `timePeriod` and `timePeriodUnit` are provided, `timePeriod` and `timePeriodUnit` take precedence."
+              },
+              {
+                "name": "applyEarliestCommonDate",
+                "value": "",
+                "type": "query",
+                "description": "\nSpecifies whether to apply the earliest common start date across all investments.\n\n When set to `true`, the start date of the time series is adjusted to match the latest inception date among the investments, ensuring all data points are aligned."
+              },
+              {
+                "name": "applyTrackRecordExtension",
+                "value": "",
+                "type": "query",
+                "description": "\nSpecifies whether to apply the Track Record Extension logic in order to extend the performance of an investment by copying the historical performance of another qualified older investment."
+              },
+              {
+                "name": "applyRestructureDate",
+                "value": "",
+                "type": "query",
+                "description": "\nSpecifies whether to consider the Morningstar or Custom restructure date when determining the start of the performance period.\n\nThis option is applicable only when `applyEarliestCommonDate` is set to true."
+              },
+              {
+                "name": "sinceInception",
+                "value": "",
+                "type": "query",
+                "description": "\nSets the time range from inception (or the maximum supported lookback) to the end date. \n\nTakes precendence over any `timePeriod` / `timePeriodUnit` and `startDate` / `endDate` settings."
+              },
+              {
+                "name": "currencyId",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the currency in which to return data."
+              }
+            ]
+          },
+          "docs": "Historical Dividends, Capital Gains and Split Factor."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

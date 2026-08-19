@@ -1,0 +1,71 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Portfolios API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Portfolios",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the table content of the investment mix question",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v1/portfolios/investments",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "The 'Investment Mix' question (question 8 of FM10S30 and question 16 of FM25V30) prompts the client to choose from a list of seven example portfolio options, selecting the one that best aligns with their preferred investment mix. These options range from low-risk/low-return to high-risk/high-return, with variations in between. The question text includes a link to an image depicting the investment mix table. Additionally, the content can be accessed as a JSON object via this endpoint."
+        },
+        {
+          "info": {
+            "name": "Get the content of the mix of investments matrix",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/portfolios/investments",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Accept-Language",
+                "value": ""
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ]
+          },
+          "docs": "Get the content of the mix of investments matrix with the set of portfolios and their high, medium, low percentage of return."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

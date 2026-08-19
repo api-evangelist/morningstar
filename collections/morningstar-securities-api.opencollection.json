@@ -1,0 +1,183 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts securities API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "securities",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get information for the security specified",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/securities/:securityId",
+            "params": [
+              {
+                "name": "securityId",
+                "value": "",
+                "type": "path",
+                "description": "Security ID"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "query",
+                "description": "View ID"
+              },
+              {
+                "name": "idType",
+                "value": "",
+                "type": "query",
+                "description": "Security ID type"
+              },
+              {
+                "name": "languageId",
+                "value": "",
+                "type": "query",
+                "description": "Language ID - ISO 639-1"
+              },
+              {
+                "name": "currencyId",
+                "value": "",
+                "type": "query",
+                "description": "Currency ID - ISO 4217 alphabetic code"
+              },
+              {
+                "name": "responseViewFormat",
+                "value": "",
+                "type": "query",
+                "description": "Response view format - xml / json"
+              }
+            ]
+          },
+          "docs": "Information returned depends on the view specifed in the request."
+        },
+        {
+          "info": {
+            "name": "Get securities data",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/securities/:secIds",
+            "params": [
+              {
+                "name": "secIds",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+              },
+              {
+                "name": "universeIds",
+                "value": "",
+                "type": "query",
+                "description": "Unique five-letter identifier created by combining a two-letter Investment Type code and three-letter country code.</br> Multiple entries must be pipe-separated '|'."
+              },
+              {
+                "name": "langCult",
+                "value": "",
+                "type": "query",
+                "description": "Language and locale, for example, en-US"
+              },
+              {
+                "name": "dataPoints",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a data point. Can be data point ID or short ID."
+              },
+              {
+                "name": "currencyId",
+                "value": "",
+                "type": "query",
+                "description": "ISO 4217 currency code, for example 'USD'"
+              }
+            ]
+          },
+          "docs": "Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used  in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted.  The value(s) entered appear as the first data point in the output for each security. </br></br> Use the `dataPoints` parameter to specify the data returned in the response. You can enter  a data point ID or the corresponding short ID.  You can only specify data poin"
+        },
+        {
+          "info": {
+            "name": "Create securities data",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/securities/:secIds",
+            "params": [
+              {
+                "name": "secIds",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+              },
+              {
+                "name": "universeIds",
+                "value": "",
+                "type": "query",
+                "description": "Unique five-letter identifier created by combining a two-letter Investment Type code and three-letter country code.</br>Multiple entries must be pipe-separated '|'."
+              },
+              {
+                "name": "langCult",
+                "value": "",
+                "type": "query",
+                "description": "Language and locale, for example, en-US"
+              },
+              {
+                "name": "dataPoints",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a data point. Can be data point ID or short ID."
+              },
+              {
+                "name": "currencyId",
+                "value": "",
+                "type": "query",
+                "description": "ISO 4217 currency code, for example, 'USD'"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used  in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted.  The value(s) entered appear as the first data point in the output for each security.  </br></br>Use the`dataPoints` parameter to specify the data returned in the response. You can enter  a data point ID or the corresponding short ID.  You can only specify data point"
+        },
+        {
+          "info": {
+            "name": "Get benefits data for variable annuity subaccounts",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/securities/:secIds/vabenefits",
+            "params": [
+              {
+                "name": "secIds",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+              }
+            ]
+          },
+          "docs": "Get benefits data for variable annunity subaccounts for the securities specified in the `secIds` paramter."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

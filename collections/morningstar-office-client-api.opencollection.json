@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Office Client API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Office Client",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get client profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/households/:householdId/client",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "householdId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a household"
+              }
+            ]
+          },
+          "docs": "Get a specific client profile."
+        },
+        {
+          "info": {
+            "name": "Update client profile",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/households/:householdId/client",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "householdId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a household"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a client profile </br></br> `clientName`, `firstName`, and `lastName` do not support these characters: ~!#^`[]{}|\\;\"<>?/"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

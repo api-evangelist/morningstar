@@ -1,0 +1,40 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Earnings Summaries API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Earnings Summaries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Returns earnings summaries for a list of companies.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/ai-insights/earnings-summaries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a list of company identifiers to retrieve AI-generated earnings release summaries. Results are returned synchronously.\n\n  #### Supported Identifier Types\n\n  * `companyId` - Morningstar company ID (default).\n  * `performanceId`, `securityId`, `msid`, `isin`, `cusip`, `tradingSymbol`\n  \n  When using non-unique identifiers such as `tradingSymbol` or `isin`, apply\n  optional filters (`baseCurrency`, `domicile`, `exchangeCountry`) to improve\n  match accuracy.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

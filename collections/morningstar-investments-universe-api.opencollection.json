@@ -1,0 +1,98 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Investments Universe API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Investments Universe",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Query entitled universe to retrieve investment metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/investments",
+            "params": [
+              {
+                "name": "universe",
+                "value": "MY_UNIVERSE_321",
+                "type": "query",
+                "description": "Filters results to a custom universe defined during implementation for the account."
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the investment data type to query."
+              },
+              {
+                "name": "exchangeCode",
+                "value": "XPAR",
+                "type": "query",
+                "description": "Primary filter for equities. Filters results by exchange code."
+              },
+              {
+                "name": "securityType",
+                "value": "ST00000001",
+                "type": "query",
+                "description": "Secondary filter for equities. Accepts:\n\n  *   `ST00000001` - Common Stock\n  *   `ST00000002` - Preferred Stock\n  *   `ST00000003` - Industry\n  *   `ST00000004` - Index\n  *   `ST00000005` - ETF\n  *   `ST00000006` - Closed-end Fund\n  *   `ST00000007` - Investment Trusts\n  *   `ST00000008` - Warrant\n  *   `ST00000009` - Note\n  *   `ST000000A1` - Units\n  *   `ST000000B1` - Rights\n  *   `ST000000C1` - Unlisted Common\n  *   `ST000000C2` - Unlisted Preferred"
+              },
+              {
+                "name": "countryAvailableForSaleCode",
+                "value": "AUS",
+                "type": "query",
+                "description": "Primary filter for managed investments. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "domicileCode",
+                "value": "AUS",
+                "type": "query",
+                "description": "Primary filter for managed investments. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "shareClassInformationInvestmentType",
+                "value": "EQ",
+                "type": "query",
+                "description": "Secondary filter for equities.\n\nAccepts:\n\n  *   `EQ` - Equity\n  *   `DR` - Depository Receipt\n  *   `PE` - Preferred Equity\n  *   `UE` - Unlisted Equity"
+              },
+              {
+                "name": "paginationTokenNext",
+                "value": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK",
+                "type": "query",
+                "description": "Specifies the token to fetch the next page of results."
+              },
+              {
+                "name": "paginationTokenPrevious",
+                "value": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK",
+                "type": "query",
+                "description": "Specifies the token to fetch the previous page of results."
+              },
+              {
+                "name": "pageSize",
+                "value": "25",
+                "type": "query",
+                "description": "Specifies the number of records per page."
+              }
+            ]
+          },
+          "docs": "\n**Get Universe Entitlements**\n\nRetrieve the **primary filters** your account is entitled for.\n\n| Scenario| Request Inputs |\n|-----------|-------|\n| Get equities entitlements.| `GET /investments`|\n| Get managed investments entitlements.| `GET /investments?source=managedInvestments` |\n\n**Get Custom Universe**\n\nRetrieve a custom universe in full.\n\n| Scenario| Request Inputs |\n|-----------|-------|\n| Get equities custom universe.| `GET /investments?universe=MY_EQUITIES_ABC`|\n| Get managed investmen"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

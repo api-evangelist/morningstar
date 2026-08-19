@@ -1,0 +1,535 @@
+{
+  "item": [
+    {
+      "id": "84ffcd08-c5fb-48d1-9e39-266cb626e51e",
+      "name": "Corporate Actions",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ec3679c9-6202-4254-bc8f-7205a1e210ae",
+          "name": "Get Dividend Amount History time series.",
+          "request": {
+            "name": "Get Dividend Amount History time series.",
+            "description": {
+              "content": "Historical Dividends, Capital Gains and Split Factor.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-web-services",
+                "time-series",
+                "v1",
+                "corporate-actions",
+                "dividend-amount-history",
+                ":ids"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "idTypes",
+                  "value": "<string>",
+                  "description": "\nComma-separated list specifying the type of each value passed in the `ids` parameter.<br>\nRules:\n\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n*   Empty values default to `performanceId`\n\nExample:\n\n*   `ids=id1,id2,id3`\n*   `id1` and `id3` are performance IDs\n*   `id2` is a security ID\n*   `idTypes=,securityId`\n\nAccepted values:\n\n*   `performanceId` (default)\n*   `isin`\n*   `securityId`\n*   `cusip`\n*   `tradingSymbol`\n*   `msid`"
+                },
+                {
+                  "disabled": false,
+                  "key": "baseCurrency",
+                  "value": "<string>",
+                  "description": "\nComma-separated list of 3-character ISO 4217 currency codes (for example, `CAD`, `EUR`, `JPY`).<br>\n\n*   Filters results based on currency\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n\nExample:\n\n*   `ids=id1,id2,id3,id4,id5`\n*   Base currency passed for `id2` and `id4`\n*   `baseCurrency=,USD,,USD`"
+                },
+                {
+                  "disabled": false,
+                  "key": "domicile",
+                  "value": "<string>",
+                  "description": "\nComma-separated list of 3-character ISO 3166‑1 country codes (for example, `CAN`, `IRL`, `IND`). \nRules:\n\n*   Filters results based on domicile\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n\nExample:\n\n*   `ids=id1,id2,id3,id4,id5`\n*   Domicile passed for `id2` and `id4`\n*   `domicile=,USA,,USA`"
+                },
+                {
+                  "disabled": false,
+                  "key": "exchangeCountry",
+                  "value": "<string>",
+                  "description": "\nComma-separated list of 3-character ISO 3166‑1 country codes (for example, `CAN`, `IRL`, `IND`).\n\n\n*   Filters results based on domicile\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n\nExample:\n\n*   `ids=id1,id2,id3,id4,id5`\n*   Exchange country passed for `id2` and `id4`\n*   `exchangeCountry=,USA,,USA`"
+                },
+                {
+                  "disabled": false,
+                  "key": "exchangeId",
+                  "value": "<string>",
+                  "description": "\nComma-separated list of exchange IDs (for example, `EX$$$$XMEX`, `EX$$$$XNAS`).\n\n*   Filters results based on exchange ID\n*   Values must align with the order of values in `ids`\n*   Use empty entries to skip\n*   Omit trailing commas after the last non-empty value\n\nExample:\n\n*   `ids=id1,id2,id3,id4,id5`\n*   Exchange ID passed for `id2` and `id4`\n*   `exchangeId=,EX$$$$XMEX,,EX$$$$XNAS`"
+                },
+                {
+                  "disabled": false,
+                  "key": "frequency",
+                  "value": "daily",
+                  "description": "Specifies the time interval between data points."
+                },
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<date>",
+                  "description": "Specifies the start date for the time series. Accepted format is `yyyy-MM-dd`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<date>",
+                  "description": "Specifies the end date for the time series. Accepted format is `yyyy-MM-dd`.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "timePeriod",
+                  "value": "<number>",
+                  "description": "Specifies the size of the time window for the data range. \n\n- Used in combination with `timePeriodUnit` to specify relative time ranges. \n\n- When `startDate`, `endDate`, `timePeriod` and `timePeriodUnit` are provided, `timePeriod` and `timePeriodUnit` take precedence."
+                },
+                {
+                  "disabled": false,
+                  "key": "timePeriodUnit",
+                  "value": "<string>",
+                  "description": "\nSpecifies the time period unit. \n\n- Used in combination with `timePeriod` to specify relative time ranges. \n\n- When `startDate`, `endDate`, `timePeriod` and `timePeriodUnit` are provided, `timePeriod` and `timePeriodUnit` take precedence."
+                },
+                {
+                  "disabled": false,
+                  "key": "applyEarliestCommonDate",
+                  "value": "false",
+                  "description": "\nSpecifies whether to apply the earliest common start date across all investments.\n\n When set to `true`, the start date of the time series is adjusted to match the latest inception date among the investments, ensuring all data points are aligned."
+                },
+                {
+                  "disabled": false,
+                  "key": "applyTrackRecordExtension",
+                  "value": "false",
+                  "description": "\nSpecifies whether to apply the Track Record Extension logic in order to extend the performance of an investment by copying the historical performance of another qualified older investment."
+                },
+                {
+                  "disabled": false,
+                  "key": "applyRestructureDate",
+                  "value": "false",
+                  "description": "\nSpecifies whether to consider the Morningstar or Custom restructure date when determining the start of the performance period.\n\nThis option is applicable only when `applyEarliestCommonDate` is set to true."
+                },
+                {
+                  "disabled": false,
+                  "key": "sinceInception",
+                  "value": "false",
+                  "description": "\nSets the time range from inception (or the maximum supported lookback) to the end date. \n\nTakes precendence over any `timePeriod` / `timePeriodUnit` and `startDate` / `endDate` settings."
+                },
+                {
+                  "disabled": false,
+                  "key": "currencyId",
+                  "value": "BASE",
+                  "description": "Specifies the currency in which to return data."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "ids",
+                  "description": "(Required) \nComma-separated list of up to 25 investment identifiers to query.\n\nAccepts:\n\n- Morningstar Performance ID (default)\n- Morningstar Security ID\n- Morningstar IDs (MSID)\n- ISIN\n- CUSIP\n- Trading symbol\n- Category ID   \n  Important: When a category ID is passed, the corresponding `identifierType` can be `performanceId` or `securityId`. The value must be URL-encoded. For example, if the category ID is `LC00002226;CA]FO`, the URL-encoded value is `LC00002226;CA%5DFO`."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0e734ece-e052-410e-8fd1-198452d02dce",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "time-series",
+                    "v1",
+                    "corporate-actions",
+                    "dividend-amount-history",
+                    ":ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "idTypes",
+                      "value": ",securityId"
+                    },
+                    {
+                      "key": "baseCurrency",
+                      "value": ",USD,,USD"
+                    },
+                    {
+                      "key": "domicile",
+                      "value": ",USD,,USD"
+                    },
+                    {
+                      "key": "exchangeCountry",
+                      "value": ",CAN,CAN"
+                    },
+                    {
+                      "key": "exchangeId",
+                      "value": "EX$$$$XMEX"
+                    },
+                    {
+                      "key": "frequency",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "2020-01-12"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2024-01-12"
+                    },
+                    {
+                      "key": "timePeriod",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "timePeriodUnit",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "applyEarliestCommonDate",
+                      "value": "false"
+                    },
+                    {
+                      "key": "applyTrackRecordExtension",
+                      "value": "false"
+                    },
+                    {
+                      "key": "applyRestructureDate",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sinceInception",
+                      "value": "false"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "BASE"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ids",
+                      "description": "(Required) \nComma-separated list of up to 25 investment identifiers to query.\n\nAccepts:\n\n- Morningstar Performance ID (default)\n- Morningstar Security ID\n- Morningstar IDs (MSID)\n- ISIN\n- CUSIP\n- Trading symbol\n- Category ID   \n  Important: When a category ID is passed, the corresponding `identifierType` can be `performanceId` or `securityId`. The value must be URL-encoded. For example, if the category ID is `LC00002226;CA]FO`, the URL-encoded value is `LC00002226;CA%5DFO`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"investments\": [\n    {\n      \"identifiers\": {\n        \"performanceId\": \"0P00002CI5\",\n        \"isin\": \"US2562191062\",\n        \"securityId\": \"FCUSA0000P\",\n        \"cusip\": \"string\",\n        \"sedol\": \"B4TT7L5\",\n        \"tradingSymbol\": \"MDLOX\"\n      },\n      \"timeSeries\": {\n        \"categories\": [\n          \"portfolio-holdings\",\n          \"reference\"\n        ],\n        \"dataPoint\": \"daily-price\",\n        \"performanceType\": \"total\",\n        \"data\": [\n          {\n            \"date\": \"2025-09-06\",\n            \"value\": 1.108\n          },\n          {\n            \"date\": \"2025-09-06\",\n            \"value\": 1.108\n          }\n        ]\n      },\n      \"metadata\": {\n        \"exchangeCountry\": \"GBR\",\n        \"domicile\": \"GBR\",\n        \"baseCurrency\": \"GBP\"\n      }\n    }\n  ],\n  \"metadata\": {\n    \"messages\": {\n      \"investments\": [\n        {\n          \"id\": \"0P000PPP6Q\",\n          \"idType\": \"performanceId\"\n        },\n        {\n          \"id\": \"0P000PPP6Q\",\n          \"idType\": \"performanceId\"\n        }\n      ],\n      \"type\": \"Warning\",\n      \"message\": \"Lookup : Invalid investments.\",\n      \"code\": \"404.common.125\"\n    },\n    \"requestId\": \"c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c\",\n    \"time\": \"2025-10-02T10:54:36.9161062Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9113dd1a-47ec-4992-970d-fc40d6a88988",
+              "name": "400",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "time-series",
+                    "v1",
+                    "corporate-actions",
+                    "dividend-amount-history",
+                    ":ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "idTypes",
+                      "value": ",securityId"
+                    },
+                    {
+                      "key": "baseCurrency",
+                      "value": ",USD,,USD"
+                    },
+                    {
+                      "key": "domicile",
+                      "value": ",USD,,USD"
+                    },
+                    {
+                      "key": "exchangeCountry",
+                      "value": ",CAN,CAN"
+                    },
+                    {
+                      "key": "exchangeId",
+                      "value": "EX$$$$XMEX"
+                    },
+                    {
+                      "key": "frequency",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "2020-01-12"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2024-01-12"
+                    },
+                    {
+                      "key": "timePeriod",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "timePeriodUnit",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "applyEarliestCommonDate",
+                      "value": "false"
+                    },
+                    {
+                      "key": "applyTrackRecordExtension",
+                      "value": "false"
+                    },
+                    {
+                      "key": "applyRestructureDate",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sinceInception",
+                      "value": "false"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "BASE"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ids",
+                      "description": "(Required) \nComma-separated list of up to 25 investment identifiers to query.\n\nAccepts:\n\n- Morningstar Performance ID (default)\n- Morningstar Security ID\n- Morningstar IDs (MSID)\n- ISIN\n- CUSIP\n- Trading symbol\n- Category ID   \n  Important: When a category ID is passed, the corresponding `identifierType` can be `performanceId` or `securityId`. The value must be URL-encoded. For example, if the category ID is `LC00002226;CA]FO`, the URL-encoded value is `LC00002226;CA%5DFO`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"errorCode\": \"400.investmentDetails.002\",\n  \"message\": \"Invalid date format. Expected format is yyyy-MM-d\",\n  \"requestId\": \"539d62a5-3586-4070-965e-0f7f64712d79\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d749204c-cf04-4726-b409-7833fb2d611a",
+              "name": "500",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "time-series",
+                    "v1",
+                    "corporate-actions",
+                    "dividend-amount-history",
+                    ":ids"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "idTypes",
+                      "value": ",securityId"
+                    },
+                    {
+                      "key": "baseCurrency",
+                      "value": ",USD,,USD"
+                    },
+                    {
+                      "key": "domicile",
+                      "value": ",USD,,USD"
+                    },
+                    {
+                      "key": "exchangeCountry",
+                      "value": ",CAN,CAN"
+                    },
+                    {
+                      "key": "exchangeId",
+                      "value": "EX$$$$XMEX"
+                    },
+                    {
+                      "key": "frequency",
+                      "value": "daily"
+                    },
+                    {
+                      "key": "startDate",
+                      "value": "2020-01-12"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2024-01-12"
+                    },
+                    {
+                      "key": "timePeriod",
+                      "value": "<number>"
+                    },
+                    {
+                      "key": "timePeriodUnit",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "applyEarliestCommonDate",
+                      "value": "false"
+                    },
+                    {
+                      "key": "applyTrackRecordExtension",
+                      "value": "false"
+                    },
+                    {
+                      "key": "applyRestructureDate",
+                      "value": "false"
+                    },
+                    {
+                      "key": "sinceInception",
+                      "value": "false"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "BASE"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "ids",
+                      "description": "(Required) \nComma-separated list of up to 25 investment identifiers to query.\n\nAccepts:\n\n- Morningstar Performance ID (default)\n- Morningstar Security ID\n- Morningstar IDs (MSID)\n- ISIN\n- CUSIP\n- Trading symbol\n- Category ID   \n  Important: When a category ID is passed, the corresponding `identifierType` can be `performanceId` or `securityId`. The value must be URL-encoded. For example, if the category ID is `LC00002226;CA]FO`, the URL-encoded value is `LC00002226;CA%5DFO`."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"errorCode\": \"500.investmentDetails.003\",\n  \"message\": \"Error calling Investment API.\",\n  \"requestId\": \"539d62a5-3586-4070-965e-0f7f64712d79\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "8bae3c1c-a64e-409c-95f6-40b952215465",
+    "name": "Authorization Tokens Accounts Corporate Actions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

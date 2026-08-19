@@ -1,0 +1,284 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Ownership - Regulatory Reporting API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Ownership - Regulatory Reporting",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Ownership Detail SEC and SEDAR view",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/investments/:id/equity-ownership-detail-sec-and-sedar",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+              },
+              {
+                "name": "idType",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the type of the value passed in the `id` parameter.\nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+              },
+              {
+                "name": "baseCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes."
+              },
+              {
+                "name": "domicile",
+                "value": "",
+                "type": "query",
+                "description": "Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "exchangeCountry",
+                "value": "",
+                "type": "query",
+                "description": "Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "exchangeId",
+                "value": "",
+                "type": "query",
+                "description": "Exchange identifier to use for investment lookup."
+              },
+              {
+                "name": "ownerTypeGroup",
+                "value": "",
+                "type": "query",
+                "description": "Filters results by owner type group.\n\n- `13GDCompany` - 13GD owners are not required to indicate when their ownership stake drops below 5% but must report when ownership changes more than 1% since the initial filing. Form 13GD are filed on the SEC by both the purchaser and the issuer of the security.\n- `13GDPerson` - U.S. specific, an individual who filed Schedule 13G because they own more than 5% of a company’s shares as a passive investor.\n- `13GDOwner` - U.S. specific, a generic category for any owner disclosed under Schedule 13G, regardless of whether they are a person or entity.\n\n- `13FCompany` - U.S. specific, though some shares may be held that are listed elsewhere. Shares held by U.S. institutional investment managers that manage over $100 million primarily in equities, shares of closed-end investment companies, and shares of exchange-traded funds. Their holdings are collected from 13-F filings filed with the SEC. 13F owners must file the number of shares held and fair market value of securities listed, as of the end of the most recent calendar quarter, per SEC requirements.\n- `ScheduleD` - Schedule D refers to ownership data collected from Schedule D announcements, primarily released by insurance companies in the U.S.\n- `MutualFund` - Collected globally. Shares held by individual funds. These are collected from the portfolio data provided for over 125,000 funds that feature equity holdings. The file includes the most recent fund holdings that are no longer subject to suppression.\n\n- `MutualFundAdvisor` - Ownership held by entities managing mutual funds.\n\n- `Person` - Individual ownership not tied to institutional or fund structures.\n- `Institution` - Broad category for institutional ownership not otherwise classified."
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Time series start date. Accepts `yyyy-MM-dd`."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Time series end date. Accepts `yyyy-MM-dd`."
+              },
+              {
+                "name": "viewType",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Time series data supported."
+        },
+        {
+          "info": {
+            "name": "Get Ownership Detail - UK Significant Shareholders view",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/investments/:id/equity-ownership-detail-uk-significant-shareholders",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+              },
+              {
+                "name": "idType",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the type of the value passed in the `id` parameter.\nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+              },
+              {
+                "name": "baseCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes."
+              },
+              {
+                "name": "domicile",
+                "value": "",
+                "type": "query",
+                "description": "Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "exchangeCountry",
+                "value": "",
+                "type": "query",
+                "description": "Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "exchangeId",
+                "value": "",
+                "type": "query",
+                "description": "Exchange identifier to use for investment lookup."
+              },
+              {
+                "name": "viewType",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Time series data supported."
+        },
+        {
+          "info": {
+            "name": "Get Ownership Regulatory Reporting view",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/investments/:id/equity-ownership-regulatory-reporting",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+              },
+              {
+                "name": "idType",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the type of the value passed in the `id` parameter.\nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+              },
+              {
+                "name": "baseCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes."
+              },
+              {
+                "name": "domicile",
+                "value": "",
+                "type": "query",
+                "description": "Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "exchangeCountry",
+                "value": "",
+                "type": "query",
+                "description": "Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "exchangeId",
+                "value": "",
+                "type": "query",
+                "description": "Exchange identifier to use for investment lookup."
+              },
+              {
+                "name": "ownerTypeGroup",
+                "value": "",
+                "type": "query",
+                "description": "Filters results by owner type group.\n\n- `13GDCompany` - 13GD owners are not required to indicate when their ownership stake drops below 5% but must report when ownership changes more than 1% since the initial filing. Form 13GD are filed on the SEC by both the purchaser and the issuer of the security.\n- `13GDPerson` - U.S. specific, an individual who filed Schedule 13G because they own more than 5% of a company’s shares as a passive investor.\n- `13GDOwner` - U.S. specific, a generic category for any owner disclosed under Schedule 13G, regardless of whether they are a person or entity.\n\n- `13FCompany` - U.S. specific, though some shares may be held that are listed elsewhere. Shares held by U.S. institutional investment managers that manage over $100 million primarily in equities, shares of closed-end investment companies, and shares of exchange-traded funds. Their holdings are collected from 13-F filings filed with the SEC. 13F owners must file the number of shares held and fair market value of securities listed, as of the end of the most recent calendar quarter, per SEC requirements.\n- `ScheduleD` - Schedule D refers to ownership data collected from Schedule D announcements, primarily released by insurance companies in the U.S.\n- `MutualFund` - Collected globally. Shares held by individual funds. These are collected from the portfolio data provided for over 125,000 funds that feature equity holdings. The file includes the most recent fund holdings that are no longer subject to suppression.\n\n- `MutualFundAdvisor` - Ownership held by entities managing mutual funds.\n\n- `Person` - Individual ownership not tied to institutional or fund structures.\n- `Institution` - Broad category for institutional ownership not otherwise classified."
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Time series start date. Accepts `yyyy-MM-dd`."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Time series end date. Accepts `yyyy-MM-dd`."
+              }
+            ]
+          },
+          "docs": "Time series data supported."
+        },
+        {
+          "info": {
+            "name": "Get UK Major Shareholder Transactions view",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/investments/:id/equity-uk-major-shareholder-transactions",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "\nSpecifies the investment to query. \nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+              },
+              {
+                "name": "idType",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the type of the value passed in the `id` parameter.\nMorningstar Performance ID is the default identifer for the API. Use the Universe API to retrieve Performance IDs for investments in your entitled universe."
+              },
+              {
+                "name": "baseCurrency",
+                "value": "",
+                "type": "query",
+                "description": "Base currency to use for investment lookup. Accepts 3‑character ISO 4217 currency codes."
+              },
+              {
+                "name": "domicile",
+                "value": "",
+                "type": "query",
+                "description": "Domicile to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "exchangeCountry",
+                "value": "",
+                "type": "query",
+                "description": "Exchange country to use for investment lookup. Accepts 3-character ISO 3166-1 country codes."
+              },
+              {
+                "name": "exchangeId",
+                "value": "",
+                "type": "query",
+                "description": "Exchange identifier to use for investment lookup."
+              },
+              {
+                "name": "startDate",
+                "value": "",
+                "type": "query",
+                "description": "Time series start date. Accepts `yyyy-MM-dd`."
+              },
+              {
+                "name": "endDate",
+                "value": "",
+                "type": "query",
+                "description": "Time series end date. Accepts `yyyy-MM-dd`."
+              },
+              {
+                "name": "viewType",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Time series data supported."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

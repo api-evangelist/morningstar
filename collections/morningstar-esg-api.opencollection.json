@@ -1,0 +1,71 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts esg API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "esg",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Calculate ESG performance",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/esg",
+            "params": [
+              {
+                "name": "langcult",
+                "value": "",
+                "type": "query",
+                "description": "Language and locale, for example, en-US"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calculate Environmental, Social and Governance (ESG) performance for the portfolios specified in the request body. The response will return portfolio sustainability scores and fund and company-level ESG data.</br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter."
+        },
+        {
+          "info": {
+            "name": "Calculate percentage of investments that can be classified under EU SFDR Article 8/9",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/esg/eusfdr",
+            "params": [
+              {
+                "name": "langcult",
+                "value": "",
+                "type": "query",
+                "description": "Language and locale, for example, en-US"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calculate what percentage of investments contained in the funds and portfolios specified in the request body can be classified under EU Sustainable Finance Disclosures Regulation (SFDR) Article 8/9.</br></br>The response returns the following information for funds:</br></br>- Which (if any) EU SFDRs article the fund can be classified under. </br>- Whether or not intentional attributes have been specified.</br></br>The response includes the following information for portfolios:</br></br>- Percent"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

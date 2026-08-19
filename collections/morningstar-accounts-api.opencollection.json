@@ -1,0 +1,63 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Accounts",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Request aggregation of accounts for an authenticated investor user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/accounts/aggregate",
+            "params": [
+              {
+                "name": "class",
+                "value": "",
+                "type": "query",
+                "description": "Class of an account. If no class is specified, then all types are returned. </br></br>List of one or more of the following classes of investor accounts: </br><span>&#8226;</span> **investment** which includes BAA account types prefixed with INVESTMENT_ and INSURANCE_  </br><span>&#8226;</span> **nonInvestment** which includes BAA account types CREDITCARD and all those prefixed with BANKING_, HEALTHACCOUNT_, and LOAN_</br><span>&#8226;</span> **other** which includes BAA account types:OTHER, UNKNOWN, and NULL"
+              }
+            ]
+          },
+          "docs": "Initiate demand aggregation  of accounts for the authenticated investor from a financial institution. Use the `class` parameter to restrict which accounts to aggregate by specifying one or more class values: investment, noninvestment, or other. </br></br>Aggregation gathers holdings and transactions for the accounts from associated Financial Institutions. It does not discover new accounts that are available to the user from those financial institutions. The request will not attempt to aggregate "
+        },
+        {
+          "info": {
+            "name": "Delete an account",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.us-api.morningstar.com/token/accounts/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of an account"
+              }
+            ]
+          },
+          "docs": "Delete the account identified by the `id` parameter. "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

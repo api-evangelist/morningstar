@@ -1,0 +1,126 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts company entitlements API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "company entitlements",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get company entitlements",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/company-entitlements",
+            "params": [
+              {
+                "name": "companyId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a company"
+              },
+              {
+                "name": "entitlementIds",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of entitlementIds"
+              }
+            ]
+          },
+          "docs": "Get company entitlements for the company specified in the `companyId` parameter or for the entitlementIds specified in the `entitlementIds` parameter"
+        },
+        {
+          "info": {
+            "name": "Create a company entitlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/company-entitlements",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a company entitlement for the company and namespaces specified in the request body. A namespace in an entitlement can be:\n\n * a complete namespace, e.g. `abc.opp.screener`, to give the companyId access to that namespace only\n * a partial namespace, e.g. `abc.opp`, to give the companyId access to all namespaces that begin with that prefix, e.g. `abc.opp.screener` and `abc.opp.xray`"
+        },
+        {
+          "info": {
+            "name": "Get a company entitlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/company-entitlements/:entitlementId",
+            "params": [
+              {
+                "name": "entitlementId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of an entitlement"
+              }
+            ]
+          },
+          "docs": "Get the company entitlement specified by the `entitlementId` parameter"
+        },
+        {
+          "info": {
+            "name": "Overwrite a company entitlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://www.us-api.morningstar.com/token/company-entitlements/:entitlementId",
+            "params": [
+              {
+                "name": "entitlementId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of an entitlement"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Overwrite the company entitlement specified by the `entitlementId` parameter. The namespaces listed in the request body will replace the current namespaces for this entitlement. The `companyId` for this entitlement will not be updated."
+        },
+        {
+          "info": {
+            "name": "Delete a company entitlement",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.us-api.morningstar.com/token/company-entitlements/:entitlementId",
+            "params": [
+              {
+                "name": "entitlementId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of an entitlement"
+              }
+            ]
+          },
+          "docs": "Delete the company entitlement specified by the `entitlementId` parameter."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

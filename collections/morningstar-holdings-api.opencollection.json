@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts holdings API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "holdings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get holdings for a portfolio",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/holdings",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "portfolioIds",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a portfolio. Multiple values must be comma-separated."
+              },
+              {
+                "name": "enddate",
+                "value": "",
+                "type": "query",
+                "description": "Return results with end date specified (yyyy-mm-dd, yyyymmdd or LastMonthEnd)."
+              }
+            ]
+          },
+          "docs": "Get holdings for the portfolio(s) specified in the `portfolioIds` parameter."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

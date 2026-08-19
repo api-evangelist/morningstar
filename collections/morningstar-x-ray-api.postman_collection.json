@@ -1,0 +1,340 @@
+{
+  "item": [
+    {
+      "id": "07170077-c01a-49e8-895e-e6f3b6dd44e1",
+      "name": "X-Ray",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fb92848b-6009-494d-a68e-e01188a91cde",
+          "name": "Generate portfolio x-ray",
+          "request": {
+            "name": "Generate portfolio x-ray",
+            "description": {
+              "content": "Generate an x-ray of the portfolio(s) specified in the request body. The response will return information about how the portfolio is diversified by region, sector and investment style.</br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "portfolioanalysis",
+                "v1",
+                "xray"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "langcult",
+                  "value": "en-US",
+                  "description": "(Required) Language and locale used for the response. Defaults to en-US."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Portfolios\": [\n    {\n      \"Currency\": \"<string>\",\n      \"Holdings\": [\n        {\n          \"SecurityId\": \"<string>\",\n          \"CUSIP\": \"<string>\",\n          \"ISIN\": \"<string>\",\n          \"PerformanceId\": \"<string>\",\n          \"TradingSymbol\": \"<string>\",\n          \"FundCode\": \"<string>\",\n          \"Weight\": \"<double>\",\n          \"Value\": \"<double>\",\n          \"AnnualFeeFrequency\": \"Monthly\",\n          \"AnnualFeePercent\": 0\n        }\n      ],\n      \"Name\": \"<string>\",\n      \"TotalValue\": \"<double>\",\n      \"Fees\": {\n        \"AnnualFeePercent\": 0,\n        \"AnnualFeeFrequency\": \"Monthly\"\n      },\n      \"IrrFees\": \"<double>\"\n    }\n  ],\n  \"RequestSettings\": {\n    \"OutputCurrency\": \"USD\",\n    \"AnalysisDateTimePeriod\": \"MonthEnd\",\n    \"AssetClassGroupConfigs\": {\n      \"AssetClassGroupConfig\": [\n        {\n          \"Id\": \"ACG-USBROAD\"\n        },\n        {\n          \"Id\": \"ACG-USBROAD\"\n        }\n      ]\n    },\n    \"DisableRescale\": false,\n    \"EnablePerformanceCommonEndDate\": false,\n    \"IncludeGrossNetReturns\": false,\n    \"IncludePortfolioInCorrelationMatrix\": false,\n    \"InitialValue\": 10000,\n    \"MaxCorrelationMatrixHoldingNumber\": 50,\n    \"PerformanceFrequency\": \"Monthly\",\n    \"PortfolioPerformanceStartDate\": \"EarliestCommon\",\n    \"PortfolioPerformanceEndDate\": \"<date>\",\n    \"PortfolioPerformanceCustomStartDate\": \"<date>\",\n    \"ReturnDataSections\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"RollingReturnFrequencies\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"RollingReturnStep\": 1,\n    \"SynchronizePortfolioStartDate\": false\n  },\n  \"View\": {\n    \"Id\": \"All\"\n  },\n  \"Config\": {\n    \"Id\": \"Default\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f0c98314-ce05-462b-ac07-122ba8e941b1",
+              "name": "200: OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "xray"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"XRay\": [\n    {\n      \"PortfolioName\": \"string\",\n      \"PerformanceDate\": {\n        \"EarliestCommonDate\": \"1976-03-29T05:05:39.524Z\",\n        \"EarliestAvailableDate\": \"1967-12-19T15:33:33.890Z\",\n        \"EarliestInceptionDate\": \"2013-12-07T05:41:26.886Z\",\n        \"EarliestCommonExtendedDate\": \"2009-12-18T17:44:40.231Z\"\n      },\n      \"AnalysisDate\": \"2014-12-19T17:48:26.841Z\",\n      \"ReturnMethodology\": \"QuickPortfolio\",\n      \"Analysis\": {\n        \"AssetAllocation\": [\n          {\n            \"Id\": \"string\",\n            \"AsOfDate\": \"1995-07-09T04:52:06.698Z\",\n            \"PortfolioAnalyzed\": 7151.953493973815,\n            \"Portfolio\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Benchmark\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"SecurityBreakdown\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"Id\": \"string\",\n            \"AsOfDate\": \"1974-06-15T18:08:00.436Z\",\n            \"PortfolioAnalyzed\": 9773.033535414454,\n            \"Portfolio\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Benchmark\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"SecurityBreakdown\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ],\n        \"EquityAnalysis\": {\n          \"AsOfDate\": \"1963-01-08T14:35:16.427Z\",\n          \"EquitySectors\": {\n            \"EquitySector\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"WorldRegions\": {\n            \"Id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PortfolioAnalyzed\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"EquityMarketMaturity\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"EquityTypeBreakdown\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PortfolioAnalyzed\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"PriceRatios\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Profitability\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"GeometricAverageCapitalization\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"FixedIncomeAnalysis\": {\n          \"AsOfDate\": \"1988-08-16T18:25:27.843Z\",\n          \"FixedIncomeSectors\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"FixedIncomeMaturity\": {\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"CreditQuality\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"InterestRateRisk\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"InvestmentStyle\": {\n          \"AsOfDate\": \"1946-12-20T17:53:48.592Z\",\n          \"FixedIncomeStyle\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PortfolioAnalyzed\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"FixedIncomeStyleBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"EquityStyle\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PortfolioAnalyzed\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"EquityStyleBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"Holdings\": {\n        \"AsOfDate\": \"2003-03-25T23:35:11.392Z\",\n        \"RegionAnalysis\": {\n          \"US\": 2282,\n          \"NotClassified\": 4074,\n          \"Foreign\": 5914,\n          \"Cash\": 4822\n        },\n        \"TopNetUnderlyingHoldings\": {\n          \"AsOfDate\": \"1990-10-25T12:24:26.630Z\",\n          \"TopNumber\": 4290,\n          \"Security\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"PortfolioHoldings\": {\n          \"AsOfDate\": \"1964-10-01T09:52:10.315Z\",\n          \"Security\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"StockIntersection\": {\n          \"IncludeIndex\": false,\n          \"Stock\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"ConcentrationRatio\": {\n            \"TopStocksPercent\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"OtherStocksPercent\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"TopNumberOfStocks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"Statistics\": {\n        \"PortfolioSummary\": {\n          \"PortfolioValue\": 2740.6065777335843,\n          \"Currency\": \"JPY\",\n          \"PortfolioDate\": \"1958-01-24T19:27:07.459Z\",\n          \"EquityCount\": 2829,\n          \"FixedIncomeCount\": 3813,\n          \"SECYield\": 7822.035766990099,\n          \"PortfolioYield\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"FundStatistics\": {\n          \"AsOfDate\": \"2018-01-11T17:05:07.764Z\",\n          \"PortfolioAnalyzed\": 6199.557304766371,\n          \"Portfolio\": {\n            \"AverageNetExpenseRatio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"AverageGrossExpenseRatio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PotentialCapGainsExposure\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"AverageManagementExpenseRatio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"AverageManagementFee\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"EstimatedMutualFundExpensesAmount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"SecurityBreakdown\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      \"PortfolioBenchmark\": {\n        \"Type\": \"Custom\",\n        \"Holdings\": [\n          {\n            \"SecurityId\": \"string\",\n            \"Weight\": 199.7230784275772\n          },\n          {\n            \"SecurityId\": \"string\",\n            \"Weight\": 4393.921401791257\n          }\n        ]\n      },\n      \"Returns\": {\n        \"TrailingReturns\": {\n          \"AsOfDate\": \"2010-09-25T18:43:58.847Z\",\n          \"Portfolio\": {\n            \"TimePeriod\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Benchmark\": {\n            \"TimePeriod\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"CalendarYearReturn\": {\n          \"AsOfDate\": \"2013-01-04T15:07:58.725Z\",\n          \"Portfolio\": {\n            \"CalendarYear\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Benchmark\": {\n            \"CalendarYear\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"RollingReturns\": {\n          \"RollingReturn\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"AsOfDate\": \"1993-10-01T15:15:49.565Z\"\n        },\n        \"InvestmentActivity\": {\n          \"DataFrequency\": \"Monthly\",\n          \"Portfolio\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"Benchmark\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"SecurityReturns\": {\n          \"AsOfDate\": \"1967-10-18T17:44:29.268Z\",\n          \"StandardizedAndTaxAdjustedReturns\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Security\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"SecurityFees\": {\n        \"AsOfDate\": \"1989-01-08T17:58:10.707Z\",\n        \"Security\": [\n          {\n            \"SecurityId\": \"string\",\n            \"FrontLoadFee\": 3720.328095448201,\n            \"DeferredLoadFee\": 3675.563256849934,\n            \"ManagementFees\": 4138.903960110345,\n            \"Expense12b1\": 9905.813505511494,\n            \"GrossExpenseRatio\": 8424.589084293892\n          },\n          {\n            \"SecurityId\": \"string\",\n            \"FrontLoadFee\": 4631.225392909811,\n            \"DeferredLoadFee\": 9105.78022802411,\n            \"ManagementFees\": 624.0808829845668,\n            \"Expense12b1\": 4489.071230976074,\n            \"GrossExpenseRatio\": 5782.98446808594\n          }\n        ]\n      },\n      \"Risks\": {\n        \"RiskStatistics\": [\n          {\n            \"AsOfDate\": \"1995-05-08T18:39:51.693Z\",\n            \"TrailingTimePeriod\": \"Year5\",\n            \"DataFrequency\": \"Quarterly\",\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Security\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"AsOfDate\": \"1972-05-01T11:52:57.627Z\",\n            \"TrailingTimePeriod\": \"Year1\",\n            \"DataFrequency\": \"Monthly\",\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Security\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ],\n        \"MPTStatistics\": [\n          {\n            \"AsOfDate\": \"1977-04-03T23:34:08.680Z\",\n            \"TrailingTimePeriod\": \"Year1\",\n            \"DataFrequency\": \"Monthly\",\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"AsOfDate\": \"2012-01-20T21:02:57.393Z\",\n            \"TrailingTimePeriod\": \"Year10\",\n            \"DataFrequency\": \"Quarterly\",\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"CorrelationMatrix\": [\n          {\n            \"TrailingTimePeriod\": \"Year3\",\n            \"DataFrequency\": \"Monthly\",\n            \"StartDate\": \"2010-01-25T08:25:08.089Z\",\n            \"EndDate\": \"1973-04-01T06:50:06.528Z\",\n            \"Correlations\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"TrailingTimePeriod\": \"Year5\",\n            \"DataFrequency\": \"Monthly\",\n            \"StartDate\": \"1991-05-23T21:14:58.570Z\",\n            \"EndDate\": \"2016-05-23T02:40:40.639Z\",\n            \"Correlations\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ],\n        \"Drawdown\": {\n          \"AsOfDate\": \"1982-05-30T18:12:49.553Z\",\n          \"Portfolio\": {\n            \"PortfolioDrawdownItem\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"TimePeriods\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"CalendarYear\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"CaptureRatio\": {\n          \"AsOfDate\": \"2017-03-29T20:40:09.723Z\",\n          \"Portfolio\": {\n            \"Downside\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Upside\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"Ownership\": {\n        \"AsOfDate\": \"1952-08-11T20:07:52.050Z\",\n        \"Zones\": [\n          {\n            \"SecurityId\": \"string\",\n            \"SizeScore\": 1019.678043349932,\n            \"StyleScore\": 1783.8984710601092,\n            \"SizeVariance\": 1331.0508702988832,\n            \"StyleVariance\": 5347.093529852362,\n            \"Rho\": 8043.998349489816,\n            \"ZonePercentile\": 2597.302909738725\n          },\n          {\n            \"SecurityId\": \"string\",\n            \"SizeScore\": 4883.723604485649,\n            \"StyleScore\": 6525.856376643445,\n            \"SizeVariance\": 9689.206508759764,\n            \"StyleVariance\": 8883.71369976013,\n            \"Rho\": 2108.962681101405,\n            \"ZonePercentile\": 7584.901616483289\n          }\n        ]\n      },\n      \"FinraHeader\": {\n        \"Message\": \"string\"\n      }\n    },\n    {\n      \"PortfolioName\": \"string\",\n      \"PerformanceDate\": {\n        \"EarliestCommonDate\": \"2021-04-17T08:40:32.823Z\",\n        \"EarliestAvailableDate\": \"1995-09-13T22:50:59.248Z\",\n        \"EarliestInceptionDate\": \"2005-06-04T04:45:33.658Z\",\n        \"EarliestCommonExtendedDate\": \"1958-11-19T02:46:17.084Z\"\n      },\n      \"AnalysisDate\": \"1995-01-31T18:05:04.224Z\",\n      \"ReturnMethodology\": \"QuickPortfolio\",\n      \"Analysis\": {\n        \"AssetAllocation\": [\n          {\n            \"Id\": \"string\",\n            \"AsOfDate\": \"1970-11-24T09:39:28.925Z\",\n            \"PortfolioAnalyzed\": 8922.990085754489,\n            \"Portfolio\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Benchmark\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"SecurityBreakdown\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"Id\": \"string\",\n            \"AsOfDate\": \"1966-07-26T23:25:25.511Z\",\n            \"PortfolioAnalyzed\": 3022.5489172810026,\n            \"Portfolio\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"Benchmark\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"SecurityBreakdown\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ],\n        \"EquityAnalysis\": {\n          \"AsOfDate\": \"2003-04-11T02:50:47.659Z\",\n          \"EquitySectors\": {\n            \"EquitySector\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"WorldRegions\": {\n            \"Id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PortfolioAnalyzed\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"EquityMarketMaturity\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"EquityTypeBreakdown\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PortfolioAnalyzed\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"PriceRatios\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Profitability\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"GeometricAverageCapitalization\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"FixedIncomeAnalysis\": {\n          \"AsOfDate\": \"1976-12-18T00:29:46.103Z\",\n          \"FixedIncomeSectors\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"FixedIncomeMaturity\": {\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"CreditQuality\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"InterestRateRisk\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"InvestmentStyle\": {\n          \"AsOfDate\": \"1955-02-04T14:45:35.135Z\",\n          \"FixedIncomeStyle\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PortfolioAnalyzed\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"FixedIncomeStyleBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"EquityStyle\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PortfolioAnalyzed\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"EquityStyleBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"SecurityBreakdown\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"Holdings\": {\n        \"AsOfDate\": \"2001-12-30T15:49:46.100Z\",\n        \"RegionAnalysis\": {\n          \"US\": 1840,\n          \"NotClassified\": 9712,\n          \"Foreign\": 5054,\n          \"Cash\": 4616\n        },\n        \"TopNetUnderlyingHoldings\": {\n          \"AsOfDate\": \"1950-02-17T11:04:02.655Z\",\n          \"TopNumber\": 6487,\n          \"Security\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"PortfolioHoldings\": {\n          \"AsOfDate\": \"1950-06-24T10:41:44.386Z\",\n          \"Security\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"StockIntersection\": {\n          \"IncludeIndex\": false,\n          \"Stock\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"ConcentrationRatio\": {\n            \"TopStocksPercent\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"OtherStocksPercent\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"TopNumberOfStocks\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"Statistics\": {\n        \"PortfolioSummary\": {\n          \"PortfolioValue\": 3337.550855860576,\n          \"Currency\": \"ZAR\",\n          \"PortfolioDate\": \"2021-10-16T10:55:45.379Z\",\n          \"EquityCount\": 4087,\n          \"FixedIncomeCount\": 4993,\n          \"SECYield\": 450.70736815097877,\n          \"PortfolioYield\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"FundStatistics\": {\n          \"AsOfDate\": \"1977-09-20T00:33:09.172Z\",\n          \"PortfolioAnalyzed\": 6852.982613417449,\n          \"Portfolio\": {\n            \"AverageNetExpenseRatio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"AverageGrossExpenseRatio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"PotentialCapGainsExposure\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"AverageManagementExpenseRatio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"AverageManagementFee\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"EstimatedMutualFundExpensesAmount\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"SecurityBreakdown\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      \"PortfolioBenchmark\": {\n        \"Type\": \"AutoAsset\",\n        \"Holdings\": [\n          {\n            \"SecurityId\": \"string\",\n            \"Weight\": 5148.262383507555\n          },\n          {\n            \"SecurityId\": \"string\",\n            \"Weight\": 2448.9704557992795\n          }\n        ]\n      },\n      \"Returns\": {\n        \"TrailingReturns\": {\n          \"AsOfDate\": \"1995-09-18T01:34:41.744Z\",\n          \"Portfolio\": {\n            \"TimePeriod\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Benchmark\": {\n            \"TimePeriod\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"CalendarYearReturn\": {\n          \"AsOfDate\": \"2004-05-21T16:08:57.352Z\",\n          \"Portfolio\": {\n            \"CalendarYear\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"Benchmark\": {\n            \"CalendarYear\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"RollingReturns\": {\n          \"RollingReturn\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"AsOfDate\": \"2018-10-20T08:11:00.144Z\"\n        },\n        \"InvestmentActivity\": {\n          \"DataFrequency\": \"Monthly\",\n          \"Portfolio\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"Benchmark\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        },\n        \"SecurityReturns\": {\n          \"AsOfDate\": \"1953-08-10T20:53:12.554Z\",\n          \"StandardizedAndTaxAdjustedReturns\": {\n            \"AsOfDate\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Security\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"SecurityFees\": {\n        \"AsOfDate\": \"1988-06-20T19:18:27.624Z\",\n        \"Security\": [\n          {\n            \"SecurityId\": \"string\",\n            \"FrontLoadFee\": 3347.9057087597607,\n            \"DeferredLoadFee\": 873.1581418807599,\n            \"ManagementFees\": 5289.008433508947,\n            \"Expense12b1\": 1812.8032554624585,\n            \"GrossExpenseRatio\": 3690.4503769395924\n          },\n          {\n            \"SecurityId\": \"string\",\n            \"FrontLoadFee\": 9343.593097103512,\n            \"DeferredLoadFee\": 909.3301915469176,\n            \"ManagementFees\": 8543.01744743641,\n            \"Expense12b1\": 4297.259024911301,\n            \"GrossExpenseRatio\": 367.05947930091963\n          }\n        ]\n      },\n      \"Risks\": {\n        \"RiskStatistics\": [\n          {\n            \"AsOfDate\": \"1982-12-22T12:21:09.852Z\",\n            \"TrailingTimePeriod\": \"Year1\",\n            \"DataFrequency\": \"Monthly\",\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Security\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"AsOfDate\": \"1984-06-27T07:19:19.049Z\",\n            \"TrailingTimePeriod\": \"Year10\",\n            \"DataFrequency\": \"Quarterly\",\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Benchmark\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Security\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ],\n        \"MPTStatistics\": [\n          {\n            \"AsOfDate\": \"1988-06-04T04:32:13.268Z\",\n            \"TrailingTimePeriod\": \"Year5\",\n            \"DataFrequency\": \"Monthly\",\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"AsOfDate\": \"1985-05-29T11:38:08.141Z\",\n            \"TrailingTimePeriod\": \"Year1\",\n            \"DataFrequency\": \"Quarterly\",\n            \"Portfolio\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"CorrelationMatrix\": [\n          {\n            \"TrailingTimePeriod\": \"Year3\",\n            \"DataFrequency\": \"Monthly\",\n            \"StartDate\": \"1956-12-06T05:05:21.683Z\",\n            \"EndDate\": \"2008-06-26T12:38:38.233Z\",\n            \"Correlations\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          },\n          {\n            \"TrailingTimePeriod\": \"Year3\",\n            \"DataFrequency\": \"Monthly\",\n            \"StartDate\": \"1989-04-29T01:27:37.543Z\",\n            \"EndDate\": \"1988-08-13T21:45:41.858Z\",\n            \"Correlations\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ]\n          }\n        ],\n        \"Drawdown\": {\n          \"AsOfDate\": \"2024-07-28T13:54:24.187Z\",\n          \"Portfolio\": {\n            \"PortfolioDrawdownItem\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"TimePeriods\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"CalendarYear\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"CaptureRatio\": {\n          \"AsOfDate\": \"1963-03-26T18:46:02.476Z\",\n          \"Portfolio\": {\n            \"Downside\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"Upside\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      },\n      \"Ownership\": {\n        \"AsOfDate\": \"2015-02-01T05:53:27.543Z\",\n        \"Zones\": [\n          {\n            \"SecurityId\": \"string\",\n            \"SizeScore\": 838.7160294926621,\n            \"StyleScore\": 9585.599376021828,\n            \"SizeVariance\": 4014.3873202160376,\n            \"StyleVariance\": 6053.170136117748,\n            \"Rho\": 5832.535569796723,\n            \"ZonePercentile\": 6963.556527725864\n          },\n          {\n            \"SecurityId\": \"string\",\n            \"SizeScore\": 8175.459540521325,\n            \"StyleScore\": 378.6059215902149,\n            \"SizeVariance\": 7353.66961673694,\n            \"StyleVariance\": 246.8166888015222,\n            \"Rho\": 6916.67186492473,\n            \"ZonePercentile\": 7368.806708359856\n          }\n        ]\n      },\n      \"FinraHeader\": {\n        \"Message\": \"string\"\n      }\n    }\n  ],\n  \"SecurityReference\": [\n    {\n      \"SecurityId\": \"string\",\n      \"CUSIP\": \"string\",\n      \"ISIN\": \"string\",\n      \"FundCode\": \"string\",\n      \"Name\": \"string\",\n      \"TradingSymbol\": \"string\",\n      \"PerformanceId\": \"string\",\n      \"BaseCurrency\": \"VUV\",\n      \"Type\": \"MO\",\n      \"InceptionDate\": \"2000-03-04T03:50:18.747Z\",\n      \"ObsoleteType\": \"string\",\n      \"ObsoleteDate\": \"2010-10-02T23:36:14.906Z\",\n      \"SecurityReferenceTypes\": [\n        \"PortfolioHolding\",\n        \"InactiveSecurity\"\n      ],\n      \"Value\": 4066.756963335956,\n      \"NotClassifiedHoldingId\": \"string\",\n      \"Weight\": 4149.017358836298\n    },\n    {\n      \"SecurityId\": \"string\",\n      \"CUSIP\": \"string\",\n      \"ISIN\": \"string\",\n      \"FundCode\": \"string\",\n      \"Name\": \"string\",\n      \"TradingSymbol\": \"string\",\n      \"PerformanceId\": \"string\",\n      \"BaseCurrency\": \"KRW\",\n      \"Type\": \"CIT\",\n      \"InceptionDate\": \"2025-02-01T21:03:27.695Z\",\n      \"ObsoleteType\": \"string\",\n      \"ObsoleteDate\": \"2010-05-01T23:41:30.380Z\",\n      \"SecurityReferenceTypes\": [\n        \"DisclosureIndex\",\n        \"NotEntitled\"\n      ],\n      \"Value\": 1124.4796909831268,\n      \"NotClassifiedHoldingId\": \"string\",\n      \"Weight\": 9363.206379200039\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33029fa0-29e4-4a64-b050-99d0cbb0182e",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "xray"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "\"{\\\"Message\\\": \\\"The request is invalid.\\\",\\\"SpecificErrorStatus\\\": [    {\\\"ErrorCode\\\": \\\"40015\\\",\\\"ErrorMessage\\\": \\\"Portfolio does not have any valid holdings. Invalid portfolio name: TestPortfolio1. Invalid Holdings: TradingSymbol:DODGX1.\\\"}]}\"",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1bd8594-92db-42ee-a3e6-a9ec8ec4b7ed",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "xray"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "21131130-1af7-4304-b9eb-7fe3876648ac",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "xray"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5f074572-7f2e-4840-a7e2-e3d6b5d7733b",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "xray"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e6b8f0f8-19e8-456f-8aa4-77b0e9591c42",
+    "name": "Authorization Tokens Accounts X-Ray API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

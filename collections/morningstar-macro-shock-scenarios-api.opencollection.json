@@ -1,0 +1,92 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts macro shock scenarios API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "macro shock scenarios",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all custom macro shock scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/macro-shock-scenarios",
+            "params": [
+              {
+                "name": "is-new",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a new scenario"
+              }
+            ]
+          },
+          "docs": "Get a list of all your custom macro shock scenarios, as well as custom scenarios that have been shared with you. The response will include the unique ID for each scenario.  You use the ID with other endpoints to return information based on that scenario."
+        },
+        {
+          "info": {
+            "name": "Get details for a custom macro shock scenario",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/macro-shock-scenarios/:scenario_id",
+            "params": [
+              {
+                "name": "scenario_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a scenario"
+              },
+              {
+                "name": "risk-model-id",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a risk model"
+              }
+            ]
+          },
+          "docs": "Get details for a specific custom macro shock scenario. The response will return the scenario name, macrvariables, and shocked scale values."
+        },
+        {
+          "info": {
+            "name": "Calculate returns forecast for a fund based on a custom macro shock scenario",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/macro-shock-scenarios/:scenario_id/calculate-forecast-return",
+            "params": [
+              {
+                "name": "scenario_id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a scenario"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a specific risk model and custom macro shock scenario, calculate returns forecast for a fund. The response will include data for the historical returns, return during and after shock, and expected volatility."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

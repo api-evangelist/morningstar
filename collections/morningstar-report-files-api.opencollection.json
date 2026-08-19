@@ -1,0 +1,70 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts report files API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "report files",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Download a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/report-files/:reportId",
+            "params": [
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a report"
+              }
+            ]
+          },
+          "docs": "Download the report file specified in the `reportId` parameter. </br></br> `reportId` can be retrieved by using the [Report Retrieval API](/apis/financial-planning/report-retrieval-us)."
+        },
+        {
+          "info": {
+            "name": "Upload a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/report-files",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "bucketId",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "fileName",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Upload a report file. If a `bucketId` is not specified in the request body, the file will be uploaded to the root bucket."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

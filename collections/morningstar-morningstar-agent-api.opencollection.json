@@ -1,0 +1,97 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Morningstar Agent API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Morningstar Agent",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/morningstar-agent/v1/status"
+          },
+          "docs": "Status"
+        },
+        {
+          "info": {
+            "name": "Ready",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/morningstar-agent/v1/ready"
+          },
+          "docs": "Ready"
+        },
+        {
+          "info": {
+            "name": "Run",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/morningstar-agent/v1/run",
+            "headers": [
+              {
+                "name": "x-session-id",
+                "value": ""
+              },
+              {
+                "name": "x-context-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Run the agent and return the final response (blocking)."
+        },
+        {
+          "info": {
+            "name": "Run Stream",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/morningstar-agent/v1/run/stream",
+            "headers": [
+              {
+                "name": "x-session-id",
+                "value": ""
+              },
+              {
+                "name": "x-context-id",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Run the agent and stream tokens back as SSE."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

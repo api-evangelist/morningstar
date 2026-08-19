@@ -1,0 +1,167 @@
+{
+  "item": [
+    {
+      "id": "0c5fc7d4-ad0f-49b5-aeab-c75a3f14f784",
+      "name": "profiles",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "839c749b-5c0f-4d69-b81e-3b1f37c9dfa7",
+          "name": "Get household profiles",
+          "request": {
+            "name": "Get household profiles",
+            "description": {
+              "content": "Get household profiles for an advisor. To limit the number of records returned in the response, use the `limit` parameter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "profiles"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Limit number of records returned. Default is 100 or 500."
+                },
+                {
+                  "disabled": false,
+                  "key": "skip",
+                  "value": "<integer>",
+                  "description": "Number of results to skip"
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "<boolean>",
+                  "description": "Return the total count of profiles. Default is `false`."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) Unique API key of a client",
+                "key": "x-api-key",
+                "value": "<string>"
+              },
+              {
+                "key": "Accept",
+                "value": "*/*"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "69f704ee-c0d9-482f-8d04-3a454ad62e1c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "profiles"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "skip",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "count",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) Unique API key of a client",
+                    "key": "x-api-key",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "*/*"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "*/*"
+                }
+              ],
+              "body": "{\n  \"_meta\": {\n    \"hint\": \"string\",\n    \"response_status\": \"string\"\n  },\n  \"households\": [\n    {\n      \"active\": false,\n      \"clientType\": {\n        \"code\": 7838,\n        \"name\": \"string\"\n      },\n      \"householdId\": \"string\",\n      \"householdType\": \"group\",\n      \"name\": \"string\",\n      \"ownerId\": \"string\",\n      \"ownerName\": \"string\",\n      \"permission\": {\n        \"code\": 5824,\n        \"name\": \"string\"\n      },\n      \"views\": {\n        \"key_0\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        },\n        \"key_1\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\",\n          \"key_2\": \"string\"\n        }\n      }\n    },\n    {\n      \"active\": false,\n      \"clientType\": {\n        \"code\": 7989,\n        \"name\": \"string\"\n      },\n      \"householdId\": \"string\",\n      \"householdType\": \"prospect\",\n      \"name\": \"string\",\n      \"ownerId\": \"string\",\n      \"ownerName\": \"string\",\n      \"permission\": {\n        \"code\": 5735,\n        \"name\": \"string\"\n      },\n      \"views\": {\n        \"key_0\": {\n          \"key_0\": \"string\",\n          \"key_1\": \"string\"\n        }\n      }\n    }\n  ],\n  \"pagination\": {\n    \"count\": 4143,\n    \"limit\": 465,\n    \"skip\": 3241\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1a1e4068-440a-4c9d-b484-71dd44e5532e",
+    "name": "Authorization Tokens Accounts profiles API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

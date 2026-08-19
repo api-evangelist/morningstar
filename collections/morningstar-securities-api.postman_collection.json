@@ -1,0 +1,1362 @@
+{
+  "item": [
+    {
+      "id": "7f45d14d-e1a0-4f03-9518-87d18a7ba712",
+      "name": "securities",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1f322c85-2ebd-4a1a-971f-2d5bc1962fa7",
+          "name": "Get information for the security specified",
+          "request": {
+            "name": "Get information for the security specified",
+            "description": {
+              "content": "Information returned depends on the view specifed in the request.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "securities",
+                ":securityId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "viewId",
+                  "value": "<string>",
+                  "description": "(Required) View ID"
+                },
+                {
+                  "disabled": false,
+                  "key": "idType",
+                  "value": "msid",
+                  "description": "Security ID type"
+                },
+                {
+                  "disabled": false,
+                  "key": "languageId",
+                  "value": "<string>",
+                  "description": "Language ID - ISO 639-1"
+                },
+                {
+                  "disabled": false,
+                  "key": "currencyId",
+                  "value": "<string>",
+                  "description": "Currency ID - ISO 4217 alphabetic code"
+                },
+                {
+                  "disabled": false,
+                  "key": "responseViewFormat",
+                  "value": "<string>",
+                  "description": "Response view format - xml / json"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "securityId",
+                  "description": "(Required) Security ID"
+                }
+              ]
+            },
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5aa4b745-8007-47b5-b621-e5da0ea76042",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":securityId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "viewId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "idType",
+                      "value": "msid"
+                    },
+                    {
+                      "key": "languageId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "responseViewFormat",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "securityId",
+                      "description": "(Required) Security ID"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c2c54e62-2224-4d18-a7b9-595723e0f35e",
+          "name": "Get securities data",
+          "request": {
+            "name": "Get securities data",
+            "description": {
+              "content": "Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used  in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted.  The value(s) entered appear as the first data point in the output for each security. </br></br> Use the `dataPoints` parameter to specify the data returned in the response. You can enter  a data point ID or the corresponding short ID.  You can only specify data points your configuration is enabled for. </br></br>To override the default value in the Accept-Language HTTP header, use the `langCult` parameter. You can also define the currency of the data returned. Only one currency can be specified. </br></br>This call works with the `POST /securities/{secIds}` call to create and fetch the data.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "securities",
+                ":secIds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "universeIds",
+                  "value": "FOUSA|FEUSA|FCUSA",
+                  "description": "Unique five-letter identifier created by combining a two-letter Investment Type code and three-letter country code.</br> Multiple entries must be pipe-separated '|'."
+                },
+                {
+                  "disabled": false,
+                  "key": "langCult",
+                  "value": "en-US",
+                  "description": "Language and locale, for example, en-US"
+                },
+                {
+                  "disabled": false,
+                  "key": "dataPoints",
+                  "value": "n|t",
+                  "description": "Unique identifier of a data point. Can be data point ID or short ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "currencyId",
+                  "value": "USD",
+                  "description": "ISO 4217 currency code, for example 'USD'"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "FOUSA06N2B|FEUSA04ABV",
+                  "key": "secIds",
+                  "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ba2f150a-f9b3-449b-b1b1-d68a0af2cf40",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"secIds\": \"string\",\n  \"universeIds\": \"string\",\n  \"dataPoints\": \"string\",\n  \"languageId\": \"string\",\n  \"currencyId\": \"string\",\n  \"assetAllocationType\": \"string\",\n  \"customBenchmark\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "110979a9-7ad3-4dfb-a9f0-0c410d4862f6",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4dd8bc29-4b50-4858-a8c1-3ad2972fd4fd",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e92b3fa9-0334-4e0b-b442-f59b76c0becd",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7caa9203-4c1a-4a16-9ee3-cbda6eb61301",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "728a7315-be48-4677-a8cc-e0b979302c04",
+          "name": "Create securities data",
+          "request": {
+            "name": "Create securities data",
+            "description": {
+              "content": "Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used  in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted.  The value(s) entered appear as the first data point in the output for each security.  </br></br>Use the`dataPoints` parameter to specify the data returned in the response. You can enter  a data point ID or the corresponding short ID.  You can only specify data points your configuration is enabled for. </br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter. You can also define the currency of the data returned. Only one currency can be specified. </br></br>This call works with the `GET /securities/{secIds}` call to create and fetch the data..",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "securities",
+                ":secIds"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "universeIds",
+                  "value": "FOUSA|FEUSA|FCUSA",
+                  "description": "Unique five-letter identifier created by combining a two-letter Investment Type code and three-letter country code.</br>Multiple entries must be pipe-separated '|'."
+                },
+                {
+                  "disabled": false,
+                  "key": "langCult",
+                  "value": "en-US",
+                  "description": "Language and locale, for example, en-US"
+                },
+                {
+                  "disabled": false,
+                  "key": "dataPoints",
+                  "value": "n|t",
+                  "description": "Unique identifier of a data point. Can be data point ID or short ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "currencyId",
+                  "value": "USD",
+                  "description": "ISO 4217 currency code, for example, 'USD'"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "FOUSA06N2B|FEUSA04ABV",
+                  "key": "secIds",
+                  "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "dataPoints",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "securityIds",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cd17ffd9-bf4b-4409-b9fe-0dbacd721154",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "dataPoints",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "securityIds",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"secIds\": \"string\",\n  \"universeIds\": \"string\",\n  \"dataPoints\": \"string\",\n  \"languageId\": \"string\",\n  \"currencyId\": \"string\",\n  \"assetAllocationType\": \"string\",\n  \"customBenchmark\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bfd08b8-1d5a-4ff4-83f5-c830f5afbc0a",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "dataPoints",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "securityIds",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e14d190d-0b57-421c-af13-c2afed8d679a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "dataPoints",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "securityIds",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "827e29d4-1bae-4fdc-88fe-b7f1ea1f440c",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "dataPoints",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "securityIds",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1e8bc521-3422-4339-91d6-5ebaf4a5ffdb",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universeIds",
+                      "value": "FOUSA|FEUSA|FCUSA"
+                    },
+                    {
+                      "key": "langCult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "dataPoints",
+                      "value": "n|t"
+                    },
+                    {
+                      "key": "currencyId",
+                      "value": "USD"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "FOUSA06N2B|FEUSA04ABV",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "dataPoints",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "securityIds",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b4c7b940-e504-4a3b-801f-f995bc4e80b0",
+          "name": "Get benefits data for variable annuity subaccounts",
+          "request": {
+            "name": "Get benefits data for variable annuity subaccounts",
+            "description": {
+              "content": "Get benefits data for variable annunity subaccounts for the securities specified in the `secIds` paramter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "securities",
+                ":secIds",
+                "vabenefits"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "VAUSA0N0XD",
+                  "key": "secIds",
+                  "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7f994148-7f2c-440c-9155-71255a0d05ae",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds",
+                    "vabenefits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "VAUSA0N0XD",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"secIds\": \"string\",\n  \"universeIds\": \"string\",\n  \"dataPoints\": \"string\",\n  \"languageId\": \"string\",\n  \"currencyId\": \"string\",\n  \"assetAllocationType\": \"string\",\n  \"customBenchmark\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ea3013c4-d8e9-4d24-bba4-e4fd1ee91a11",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds",
+                    "vabenefits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "VAUSA0N0XD",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "36955ba4-5a26-4d31-b5f9-d1692627cfe4",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds",
+                    "vabenefits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "VAUSA0N0XD",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9fa9ef1c-88cc-49c6-8bf9-1c8cff1b0dd9",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds",
+                    "vabenefits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "VAUSA0N0XD",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ae3a7ed3-c1b4-4e4d-9c3c-aa280667fe9e",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "securities",
+                    ":secIds",
+                    "vabenefits"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "VAUSA0N0XD",
+                      "key": "secIds",
+                      "description": "(Required) Unique identifier of a security. Multiple entries must be pipe-separated '|'."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "09473f91-88f8-4b0f-8866-b0afb17e89d1",
+    "name": "Authorization Tokens Accounts securities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

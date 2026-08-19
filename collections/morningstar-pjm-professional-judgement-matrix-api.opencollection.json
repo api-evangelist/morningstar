@@ -1,0 +1,75 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts PJM (Professional Judgement Matrix) API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "PJM (Professional Judgement Matrix)",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Submit new Professional Judgement Matrix configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/v1/pjm",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a custom Professional Judgement Matrix configuration. In the response, a unique pjmid for the submitted configuration is returned. The identifier can be used for future retrieval of the custom Professional Judgement Matrix configuration.\n\nFor each consideration, define the risk tolerance score cap for each option. For example,  `“basic knowledge” : 68` means that the suitability score of a client with basic investment knowledge will be capped at 68. Refer to the [Morningstar Risk Profiler"
+        },
+        {
+          "info": {
+            "name": "Get Professional Judgement Matrix configuration",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v1/pjm/:pjmId",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "pjmId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a Professional Judgement Matrix configuration"
+              }
+            ]
+          },
+          "docs": "Get a specific Professional Judgement Matrix configuration. The configuration is identified by the value in the `pjmId` parameter. This ID was returned in the response when the configuration was created."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

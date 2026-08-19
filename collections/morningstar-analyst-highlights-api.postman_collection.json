@@ -1,0 +1,494 @@
+{
+  "item": [
+    {
+      "id": "3803fe8c-24ac-4de5-ac41-9a37cf4825fc",
+      "name": "Analyst Highlights",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f304c2a3-6165-4507-b57e-f97d6e67db41",
+          "name": "Request analyst highlights for a list of investments.",
+          "request": {
+            "name": "Request analyst highlights for a list of investments.",
+            "description": {
+              "content": "\n#### Request Input\nRequest analyst highlights for the investments specified in the request body. The API accepts:\n\n  * `performanceId` - Morningstar performance ID.\n  * `securityId` - Morningstar security ID. \n  * `isin`\n  * `cusip`\n  * `tradingSymbol`\n  * `fundCode`\n  * `msid` \n  \n  When querying identifiers that may not be globally unique (such as `tradingSymbol`), you can apply additional filters (`baseCurrency`, `domicile`, and `exchangeCountry`) to narrow the results and improve specificity.\n  \n  #### Response\n  \n  A `202 Accepted` response is returned to indicate the server has accepted the request for asynchronous processing.\n  The response includes a `jobId` and a `_links` array with a URL to the `/jobs/{jobId}` endpoint. You use this URL to check the status of the job until it completes.\n  \n  #### Retrieving Output\n  \n  When you poll the `/jobs` endpoint, a `200: OK` response indicates the status of the job.\n  \n  When processing completes, a `302: Found` response is returned. A URL to retrieve the output can be found in the `Location` header.\n  \n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-web-services",
+                "v1",
+                "ai-insights",
+                "analyst-highlights"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "description": "(Required) ",
+                "key": "Prefer",
+                "value": "<string>"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"investments\": [\n    {\n      \"id\": \"<string>\",\n      \"idType\": \"performanceId\",\n      \"baseCurrency\": \"<string,null>\",\n      \"domicile\": \"<string,null>\",\n      \"exchangeCountry\": \"<string,null>\"\n    },\n    {\n      \"id\": \"<string>\",\n      \"idType\": \"performanceId\",\n      \"baseCurrency\": \"<string,null>\",\n      \"domicile\": \"<string,null>\",\n      \"exchangeCountry\": \"<string,null>\"\n    }\n  ],\n  \"sortBy\": [\n    \"updatedAt\"\n  ],\n  \"orderBy\": \"desc\",\n  \"limit\": 20\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1f186ca3-c403-45e4-b121-b20ffd9a845d",
+              "name": "Accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "ai-insights",
+                    "analyst-highlights"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Prefer",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"investments\": [\n    {\n      \"id\": \"DODGX\",\n      \"idType\": \"tradingSymbol\"\n    },\n    {\n      \"id\": \"0P000000ppY\",\n      \"idType\": \"securityId\"\n    },\n    {\n      \"id\": \"US4138386085\",\n      \"idType\": \"isin\",\n      \"exchangeCountry\": \"USA\"\n    },\n    {\n      \"id\": \"780910105\",\n      \"idType\": \"cusip\",\n      \"exchangeCountry\": \"USA\",\n      \"domicile\": \"USA\",\n      \"baseCurrency\": \"USD\"\n    },\n    {\n      \"id\": \"AAPL\",\n      \"idType\": \"tradingSymbol\",\n      \"exchangeCountry\": \"UKR\"\n    }\n  ],\n  \"sortBy\": [\n    \"updatedAt\"\n  ],\n  \"orderBy\": \"asc\",\n  \"limit\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"jobId\": \"16bf1a7a-c883-4424-8810-2f4e9d244d40\",\n  \"_links\": [\n    {\n      \"href\": \"https://www.us-api.morningstar.com/dynamic-services-apis/jobs/16bf1a7a-c883-4424-8810-2f4e9d244d40\",\n      \"rel\": \"self\",\n      \"method\": \"GET\"\n    }\n  ],\n  \"metadata\": {\n    \"requestId\": \"41ec7d45-4d13-46fc-acf8-292500708eb1\",\n    \"time\": \"2025-06-11T14:23:28.891651Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "61f8ec6e-2fbd-4b52-99a0-3be23850ce93",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "ai-insights",
+                    "analyst-highlights"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Prefer",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"investments\": [\n    {\n      \"id\": \"DODGX\",\n      \"idType\": \"tradingSymbol\"\n    },\n    {\n      \"id\": \"0P000000ppY\",\n      \"idType\": \"securityId\"\n    },\n    {\n      \"id\": \"US4138386085\",\n      \"idType\": \"isin\",\n      \"exchangeCountry\": \"USA\"\n    },\n    {\n      \"id\": \"780910105\",\n      \"idType\": \"cusip\",\n      \"exchangeCountry\": \"USA\",\n      \"domicile\": \"USA\",\n      \"baseCurrency\": \"USD\"\n    },\n    {\n      \"id\": \"AAPL\",\n      \"idType\": \"tradingSymbol\",\n      \"exchangeCountry\": \"UKR\"\n    }\n  ],\n  \"sortBy\": [\n    \"updatedAt\"\n  ],\n  \"orderBy\": \"asc\",\n  \"limit\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"errorCode\": \"400.aiInsights.007\",\n  \"message\": \"The prefer header is required.\",\n  \"requestId\": \"41ec7d45-4d13-46fc-acf8-292500708eb1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63700f7c-b1e8-4178-8f26-5b127dc58518",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "ai-insights",
+                    "analyst-highlights"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "disabled": false,
+                    "description": "(Required) ",
+                    "key": "Prefer",
+                    "value": "<string>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"investments\": [\n    {\n      \"id\": \"DODGX\",\n      \"idType\": \"tradingSymbol\"\n    },\n    {\n      \"id\": \"0P000000ppY\",\n      \"idType\": \"securityId\"\n    },\n    {\n      \"id\": \"US4138386085\",\n      \"idType\": \"isin\",\n      \"exchangeCountry\": \"USA\"\n    },\n    {\n      \"id\": \"780910105\",\n      \"idType\": \"cusip\",\n      \"exchangeCountry\": \"USA\",\n      \"domicile\": \"USA\",\n      \"baseCurrency\": \"USD\"\n    },\n    {\n      \"id\": \"AAPL\",\n      \"idType\": \"tradingSymbol\",\n      \"exchangeCountry\": \"UKR\"\n    }\n  ],\n  \"sortBy\": [\n    \"updatedAt\"\n  ],\n  \"orderBy\": \"asc\",\n  \"limit\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"errorCode\": \"500.aiInsights.002\",\n  \"message\": \"Async job data not found in S3.\",\n  \"requestId\": \"41ec7d45-4d13-46fc-acf8-292500708eb1\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "94be9f76-4334-47a2-b987-d1964415f4e8",
+          "name": "Retrieve analyst highlights.",
+          "request": {
+            "name": "Retrieve analyst highlights.",
+            "description": {
+              "content": "When the asynchronous processing job is completed, this endpoint is returned in the `Location` header of the `302 Found` response returned by the `/jobs/{jobId}` endpoint.\n\n  When this endpoint is called, it returns:\n\n  * The AI insights for the investments it successfully identifies and where data is available.\n  * A metadata object listing any input identifiers that could not be matched or for which no data is available.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-web-services",
+                "v1",
+                "ai-insights",
+                "results",
+                ":resultId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "resultId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6be9c4e3-0e76-4053-b192-ca35cc961e7d",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "ai-insights",
+                    "results",
+                    ":resultId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resultId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"investments\": [\n    {\n      \"identifiers\": {\n        \"isin\": \"US4138386085\",\n        \"performanceId\": \"0P00002Y8D\",\n        \"exchangeCountry\": \"USA\"\n      },\n      \"summary\": \"The Oakmark Select strategy, managed by Bill Nygren since 1996, focuses on undervalued stocks with growth potential, typically maintaining 20-25 positions. The strategy has a High rating for People and Above Average for Process, with a Silver Morningstar Medalist Rating. As of March 2025, the top holding is Iqvia at 6.7%. The fund has achieved an 11.5% annualized gain over Nygren's tenure, outperforming the S&P 500's 9.5%, although recent performance has been inconsistent due to market fluctuations and specific holdings like Alphabet and Lithia Motors. The fund's net expense ratio is 0.99%, and it has a total return of 19.08%. While riskier than the broader Oakmark fund, patient investors may benefit from its bold approach. The ticker for the fund is OAKLX, traded on Nasdaq.\"\n    },\n    {\n      \"identifiers\": {\n        \"tradingSymbol\": \"DODGX\",\n        \"performanceId\": \"0P00002PB8\"\n      },\n      \"summary\": \"Dodge & Cox Stock (Ticker: DODGX) is managed by a six-member investment committee led by CIO David Hoeft, focusing on fundamental research and contrarian stock selection within a 60- to 90-stock portfolio, maintaining a modest turnover of approximately 30% annually. As of March 2025, sector allocations include 17% in financials and 26% in healthcare. The fund has achieved a 9.2% annualized return since January 2002, outperforming 98% of its peers, with a total return of 12.95%. It holds a Gold Morningstar Medalist Rating and a 4-star Morningstar Star Rating, reflecting its strong performance and reasonable net expense ratio of 0.51%. The firm emphasizes risk management and has enhanced its risk assessment tools, contributing to its High Parent rating due to effective succession planning. While the strategy may experience some volatility, its long-term performance is robust, indicating potential for positive alpha.\"\n    }\n  ],\n  \"metadata\": {\n    \"requestId\": \"36f8e3e6-56bd-4628-9bbb-791724c995cd\",\n    \"time\": \"2025-06-12T12:49:14.1695143Z\",\n    \"messages\": [\n      {\n        \"type\": \"Warning\",\n        \"code\": \"404.investmentInsights.101\",\n        \"message\": \"Investment Insights : No data coverage for the investments.\",\n        \"investments\": [\n          {\n            \"id\": \"780910105\",\n            \"idType\": \"cusip\",\n            \"performanceId\": \"0P00002COT\",\n            \"baseCurrency\": \"USD\",\n            \"domicile\": \"USA\",\n            \"exchangeCountry\": \"USA\"\n          },\n          {\n            \"id\": \"AAPL\",\n            \"idType\": \"tradingSymbol\",\n            \"performanceId\": \"0P0001ISID\",\n            \"exchangeCountry\": \"UKR\"\n          }\n        ]\n      },\n      {\n        \"type\": \"Warning\",\n        \"code\": \"404.common.125\",\n        \"message\": \"Lookup : Invalid investments.\",\n        \"investments\": [\n          {\n            \"id\": \"0P000000ppY\",\n            \"idType\": \"securityId\"\n          }\n        ]\n      },\n      {\n        \"type\": \"Warning\",\n        \"code\": \"200.common.126\",\n        \"message\": \"Lookup : Multiple identifier match found for the investments.\",\n        \"investments\": [\n          {\n            \"id\": \"AAPL\",\n            \"idType\": \"tradingSymbol\",\n            \"performanceId\": \"0P0001ISID\",\n            \"exchangeCountry\": \"UKR\"\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6553c55-dd33-4d27-91e6-4d9bc152c905",
+              "name": "Result not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "ai-insights",
+                    "results",
+                    ":resultId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resultId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 1839,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"requestId\": \"f77b8aa3-47e3-80d9-ff39-cd9893ec7111\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dce3a693-c892-4f30-b1c1-f71c88671f5e",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "ai-insights",
+                    "results",
+                    ":resultId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "resultId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 1839,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"requestId\": \"f77b8aa3-47e3-80d9-ff39-cd9893ec7111\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c3eb14d3-3f8d-417f-af29-b9d1ab5d108f",
+    "name": "Authorization Tokens Accounts Analyst Highlights API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

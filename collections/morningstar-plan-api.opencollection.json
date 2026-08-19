@@ -1,0 +1,50 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Plan API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Plan",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get plan details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v2/retirementplan/Plan",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "query",
+                "description": "Unique name of a retirement plan"
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query",
+                "description": "The source to request plan from"
+              }
+            ]
+          },
+          "docs": "Get information about the plan specified in the `id` parameter. The value must be URL-encoded and match the name returned in the response to the call to the `PlanNames` endpoint. For example, `THE SCOTT FETZER RETIREMENT SAVINGS PLAN`.</br></br>You can specify a plan list source to query. The following values are available: </br></br> - `RP` - Retirement plans from Morningstar's plan list</br> - `BM` - Benchmark</br> - `DB` - Database for saved plans</br>"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

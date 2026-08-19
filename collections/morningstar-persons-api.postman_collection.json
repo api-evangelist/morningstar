@@ -1,0 +1,572 @@
+{
+  "item": [
+    {
+      "id": "b37da842-98bc-4fcb-95e0-0eeef9f18058",
+      "name": "Persons",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a6f0a1cb-6d4f-4c6b-bca4-fece278d5db1",
+          "name": "Register a new user",
+          "request": {
+            "name": "Register a new user",
+            "description": {
+              "content": "Add an Investor Person to the system and associate it to a Firm and optionally to an Advisor. Registering a new Person does not require prior authentication. </br> <span>&#8226;</span> The Firm to which the Person is to be added must have the \"Investor self-signup\" feature enabled.  </br> <span>&#8226;</span> The user is created as SSO, non-SSO, or UIM JWT as determined by the Firm’s configuration for creating new “clients”.  </br></br>**Request Headers**</br>Registering a new Person does not require prior authentication, so JSESSIONID or CSRF-TOKEN are not required. </br></br>A UIM Admin JWT can optionally be submitted to this endpoint using the Authorization header with the header value \"Bearer <token-value>\".  The UIM Admin JWT holds a Service Administrator level authentication context  and the uimGuid for the user to be created must be provided in the post body. The endpoint will validate the JWT, extract the UIM Guid, and store the UIM Guid on the Person. The UIM Guid must be unique across the ByAllAccounts system (across all Persons). If not, then the Person is not created and HTTP 409 Conflict is returned with the person URI.</br></br>The POST body parameters listed in Model below are to be submitted in in JSON format as shown in the Example Value. </br></br>**Response Body**</br>Location header:  URI to new resource. For example:</br>\n  {\n   \"uri\": \"https://www.byallaccounts.net/api/v1/persons/12345\"\n  }\n  </br>Where 12345 is the BAA Person Id for the new Person. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "persons"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"firstName\": \"<string>\",\n  \"lastName\": \"<string>\",\n  \"role\": \"<string>\",\n  \"middleName\": \"<string>\",\n  \"phoneNumber\": \"<string>\",\n  \"firmTag1\": \"<string>\",\n  \"firmTag2\": \"<string>\",\n  \"firmTag3\": \"<string>\",\n  \"taxId\": \"<string>\",\n  \"firmCode\": \"<string>\",\n  \"advisorId\": \"<long>\",\n  \"uimGuid\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3b0cb3ba-6982-472a-b794-93b1682117c9",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "persons"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"firstName\": \"Chris\",\n  \"lastName\": \"Smith\",\n  \"role\": \"investor\",\n  \"middleName\": \"Pat\",\n  \"phoneNumber\": \"6035551212\",\n  \"firmTag1\": \"BAA-primary-user-identifier\",\n  \"firmTag2\": \"BAA-primary-user-identifier-Marketing\",\n  \"firmTag3\": \"BAA-primary-user-identifier-Sales\",\n  \"taxId\": \"111111111\",\n  \"firmCode\": \"ABC-12345\",\n  \"advisorId\": 123,\n  \"uimGuid\": \"C5E883D3-8B92-438C-A43B-E70455FA1F06\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "afa6d2d2-fece-4532-b5e4-cbe8e91e246b",
+              "name": "Bad Request. </br>Possible causes:</br> <span>&#8226;</span> The *field name* field is missing </br> <span>&#8226;</span> Missing required value </br> <span>&#8226;</span> The *field name* cannot exceed *max value* </br> <span>&#8226;</span> Invalid Role value </br> <span>&#8226;</span> Email addresses must be in the form x@x.x and cannot contain spaces  </br> <span>&#8226;</span> Firm *firm* not found </br> <span>&#8226;</span> Advisor not found </br> </br>One of these is set on the Firm to be required but is not found:</br> <span>&#8226;</span> taxId  </br> <span>&#8226;</span> firmTag1 </br> <span>&#8226;</span> firmTag2  </br> <span>&#8226;</span> firmTag3  ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "persons"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"firstName\": \"Chris\",\n  \"lastName\": \"Smith\",\n  \"role\": \"investor\",\n  \"middleName\": \"Pat\",\n  \"phoneNumber\": \"6035551212\",\n  \"firmTag1\": \"BAA-primary-user-identifier\",\n  \"firmTag2\": \"BAA-primary-user-identifier-Marketing\",\n  \"firmTag3\": \"BAA-primary-user-identifier-Sales\",\n  \"taxId\": \"111111111\",\n  \"firmCode\": \"ABC-12345\",\n  \"advisorId\": 123,\n  \"uimGuid\": \"C5E883D3-8B92-438C-A43B-E70455FA1F06\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ad1d1010-9a9e-465f-8985-9de5c49e021e",
+              "name": "Not Authorized. </br>Possible causes:</br> <span>&#8226;</span> Investor self-signup not allowed </br><span>&#8226;</span> UIM JWT not valid",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "persons"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"firstName\": \"Chris\",\n  \"lastName\": \"Smith\",\n  \"role\": \"investor\",\n  \"middleName\": \"Pat\",\n  \"phoneNumber\": \"6035551212\",\n  \"firmTag1\": \"BAA-primary-user-identifier\",\n  \"firmTag2\": \"BAA-primary-user-identifier-Marketing\",\n  \"firmTag3\": \"BAA-primary-user-identifier-Sales\",\n  \"taxId\": \"111111111\",\n  \"firmCode\": \"ABC-12345\",\n  \"advisorId\": 123,\n  \"uimGuid\": \"C5E883D3-8B92-438C-A43B-E70455FA1F06\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "debb9a91-fa6b-4f57-8235-6ffeaf120856",
+              "name": "Conflict. </br>Possible causes:</br><span>&#8226;</span>  UIM Guid must be unique (from UIM JWT) </br><span>&#8226;</span> firmTag1 must be unique",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "persons"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"firstName\": \"Chris\",\n  \"lastName\": \"Smith\",\n  \"role\": \"investor\",\n  \"middleName\": \"Pat\",\n  \"phoneNumber\": \"6035551212\",\n  \"firmTag1\": \"BAA-primary-user-identifier\",\n  \"firmTag2\": \"BAA-primary-user-identifier-Marketing\",\n  \"firmTag3\": \"BAA-primary-user-identifier-Sales\",\n  \"taxId\": \"111111111\",\n  \"firmCode\": \"ABC-12345\",\n  \"advisorId\": 123,\n  \"uimGuid\": \"C5E883D3-8B92-438C-A43B-E70455FA1F06\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "20fd8371-f1b7-41ea-bafc-e1db95b52da7",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "persons"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"emailAddress\": \"<string>\",\n  \"firstName\": \"Chris\",\n  \"lastName\": \"Smith\",\n  \"role\": \"investor\",\n  \"middleName\": \"Pat\",\n  \"phoneNumber\": \"6035551212\",\n  \"firmTag1\": \"BAA-primary-user-identifier\",\n  \"firmTag2\": \"BAA-primary-user-identifier-Marketing\",\n  \"firmTag3\": \"BAA-primary-user-identifier-Sales\",\n  \"taxId\": \"111111111\",\n  \"firmCode\": \"ABC-12345\",\n  \"advisorId\": 123,\n  \"uimGuid\": \"C5E883D3-8B92-438C-A43B-E70455FA1F06\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "593718d7-c6bc-4cd7-9148-fd468d1a3903",
+          "name": "Get profile data for a user",
+          "request": {
+            "name": "Get profile data for a user",
+            "description": {
+              "content": "Fetch the profile data of a Person specified by the `id` parameter.   ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "persons",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<long>",
+                  "key": "id",
+                  "description": "(Required) The unique identifier of the person requested"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e4caa155-bed4-4aab-bb48-565031d30fda",
+              "name": "Ok",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "persons",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the person requested"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"firstName\": \"Rosalind\",\n  \"id\": 778899,\n  \"lastName\": \"Franklin\",\n  \"userAgreementAccepted\": true,\n  \"middleName\": \"Elsie\",\n  \"emailAddress\": \"string\",\n  \"phoneNumber\": \"5085551212\",\n  \"taxId\": \"111111111\",\n  \"isSSOUser\": true,\n  \"advisorId\": 5176,\n  \"firmTag1\": \"xxx\",\n  \"firmTag2\": \"yyy\",\n  \"firmTag3\": \"ZZZ\",\n  \"uimGuid\": \"C5E883D3-8B92-438C-A43B-E70455FA1F06\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec294c90-be51-49f2-a5c6-ef8548dd39d9",
+              "name": "Not Authorized </br> </br> Possible reasons:</br><span>&#8226;</span> Invalid JSESSIONID and/or CSRF-TOKEN</br><span>&#8226;</span>  Expired UIM JWT ",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "persons",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the person requested"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ced084d6-885e-4768-8c7b-eca01ea1d12c",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "persons",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the person requested"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "fdbbe28b-0d17-4dc4-8ff7-d88e9e8980b7",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "persons",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<long>",
+                      "key": "id",
+                      "description": "(Required) The unique identifier of the person requested"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e7d4ef1c-d1f0-43ac-8c07-32136bbdd213",
+    "name": "Authorization Tokens Accounts Persons API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

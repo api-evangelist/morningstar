@@ -1,0 +1,375 @@
+{
+  "item": [
+    {
+      "id": "ff12de9d-aac1-4d50-8fec-8bcce335a45c",
+      "name": "Portfolio Risk Score",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "387ec9b7-192c-46c3-90aa-1dcdf6f19a78",
+          "name": "Calculate risk score",
+          "request": {
+            "name": "Calculate risk score",
+            "description": {},
+            "url": {
+              "path": [
+                "portfolioanalysis",
+                "v1",
+                "risk-score"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "langcult",
+                  "value": "en-US",
+                  "description": "ISO culture codes. If not provided, defaults to the language defined in the settings. Overrides the value in the Accept-Language HTTP Header."
+                },
+                {
+                  "disabled": false,
+                  "key": "countryID",
+                  "value": "",
+                  "description": "ISO alpha-3 country codes."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"Portfolios\": [\n    {\n      \"Currency\": \"<string>\",\n      \"Holdings\": [\n        {\n          \"SecurityId\": \"<string>\",\n          \"Weight\": \"<double>\",\n          \"Value\": \"<double>\",\n          \"PerformanceId\": \"<string>\",\n          \"CUSIP\": \"<string>\",\n          \"ISIN\": \"<string>\",\n          \"TradingSymbol\": \"<string>\",\n          \"FundCode\": \"<string>\"\n        }\n      ],\n      \"Name\": \"<string>\",\n      \"TotalValue\": \"<double>\"\n    },\n    {\n      \"Currency\": \"<string>\",\n      \"Holdings\": [\n        {\n          \"SecurityId\": \"<string>\",\n          \"Weight\": \"<double>\",\n          \"Value\": \"<double>\",\n          \"PerformanceId\": \"<string>\",\n          \"CUSIP\": \"<string>\",\n          \"ISIN\": \"<string>\",\n          \"TradingSymbol\": \"<string>\",\n          \"FundCode\": \"<string>\"\n        }\n      ],\n      \"Name\": \"<string>\",\n      \"TotalValue\": \"<double>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "310f92ec-d241-4856-818e-332e9d03502c",
+              "name": "200: OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "risk-score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "countryID",
+                      "value": ""
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"riskScores\": [\n    {\n      \"portfolio\": {\n        \"name\": \"TestPortfolio1\",\n        \"riskScore\": 74.30804031,\n        \"alignmentScore\": 0,\n        \"rSquared\": 0,\n        \"retainedWeightProxied\": 0,\n        \"scoringMethodUsed\": \"HBSA\",\n        \"effectiveDate\": \"2024-01-31\"\n      }\n    }\n  ],\n  \"metadata\": {\n    \"requestId\": \"f87f72c2-9a76-40f6-9118-a7be027eff9d\",\n    \"time\": \"2024-02-26T15:29:16.8685342Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d3f28b9-6712-482a-b843-06cc2c19c305",
+              "name": "400: Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "risk-score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "countryID",
+                      "value": ""
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"errorCode\": \"400.riskScore.001\",\n  \"message\": \"LangCult fr-FR is not currently supported. Please contact your administrator.\",\n  \"requestId\": \"6bc61555-c0f1-4d7c-b912-ec56a94cc628\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b098697c-26fc-41da-b0b2-95488cf52779",
+              "name": "403: Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "risk-score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "countryID",
+                      "value": ""
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 403,\n  \"errorCode\": \"403.riskScore.005\",\n  \"message\": \"The user is not authorized for the countryId-USA.\",\n  \"requestId\": \"e922fdf6-d1ef-421b-aa21-6e9ced90d920\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cba4204b-2308-40bb-818b-91e881f754fe",
+              "name": "413: Request Entity Too Large",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "risk-score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "countryID",
+                      "value": ""
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Request Entity Too Large",
+              "code": 413,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 413,\n  \"errorCode\": \"413.riskScore.003\",\n  \"message\": \"Risk Score is only supported with two portfolios\",\n  \"requestId\": \"036824d0-2cff-4783-8ae0-e63ccf1e4d30\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "20d2a4df-f034-48ff-bf8e-347a35d428bf",
+              "name": "500: Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "portfolioanalysis",
+                    "v1",
+                    "risk-score"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "countryID",
+                      "value": ""
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"errorCode\": \"500.riskScore.008\",\n  \"message\": \"Internal Server Error\",\n  \"requestId\": \"6bc61555-c0f1-4d7c-b912-ec56a94cc620\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "989672b5-ad10-4fdb-b1fb-95615d731375",
+    "name": "Authorization Tokens Accounts Portfolio Risk Score API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

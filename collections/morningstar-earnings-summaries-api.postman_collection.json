@@ -1,0 +1,258 @@
+{
+  "item": [
+    {
+      "id": "8ed41dcf-2e43-43ad-8bef-c10458078b33",
+      "name": "Earnings Summaries",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9caaad76-acae-4e43-b1ae-bebe4b560748",
+          "name": "Returns earnings summaries for a list of companies.",
+          "request": {
+            "name": "Returns earnings summaries for a list of companies.",
+            "description": {
+              "content": "Submit a list of company identifiers to retrieve AI-generated earnings release summaries. Results are returned synchronously.\n\n  #### Supported Identifier Types\n\n  * `companyId` - Morningstar company ID (default).\n  * `performanceId`, `securityId`, `msid`, `isin`, `cusip`, `tradingSymbol`\n  \n  When using non-unique identifiers such as `tradingSymbol` or `isin`, apply\n  optional filters (`baseCurrency`, `domicile`, `exchangeCountry`) to improve\n  match accuracy.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-web-services",
+                "v1",
+                "ai-insights",
+                "earnings-summaries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"investments\": [\n    {\n      \"id\": \"<string>\",\n      \"idType\": \"companyId\",\n      \"baseCurrency\": \"<string,null>\",\n      \"domicile\": \"<string,null>\",\n      \"exchangeCountry\": \"<string,null>\",\n      \"exchangeId\": \"<string,null>\"\n    }\n  ],\n  \"sortBy\": \"<array,null>\",\n  \"orderBy\": \"desc\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d46f82ea-4a19-4858-af81-f26e56044732",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "ai-insights",
+                    "earnings-summaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"investments\": [\n    {\n      \"id\": \"0C00000378\",\n      \"idType\": \"companyId\"\n    },\n    {\n      \"id\": \"0C00000D9W\",\n      \"idType\": \"companyId\"\n    },\n    {\n      \"id\": \"0C00000L88\",\n      \"idType\": \"companyId\"\n    }\n  ],\n  \"sortBy\": [\n    \"filingUpdatedAt\"\n  ],\n  \"orderBy\": \"desc\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"companies\": [\n    {\n      \"identifiers\": {\n        \"companyId\": \"0C00000378\"\n      },\n      \"summary\": \"Apple Inc. reported strong quarterly earnings with revenue beating analyst expectations. iPhone sales drove growth in the quarter.\",\n      \"metadata\": {\n        \"companyName\": \"Apple Inc.\",\n        \"filingType\": \"8-K\",\n        \"filingUpdatedAt\": \"2025-05-21\",\n        \"earningsReleaseSummaryPublishedAt\": \"2025-05-28T08:11:48.095000\"\n      }\n    },\n    {\n      \"identifiers\": {\n        \"companyId\": \"0C00000D9W\"\n      },\n      \"summary\": \"Microsoft Corporation announced quarterly results with cloud services revenue showing significant year-over-year growth.\",\n      \"metadata\": {\n        \"companyName\": \"Microsoft Corporation\",\n        \"filingType\": \"10-Q\",\n        \"filingUpdatedAt\": \"2025-05-22\",\n        \"earningsReleaseSummaryPublishedAt\": \"2025-05-29T09:30:15.120000\"\n      }\n    },\n    {\n      \"identifiers\": {\n        \"companyId\": \"0C00000L88\"\n      },\n      \"summary\": \"Amazon.com Inc. posted quarterly earnings with AWS revenue contributing to overall revenue growth.\",\n      \"metadata\": {\n        \"companyName\": \"Amazon.com Inc.\",\n        \"filingType\": \"10-K\",\n        \"filingUpdatedAt\": \"2025-05-23\",\n        \"earningsReleaseSummaryPublishedAt\": \"2025-05-30T10:45:22.500000\"\n      }\n    }\n  ],\n  \"metadata\": {\n    \"requestId\": \"ac585332-fddb-463e-a966-864686c6ac16\",\n    \"time\": \"2026-03-03T10:39:34.0164714Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29795789-a8de-46aa-8672-56d56e28adf2",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "ai-insights",
+                    "earnings-summaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"investments\": [\n    {\n      \"id\": \"0C00000378\",\n      \"idType\": \"companyId\"\n    },\n    {\n      \"id\": \"0C00000D9W\",\n      \"idType\": \"companyId\"\n    },\n    {\n      \"id\": \"0C00000L88\",\n      \"idType\": \"companyId\"\n    }\n  ],\n  \"sortBy\": [\n    \"filingUpdatedAt\"\n  ],\n  \"orderBy\": \"desc\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 9142,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"requestId\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a4f7f52-4627-4a9b-8512-32e5bf4e57e2",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "ai-insights",
+                    "earnings-summaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"investments\": [\n    {\n      \"id\": \"0C00000378\",\n      \"idType\": \"companyId\"\n    },\n    {\n      \"id\": \"0C00000D9W\",\n      \"idType\": \"companyId\"\n    },\n    {\n      \"id\": \"0C00000L88\",\n      \"idType\": \"companyId\"\n    }\n  ],\n  \"sortBy\": [\n    \"filingUpdatedAt\"\n  ],\n  \"orderBy\": \"desc\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 9142,\n  \"errorCode\": \"string\",\n  \"message\": \"string\",\n  \"requestId\": null\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "51e9513c-9730-4dd7-b6fe-21dce6683963",
+    "name": "Authorization Tokens Accounts Earnings Summaries API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

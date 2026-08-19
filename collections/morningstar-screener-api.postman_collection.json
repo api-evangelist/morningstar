@@ -1,0 +1,1040 @@
+{
+  "item": [
+    {
+      "id": "554b6264-9dd0-4766-b089-ffa413dfce01",
+      "name": "Screener",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "060b493a-9bd9-41e9-bd02-c74f2aa10235",
+          "name": "Query equity investments and return selected data points.",
+          "request": {
+            "name": "Query equity investments and return selected data points.",
+            "description": {},
+            "url": {
+              "path": [
+                "direct-web-services",
+                "v1",
+                "screeners",
+                "equities"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scope\": null,\n  \"query\": \"string\",\n  \"dataPoints\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pagination\": {\n    \"paginationTokenNext\": \"<string>\",\n    \"paginationTokenPrevious\": \"<string>\",\n    \"pageSize\": 50\n  },\n  \"sort\": [\n    {\n      \"dataPoint\": \"performanceId\",\n      \"orderBy\": \"asc\"\n    },\n    {\n      \"dataPoint\": \"performanceId\",\n      \"orderBy\": \"asc\"\n    }\n  ],\n  \"languageId\": \"ENG\",\n  \"currencyId\": \"USD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e8fab347-2c2a-431c-a3d6-00204b557777",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "screeners",
+                    "equities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"investments\": [\n    {\n      \"instrumentIdentifiers.performanceId\": \"0P0001VK71\",\n      \"pricesMostRecent.avgVolumeInMil9MoDaily\": 0.0013,\n      \"factorProfile.emergingAsiaPacificFactorMultiAssetModel\": 0.019826,\n      \"factorProfile.realEstateFactorMultiAssetModel\": 0.000357,\n      \"factorProfile.styleFactorMultiAssetModel\": 0.110014,\n      \"shareClassInformation.investmentStatus\": 1,\n      \"shareClassInformation.symbol\": \"MSES\"\n    }\n  ],\n  \"metadata\": {\n    \"totalCount\": 1,\n    \"messages\": [\n      {\n        \"investments\": [\n          {\n            \"status\": \"Data points are not entitled for 0P0001VK71 security\",\n            \"dataPoints\": [\n              \"esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate\",\n              \"esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory\",\n              \"esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd\",\n              \"esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations\",\n              \"quantitativeFairValues.quantitativeMoat\",\n              \"esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth\"\n            ],\n            \"errorCode\": \"403\",\n            \"id\": \"0P0001VK71\"\n          }\n        ],\n        \"type\": \"Warning\"\n      }\n    ],\n    \"requestId\": \"092fa93b-d63d-4b6e-a53b-d7ace50473ff\",\n    \"time\": \"2025-10-03T17:48:16.0302555Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "58051b53-fc9f-4ba3-940f-f9f8658f360c",
+              "name": "400: Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "screeners",
+                    "equities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"errorCode\": \"400.screener.005\",\n  \"message\": \"Invalid dataPoint names {0}. Provide valid values.\",\n  \"requestId\": \"5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7a7ac0a-1fb4-441c-b103-dbc0aa65e779",
+              "name": "500: Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "screeners",
+                    "equities"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 500,\n  \"errorCode\": \"500.screener.001\",\n  \"message\": \"TBC\",\n  \"requestId\": \"5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5ceb7f17-b4c3-4cfe-b178-f5725dda9569",
+          "name": "Query managed investments and return selected data points.",
+          "request": {
+            "name": "Query managed investments and return selected data points.",
+            "description": {
+              "content": "Returns the investments that meet the conditions defined in the `queries` object. Returns `performanceId` by default and any other data points specified in the `dataPoints` array.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-web-services",
+                "v1",
+                "screeners",
+                "managed-investments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scope\": \"string\",\n  \"query\": 8541,\n  \"dataPoints\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"pagination\": {\n    \"paginationTokenNext\": \"<string>\",\n    \"paginationTokenPrevious\": \"<string>\",\n    \"pageSize\": 50\n  },\n  \"sort\": [\n    {\n      \"dataPoint\": \"instrumentIdentifiers.performanceId\",\n      \"orderBy\": \"asc\"\n    },\n    {\n      \"dataPoint\": \"instrumentIdentifiers.performanceId\",\n      \"orderBy\": \"asc\"\n    }\n  ],\n  \"languageId\": \"ENG\",\n  \"currencyId\": \"USD\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e3c81e63-1fb6-4596-9628-db3ba8104918",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "screeners",
+                    "managed-investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"investments\": [\n    {\n      \"instrumentIdentifiers.performanceId\": \"0P0001UMFK\",\n      \"basicReference.firmName\": \"Driftwood Euro Solutions LLC\",\n      \"basicReference.name\": \"Ser 501TrbtHtlOldSanJuanNtsdue2027$Acc\",\n      \"basicReference.legalName\": \"(Series 501) Tribute Hotel Old San Juan Notes Due 2027 USD Accumulation\"\n    },\n    {\n      \"instrumentIdentifiers.performanceId\": \"0P0001O9X4\",\n      \"basicReference.firmName\": \"VS TRUST\",\n      \"basicReference.name\": \"-1x Short VIX Futures ETF\",\n      \"basicReference.legalName\": \"-1x Short VIX Futures ETF\"\n    },\n    {\n      \"instrumentIdentifiers.performanceId\": \"0P0001LOE2\",\n      \"basicReference.firmName\": \"Bitcoin Capital AG\",\n      \"basicReference.name\": \"15 FiCAS Active Crypto ETP\",\n      \"basicReference.legalName\": \"15 FiCAS Active Crypto ETP\"\n    },\n    {\n      \"instrumentIdentifiers.performanceId\": \"0P0001QYNH\",\n      \"basicReference.firmName\": \"Valour Digital Securities Limited\",\n      \"basicReference.name\": \"1Valour Bitcoin Physcl Carb Netrl $ Acc\",\n      \"basicReference.legalName\": \"1Valour Bitcoin Physical Carbon Neutral USD Acc\"\n    },\n    {\n      \"instrumentIdentifiers.performanceId\": \"0P0001TY43\",\n      \"basicReference.firmName\": \"Valour Digital Securities Limited\",\n      \"basicReference.name\": \"1Valour Bitcoin Physical Staking $ Acc\",\n      \"basicReference.legalName\": \"1Valour Bitcoin Physical Staking USD Acc\"\n    }\n  ],\n  \"metadata\": {\n    \"paginationTokenNext\": \"WyIxVmFsb3VyIEJpdGNvaW4gUGh5c2ljYWwgU3Rha2luZyBVU0QgQWNjIixudWxsLG51bGwsIjBQMDAwMVRZNDMiXQ==\",\n    \"totalCount\": 10000,\n    \"requestId\": \"d98e0f36-91b3-4cf3-bd61-15841ce6f9f8\",\n    \"time\": \"2025-10-27T09:09:01.3362533Z\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6db0cc5-9f9d-44fa-b405-8cc11a0f1b97",
+              "name": "400: Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "screeners",
+                    "managed-investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"errorCode\": \"400.screener.05\",\n  \"message\": \"Invalid dataPoint names {0}. Provide valid values.\",\n  \"requestId\": \"5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "30a3729d-e258-4e38-b446-a20aa80750ef",
+              "name": "500: Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "screeners",
+                    "managed-investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": \"string\",\n  \"errorCode\": \"400.screener.006\",\n  \"message\": \"Please provide valid sort option.\",\n  \"requestId\": \"6631c374-2331-4c7e-b6f2-d0c0079f6ee\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c0e30e1-881e-40cf-af64-7b4f90d21431",
+          "name": "Get securites and associated data points",
+          "request": {
+            "name": "Get securites and associated data points",
+            "description": {
+              "content": "Specify search and filter criteria to limit the number of results returned. You can define the format of the returned content - JSON or XML. </br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "screener"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startIndex",
+                  "value": "0",
+                  "description": "Row to start query from. Zero-based index; first row is '0.'"
+                },
+                {
+                  "disabled": false,
+                  "key": "securityType",
+                  "value": "st",
+                  "description": "Unique identifier of a security type"
+                },
+                {
+                  "disabled": false,
+                  "key": "results",
+                  "value": "10",
+                  "description": "Maximum number of rows to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "secId",
+                  "description": "Sort by data point"
+                },
+                {
+                  "disabled": false,
+                  "key": "dir",
+                  "value": "asc",
+                  "description": "Sort results in ascending/descending direction"
+                },
+                {
+                  "disabled": false,
+                  "key": "output",
+                  "value": "json",
+                  "description": "Format of the returned content"
+                },
+                {
+                  "disabled": false,
+                  "key": "langcult",
+                  "value": "en-US",
+                  "description": "Language and locale, for example, en-US"
+                },
+                {
+                  "disabled": false,
+                  "key": "universe",
+                  "value": "STGLOBAL",
+                  "description": "Unique identifier of a universe"
+                },
+                {
+                  "disabled": false,
+                  "key": "securityDataPoints",
+                  "value": "secId|selected|name|ticker",
+                  "description": "Unique identifier of a data point. Can be data point ID or short ID. Multiple values must be pipe-separated."
+                },
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "",
+                  "description": "Data point ID with either min/max values, or a list of specific values. Multiple criteria must be comma-separated."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "469e6ea7-2336-45a5-bfbb-1c2040ce562c",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screener"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startIndex",
+                      "value": "0"
+                    },
+                    {
+                      "key": "securityType",
+                      "value": "st"
+                    },
+                    {
+                      "key": "results",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "secId"
+                    },
+                    {
+                      "key": "dir",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "output",
+                      "value": "json"
+                    },
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "universe",
+                      "value": "STGLOBAL"
+                    },
+                    {
+                      "key": "securityDataPoints",
+                      "value": "secId|selected|name|ticker"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "fundSize:{\"min\":\"100000000\",\"max\":\"500000000\"},starRating:[4,5]}"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"secIds\": \"string\",\n  \"universeIds\": \"string\",\n  \"dataPoints\": \"string\",\n  \"languageId\": \"string\",\n  \"currencyId\": \"string\",\n  \"assetAllocationType\": \"string\",\n  \"customBenchmark\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "90e7cc7c-bd04-47c6-8963-e21d8de123f6",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screener"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startIndex",
+                      "value": "0"
+                    },
+                    {
+                      "key": "securityType",
+                      "value": "st"
+                    },
+                    {
+                      "key": "results",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "secId"
+                    },
+                    {
+                      "key": "dir",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "output",
+                      "value": "json"
+                    },
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "universe",
+                      "value": "STGLOBAL"
+                    },
+                    {
+                      "key": "securityDataPoints",
+                      "value": "secId|selected|name|ticker"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "fundSize:{\"min\":\"100000000\",\"max\":\"500000000\"},starRating:[4,5]}"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "5afc0aa3-0dca-4362-919b-cfaf5469349d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screener"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startIndex",
+                      "value": "0"
+                    },
+                    {
+                      "key": "securityType",
+                      "value": "st"
+                    },
+                    {
+                      "key": "results",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "secId"
+                    },
+                    {
+                      "key": "dir",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "output",
+                      "value": "json"
+                    },
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "universe",
+                      "value": "STGLOBAL"
+                    },
+                    {
+                      "key": "securityDataPoints",
+                      "value": "secId|selected|name|ticker"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "fundSize:{\"min\":\"100000000\",\"max\":\"500000000\"},starRating:[4,5]}"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "92e6ec3e-b009-4144-a819-9984a718ac3d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screener"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startIndex",
+                      "value": "0"
+                    },
+                    {
+                      "key": "securityType",
+                      "value": "st"
+                    },
+                    {
+                      "key": "results",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "secId"
+                    },
+                    {
+                      "key": "dir",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "output",
+                      "value": "json"
+                    },
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "universe",
+                      "value": "STGLOBAL"
+                    },
+                    {
+                      "key": "securityDataPoints",
+                      "value": "secId|selected|name|ticker"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "fundSize:{\"min\":\"100000000\",\"max\":\"500000000\"},starRating:[4,5]}"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a4431995-b487-4e4f-89c2-2c0e5e5588d4",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screener"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startIndex",
+                      "value": "0"
+                    },
+                    {
+                      "key": "securityType",
+                      "value": "st"
+                    },
+                    {
+                      "key": "results",
+                      "value": "10"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "secId"
+                    },
+                    {
+                      "key": "dir",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "output",
+                      "value": "json"
+                    },
+                    {
+                      "key": "langcult",
+                      "value": "en-US"
+                    },
+                    {
+                      "key": "universe",
+                      "value": "STGLOBAL"
+                    },
+                    {
+                      "key": "securityDataPoints",
+                      "value": "secId|selected|name|ticker"
+                    },
+                    {
+                      "key": "filters",
+                      "value": "fundSize:{\"min\":\"100000000\",\"max\":\"500000000\"},starRating:[4,5]}"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "474b98d1-4e34-4bca-b08e-9d811cdd3292",
+          "name": "Create security and associated data points",
+          "request": {
+            "name": "Create security and associated data points",
+            "description": {},
+            "url": {
+              "path": [
+                "screener"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "securityDataPoints",
+                  "value": "secId|selected|name|ticker",
+                  "description": "Unique identifier of a data point. Can be data point ID or short ID. Multiple values must be pipe-separated."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "securityDataPoints",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "filters",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "251105b1-0036-4a55-bf5e-5ba015696ff8",
+              "name": "OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "screener"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "securityDataPoints",
+                      "value": "secId|selected|name|ticker"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "securityDataPoints",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "filters",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "2a034a92-f5f3-44ce-bea8-f7c1cd0cdaaf",
+    "name": "Authorization Tokens Accounts Screener API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

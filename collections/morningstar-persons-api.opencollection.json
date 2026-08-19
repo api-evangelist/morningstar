@@ -1,0 +1,59 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Persons API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Persons",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Register a new user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/persons",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add an Investor Person to the system and associate it to a Firm and optionally to an Advisor. Registering a new Person does not require prior authentication. </br> <span>&#8226;</span> The Firm to which the Person is to be added must have the \"Investor self-signup\" feature enabled.  </br> <span>&#8226;</span> The user is created as SSO, non-SSO, or UIM JWT as determined by the Firm’s configuration for creating new “clients”.  </br></br>**Request Headers**</br>Registering a new Person does not re"
+        },
+        {
+          "info": {
+            "name": "Get profile data for a user",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/persons/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the person requested"
+              }
+            ]
+          },
+          "docs": "Fetch the profile data of a Person specified by the `id` parameter.   "
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

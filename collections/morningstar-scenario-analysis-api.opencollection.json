@@ -1,0 +1,185 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Scenario Analysis API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Scenario Analysis",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get risk models",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/scenario-analysis/risk-models"
+          },
+          "docs": "Retrieves the list of available risk models. The response includes a risk model ID, which can be used to request the scenarios defined for that model."
+        },
+        {
+          "info": {
+            "name": "Get scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/scenario-analysis/scenarios",
+            "params": [
+              {
+                "name": "riskModelId",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the risk model to query."
+              },
+              {
+                "name": "scenarioType",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the scenario type to filter results by."
+              }
+            ]
+          },
+          "docs": "Retrieves the list of scenarios defined for the specified risk model.  The `HistoricalEvent`scenario type is returned by default. Use the optional `scenarioType` query parameter to override the default setting and return a different scenario type.\nThe response includes a scenario ID, which can be used to calculate returns or generate portfolio and investment metrics based on the conditions defined for the scenario."
+        },
+        {
+          "info": {
+            "name": "Calculate returns",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/scenario-analysis/returns",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Calculates scenario returns for the specified investments and portfolios based on the conditions defined for one or more scenarios."
+        },
+        {
+          "info": {
+            "name": "Generate metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/direct-web-services/v1/scenario-analysis/metrics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates performance metrics for the specified portfolios and investments based on the conditions defined for one or more scenarios. Supported metrics include Alpha, Return, Max Drawdown, Standard Deviation, and Tracking Error."
+        },
+        {
+          "info": {
+            "name": "Get all predefined scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/scenario-analysis/scenarios",
+            "params": [
+              {
+                "name": "risk-model-id",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a risk model"
+              }
+            ]
+          },
+          "docs": "Get a list of all predefined scenarios. The response will include the unique ID for each scenario.  You use the ID with other endpoints to return information based on that scenario. Only scenarios that your account is enabled for will be returned."
+        },
+        {
+          "info": {
+            "name": "Calculate cumulative returns forecast for funds based on  predefined or custom macro schock scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/scenario-analysis/calculate-cumulative-return",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a specific risk model and predefined or custom macro shock scenarios, calculate daily cumulative returns forecast for funds.  You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request. The response enables you to understand the impact on fund cumulative returns if significant market events are repeated."
+        },
+        {
+          "info": {
+            "name": "Calculate drawdown forecast for a fund based on a predefined or custom macro shock scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/scenario-analysis/calculate-drawdown",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a specific risk model and predefined or custom macro shock scenarios, calculate daily drawdown forecast for a fund. You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request. The response enables you to understand the impact on the fund drawdown if significant market events are repeated."
+        },
+        {
+          "info": {
+            "name": "Calculate metrics forecast for a fund based on predefined or custom macro shock scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/scenario-analysis/calculate-metrics",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a specific risk model and predefined or custom macro shock scenarios, calculate metrics forecast for a fund. You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request. The response enables you to understand the impact on the fund metrics if significant market events are repeated."
+        },
+        {
+          "info": {
+            "name": "Calculate returns forecast for a fund based on predefined or custom macro shock scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/scenario-analysis/calculate-period-return",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a specific risk model and predefined or custom macro shock scenarios, calculate  returns for a fund during different time periods.  You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request.  The response enables you to understand the impact on fund returns if significant market events are repeated."
+        },
+        {
+          "info": {
+            "name": "Calculate growth forecast for a $10k investment in a fund based on a predefined or custom macro/market shock scenarios",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/scenario-analysis/calculate-ten-k-growth",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Based on a specific risk model and predefined or custom macro/market shock scenarios, calculate growth for a $10k investment in a fund. You can include multiple scenarios and one fund in the request, or one scenario and multiple funds. Multiple scenarios and multiple funds cannot be sent in the same request. The response returns a series investment results forecasts. The forecast frequency depends on the type of scenario -  predefined (daily); macro shock (monthly) market shock (weekly)."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

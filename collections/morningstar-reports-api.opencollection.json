@@ -1,0 +1,418 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts Reports API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a risk tolerance report in JSON format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v1/reports/risks/:id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of response to query"
+              },
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "ignoreSections",
+                "value": "YOUR_DIFFERENCES,FOOTNOTES",
+                "type": "query",
+                "description": "Determines the sections NOT to include in the report.If not specified, all the sections will be included. Multiple valuses must be comma-separated. Accepted values are:\n\n  * `RISK_TOLERANCE`\n  * `USING_YOUR_PROFILE`\n  * `RISK_TOLERANCE_SCORE`\n  * `RISK_GROUP`\n  * `YOUR_DIFFERENCES`\n  * `FOOTNOTES`\n"
+              }
+            ]
+          },
+          "docs": "Get a client's risk tolerance report in JSON format."
+        },
+        {
+          "info": {
+            "name": "Get a client's most recent risk tolerance report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v2/reports/risks",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "rtqType",
+                "value": "",
+                "type": "query",
+                "description": "Questionnaire type identifier.\n- `FM10S30` - 10 questions\n- `FM25V30`- 25 questions\n"
+              },
+              {
+                "name": "disclosureType",
+                "value": "",
+                "type": "query",
+                "description": "Indicates if disclosure is needed.\n- `1` - Include disclosure.\n- `2` - Do not include disclosure.\n"
+              },
+              {
+                "name": "ignoreSections",
+                "value": "YOUR_DIFFERENCES,FOOTNOTES",
+                "type": "query",
+                "description": "Determines the sections NOT to include in the report.If not specified, all the sections will be included. Multiple valuses must be comma-separated. Accepted values are:\n\n  * `RISK_TOLERANCE`\n  * `USING_YOUR_PROFILE`\n  * `RISK_TOLERANCE_SCORE`\n  * `RISK_GROUP`\n  * `YOUR_DIFFERENCES`\n  * `FOOTNOTES`\n"
+              }
+            ]
+          },
+          "docs": "Get a client’s risk tolerance report based on the most recently submitted responses to the risk tolerance questionnaire. The report includes sections on:\n\n\n  * Risk tolerance score\n  * Risk group\n  * Differences\n  * How to use the report\n  * Footnotes\n\nIn the `ignoreSections` parameter, specify any sections you do not want returned in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Get a specific risk tolerance report for a client",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v2/reports/risks/:id",
+            "headers": [
+              {
+                "name": "Accept-Language",
+                "value": "en-US"
+              },
+              {
+                "name": "X-API-RequestId",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of response to query"
+              },
+              {
+                "name": "clientId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "rtqType",
+                "value": "",
+                "type": "query",
+                "description": "Questionnaire type identifier.\n- `FM10S30` - 10 questions\n- `FM25V30`- 25 questions\n"
+              },
+              {
+                "name": "disclosureType",
+                "value": "",
+                "type": "query",
+                "description": "Indicates if disclosure is needed.\n- `1` - Include disclosure.\n- `2` - Do not include disclosure.\n"
+              },
+              {
+                "name": "ignoreSections",
+                "value": "YOUR_DIFFERENCES,FOOTNOTES",
+                "type": "query",
+                "description": "Determines the sections NOT to include in the report.If not specified, all the sections will be included. Multiple valuses must be comma-separated. Accepted values are:\n\n  * `RISK_TOLERANCE`\n  * `USING_YOUR_PROFILE`\n  * `RISK_TOLERANCE_SCORE`\n  * `RISK_GROUP`\n  * `YOUR_DIFFERENCES`\n  * `FOOTNOTES`\n"
+              }
+            ]
+          },
+          "docs": "Get a specific response to the risk tolerance questionnaire for a client. The report includes sections on:\n\n\n  * Risk tolerance score\n  * Risk group\n  * Differences\n  * How to use the report\n  * Footnotes\n\nIn the `ignoreSections` parameter, specify any sections you do not want returned in the response.\n"
+        },
+        {
+          "info": {
+            "name": "Generate reports",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/report",
+            "params": [
+              {
+                "name": "langcult",
+                "value": "",
+                "type": "query",
+                "description": "Language and locale, for example, en-US"
+              },
+              {
+                "name": "contentDispositionHeaderValue",
+                "value": "",
+                "type": "query",
+                "description": "Open PDF online or download as an attachment"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a report for the portfolio specified in the request body. Report types include: </br></br> - X-Ray</br>- Snapshot </br> - Hypothetical Growth </br>- Investment Details </br> - Stock Intersection </br>- Disclosure </br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter."
+        },
+        {
+          "info": {
+            "name": "Get report(s) metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/reports",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "period",
+                "value": "",
+                "type": "query",
+                "description": "Time period for reports in quarters:<br> 0 = Current quarter<br> 1 = Previous quarter<br> n = nth quarter from the current quarter<br> -1 = Current and previous quarter<br>"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Name search string"
+              },
+              {
+                "name": "bucketId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a bucket. Default is root bucket."
+              },
+              {
+                "name": "householdId",
+                "value": "",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "published",
+                "value": "",
+                "type": "query",
+                "description": "When set to `published` returns published reports only"
+              }
+            ]
+          },
+          "docs": "Get reports metadata including `reportId`. </br></br>You must enter a time period for the request to query in the `period` parameter. Time period is measured in quarters:</br> - `0` = Current quarter. For example, if today is 2021-07-31, returns reports for 2021-07-01 to 2021-09-30.</br> - `1` = Previous quarter. For example, if today is 2021-07-31, returns reports for 2021-04-01 to 2021-06-30.</br> - `n` = nth quarter from the current quarter. For example, `4` returns reports of the 4th quarter"
+        },
+        {
+          "info": {
+            "name": "Get a report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/reports/:reportId",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "reportId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a report"
+              }
+            ]
+          },
+          "docs": "Get the report specified in the `reportId` parameter."
+        },
+        {
+          "info": {
+            "name": "Assign report(s)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/reports/assign",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Assign report(s) specified in the request body to household(s) specified in the request body.</br></br>You must assign a report to a household before it can be published."
+        },
+        {
+          "info": {
+            "name": "Publish or unpublish reports(s) to Client Web Portal",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.us-api.morningstar.com/token/reports/publish",
+            "headers": [
+              {
+                "name": "x-api-key",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "enabled",
+                "value": "",
+                "type": "query",
+                "description": "Set report(s) to added (true) or removed (false)."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add or remove report files from the Client Web Portal. You must assign a report to a household before it can be published.</br></br>**Note:** Requests to unpublish a report that contain an identifier for a report that has not been published will fail."
+        },
+        {
+          "info": {
+            "name": "Get the content of a specific response to a questionnaire",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/reports/risks/:responseId",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Accept-Language",
+                "value": ""
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "responseId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a",
+                "type": "path",
+                "description": "Unique identifier of a response to a questionnaire"
+              },
+              {
+                "name": "clientId",
+                "value": "3168dab3-4445-40c5-8295-5a816c6cd5de",
+                "type": "query",
+                "description": "Unique identifier of a client"
+              },
+              {
+                "name": "ignoreSections",
+                "value": "RISK_TOLERANCE,USING_YOUR_PROFILE,RISK_TOLERANCE_SCORE,RISK_GROUP,YOUR_DIFFERENCES,FOOTNOTES",
+                "type": "query",
+                "description": "Define the sections you do NOT want to include in the report. It must be a comma separated string with the specific sections to ignore in the response. If not specified, all the sections will be included."
+              }
+            ]
+          },
+          "docs": "Get the content of a specific response to a questionnaire, including the static text, risk tolerance responses, and footnotes. In the `ignoreSections` parameter, specify any sections you do not want returned in the response."
+        },
+        {
+          "info": {
+            "name": "Extract clients data in csv format.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/reports/data-points",
+            "headers": [
+              {
+                "name": "X-API-RequestId",
+                "value": "436c05d4-27b6-4a92-b7f1-5a829d55373a"
+              },
+              {
+                "name": "Authorization",
+                "value": ""
+              }
+            ],
+            "params": [
+              {
+                "name": "startDate",
+                "value": "20200601",
+                "type": "query",
+                "description": "Date to start fetching records."
+              },
+              {
+                "name": "endDate",
+                "value": "20200228",
+                "type": "query",
+                "description": "Date to limit fetching record."
+              }
+            ]
+          },
+          "docs": "Extract client data with questionnaire answers and suitability score calculations."
+        },
+        {
+          "info": {
+            "name": "Generate reports in Excel format",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v1/reports/:namespaces",
+            "params": [
+              {
+                "name": "namespaces",
+                "value": "",
+                "type": "path",
+                "description": "Get statistics for a namespace or comma-separated list of namespaces"
+              }
+            ]
+          },
+          "docs": "Generate reports in Excel format"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

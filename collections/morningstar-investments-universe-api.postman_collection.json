@@ -1,0 +1,315 @@
+{
+  "item": [
+    {
+      "id": "0e504d6f-2aa3-4f4f-a78d-b9b6f643e9ad",
+      "name": "Investments Universe",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c12fc4dc-2e27-44e6-b689-abdb85830266",
+          "name": "Query entitled universe to retrieve investment metadata",
+          "request": {
+            "name": "Query entitled universe to retrieve investment metadata",
+            "description": {
+              "content": "\n**Get Universe Entitlements**\n\nRetrieve the **primary filters** your account is entitled for.\n\n| Scenario| Request Inputs |\n|-----------|-------|\n| Get equities entitlements.| `GET /investments`|\n| Get managed investments entitlements.| `GET /investments?source=managedInvestments` |\n\n**Get Custom Universe**\n\nRetrieve a custom universe in full.\n\n| Scenario| Request Inputs |\n|-----------|-------|\n| Get equities custom universe.| `GET /investments?universe=MY_EQUITIES_ABC`|\n| Get managed investments custom universe.| `GET /investments?source=managedInvestments&universe=MY_MANAGED_INVESTMENTS_XYZ`|\n\n**Filter Equities**\n\nFurther narrow a custom universe or filter full universe.\n\n| Scenario| Request Inputs |\n|-----------|-------|\n| Filter custom universe by primary filter.| `GET /investments?exchangeCode=XPAR&universe=MY_EQUITIES_ABC` |\n| Filter custom universe by primary and secondary filter.| `GET /investments?exchangeCode=XPAR&securityType=ST00000001&universe=MY_EQUITIES_ABC` |\n| Filter full universe by primary filter only.| `GET /investments?exchangeCode=XPAR` |\n| Filter full universe by primary and 1 secondary filter.| `GET /investments?exchangeCode=XPAR&securityType=ST00000001` |\n| Filter full universe by primary and 2 secondary filters.| `GET /investments?exchangeCode=XPAR&shareClassInformationInvestmentType=ST00000001&securityType=ST00000001` |\n\n\n**Filter Managed Investments**\n\nFurther narrow a custom universe or filter full universe.\n\n| Scenario| Request Inputs |\n|-----------|-------|\n| Filter custom universe by a primary filter.| `GET /investments?source=managedInvestments&domicileCode=USA&universe=MY_MANAGED_INVESTMENTS_XYZ`|\n| Filter managed investments by a primary filter (`countryAvailableForSaleCode`) | `GET /investments?source=managedInvestments&countryAvailableForSaleCode=USA`|\n| Filter managed investments by a primary filter (`domicileCode`) | `GET /investments?source=managedInvestments&domicileCode=USA`|\n\n\n**Retrieve Results Using Pagination Tokens**\n\nSet pagination preferences in inital request and retrieve paginated results using tokens.\n\n| Scenario| Request Inputs |\n|-----------|-------|\n| Pagination settings initial request (default `pageSize`).| `GET /investments?exchangeCode=XPAR` |\n| Pagination settings subsequent requests (default `pageSize`).| `GET /investments?exchangeCode=XPAR&paginationTokenNext=CJjVEBoTOhE`|\n| Pagination settings initial request (explicit `pageSize`).| `GET /investments?exchangeCode=XPAR&pageSize=25` |\n| Pagination settings subsequent requests (explicit `pageSize`).| `GET /investments?exchangeCode=XPAR&pageSize=25&paginationTokenNext=CJjVEBoTOhE`|",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "direct-web-services",
+                "v1",
+                "investments"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "universe",
+                  "value": "<string>",
+                  "description": "Filters results to a custom universe defined during implementation for the account."
+                },
+                {
+                  "disabled": false,
+                  "key": "source",
+                  "value": "equities",
+                  "description": "Specifies the investment data type to query."
+                },
+                {
+                  "disabled": false,
+                  "key": "exchangeCode",
+                  "value": "<string>",
+                  "description": "Primary filter for equities. Filters results by exchange code."
+                },
+                {
+                  "disabled": false,
+                  "key": "securityType",
+                  "value": "<string>",
+                  "description": "Secondary filter for equities. Accepts:\n\n  *   `ST00000001` - Common Stock\n  *   `ST00000002` - Preferred Stock\n  *   `ST00000003` - Industry\n  *   `ST00000004` - Index\n  *   `ST00000005` - ETF\n  *   `ST00000006` - Closed-end Fund\n  *   `ST00000007` - Investment Trusts\n  *   `ST00000008` - Warrant\n  *   `ST00000009` - Note\n  *   `ST000000A1` - Units\n  *   `ST000000B1` - Rights\n  *   `ST000000C1` - Unlisted Common\n  *   `ST000000C2` - Unlisted Preferred"
+                },
+                {
+                  "disabled": false,
+                  "key": "countryAvailableForSaleCode",
+                  "value": "<string>",
+                  "description": "Primary filter for managed investments. Accepts 3-character ISO 3166-1 country codes."
+                },
+                {
+                  "disabled": false,
+                  "key": "domicileCode",
+                  "value": "<string>",
+                  "description": "Primary filter for managed investments. Accepts 3-character ISO 3166-1 country codes."
+                },
+                {
+                  "disabled": false,
+                  "key": "shareClassInformationInvestmentType",
+                  "value": "<string>",
+                  "description": "Secondary filter for equities.\n\nAccepts:\n\n  *   `EQ` - Equity\n  *   `DR` - Depository Receipt\n  *   `PE` - Preferred Equity\n  *   `UE` - Unlisted Equity"
+                },
+                {
+                  "disabled": false,
+                  "key": "paginationTokenNext",
+                  "value": "<string>",
+                  "description": "Specifies the token to fetch the next page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "paginationTokenPrevious",
+                  "value": "<string>",
+                  "description": "Specifies the token to fetch the previous page of results."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "50",
+                  "description": "Specifies the number of records per page."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "305ef88e-1e0f-41ef-8232-a4ed4b1aad8d",
+              "name": "200: OK",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universe",
+                      "value": "MY_UNIVERSE_321"
+                    },
+                    {
+                      "key": "source",
+                      "value": "equities"
+                    },
+                    {
+                      "key": "exchangeCode",
+                      "value": "XPAR"
+                    },
+                    {
+                      "key": "securityType",
+                      "value": "ST00000001"
+                    },
+                    {
+                      "key": "countryAvailableForSaleCode",
+                      "value": "AUS"
+                    },
+                    {
+                      "key": "domicileCode",
+                      "value": "AUS"
+                    },
+                    {
+                      "key": "shareClassInformationInvestmentType",
+                      "value": "EQ"
+                    },
+                    {
+                      "key": "paginationTokenNext",
+                      "value": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK"
+                    },
+                    {
+                      "key": "paginationTokenPrevious",
+                      "value": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"investments\": [],\n  \"metadata\": {\n    \"requestId\": \"68511d05-3d2e-480c-ae88-a14be0948f03\",\n    \"time\": \"2026-02-26T12:19:15.8950456Z\",\n    \"exchanges\": [\n      {\n        \"exchangeCode\": \"SWA\",\n        \"micCode\": \"XSWA\"\n      },\n      {\n        \"exchangeCode\": \"XTER\",\n        \"micCode\": \"XETR\"\n      },\n      {\n        \"exchangeCode\": \"KAR\",\n        \"micCode\": \"XKAR\"\n      },\n      {\n        \"exchangeCode\": \"ZAG\",\n        \"micCode\": \"XZAG\"\n      },\n      {\n        \"exchangeCode\": \"MTAH\",\n        \"micCode\": \"MTAH\"\n      },\n      {\n        \"exchangeCode\": \"BJSE\",\n        \"micCode\": \"BJSE\"\n      },\n      {\n        \"exchangeCode\": \"OVSE\",\n        \"micCode\": \"XLIT\"\n      }\n    ],\n    \"countryAvailableForSale\": [\n      \"ABW\",\n      \"AFG\",\n      \"AGO\",\n      \"AIA\",\n      \"ALA\",\n      \"ALB\",\n      \"AND\",\n      \"ANT\",\n      \"ARE\",\n      \"ARG\",\n      \"ARM\",\n      \"ASM\",\n      \"CYM\"\n    ],\n    \"domiciles\": [\n      \"ABW\",\n      \"AFG\",\n      \"AGO\",\n      \"AIA\",\n      \"ALA\",\n      \"ALB\",\n      \"AND\",\n      \"ANT\",\n      \"ARE\",\n      \"ARG\",\n      \"ARM\",\n      \"ASM\",\n      \"CYM\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c504933-f16e-4745-8a79-b0fac3d3963f",
+              "name": "400: Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "direct-web-services",
+                    "v1",
+                    "investments"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "universe",
+                      "value": "MY_UNIVERSE_321"
+                    },
+                    {
+                      "key": "source",
+                      "value": "equities"
+                    },
+                    {
+                      "key": "exchangeCode",
+                      "value": "XPAR"
+                    },
+                    {
+                      "key": "securityType",
+                      "value": "ST00000001"
+                    },
+                    {
+                      "key": "countryAvailableForSaleCode",
+                      "value": "AUS"
+                    },
+                    {
+                      "key": "domicileCode",
+                      "value": "AUS"
+                    },
+                    {
+                      "key": "shareClassInformationInvestmentType",
+                      "value": "EQ"
+                    },
+                    {
+                      "key": "paginationTokenNext",
+                      "value": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK"
+                    },
+                    {
+                      "key": "paginationTokenPrevious",
+                      "value": "CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK"
+                    },
+                    {
+                      "key": "pageSize",
+                      "value": "25"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"statusCode\": 400,\n  \"errorCode\": \"400.investmentDetails.020\",\n  \"message\": \"Invalid source input for domicileCode\",\n  \"requestId\": \"539d62a5-3586-4070-965e-0f7f64712d79\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a700a918-a1a7-4833-ade7-2742f45392ea",
+    "name": "Authorization Tokens Accounts Investments Universe API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

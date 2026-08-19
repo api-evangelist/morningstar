@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts fund reports - esg API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "fund reports - esg",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get an Environmental, Social, and Governance (ESG) Report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/fund/v1/reports/esg/:fundshareclassId",
+            "params": [
+              {
+                "name": "fundshareclassId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a fund shareclass"
+              },
+              {
+                "name": "analyst-rating",
+                "value": "",
+                "type": "query",
+                "description": "Include Morningstar Analyst Ratings data point in report"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size of output PDF"
+              },
+              {
+                "name": "locale",
+                "value": "",
+                "type": "query",
+                "description": "Language and locale, for example, en-US"
+              }
+            ]
+          },
+          "docs": "Get an ESG Report for the fund shareclass specified in the `fundshareclassId` parameter.</br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter. </br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br>If a report exists, a presigned URL from which you can download the PDF is returned in the response."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

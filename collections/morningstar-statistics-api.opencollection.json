@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts statistics API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "statistics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a statistics resource for a namespace, tool and time period",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/v1/statistics/:namespace/:tool/:period",
+            "params": [
+              {
+                "name": "namespace",
+                "value": "",
+                "type": "path",
+                "description": "Get statistics for this namespace"
+              },
+              {
+                "name": "tool",
+                "value": "",
+                "type": "path",
+                "description": "Get statistics for this tool"
+              },
+              {
+                "name": "period",
+                "value": "",
+                "type": "path",
+                "description": "Get statistics for this time period"
+              },
+              {
+                "name": "date",
+                "value": "",
+                "type": "query",
+                "description": "Get statistics logged for this date. For month or quarter this is the end date for the period. If omitted returns the latest available statistics."
+              }
+            ]
+          },
+          "docs": "Get the latest statistics for the specified namespace, tool and time period. Specify the `date` parameter to get statistics for that date."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,272 @@
+{
+  "item": [
+    {
+      "id": "08bbf5e2-1611-48fb-9463-55e79fb755ab",
+      "name": "Activities",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "be1120ad-b87a-48fc-9e04-9bb6619704af",
+          "name": "Monitor the status of asynchronous authentication or aggregation activities",
+          "request": {
+            "name": "Monitor the status of asynchronous authentication or aggregation activities",
+            "description": {
+              "content": "Determine if asynchronous activities are in progress for the  authenticated  investor. The endpoint can monitor activities for just the current session, or it can include other sessions of the user depending  on the `scope` parameter setting.  Asynchronous activities include:  </br>  </br><span>&#8226;</span> authenticating credentials </br>  <span>&#8226;</span> discovering, adding, and aggregating accounts</br>  <span>&#8226;</span> aggregating accounts </br></br>This endpoint  returns a single Boolean value for *activityInProgress* that indicates whether asynchronous activities are in progress for the user.  </br></br>The applicable scope of this endpoint is always a single authenticated investor.  This endpoint can provide information on asynchronous activity for the current session or for all activity in thesystem. Use the `scope` parameter with value `session` to request information about activity initiated during the current session.  Use the `scope` parameter with value `global` to request information for all activity in the system.  When `scope` is `global`, asynchronous activity progress will be available for terminated sessions up to 15 minutes after completion of that activity.  If the `scope` parameter is not provided, the endpoint will report on activity for the current session if there is one.  If there is no current session (Morningstar Authentication) then it will report on all activity for the authenticated investor.   </br></br>**Response discussion** </br>The JSON response for the endpoint is one of the following, depending on whether there is activity in progress or not: </br><span>&#8226;</span>  {\"activityInProgress\":false} </br>OR</br><span>&#8226;</span> {\"activityInProgress\":true}</br>If `scope` is not set or is set to `session`, the value is true if any asynchronous activity is in progress for the session for at least one credential. If `scope` is set to `global`, the value is true if any asynchronous activity is in progress for the session for at least one credential or if authenticate or discovery/add/aggregate is in progress for accounts aggregating for at least one credential outside the current session. When all activity completes then the value of activityInProgress will be false. ",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "activities",
+                "summary"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "scope",
+                  "value": "session",
+                  "description": "Scope of activity. Value can be *session*, to include only session-specific activity progress, or *global* to also include activity progress from other sessions for this user. Cannot be set to *session* for users autheticated with Morningtar Authentication.  The default is *session* for  session-based users and *global* for users authenticated by Morningstar Authentication.</br></br>Note: the *global* setting currently does not return status for accounts aggregating outside the current session."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "49ee0f0c-c87b-4ce8-a861-2801cfe24477",
+              "name": "Ok </br>See Response discussion above.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "activities",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "session"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"activityInProgress\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b63e17f0-21f1-4c4f-bccd-31bfe073a928",
+              "name": "Not Authorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "activities",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "session"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4108eead-2e8d-457d-834b-3846d39a033f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "activities",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "session"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1c63e66d-ed56-43be-b0cd-ffa39a9b0689",
+              "name": "Internal Server Error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "activities",
+                    "summary"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "scope",
+                      "value": "session"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://www.us-api.morningstar.com/token",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "basic",
+    "basic": [
+      {
+        "key": "username",
+        "value": "{{basicAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{basicAuthPassword}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "ca38e7bf-3894-411f-aa36-3efed33a1fea",
+    "name": "Authorization Tokens Accounts Activities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>\nTo request a token, click Authorize and enter the following credentials:\n\n* Username - Your Client ID.\n* Password - Your Client Secret.",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts fund reports - target date series API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "fund reports - target date series",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a Target Date Series Report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/fund/v1/reports/target-date-series/:StrategyId",
+            "params": [
+              {
+                "name": "StrategyId",
+                "value": "",
+                "type": "path",
+                "description": "A unique identifier for a specific fund. For example, STUSA04D0O"
+              },
+              {
+                "name": "locale",
+                "value": "",
+                "type": "query",
+                "description": "Language and locale, for example, en-US"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size of output PDF"
+              }
+            ]
+          },
+          "docs": "Get a Target Date Series Report for the fund specified in the `StrategyId` parameter.</br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter.</br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter`.</br></br>If a report exists, a presigned URL from which you can download the PDF is returned in the response."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Authorization Tokens Accounts fund reports - managed investment report API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "basic",
+      "username": "{{username}}",
+      "password": "{{password}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "fund reports - managed investment report",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a Managed Investment Report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.us-api.morningstar.com/token/fund/v1/reports/global-fund-report/:FundIdentifier",
+            "params": [
+              {
+                "name": "FundIdentifier",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of a fund"
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Page size of output PDF"
+              },
+              {
+                "name": "locale",
+                "value": "",
+                "type": "query",
+                "description": "Language and locale, for example, en-US"
+              }
+            ]
+          },
+          "docs": "Get a Managed Investment Report for the fund specified in the `FundIdentifier` parameter.</br></br> Managed Investments Reports provide a qualitative assessment  of a fund carried out by Morningstar Research Analysts.</br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br>If a report exists, a presigned URL from which you can download the PDF is returned in the response."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
