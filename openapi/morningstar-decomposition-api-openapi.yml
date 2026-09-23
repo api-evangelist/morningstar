@@ -1,24 +1,32 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Risk Analytics Decomposition API
   version: 1.0.0
-  title: Authorization Tokens Accounts decomposition API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+  description: 'Use the API to:
 
-    To request a token, click Authorize and enter the following credentials:
+    * Calculate performance attribution, risk attribution, and active exposure for investment(s) based on predefined risk models.
+
+    * Forecast the impact on investments if market and macroeconomic events reoccur by using predefined and custom scenarios.
+
+    * Retrieve scenario metadata including IDs that you use with other endpoints.
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    To retrieve the risk model IDs used with the endpoints in this API, use the Risk Models API.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/risk-analytics/v1
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/risk-analytics/v1
+  description: UAT
+- url: https://www.emea-api.morningstar.com/risk-analytics/v1
+  description: PROD
+- url: https://www.emea-uat-api.morningstar.com/risk-analytics/v1
+  description: UAT
+- url: https://www.apac-api.morningstar.com/risk-analytics/v1
+  description: PROD
+- url: https://www.apac-uat-api.morningstar.com/risk-analytics/v1
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
 - name: decomposition
 paths:
@@ -36,7 +44,7 @@ paths:
         '500':
           description: Internal server error.
       summary: Calculate risk attribution for a portfolio over a defined time period
-      description: Based on a specific risk model, calculate risk attribution for a specific portfolio over a time period of between 3 months and 15 years.  The response enables you to attribute portfolio risk to specific factors.
+      description: Based on a specific risk model, calculate risk attribution for a specific portfolio over a time period of between 3 months and 15 years. The response enables you to attribute portfolio risk to specific factors.
       operationId: post_decomposition_by_factors
       requestBody:
         content:
@@ -59,8 +67,8 @@ paths:
           description: Not found.
         '500':
           description: Internal server error.
-      summary: Calculate risk attribution for the individual holdings in a portfolio over a defined time period
-      description: Based on a specific risk model, calculate risk attribution for a specific portfolio over a time period of between 3 months and 15 years.  The response enables you to attribute portfolio risk to specific holdings.
+      summary: Calculate risk attribution for the individual holdings in a portfolio over a…
+      description: Based on a specific risk model, calculate risk attribution for a specific portfolio over a time period of between 3 months and 15 years. The response enables you to attribute portfolio risk to specific holdings.
       operationId: post_decomposition_by_holdings
       requestBody:
         content:
@@ -72,30 +80,60 @@ paths:
       - decomposition
 components:
   schemas:
-    idType:
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-      type: object
-    holding:
-      properties:
-        identifier:
-          type: string
-        weight:
-          type: number
-      type: object
-    Holdings:
+    CalculateByHoldings:
       required:
-      - id
+      - benchmark
+      - endDate
+      - investment
+      - startDate
       properties:
-        holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/holding'
-        id:
+        startDate:
           type: string
+          description: The start date of the time period to perform the attribution analysis.
+          example: '2018-01-01T00:00:00.000Z'
+        endDate:
+          type: string
+          description: The end date of the time period to perform the attribution analysis.
+          example: '2018-06-30T00:00:00.000Z'
+        currency:
+          type: string
+          description: Currency of holdings
+          example: USD
+        investment:
+          description: ''
+          example:
+            id: model-portfolio1
+            type: portfolio
+          allOf:
+          - $ref: '#/components/schemas/idType'
+        benchmark:
+          description: ''
+          example:
+            id: model-portfolio2
+            type: portfolio
+          allOf:
+          - $ref: '#/components/schemas/idType'
+        portfolios:
+          type: array
+          example:
+          - id: model-portfolio1
+            holdings:
+            - identifier: 0P0000058R
+              identifierType: PerformanceId
+              weight: 60
+            - identifier: 0P000001RB
+              identifierType: PerformanceId
+              weight: 40
+          - id: model-portfolio2
+            holdings:
+            - identifier: 0P0000058R
+              identifierType: PerformanceId
+              weight: 50
+            - identifier: 0P000001RB
+              identifierType: PerformanceId
+              weight: 50
+          items:
+            $ref: '#/components/schemas/Holdings'
       type: object
     CalculateByFactors:
       required:
@@ -156,62 +194,32 @@ components:
           items:
             $ref: '#/components/schemas/Holdings'
       type: object
-    CalculateByHoldings:
-      required:
-      - benchmark
-      - endDate
-      - investment
-      - startDate
+    holding:
       properties:
-        startDate:
+        identifier:
           type: string
-          description: The start date of the time period to perform the attribution analysis.
-          example: '2018-01-01T00:00:00.000Z'
-        endDate:
+        weight:
+          type: number
+      type: object
+    idType:
+      properties:
+        id:
           type: string
-          description: The end date of the time period to perform the attribution analysis.
-          example: '2018-06-30T00:00:00.000Z'
-        currency:
+        type:
           type: string
-          description: Currency of holdings
-          example: USD
-        investment:
-          description: ''
-          example:
-            id: model-portfolio1
-            type: portfolio
-          allOf:
-          - $ref: '#/components/schemas/idType'
-        benchmark:
-          description: ''
-          example:
-            id: model-portfolio2
-            type: portfolio
-          allOf:
-          - $ref: '#/components/schemas/idType'
-        portfolios:
+      type: object
+    Holdings:
+      required:
+      - id
+      properties:
+        holdings:
           type: array
-          example:
-          - id: model-portfolio1
-            holdings:
-            - identifier: 0P0000058R
-              identifierType: PerformanceId
-              weight: 60
-            - identifier: 0P000001RB
-              identifierType: PerformanceId
-              weight: 40
-          - id: model-portfolio2
-            holdings:
-            - identifier: 0P0000058R
-              identifierType: PerformanceId
-              weight: 50
-            - identifier: 0P000001RB
-              identifierType: PerformanceId
-              weight: 50
           items:
-            $ref: '#/components/schemas/Holdings'
+            $ref: '#/components/schemas/holding'
+        id:
+          type: string
       type: object
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

@@ -1,8 +1,9 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   version: 1.0.0
-  title: Authorization Tokens Accounts oauth API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+  title: Authorization Tokens OAUTH API
+  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.
+
 
     To request a token, click Authorize and enter the following credentials:
 
@@ -20,12 +21,12 @@ servers:
 security:
 - BasicAuth: []
 tags:
-- name: oauth
+- name: OAuth
 paths:
   /oauth:
     post:
       tags:
-      - oauth
+      - OAuth
       responses:
         '200':
           description: Successful response
@@ -39,6 +40,10 @@ paths:
             '*/*':
               schema:
                 $ref: '#/components/schemas/401Response'
+      summary: Create oauth
+      x-summary-source: derived
+      operationId: postOauth
+      x-operation-id-source: derived
 components:
   schemas:
     200Response:

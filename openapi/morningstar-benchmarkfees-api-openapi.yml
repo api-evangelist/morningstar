@@ -1,24 +1,16 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Retirement Plan (US) Benchmark Fees API
   version: 1.0.0
-  title: Authorization Tokens Accounts BenchmarkFees API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  description: 'Use the Retirement Plan API to:
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    - Get details, including plan lineups, for over 600,000 United States employer retirement plans based on form 404a-5 and form 5500 filings.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/ec
+  description: PROD
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
 - name: BenchmarkFees
 paths:
@@ -69,25 +61,18 @@ paths:
             text/xml:
               schema:
                 $ref: '#/components/schemas/ErrorDetails'
+      operationId: getV1RetirementplanBenchmarkFees
+      x-operation-id-source: derived
 components:
   schemas:
-    ErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          format: int32
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
     BenchmarkFeeModel:
       type: object
       properties:
         benchmarkName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Name of the benchmark, including applicable plan size dollar amount range
-          nullable: true
         benchmarkFeeRatio:
           type: number
           description: Typical plan-level fee for a retirement plan of this size
@@ -98,7 +83,18 @@ components:
           format: double
       additionalProperties: false
       description: Benchmark Fee Model
+    ErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

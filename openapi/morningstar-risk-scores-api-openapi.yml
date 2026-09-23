@@ -1,33 +1,32 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  description: Internal and external teams use the Portolio Analysis (US) API to integrate Morningstar's calculated data directly into their own tools, software, and applications.
   version: 1.0.0
-  title: Authorization Tokens Accounts risk scores API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: Portfolio Analysis (US) risk scores API
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/portfolioanalysis/v1
+  description: PROD
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
-- name: risk scores
+- name: Risk Scores
 paths:
   /riskscore:
     post:
       tags:
-      - risk scores
+      - Risk Scores
       summary: Calculate portfolio risk scores
-      description: Calculate the following scores for the portfolios specified in the request body:</br></br>- Risk score</br>- Alignment score</br> - R-squared score </br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.
+      description: 'Calculate the following scores for the portfolios specified in the request body:
+
+
+        - Risk score
+
+        - Alignment score
+
+        - R-squared score
+
+
+        To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.'
       operationId: RiskscoreV1_PostAsync
       parameters:
       - name: langcult
@@ -69,6 +68,31 @@ paths:
           description: Internal Server Error
 components:
   schemas:
+    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreStyle:
+      type: object
+      properties:
+        Name:
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        Category:
+          type: string
+        Name:
+          type: string
+        IsEquity:
+          type: boolean
+        UnconstrainedStyleExposure:
+          type: boolean
+        Style:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreStyle'
     Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
       type: object
       properties:
@@ -83,49 +107,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
-    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding:
-      description: 'TODO: Implement same way as PortfolioInput'
-      required:
-      - SecurityId
-      - Weight
-      type: object
-      properties:
-        SecurityId:
-          type: string
-        Type:
-          enum:
-          - XI
-          - CA
-          - EI
-          - CASH
-          type: string
-        Weight:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings:
-      type: object
-      properties:
-        Portfolios:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
-        RiskScoreTAIConfig:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig'
-      example:
-        Portfolios:
-        - Name: TestPortfolio1
-          TotalValue: 10000
-          Holdings:
-          - SecurityId: F00000VCTT
-            Weight: 20
-          - SecurityId: 0P00002NW8
-            Weight: 10
-          - TradingSymbol: AAPL
-            Weight: 15
-          - ISIN: US09251T1034
-            Weight: 35
-          - CUSIP: '256219106'
-            Weight: 20
     Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
       required:
       - Name
@@ -161,31 +142,6 @@ components:
         RiskFreeProxyId:
           description: Default is set in the Configuration. This is a portfolio level override.
           type: string
-    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreStyle:
-      type: object
-      properties:
-        Name:
-          type: string
-        Value:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreConfig:
-      type: object
-      properties:
-        Id:
-          type: string
-        Category:
-          type: string
-        Name:
-          type: string
-        IsEquity:
-          type: boolean
-        UnconstrainedStyleExposure:
-          type: boolean
-        Style:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreStyle'
     Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreGroupConfig:
       type: object
       properties:
@@ -200,6 +156,43 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreConfig'
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding:
+      description: 'TODO: Implement same way as PortfolioInput'
+      required:
+      - SecurityId
+      - Weight
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Type:
+          enum:
+          - XI
+          - CA
+          - EI
+          - CASH
+          type: string
+        Weight:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        MonthlyReturnsRequired:
+          format: int32
+          type: integer
+        TAIReturnsStartDate:
+          format: date-time
+          type: string
+        ReturnsThresholdValue:
+          format: double
+          type: number
+        RiskScoreGroupConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreGroupConfig'
     Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding:
       type: object
       properties:
@@ -282,25 +275,31 @@ components:
           type: string
         FundCode:
           type: string
-    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig:
+    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings:
       type: object
       properties:
-        Id:
-          type: string
-        MonthlyReturnsRequired:
-          format: int32
-          type: integer
-        TAIReturnsStartDate:
-          format: date-time
-          type: string
-        ReturnsThresholdValue:
-          format: double
-          type: number
-        RiskScoreGroupConfig:
+        Portfolios:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreGroupConfig'
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
+        RiskScoreTAIConfig:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig'
+      example:
+        Portfolios:
+        - Name: TestPortfolio1
+          TotalValue: 10000
+          Holdings:
+          - SecurityId: F00000VCTT
+            Weight: 20
+          - SecurityId: 0P00002NW8
+            Weight: 10
+          - TradingSymbol: AAPL
+            Weight: 15
+          - ISIN: US09251T1034
+            Weight: 35
+          - CUSIP: '256219106'
+            Weight: 20
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

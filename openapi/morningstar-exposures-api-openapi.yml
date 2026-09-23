@@ -1,26 +1,34 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Risk Analytics Exposures API
   version: 1.0.0
-  title: Authorization Tokens Accounts exposures API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+  description: 'Use the API to:
 
-    To request a token, click Authorize and enter the following credentials:
+    * Calculate performance attribution, risk attribution, and active exposure for investment(s) based on predefined risk models.
+
+    * Forecast the impact on investments if market and macroeconomic events reoccur by using predefined and custom scenarios.
+
+    * Retrieve scenario metadata including IDs that you use with other endpoints.
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    To retrieve the risk model IDs used with the endpoints in this API, use the Risk Models API.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/risk-analytics/v1
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/risk-analytics/v1
+  description: UAT
+- url: https://www.emea-api.morningstar.com/risk-analytics/v1
+  description: PROD
+- url: https://www.emea-uat-api.morningstar.com/risk-analytics/v1
+  description: UAT
+- url: https://www.apac-api.morningstar.com/risk-analytics/v1
+  description: PROD
+- url: https://www.apac-uat-api.morningstar.com/risk-analytics/v1
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
-- name: exposures
+- name: Exposures
 paths:
   /exposures/snapshot:
     post:
@@ -45,7 +53,7 @@ paths:
               $ref: '#/components/schemas/ExposureSnapshot'
         required: true
       tags:
-      - exposures
+      - Exposures
 components:
   schemas:
     ExposureSnapshot:
@@ -69,6 +77,6 @@ components:
             type: string
       type: object
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

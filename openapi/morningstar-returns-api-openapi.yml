@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Returns API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Returns API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Returns
 paths:
@@ -675,74 +684,38 @@ paths:
       x-cpqId: 913
 components:
   schemas:
-    OutputMonthEndReturnStatistics:
+    OutputIdentifiers:
       type: object
       properties:
-        asOfDate:
-          type: string
-          description: The calendar date when the best and worst 3 months total return datapoints are calculated
-          nullable: true
-        best3MonthTotalReturnOverPast120Months:
-          type: number
-          description: This data point refers to the highest 3 month total return value over the past 120 months.
-          format: double
-          nullable: true
-        best3MonthTotalReturnOverPast12Months:
-          type: number
-          description: This data point refers to the highest 3 month total return value over the past 12 months.
-          format: double
-          nullable: true
-        best3MonthTotalReturnOverPast36Months:
-          type: number
-          description: This data point refers to the highest 3 month total return value over the past 36 months.
-          format: double
-          nullable: true
-        best3MonthTotalReturnOverPast60Months:
-          type: number
-          description: This data point refers to the highest 3 month total return value over the past 60 months.
-          format: double
-          nullable: true
-        worst3MonthTotalReturnOverPast120Months:
-          type: number
-          description: This data point refers to the lowest 3 month total return value over the past 120 months.
-          format: double
-          nullable: true
-        worst3MonthTotalReturnOverPast12Months:
-          type: number
-          description: This data point refers to the lowest 3 month total return value over the past 12 months.
-          format: double
-          nullable: true
-        worst3MonthTotalReturnOverPast36Months:
-          type: number
-          description: This data point refers to the lowest 3 month total return value over the past 36 months.
-          format: double
-          nullable: true
-        worst3MonthTotalReturnOverPast60Months:
-          type: number
-          description: This data point refers to the lowest 3 month total return value over the past 60 months.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputMonthEndReturnStatistics
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
+        performanceId:
           type: string
           nullable: true
-        code:
+        securityId:
           type: string
           nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+        cusip:
+          type: string
           nullable: true
-        message:
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
+      title: OutputIdentifiers
     OutputTrailingReturn:
       type: object
       properties:
@@ -1016,75 +989,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMonthlyStandardDeviation
-    OutputMarketReturn:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date when the market return data points are calculated
-          nullable: true
-        nonDividendTotalReturnMonthToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-month period. It is calculated by using the change in price (adjusted for splits and spin-offs) for the month to date; divided by the share price at the beginning of the 1-month period.
-          format: double
-          nullable: true
-        nonDividendTotalReturnOneDay:
-          type: number
-          description: The data point represents the rate of return observed over a 1-day period. It is calculated by using the change in price (adjusted for splits and spin-offs) for today; divided by the share price from yesterday.
-          format: double
-          nullable: true
-        totalGrossedUpReturnDateToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-day period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for today; and dividing this sum by the share price from yesterday.
-          format: double
-          nullable: true
-        totalGrossedUpReturnMonthToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-month period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the month to date; and dividing this sum by the share price at the beginning of the 1-month period.
-          format: double
-          nullable: true
-        totalGrossedUpReturnQuarterToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-quarter period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the quarter to date; and dividing this sum by the share price at the beginning of the 1-quarter period.
-          format: double
-          nullable: true
-        totalGrossedUpReturnWeekToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-week period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the week to date; and dividing this sum by the share price at the beginning of the 1-week period.
-          format: double
-          nullable: true
-        totalGrossedUpReturnYearToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-year period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the year to date; and dividing this sum by the share price at the beginning of the 1-year period.
-          format: double
-          nullable: true
-        totalReturnMonthToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-month period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the month to date; and dividing this sum by the share price at the beginning of the 1-month period.
-          format: double
-          nullable: true
-        totalReturnOneDay:
-          type: number
-          description: The data point represents the rate of return observed over a 1-day period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for today; and dividing this sum by the share price from yesterday.
-          format: double
-          nullable: true
-        totalReturnQuarterToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-quarter period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the quarter to date; and dividing this sum by the share price at the beginning of  the 1-quarter period.
-          format: double
-          nullable: true
-        totalReturnWeekToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-week period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the week to date; and dividing this sum by the share price at the beginning of the 1-week period.
-          format: double
-          nullable: true
-        totalReturnYearToDate:
-          type: number
-          description: The data point represents the rate of return observed over a 1-year period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the year to date; and dividing this sum by the share price at the beginning of the 1-year period.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputMarketReturn
     OutputDailyStandardDeviation:
       type: object
       properties:
@@ -1154,38 +1058,74 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputDailyStandardDeviation
-    OutputIdentifiers:
+    OutputMonthEndReturnStatistics:
       type: object
       properties:
-        performanceId:
+        asOfDate:
+          type: string
+          description: The calendar date when the best and worst 3 months total return datapoints are calculated
+          nullable: true
+        best3MonthTotalReturnOverPast120Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 120 months.
+          format: double
+          nullable: true
+        best3MonthTotalReturnOverPast12Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 12 months.
+          format: double
+          nullable: true
+        best3MonthTotalReturnOverPast36Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 36 months.
+          format: double
+          nullable: true
+        best3MonthTotalReturnOverPast60Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 60 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast120Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 120 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast12Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 12 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast36Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 36 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast60Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 60 months.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputMonthEndReturnStatistics
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
           type: string
           nullable: true
-        securityId:
+        code:
           type: string
           nullable: true
-        cusip:
-          type: string
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
+        message:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputIdentifiers
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -1232,28 +1172,75 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputErrorDetails:
+    OutputMarketReturn:
       type: object
       properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
+        asOfDate:
           type: string
-          description: Custom error code
+          description: The calendar date when the market return data points are calculated
           nullable: true
-        message:
-          type: string
-          description: Message
+        nonDividendTotalReturnMonthToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-month period. It is calculated by using the change in price (adjusted for splits and spin-offs) for the month to date; divided by the share price at the beginning of the 1-month period.
+          format: double
           nullable: true
-        requestId:
-          type: string
-          description: RequestId
+        nonDividendTotalReturnOneDay:
+          type: number
+          description: The data point represents the rate of return observed over a 1-day period. It is calculated by using the change in price (adjusted for splits and spin-offs) for today; divided by the share price from yesterday.
+          format: double
+          nullable: true
+        totalGrossedUpReturnDateToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-day period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for today; and dividing this sum by the share price from yesterday.
+          format: double
+          nullable: true
+        totalGrossedUpReturnMonthToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-month period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the month to date; and dividing this sum by the share price at the beginning of the 1-month period.
+          format: double
+          nullable: true
+        totalGrossedUpReturnQuarterToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-quarter period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the quarter to date; and dividing this sum by the share price at the beginning of the 1-quarter period.
+          format: double
+          nullable: true
+        totalGrossedUpReturnWeekToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-week period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the week to date; and dividing this sum by the share price at the beginning of the 1-week period.
+          format: double
+          nullable: true
+        totalGrossedUpReturnYearToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-year period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the year to date; and dividing this sum by the share price at the beginning of the 1-year period.
+          format: double
+          nullable: true
+        totalReturnMonthToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-month period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the month to date; and dividing this sum by the share price at the beginning of the 1-month period.
+          format: double
+          nullable: true
+        totalReturnOneDay:
+          type: number
+          description: The data point represents the rate of return observed over a 1-day period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for today; and dividing this sum by the share price from yesterday.
+          format: double
+          nullable: true
+        totalReturnQuarterToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-quarter period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the quarter to date; and dividing this sum by the share price at the beginning of  the 1-quarter period.
+          format: double
+          nullable: true
+        totalReturnWeekToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-week period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the week to date; and dividing this sum by the share price at the beginning of the 1-week period.
+          format: double
+          nullable: true
+        totalReturnYearToDate:
+          type: number
+          description: The data point represents the rate of return observed over a 1-year period. It is calculated by summing up all dividends and the change in price (adjusted for splits and spin-offs) for the year to date; and dividing this sum by the share price at the beginning of the 1-year period.
+          format: double
           nullable: true
       additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
+      title: OutputMarketReturn
     OutputMetadata:
       type: object
       properties:
@@ -1277,73 +1264,35 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
   responses:
-    ResponseEquityReturnsToDate:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              marketReturn:
-                $ref: '#/components/schemas/OutputMarketReturn'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityTrailingReturnStatistics:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              dailyStandardDeviation:
-                $ref: '#/components/schemas/OutputDailyStandardDeviation'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityMonthlyReturnStatistics:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              monthEndReturnStatistics:
-                $ref: '#/components/schemas/OutputMonthEndReturnStatistics'
-              monthlyStandardDeviation:
-                $ref: '#/components/schemas/OutputMonthlyStandardDeviation'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseInternalServerError:
       description: Internal Server
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityTrailingReturns:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              trailingReturn:
-                $ref: '#/components/schemas/OutputTrailingReturn'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityReturns:
       description: OK
       content:
@@ -1365,7 +1314,69 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTrailingReturnStatistics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dailyStandardDeviation:
+                $ref: '#/components/schemas/OutputDailyStandardDeviation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityReturnsToDate:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              marketReturn:
+                $ref: '#/components/schemas/OutputMarketReturn'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityMonthlyReturnStatistics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              monthEndReturnStatistics:
+                $ref: '#/components/schemas/OutputMonthEndReturnStatistics'
+              monthlyStandardDeviation:
+                $ref: '#/components/schemas/OutputMonthlyStandardDeviation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityTrailingReturns:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              trailingReturn:
+                $ref: '#/components/schemas/OutputTrailingReturn'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

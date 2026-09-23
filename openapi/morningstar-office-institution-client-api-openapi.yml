@@ -1,24 +1,24 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Household Members (US) Office Institution Client API
   version: 1.0.0
-  title: Authorization Tokens Accounts Office Institution Client API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  description: 'Use the Household Members API to retrieve household member lists and member profiles, and to update member and client profiles for Morningstar Office.
 
 
-    * Username - Your Client ID.
+    With this API you can:
 
-    * Password - Your Client Secret.'
+    * Get member list for a specific household.
+
+    * Get a specific member''s profile.
+
+    * Update household client''s and member''s profiles.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/office/v1
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/office/v1
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
 - name: Office Institution Client
 paths:
@@ -58,7 +58,62 @@ paths:
       tags:
       - Office Institution Client
       summary: Update institution client profile
-      description: 'Updates an Institution Client profile. </br></br> `institutionType` mapping:</br></br> `1` = Sole Proprietorship</br> `2` = Trust</br> `3` = Charitable Trust</br> `4` = Rovocable Trust</br> `5` = Corporation</br> `6` = Investment Club</br> `7` = Association</br> `8` = Non-Profit Organization</br> `9` = Partnership</br> `10` = Limited Partnership</br> `11` = Family Limited Partnership</br> `12` = LLP </br> `13` = LLC</br> `14` = Estate</br></br>  `isUSCorporation` = `1` or `0` </br></br> `taxIdType` = `ssn` or `tin` </br></br> `role` mapping: </br></br> `1` = Authorized Signer</br> `2` = Other</br> `3` = Trustee</br> `4` = Successor Trustee</br> `5` = Custodian</br></br> `institutionName`, `firstName`, and `lastName` do not support these characters: ~!#^`[]{}|\;"<>?/'
+      description: 'Updates an Institution Client profile.
+
+
+        `institutionType` mapping:
+
+
+        `1` = Sole Proprietorship
+
+        `2` = Trust
+
+        `3` = Charitable Trust
+
+        `4` = Rovocable Trust
+
+        `5` = Corporation
+
+        `6` = Investment Club
+
+        `7` = Association
+
+        `8` = Non-Profit Organization
+
+        `9` = Partnership
+
+        `10` = Limited Partnership
+
+        `11` = Family Limited Partnership
+
+        `12` = LLP
+
+        `13` = LLC
+
+        `14` = Estate
+
+
+        `isUSCorporation` = `1` or `0`
+
+
+        `taxIdType` = `ssn` or `tin`
+
+
+        `role` mapping:
+
+
+        `1` = Authorized Signer
+
+        `2` = Other
+
+        `3` = Trustee
+
+        `4` = Successor Trustee
+
+        `5` = Custodian
+
+
+        `institutionName`, `firstName`, and `lastName` do not support these characters: ~!#^`[]{}|\;"<>?/'
       operationId: updateInstitution
       requestBody:
         description: The Institution to update.
@@ -99,16 +154,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    InstitutionPost400:
-      type: object
-      properties:
-        message:
-          type: string
-          format: string
-          example: Missing firstName property.
-        id:
-          type: string
-          format: uuid
     Institution:
       type: object
       required:
@@ -238,6 +283,16 @@ components:
               format: string
               maxLength: 20
               example: 555-555555
+    InstitutionPost400:
+      type: object
+      properties:
+        message:
+          type: string
+          format: string
+          example: Missing firstName property.
+        id:
+          type: string
+          format: uuid
     updateInstitution:
       type: object
       required:
@@ -394,6 +449,6 @@ components:
               example: 555-555555
               description: If not included, will default to empty.
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

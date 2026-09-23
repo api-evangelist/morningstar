@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Analyst Normalized Financials API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Analyst Normalized Financials API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Analyst Normalized Financials
 paths:
@@ -920,7 +929,19 @@ paths:
           endDateExample2:
             summary: Example 2
             value: '2025-12-31'
-      description: "\nThe Analyst Normalized Financials package provides enhanced normalization of a company’s reported financial data. While companies report normalized financial items as part of their financial filings, interpretations of for which line items adjustments should, and should not, be made can vary from company to company. While the Financials package includes data that uses algorithms to make normalization adjustments based on reported exceptional items, each of the companies covered by our Analyst Normalized Financials package has had an in-depth analysis of all reported items performed by our experienced data analyst to provide even more precision in the normalization process.\nThe package contains the following datasets:\n\n - Analyst Normalized Financial Statements\n\n- Analyst Normalized Financial Statements Per Share\n- Analyst Normalized Price Ratios\nMost recent and time series data supported."
+      description: 'The Analyst Normalized Financials package provides enhanced normalization of a company’s reported financial data. While companies report normalized financial items as part of their financial filings, interpretations of for which line items adjustments should, and should not, be made can vary from company to company. While the Financials package includes data that uses algorithms to make normalization adjustments based on reported exceptional items, each of the companies covered by our Analyst Normalized Financials package has had an in-depth analysis of all reported items performed by our experienced data analyst to provide even more precision in the normalization process.
+
+        The package contains the following datasets:
+
+
+        - Analyst Normalized Financial Statements
+
+
+        - Analyst Normalized Financial Statements Per Share
+
+        - Analyst Normalized Price Ratios
+
+        Most recent and time series data supported.'
       operationId: getEquityAnalystNormalizedFinancialsPackage
       tags:
       - Analyst Normalized Financials
@@ -1071,36 +1092,6 @@ paths:
       x-cpqId: 944
 components:
   schemas:
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
     OutputIdentifiers:
       type: object
       properties:
@@ -1133,52 +1124,87 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputInvalidInvestments:
+    OutputEnterpriseValueCalculations:
       type: object
       properties:
-        id:
+        asOfDate:
           type: string
+          description: The calendar date when enterprise value data points are calculated
           nullable: true
-        idType:
-          type: string
+        analystNormalizedEnterpriseValueToEbitdaRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its Normalized EBITDA.  The ratio can be used to measure a company's fair value.  This is calculated using Enterprise Value divided by Normalized EBITDA which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
+          format: double
           nullable: true
-        status:
-          type: string
+        analystNormalizedEnterpriseValueToEbitRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its Normalized EBIT.  The ratio can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT; which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
+          format: double
           nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
+        cashReturn:
+          type: number
+          description: This ratio represents a company's free cash flow relative to its enterprise value. This can be used to measure how efficiently the company is using its capital; both equity and debt; to generate free cash flow. In other words; cash return shows how much free cash flow a company generates as a percentage of how much it would cost an investor to buy out the entire business. This is calculated using Free Cash Flow to Firm divided by Enterprise Value.
+          format: double
           nullable: true
-        errorCode:
-          type: string
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        enterpriseValue:
+          type: number
+          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Cap + Preferred Stock/Units + Non-Controlling/Minority Interests in Equity + Net Debt.
+          format: double
           nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
+        enterpriseValueIncludingCash:
+          type: number
+          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Capital + Total Preferred Stock/Units/Securities + Non-Controlling/Minority Interests in Equity + Total Debt
+          format: double
           nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
+        enterpriseValueToAssetsRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its total assets. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Assets.
+          format: double
           nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
+        enterpriseValueToEbitdaRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBITDA (TTM).
+          format: double
           nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
+        enterpriseValueToEbitRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBIT (TTM).
+          format: double
           nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
+        enterpriseValueToFreeCashFlowRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its free cash flow. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Free Cash Flow (TTM).
+          format: double
           nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
+        enterpriseValueToPretaxIncomeRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its pre-tax income. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Pre-Tax Income (TTM).
+          format: double
+          nullable: true
+        enterpriseValueToRevenueRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to revenue. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Revenue (TTM).
+          format: double
+          nullable: true
+        normalizedEnterpriseValueToEbitdaRatio:
+          type: number
+          description: This ratio represents the value of a company's enterprise value relative to its Normalized EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBITDA (TTM).
+          format: double
+          nullable: true
+        normalizedEnterpriseValueToEbitRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its Normalized EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT (TTM).
+          format: double
+          nullable: true
+        totalDebtToEnterpriseValue:
+          type: number
+          description: This ratio represents the value of a company's total debt relative to its enterprise value. This can be used to measure the company's financial leverage. This is calculated using Total Debt divided by Enterprise Value.
+          format: double
           nullable: true
       additionalProperties: false
-      title: OutputInvalidInvestments
+      title: OutputEnterpriseValueCalculations
     OutputProfitability:
       type: object
       properties:
@@ -1348,87 +1374,82 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputProfitability
-    OutputEnterpriseValueCalculations:
+    OutputMetadataMessages:
       type: object
       properties:
-        asOfDate:
+        type:
           type: string
-          description: The calendar date when enterprise value data points are calculated
           nullable: true
-        analystNormalizedEnterpriseValueToEbitdaRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its Normalized EBITDA.  The ratio can be used to measure a company's fair value.  This is calculated using Enterprise Value divided by Normalized EBITDA which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
-          format: double
+        code:
+          type: string
           nullable: true
-        analystNormalizedEnterpriseValueToEbitRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its Normalized EBIT.  The ratio can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT; which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
-          format: double
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
-        cashReturn:
-          type: number
-          description: This ratio represents a company's free cash flow relative to its enterprise value. This can be used to measure how efficiently the company is using its capital; both equity and debt; to generate free cash flow. In other words; cash return shows how much free cash flow a company generates as a percentage of how much it would cost an investor to buy out the entire business. This is calculated using Free Cash Flow to Firm divided by Enterprise Value.
-          format: double
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        enterpriseValue:
-          type: number
-          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Cap + Preferred Stock/Units + Non-Controlling/Minority Interests in Equity + Net Debt.
-          format: double
-          nullable: true
-        enterpriseValueIncludingCash:
-          type: number
-          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Capital + Total Preferred Stock/Units/Securities + Non-Controlling/Minority Interests in Equity + Total Debt
-          format: double
-          nullable: true
-        enterpriseValueToAssetsRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its total assets. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Assets.
-          format: double
-          nullable: true
-        enterpriseValueToEbitdaRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBITDA (TTM).
-          format: double
-          nullable: true
-        enterpriseValueToEbitRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBIT (TTM).
-          format: double
-          nullable: true
-        enterpriseValueToFreeCashFlowRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its free cash flow. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Free Cash Flow (TTM).
-          format: double
-          nullable: true
-        enterpriseValueToPretaxIncomeRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its pre-tax income. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Pre-Tax Income (TTM).
-          format: double
-          nullable: true
-        enterpriseValueToRevenueRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to revenue. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Revenue (TTM).
-          format: double
-          nullable: true
-        normalizedEnterpriseValueToEbitdaRatio:
-          type: number
-          description: This ratio represents the value of a company's enterprise value relative to its Normalized EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBITDA (TTM).
-          format: double
-          nullable: true
-        normalizedEnterpriseValueToEbitRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its Normalized EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT (TTM).
-          format: double
-          nullable: true
-        totalDebtToEnterpriseValue:
-          type: number
-          description: This ratio represents the value of a company's total debt relative to its enterprise value. This can be used to measure the company's financial leverage. This is calculated using Total Debt divided by Enterprise Value.
-          format: double
+        message:
+          type: string
           nullable: true
       additionalProperties: false
-      title: OutputEnterpriseValueCalculations
+      title: OutputMetadataMessages
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
     OutputMetadata:
       type: object
       properties:
@@ -1539,6 +1560,55 @@ components:
       additionalProperties: false
       title: OutputProfitabilityPerShare
   responses:
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityAnalystNormalizedFinancialStatements:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              profitability:
+                $ref: '#/components/schemas/OutputProfitability'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityAnalystNormalizedFinancialStatementsPerShare:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              profitabilityPerShare:
+                $ref: '#/components/schemas/OutputProfitabilityPerShare'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityAnalystNormalizedFinancials:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              profitability:
+                $ref: '#/components/schemas/OutputProfitability'
+              profitabilityPerShare:
+                $ref: '#/components/schemas/OutputProfitabilityPerShare'
+              enterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputEnterpriseValueCalculations'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityAnalystNormalizedValuationRatios:
       description: OK
       content:
@@ -1558,56 +1628,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityAnalystNormalizedFinancials:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              profitability:
-                $ref: '#/components/schemas/OutputProfitability'
-              profitabilityPerShare:
-                $ref: '#/components/schemas/OutputProfitabilityPerShare'
-              enterpriseValueCalculations:
-                $ref: '#/components/schemas/OutputEnterpriseValueCalculations'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityAnalystNormalizedFinancialStatementsPerShare:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              profitabilityPerShare:
-                $ref: '#/components/schemas/OutputProfitabilityPerShare'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityAnalystNormalizedFinancialStatements:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              profitability:
-                $ref: '#/components/schemas/OutputProfitability'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

@@ -1,31 +1,20 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: EC Usage Statistics API
+  description: The EC Usage Statistics API allows you to query Morningstar usage tracking information logged by EC components and US APIs.
   version: 1.0.0
-  title: Authorization Tokens Accounts statistics API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
-security:
-- BasicAuth: []
+- url: https://www.us-api.morningstar.com/ec-usage-statistics
+  description: PROD (live data)
+- url: https://www.us-qa-api.morningstar.com/ec-usage-statistics
+  description: QA (test data)
 tags:
-- name: statistics
+- name: Statistics
 paths:
   /v1/statistics/{namespace}/{tool}/{period}:
     get:
       tags:
-      - statistics
+      - Statistics
       summary: Get a statistics resource for a namespace, tool and time period
       description: Get the latest statistics for the specified namespace, tool and time period. Specify the `date` parameter to get statistics for that date.
       operationId: GetStatistics
@@ -238,8 +227,3 @@ paths:
                   message:
                     type: string
                     example: An error occurred
-components:
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic

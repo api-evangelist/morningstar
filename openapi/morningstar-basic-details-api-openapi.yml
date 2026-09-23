@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Basic Details API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Basic Details API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Basic Details
 paths:
@@ -357,7 +366,31 @@ paths:
           languageExample9:
             summary: Korean
             value: KOR
-      description: "\nThe Basic Details package provides a range of data to round out the company profile, including business descriptions (in a range of languages), details of the advisers to the company, head office and registered office addresses, and the number of employees, alongside details of the IPO, the company’s legal structure, and details of the primary listing of their shares.\nThe package contains the following datasets:\n\n- Advisors\n- Business Description\n- Company Address\n- Company-Level Basic Details\n- Employee Number\n- Preferred Stock Details\n- Preferred Stock Payment Schedule\n- Preferred Stock Redemption Schedule\n- Security-Level Basic Details\n\nMost recent data supported.\n  \n  "
+      description: 'The Basic Details package provides a range of data to round out the company profile, including business descriptions (in a range of languages), details of the advisers to the company, head office and registered office addresses, and the number of employees, alongside details of the IPO, the company’s legal structure, and details of the primary listing of their shares.
+
+        The package contains the following datasets:
+
+
+        - Advisors
+
+        - Business Description
+
+        - Company Address
+
+        - Company-Level Basic Details
+
+        - Employee Number
+
+        - Preferred Stock Details
+
+        - Preferred Stock Payment Schedule
+
+        - Preferred Stock Redemption Schedule
+
+        - Security-Level Basic Details
+
+
+        Most recent data supported.'
       operationId: getEquityBasicDetailsPackage
       tags:
       - Basic Details
@@ -1415,99 +1448,38 @@ paths:
       x-cpqId: 907
 components:
   schemas:
-    OutputPreferredStockRedemptionSchedule:
+    OutputIdentifiers:
       type: object
       properties:
-        currencyCode:
+        performanceId:
           type: string
-          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
           nullable: true
-        redemptionDate:
+        securityId:
           type: string
-          description: The date when the redeemable preferred shares were bought back by the company
           nullable: true
-        redemptionPrice:
-          type: number
-          description: The price at which the redeemable preferred shares were bought back by the company
-          format: double
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
           nullable: true
       additionalProperties: false
-      title: OutputPreferredStockRedemptionSchedule
-    OutputCompanyProfile:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The effective date of the company profile
-          nullable: true
-        languageCode:
-          type: string
-          description: 3-character ISO code denoting the language of text for the company profile
-          nullable: true
-        longDescription:
-          type: string
-          description: A complete and often lengthy business description of the company; often a paragraph or more (up to 800 characters)
-          nullable: true
-      additionalProperties: false
-      title: OutputCompanyProfile
-    OutputPreferredStockSchedulePaymentDate:
-      type: object
-      properties:
-        scheduledDay:
-          type: integer
-          description: The date when the company plans to pay the dividend to its preferred stock holders
-          format: int32
-          nullable: true
-        scheduledMonth:
-          type: integer
-          description: The month when the company plans to pay the dividend to its preferred stock holders
-          format: int32
-          nullable: true
-      additionalProperties: false
-      title: OutputPreferredStockSchedulePaymentDate
-    OutputCompanyAddress:
-      type: object
-      properties:
-        addressLine1:
-          type: string
-          description: Indicates detailed address (line 1) of the company's headquarter or registered office
-          nullable: true
-        addressLine2:
-          type: string
-          description: Indicates detailed address (line 2) of the company's headquarter or registered office
-          nullable: true
-        addressLine3:
-          type: string
-          description: Indicates detailed address (line 3) of the company's headquarter or registered office
-          nullable: true
-        addressLine4:
-          type: string
-          description: Indicates detailed address (line 4) of the company's headquarter or registered office
-          nullable: true
-        addressType:
-          $ref: '#/components/schemas/CodeMappingString'
-        city:
-          type: string
-          description: Indicates city of the company's headquarter or registered office
-          nullable: true
-        countryCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        languageCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        phone:
-          type: string
-          description: Indicates phone number of the company's headquarter or registered office
-          nullable: true
-        postalCode:
-          type: string
-          description: Indicates postal code of the company's headquarter or registered office
-          nullable: true
-        stateProvince:
-          type: string
-          description: Indicates state and/or province of the company's headquarter or registered office
-          nullable: true
-      additionalProperties: false
-      title: OutputCompanyAddress
+      title: OutputIdentifiers
     OutputCompanyInformation:
       type: object
       properties:
@@ -1630,67 +1602,53 @@ components:
           $ref: '#/components/schemas/CodeMappingBoolean'
       additionalProperties: false
       title: OutputCompanyInformation
-    OutputEmployeeNumber:
+    OutputPreferredStockSchedulePaymentDate:
       type: object
       properties:
-        asOfDate:
+        scheduledDay:
+          type: integer
+          description: The date when the company plans to pay the dividend to its preferred stock holders
+          format: int32
+          nullable: true
+        scheduledMonth:
+          type: integer
+          description: The month when the company plans to pay the dividend to its preferred stock holders
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: OutputPreferredStockSchedulePaymentDate
+    OutputContactInformation:
+      type: object
+      properties:
+        emailAddress:
           type: string
-          description: The effective date of the employee number
+          description: The email address of person's contact information.
           nullable: true
-        averageEmployeeNumber:
-          type: integer
-          description: The average number of employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
-          format: int64
+      additionalProperties: false
+      title: OutputContactInformation
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
           nullable: true
-        fullTimeEmployeeNumber:
-          type: integer
-          description: The number of full-time employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
-          format: int64
+        code:
+          type: boolean
           nullable: true
-        partTimeEmployeeNumber:
-          type: integer
-          description: The number of part-time employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
-          format: int64
+      additionalProperties: false
+      title: CodeMappingBoolean
+    CodeMappingLong:
+      type: object
+      properties:
+        value:
+          type: string
           nullable: true
-        totalEmployeeNumber:
+        code:
           type: integer
-          description: The total number of employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
           format: int64
           nullable: true
       additionalProperties: false
-      title: OutputEmployeeNumber
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
+      title: CodeMappingLong
     OutputErrorDetails:
       type: object
       properties:
@@ -1713,113 +1671,6 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    OutputCompanyAdvisor:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The effective date of the company advisor
-          nullable: true
-        addressLine1:
-          type: string
-          description: Indicates detailed address (line 1) of advisor's contact information
-          nullable: true
-        addressLine2:
-          type: string
-          description: Indicates detailed address (line 2) of advisor's contact information
-          nullable: true
-        addressLine3:
-          type: string
-          description: Indicates detailed address (line 3) of advisor's contact information
-          nullable: true
-        addressLine4:
-          type: string
-          description: Indicates detailed address (line 4) of advisor's contact information
-          nullable: true
-        advisorLegalName:
-          type: string
-          description: The full name of the advisor as specified in its charter; and most often found on the public announcement
-          nullable: true
-        advisorType:
-          type: string
-          description: Indicates the type of advisor as reported by the company. The advisor types include Auditor; Nominated Adviser; Bank; Financial Adviser; Financial PR Adviser; Registrar; Solicitor; Stockbroker; Remuneration Consultant
-          nullable: true
-        cessationInformedDate:
-          type: string
-          description: Indicates the exact date disclosed in the Annual Report or RNS announcements on which the company has ceased the advisor
-          nullable: true
-        city:
-          type: string
-          description: Indicates city of advisor's contact information
-          nullable: true
-        country:
-          type: string
-          description: Indicates country of advisor's contact information
-          nullable: true
-        email:
-          type: string
-          description: Indicates email address of advisor's contact information
-          nullable: true
-        isJointRole:
-          type: boolean
-          description: Indicates that the firm has more than one auditor; in such a case; joint role is marked as 'Yes'
-          nullable: true
-        languageCode:
-          type: string
-          description: 3-character ISO code denoting the language of text for advisor's name and contact information
-          nullable: true
-        phone:
-          type: string
-          description: Indicates phone number of advisor's contact information
-          nullable: true
-        postalCode:
-          type: string
-          description: Indicates postal code of advisor's contact information
-          nullable: true
-        source:
-          type: string
-          description: 'Indicates the source from which data has been updated: Possible sources include Annual report; Website ; Exchange; RNS announcements or other authentic documents.'
-          nullable: true
-        stateProvince:
-          type: string
-          description: Indicates state and/or province of advisor's contact information
-          nullable: true
-        webAddress:
-          type: string
-          description: Indicates website address of advisor's contact information
-          nullable: true
-      additionalProperties: false
-      title: OutputCompanyAdvisor
-    CodeMappingBoolean:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: boolean
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingBoolean
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
     OutputShareClassInformation:
       type: object
       properties:
@@ -1940,15 +1791,259 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputShareClassInformation
-    OutputContactInformation:
+    OutputPreferredStockRedemptionSchedule:
       type: object
       properties:
-        emailAddress:
+        currencyCode:
           type: string
-          description: The email address of person's contact information.
+          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
+          nullable: true
+        redemptionDate:
+          type: string
+          description: The date when the redeemable preferred shares were bought back by the company
+          nullable: true
+        redemptionPrice:
+          type: number
+          description: The price at which the redeemable preferred shares were bought back by the company
+          format: double
           nullable: true
       additionalProperties: false
-      title: OutputContactInformation
+      title: OutputPreferredStockRedemptionSchedule
+    OutputEmployeeNumber:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The effective date of the employee number
+          nullable: true
+        averageEmployeeNumber:
+          type: integer
+          description: The average number of employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
+          format: int64
+          nullable: true
+        fullTimeEmployeeNumber:
+          type: integer
+          description: The number of full-time employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
+          format: int64
+          nullable: true
+        partTimeEmployeeNumber:
+          type: integer
+          description: The number of part-time employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
+          format: int64
+          nullable: true
+        totalEmployeeNumber:
+          type: integer
+          description: The total number of employees as disclosed in the Annual Report; 10-K filing; Form 20-F or equivalent report
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: OutputEmployeeNumber
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputCompanyAddress:
+      type: object
+      properties:
+        addressLine1:
+          type: string
+          description: Indicates detailed address (line 1) of the company's headquarter or registered office
+          nullable: true
+        addressLine2:
+          type: string
+          description: Indicates detailed address (line 2) of the company's headquarter or registered office
+          nullable: true
+        addressLine3:
+          type: string
+          description: Indicates detailed address (line 3) of the company's headquarter or registered office
+          nullable: true
+        addressLine4:
+          type: string
+          description: Indicates detailed address (line 4) of the company's headquarter or registered office
+          nullable: true
+        addressType:
+          $ref: '#/components/schemas/CodeMappingString'
+        city:
+          type: string
+          description: Indicates city of the company's headquarter or registered office
+          nullable: true
+        countryCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        languageCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        phone:
+          type: string
+          description: Indicates phone number of the company's headquarter or registered office
+          nullable: true
+        postalCode:
+          type: string
+          description: Indicates postal code of the company's headquarter or registered office
+          nullable: true
+        stateProvince:
+          type: string
+          description: Indicates state and/or province of the company's headquarter or registered office
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyAddress
+    OutputCompanyAdvisor:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The effective date of the company advisor
+          nullable: true
+        addressLine1:
+          type: string
+          description: Indicates detailed address (line 1) of advisor's contact information
+          nullable: true
+        addressLine2:
+          type: string
+          description: Indicates detailed address (line 2) of advisor's contact information
+          nullable: true
+        addressLine3:
+          type: string
+          description: Indicates detailed address (line 3) of advisor's contact information
+          nullable: true
+        addressLine4:
+          type: string
+          description: Indicates detailed address (line 4) of advisor's contact information
+          nullable: true
+        advisorLegalName:
+          type: string
+          description: The full name of the advisor as specified in its charter; and most often found on the public announcement
+          nullable: true
+        advisorType:
+          type: string
+          description: Indicates the type of advisor as reported by the company. The advisor types include Auditor; Nominated Adviser; Bank; Financial Adviser; Financial PR Adviser; Registrar; Solicitor; Stockbroker; Remuneration Consultant
+          nullable: true
+        cessationInformedDate:
+          type: string
+          description: Indicates the exact date disclosed in the Annual Report or RNS announcements on which the company has ceased the advisor
+          nullable: true
+        city:
+          type: string
+          description: Indicates city of advisor's contact information
+          nullable: true
+        country:
+          type: string
+          description: Indicates country of advisor's contact information
+          nullable: true
+        email:
+          type: string
+          description: Indicates email address of advisor's contact information
+          nullable: true
+        isJointRole:
+          type: boolean
+          description: Indicates that the firm has more than one auditor; in such a case; joint role is marked as 'Yes'
+          nullable: true
+        languageCode:
+          type: string
+          description: 3-character ISO code denoting the language of text for advisor's name and contact information
+          nullable: true
+        phone:
+          type: string
+          description: Indicates phone number of advisor's contact information
+          nullable: true
+        postalCode:
+          type: string
+          description: Indicates postal code of advisor's contact information
+          nullable: true
+        source:
+          type: string
+          description: 'Indicates the source from which data has been updated: Possible sources include Annual report; Website ; Exchange; RNS announcements or other authentic documents.'
+          nullable: true
+        stateProvince:
+          type: string
+          description: Indicates state and/or province of advisor's contact information
+          nullable: true
+        webAddress:
+          type: string
+          description: Indicates website address of advisor's contact information
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyAdvisor
+    OutputPrimaryPerformanceIdDetails:
+      type: object
+      properties:
+        primaryExchangeCode:
+          type: string
+          description: An exchange code used for and specific to equity production processes and equity products such as Global Equity Data Feeds-GEDF ($$$ is used for private/unlisted securities)
+          nullable: true
+        primaryPerformanceId:
+          type: string
+          description: The Morningstar identifier for a share class of an investment.
+          nullable: true
+        primarySymbol:
+          type: string
+          description: 'An arrangement of characters (often letters) representing a particular security listed on an exchange or otherwise traded publicly: Note that Morningstar''s multi-share class symbols will often contain a period within the symbol; e.g. BRK.B for Berkshire Hathaway Class B'
+          nullable: true
+      additionalProperties: false
+      title: OutputPrimaryPerformanceIdDetails
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
     OutputPreferredStockSpecific:
       type: object
       properties:
@@ -2058,81 +2153,42 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputPreferredStockSpecific
-    OutputInvalidInvestments:
+    OutputCompanyProfile:
       type: object
       properties:
-        id:
+        asOfDate:
           type: string
+          description: The effective date of the company profile
           nullable: true
-        idType:
+        languageCode:
           type: string
+          description: 3-character ISO code denoting the language of text for the company profile
           nullable: true
-        status:
+        longDescription:
           type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
+          description: A complete and often lengthy business description of the company; often a paragraph or more (up to 800 characters)
           nullable: true
       additionalProperties: false
-      title: OutputInvalidInvestments
-    CodeMappingLong:
+      title: OutputCompanyProfile
+    OutputMetadataMessages:
       type: object
       properties:
-        value:
+        type:
           type: string
           nullable: true
         code:
-          type: integer
-          format: int64
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
           nullable: true
       additionalProperties: false
-      title: CodeMappingLong
-    OutputPrimaryPerformanceIdDetails:
-      type: object
-      properties:
-        primaryExchangeCode:
-          type: string
-          description: An exchange code used for and specific to equity production processes and equity products such as Global Equity Data Feeds-GEDF ($$$ is used for private/unlisted securities)
-          nullable: true
-        primaryPerformanceId:
-          type: string
-          description: The Morningstar identifier for a share class of an investment.
-          nullable: true
-        primarySymbol:
-          type: string
-          description: 'An arrangement of characters (often letters) representing a particular security listed on an exchange or otherwise traded publicly: Note that Morningstar''s multi-share class symbols will often contain a period within the symbol; e.g. BRK.B for Berkshire Hathaway Class B'
-          nullable: true
-      additionalProperties: false
-      title: OutputPrimaryPerformanceIdDetails
+      title: OutputMetadataMessages
     CodeMappingString:
       type: object
       properties:
@@ -2144,30 +2200,73 @@ components:
           nullable: true
       additionalProperties: false
       title: CodeMappingString
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
   responses:
+    ResponseEquityBusinessDescription:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyProfile:
+                $ref: '#/components/schemas/OutputCompanyProfile'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityAdvisors:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyAdvisor:
+                $ref: '#/components/schemas/OutputCompanyAdvisor'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCompanyLevelBasicDetails:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyInformation:
+                $ref: '#/components/schemas/OutputCompanyInformation'
+              contactInformation:
+                $ref: '#/components/schemas/OutputContactInformation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityEmployeeNumber:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              employeeNumber:
+                $ref: '#/components/schemas/OutputEmployeeNumber'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityPreferredStockPaymentSchedule:
       description: OK
       content:
@@ -2181,15 +2280,15 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityEmployeeNumber:
+    ResponseEquityPreferredStockRedemptionSchedule:
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              employeeNumber:
-                $ref: '#/components/schemas/OutputEmployeeNumber'
+              preferredStockRedemptionSchedule:
+                $ref: '#/components/schemas/OutputPreferredStockRedemptionSchedule'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
@@ -2205,38 +2304,6 @@ components:
                 $ref: '#/components/schemas/OutputPrimaryPerformanceIdDetails'
               shareClassInformation:
                 $ref: '#/components/schemas/OutputShareClassInformation'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityAdvisors:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              companyAdvisor:
-                $ref: '#/components/schemas/OutputCompanyAdvisor'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityPreferredStockDetails:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              preferredStockSpecific:
-                $ref: '#/components/schemas/OutputPreferredStockSpecific'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
@@ -2274,34 +2341,6 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityCompanyLevelBasicDetails:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              companyInformation:
-                $ref: '#/components/schemas/OutputCompanyInformation'
-              contactInformation:
-                $ref: '#/components/schemas/OutputContactInformation'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityBusinessDescription:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              companyProfile:
-                $ref: '#/components/schemas/OutputCompanyProfile'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityCompanyAddress:
       description: OK
       content:
@@ -2315,26 +2354,22 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityPreferredStockRedemptionSchedule:
+    ResponseEquityPreferredStockDetails:
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              preferredStockRedemptionSchedule:
-                $ref: '#/components/schemas/OutputPreferredStockRedemptionSchedule'
+              preferredStockSpecific:
+                $ref: '#/components/schemas/OutputPreferredStockSpecific'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

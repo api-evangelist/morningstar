@@ -1,24 +1,16 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Retirement (US) Plan API
   version: 1.0.0
-  title: Authorization Tokens Accounts Plan API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  description: 'Use the Retirement Plan API to:
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    - Get details, including plan lineups, for over 600,000 United States employer retirement plans based on form 404a-5 and form 5500 filings.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/ec
+  description: PROD
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
 - name: Plan
 paths:
@@ -27,27 +19,39 @@ paths:
       tags:
       - Plan
       summary: Get plan details
-      description: 'Get information about the plan specified in the `id` parameter. The value must be URL-encoded and match the name returned in the response to the call to the `PlanNames` endpoint. For example, `THE SCOTT FETZER RETIREMENT SAVINGS PLAN`.</br></br>You can specify a plan list source to query. The following values are available: </br></br> - `RP` - Retirement plans from Morningstar''s plan list</br> - `BM` - Benchmark</br> - `DB` - Database for saved plans</br>'
+      description: 'Get information about the plan specified in the `id` parameter. The value must be URL-encoded and match the name returned in the response to the call to the `PlanNames` endpoint. For example, `THE SCOTT FETZER RETIREMENT SAVINGS PLAN`.
+
+
+        You can specify a plan list source to query. The following values are available:
+
+
+        - `RP` - Retirement plans from Morningstar''s plan list
+
+        - `BM` - Benchmark
+
+        - `DB` - Database for saved plans'
       parameters:
       - name: id
         in: query
         description: Unique name of a retirement plan
         schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: THE%20SCOTT%20FETZER%20RETIREMENT%20SAVINGS%20PLAN
       - name: source
         in: query
         description: The source to request plan from
         schema:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Set to ‘RP’ to request retirement plan from Morningstar plan list
           enum:
           - RP
           - BM
           - DB
           default: RP
-          nullable: true
           example: RP
       responses:
         '200':
@@ -92,82 +96,90 @@ paths:
             text/xml:
               schema:
                 $ref: '#/components/schemas/ErrorDetails'
+      operationId: getV2RetirementplanPlan
+      x-operation-id-source: derived
 components:
   schemas:
-    VendorCodeMap:
-      type: object
-      properties:
-        noname:
-          type: string
-          description: noname
-          nullable: true
-      additionalProperties: false
-      description: VendorCodeMap
     Investment:
       type: object
       properties:
         name:
-          type: string
+          type:
+          - string
+          - 'null'
           description: name
-          nullable: true
         vendorName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: vendorName
-          nullable: true
         type:
-          type: string
+          type:
+          - string
+          - 'null'
           description: type
-          nullable: true
         typeDescription:
-          type: string
+          type:
+          - string
+          - 'null'
           description: typeDescription
-          nullable: true
         secId:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Morningstar unique security identifier
-          nullable: true
         yearValuesV1:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/YearValue'
           description: yearValuesV1
-          nullable: true
         cusip:
-          type: string
+          type:
+          - string
+          - 'null'
           description: CUSIP
-          nullable: true
         securityName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Name of the security
-          nullable: true
         ticker:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Security's ticker symbol
-          nullable: true
         category:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Morningstar category the security is assigned to
-          nullable: true
         securityType:
-          type: string
+          type:
+          - string
+          - 'null'
           description: securityType
-          nullable: true
         starRating:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Morningstar proprietary star rating
-          nullable: true
         analystRating:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Morningstar analyst rating. Gold (7), Silver (6), Bronze (5), Neutral (4), Negative (3), Under Review (2), Not Ratable (1)
-          nullable: true
         styleBox:
-          type: string
+          type:
+          - string
+          - 'null'
           description: styleBox
-          nullable: true
         netExpRatio:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Prospectus net expense ratio
-          nullable: true
         investmentStatus:
           type: integer
           description: InvestmentStatus
@@ -177,212 +189,6 @@ components:
           description: IsRemoved
       additionalProperties: false
       description: Investment
-    ErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          format: int32
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-    PlanDetailModel:
-      type: object
-      properties:
-        planDetailsId:
-          type: integer
-          description: planDetailsId
-          format: int64
-        planId:
-          type: string
-          description: planId
-          nullable: true
-        ackId:
-          type: string
-          description: ackId
-          nullable: true
-        ein:
-          type: string
-          description: Employer identification number
-          nullable: true
-        planNumber:
-          type: string
-          description: planNumber
-          nullable: true
-        sponsorName:
-          type: string
-          description: Name of the plan sponsor (employer)
-          nullable: true
-        planName:
-          type: string
-          description: Full name of the plan (should match name used to retrieve plan details)
-          nullable: true
-        numberOfUnidentifiedInvestments:
-          type: integer
-          description: Number of plan lineup investments which were not able to be matched with Morningstar’s database
-          format: int32
-          nullable: true
-        planLineupSource:
-          type: string
-          description: Which form the plan lineup is sourced from
-          nullable: true
-        businessCode:
-          $ref: '#/components/schemas/BusinessCode'
-        state:
-          type: string
-          description: U.S. state in which plan sponsor is located
-          nullable: true
-        assetSize:
-          type: number
-          description: Total assets in the plan (USD)
-          format: double
-          nullable: true
-        avgAccountBalance:
-          type: number
-          description: Average participant account balance
-          format: double
-        totalContributions:
-          type: number
-          description: Total plan contributions
-          format: double
-        planCode:
-          type: string
-          description: planCode
-          nullable: true
-        priorYearReturn:
-          type: number
-          description: priorYearReturn
-          format: double
-        adminName:
-          type: string
-          description: Name of plan administrator
-          nullable: true
-        participants:
-          type: integer
-          description: Total number of plan participants
-          format: int32
-        planType:
-          type: string
-          description: Type of retirement plan, e.g. DC
-          nullable: true
-        filingType:
-          type: string
-          description: filingType
-          nullable: true
-        benifitPaymentsDuringYear:
-          type: number
-          description: Amount of benefit payments made by plan during prior year
-          format: double
-        vendors:
-          type: array
-          items:
-            $ref: '#/components/schemas/Vendor'
-          description: vendors
-          nullable: true
-        zipcode:
-          type: string
-          description: Zip code of plan sponsor location
-          nullable: true
-        totalVendorFee:
-          type: number
-          description: Vendor fee if available
-          format: double
-        planFeeRatio:
-          type: number
-          description: Actual plan-level fee if av
-          format: double
-          nullable: true
-        planFeeRatioEstimate:
-          type: number
-          description: Actual plan investment expenses if available
-          format: double
-          nullable: true
-        benchmarkFeeRatio:
-          type: number
-          description: Typical plan-level fee based on benchmark
-          format: double
-          nullable: true
-        benchmarkInvestmentExpenses:
-          type: number
-          description: Average investment expenses based on benchmark
-          format: double
-          nullable: true
-        benchmarkTotalAverage:
-          type: number
-          description: Sum of benchmark plan-level fee and investment expense
-          format: double
-          nullable: true
-        benchmarkPlanSizeName:
-          type: string
-          description: Name of the Morningstar benchmark applicable to this plan based on its size
-          nullable: true
-        ecPlanId:
-          type: integer
-          description: ecPlanId
-          format: int64
-        createDate:
-          type: string
-          description: When the plan was created in the database (not the date on which the plan started)
-          format: date-time
-        planVersion:
-          type: integer
-          description: PlanVersion
-          format: int32
-        externalPlanId:
-          type: string
-          description: ExternalPlanId
-          nullable: true
-        clientId:
-          type: string
-          description: ClientId
-          nullable: true
-        advisorId:
-          type: string
-          description: AdvisorId
-          nullable: true
-        asofYear:
-          type: string
-          description: AsofYear
-          nullable: true
-        lastModifiedDate:
-          type: string
-          description: LastModifiedDate
-          format: date-time
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/Investment'
-          description: List of investments offered by the plan
-          nullable: true
-        planTaxPrd:
-          type: string
-          description: PlanTaxPrd
-          nullable: true
-        avgNetExpRatio:
-          type: string
-          description: AvgNetExpRatio
-          nullable: true
-        benchmarkAvgNumberOfInvestments:
-          type: string
-          description: benchmarkAvgNumberOfInvestments
-          nullable: true
-      additionalProperties: false
-      description: PlanDetailModel
-    YearValue:
-      type: object
-      properties:
-        year:
-          type: string
-          description: year
-          nullable: true
-        value:
-          type: string
-          description: value
-          nullable: true
-      additionalProperties: false
-      description: YearValue
     Vendor:
       type: object
       properties:
@@ -393,13 +199,15 @@ components:
         vendorCodeMap:
           $ref: '#/components/schemas/VendorCodeMap'
         name:
-          type: string
+          type:
+          - string
+          - 'null'
           description: name
-          nullable: true
         fixedName:
-          type: string
+          type:
+          - string
+          - 'null'
           description: fixedName
-          nullable: true
         ein:
           type: integer
           description: ein
@@ -413,33 +221,287 @@ components:
           description: value
           format: double
         stability:
-          type: string
+          type:
+          - string
+          - 'null'
           description: stability
-          nullable: true
         planDetailsid:
           type: integer
           description: planDetailsid
           format: int64
       additionalProperties: false
       description: Vendor
+    PlanDetailModel:
+      type: object
+      properties:
+        planDetailsId:
+          type: integer
+          description: planDetailsId
+          format: int64
+        planId:
+          type:
+          - string
+          - 'null'
+          description: planId
+        ackId:
+          type:
+          - string
+          - 'null'
+          description: ackId
+        ein:
+          type:
+          - string
+          - 'null'
+          description: Employer identification number
+        planNumber:
+          type:
+          - string
+          - 'null'
+          description: planNumber
+        sponsorName:
+          type:
+          - string
+          - 'null'
+          description: Name of the plan sponsor (employer)
+        planName:
+          type:
+          - string
+          - 'null'
+          description: Full name of the plan (should match name used to retrieve plan details)
+        numberOfUnidentifiedInvestments:
+          type:
+          - integer
+          - 'null'
+          description: Number of plan lineup investments which were not able to be matched with Morningstar’s database
+          format: int32
+        planLineupSource:
+          type:
+          - string
+          - 'null'
+          description: Which form the plan lineup is sourced from
+        businessCode:
+          $ref: '#/components/schemas/BusinessCode'
+        state:
+          type:
+          - string
+          - 'null'
+          description: U.S. state in which plan sponsor is located
+        assetSize:
+          type:
+          - number
+          - 'null'
+          description: Total assets in the plan (USD)
+          format: double
+        avgAccountBalance:
+          type: number
+          description: Average participant account balance
+          format: double
+        totalContributions:
+          type: number
+          description: Total plan contributions
+          format: double
+        planCode:
+          type:
+          - string
+          - 'null'
+          description: planCode
+        priorYearReturn:
+          type: number
+          description: priorYearReturn
+          format: double
+        adminName:
+          type:
+          - string
+          - 'null'
+          description: Name of plan administrator
+        participants:
+          type: integer
+          description: Total number of plan participants
+          format: int32
+        planType:
+          type:
+          - string
+          - 'null'
+          description: Type of retirement plan, e.g. DC
+        filingType:
+          type:
+          - string
+          - 'null'
+          description: filingType
+        benifitPaymentsDuringYear:
+          type: number
+          description: Amount of benefit payments made by plan during prior year
+          format: double
+        vendors:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Vendor'
+          description: vendors
+        zipcode:
+          type:
+          - string
+          - 'null'
+          description: Zip code of plan sponsor location
+        totalVendorFee:
+          type: number
+          description: Vendor fee if available
+          format: double
+        planFeeRatio:
+          type:
+          - number
+          - 'null'
+          description: Actual plan-level fee if av
+          format: double
+        planFeeRatioEstimate:
+          type:
+          - number
+          - 'null'
+          description: Actual plan investment expenses if available
+          format: double
+        benchmarkFeeRatio:
+          type:
+          - number
+          - 'null'
+          description: Typical plan-level fee based on benchmark
+          format: double
+        benchmarkInvestmentExpenses:
+          type:
+          - number
+          - 'null'
+          description: Average investment expenses based on benchmark
+          format: double
+        benchmarkTotalAverage:
+          type:
+          - number
+          - 'null'
+          description: Sum of benchmark plan-level fee and investment expense
+          format: double
+        benchmarkPlanSizeName:
+          type:
+          - string
+          - 'null'
+          description: Name of the Morningstar benchmark applicable to this plan based on its size
+        ecPlanId:
+          type: integer
+          description: ecPlanId
+          format: int64
+        createDate:
+          type: string
+          description: When the plan was created in the database (not the date on which the plan started)
+          format: date-time
+        planVersion:
+          type: integer
+          description: PlanVersion
+          format: int32
+        externalPlanId:
+          type:
+          - string
+          - 'null'
+          description: ExternalPlanId
+        clientId:
+          type:
+          - string
+          - 'null'
+          description: ClientId
+        advisorId:
+          type:
+          - string
+          - 'null'
+          description: AdvisorId
+        asofYear:
+          type:
+          - string
+          - 'null'
+          description: AsofYear
+        lastModifiedDate:
+          type:
+          - string
+          - 'null'
+          description: LastModifiedDate
+          format: date-time
+        investments:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/Investment'
+          description: List of investments offered by the plan
+        planTaxPrd:
+          type:
+          - string
+          - 'null'
+          description: PlanTaxPrd
+        avgNetExpRatio:
+          type:
+          - string
+          - 'null'
+          description: AvgNetExpRatio
+        benchmarkAvgNumberOfInvestments:
+          type:
+          - string
+          - 'null'
+          description: benchmarkAvgNumberOfInvestments
+      additionalProperties: false
+      description: PlanDetailModel
+    ErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     BusinessCode:
       type: object
       properties:
         businessCode:
-          type: string
+          type:
+          - string
+          - 'null'
           description: businessCode
-          nullable: true
         year:
-          type: string
+          type:
+          - string
+          - 'null'
           description: year
-          nullable: true
         description:
-          type: string
+          type:
+          - string
+          - 'null'
           description: description
-          nullable: true
       additionalProperties: false
       description: BusinessCode
+    YearValue:
+      type: object
+      properties:
+        year:
+          type:
+          - string
+          - 'null'
+          description: year
+        value:
+          type:
+          - string
+          - 'null'
+          description: value
+      additionalProperties: false
+      description: YearValue
+    VendorCodeMap:
+      type: object
+      properties:
+        noname:
+          type:
+          - string
+          - 'null'
+          description: noname
+      additionalProperties: false
+      description: VendorCodeMap
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

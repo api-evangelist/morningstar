@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Research Ratings Most Recent and Historical API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Research Ratings Most Recent and…
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Research Ratings Most Recent and Historical
 paths:
@@ -153,36 +162,50 @@ paths:
       x-cpqId: 176
 components:
   schemas:
-    OutputMetadataMessages:
+    OutputIdentifiers:
       type: object
       properties:
-        type:
+        performanceId:
           type: string
           nullable: true
-        code:
+        securityId:
           type: string
           nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+        cusip:
+          type: string
           nullable: true
-        message:
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    CodeMappingString:
+      title: OutputIdentifiers
+    CodeMappingInt:
       type: object
       properties:
         value:
           type: string
           nullable: true
         code:
-          type: string
+          type: integer
+          format: int32
           nullable: true
       additionalProperties: false
-      title: CodeMappingString
+      title: CodeMappingInt
     OutputEquityResearchRatingsMostRecentAndHistorical:
       type: object
       properties:
@@ -291,28 +314,25 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputEquityResearchRatingsMostRecentAndHistorical
-    OutputErrorDetails:
+    OutputMetadataMessages:
       type: object
       properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
+        type:
           type: string
-          description: Custom error code
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
         message:
           type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
           nullable: true
       additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -359,38 +379,17 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputIdentifiers:
+    CodeMappingString:
       type: object
       properties:
-        performanceId:
+        value:
           type: string
           nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
+        code:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputIdentifiers
+      title: CodeMappingString
     OutputMetadata:
       type: object
       properties:
@@ -414,25 +413,29 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
-    CodeMappingInt:
+    OutputErrorDetails:
       type: object
       properties:
-        value:
-          type: string
-          nullable: true
-        code:
+        statusCode:
           type: integer
+          description: Status Code
           format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: CodeMappingInt
+      description: Error details
+      title: OutputErrorDetails
   responses:
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseInternalServerError:
       description: Internal Server
       content:
@@ -452,7 +455,15 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

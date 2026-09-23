@@ -1,24 +1,12 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Research equity reports - quant and enhanced quant API
+  description: The Research API provides on-demand access to Morningstar’s repository of equity and fund research.
   version: 1.0.0
-  title: Authorization Tokens Accounts equity reports - quant and enhanced quant API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/research
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: equity reports - quant and enhanced quant
 paths:
@@ -27,7 +15,19 @@ paths:
       tags:
       - equity reports - quant and enhanced quant
       summary: Get a Quantitative Report
-      description: Get a Quantitative Report for the company specified in the `companyIdentifier` parameter. Quantitative Reports provide a detailed assessment of a company based on a quantitative analysis using a variety of company financial data and other data inputs. </br></br>You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter. </br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br> A URL returned in the response is used to access the document file.
+      description: 'Get a Quantitative Report for the company specified in the `companyIdentifier` parameter. Quantitative Reports provide a detailed assessment of a company based on a quantitative analysis using a variety of company financial data and other data inputs.
+
+
+        You can identify a company using a performance ID (for example,`0P00012BBI`) or `exchange:ticker` value, (for example, `XNAS:GOOG`).
+
+
+        To override the default value in the Accept-Language HTTP header, use the `locale` parameter.
+
+
+        In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.
+
+
+        A URL returned in the response is used to access the document file.'
       operationId: QuantReport
       parameters:
       - name: companyIdentifier
@@ -80,7 +80,19 @@ paths:
       tags:
       - equity reports - quant and enhanced quant
       summary: Get an Enhanced Quantative Report
-      description: Get an Enhanced Quantitative Report for the company specified in the `companyIdentifier` parameter. Enhanced Quantitative Reports provide a detailed assessment of a company based on a quantitative analysis using a variety of company financial data and other data inputs, as well as additional commentary on the company.</br></br> You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`) .</br></br>To override the default value in the Accept-Language HTTP header, use the `locale` parameter. </br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br> A URL returned in the response is used to access the document file.
+      description: 'Get an Enhanced Quantitative Report for the company specified in the `companyIdentifier` parameter. Enhanced Quantitative Reports provide a detailed assessment of a company based on a quantitative analysis using a variety of company financial data and other data inputs, as well as additional commentary on the company.
+
+
+        You can identify a company using a performance ID (for example,`0P00012BBI`) or `exchange:ticker` value, (for example, `XNAS:GOOG`) .
+
+
+        To override the default value in the Accept-Language HTTP header, use the `locale` parameter.
+
+
+        In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.
+
+
+        A URL returned in the response is used to access the document file.'
       operationId: EnhancedQuantReport
       parameters:
       - name: companyIdentifier
@@ -130,6 +142,6 @@ paths:
           content: {}
 components:
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer

@@ -1,30 +1,25 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Portfolio Holdings API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: Morningstar Portfolio Holdings API
+  x-refined-note:
+  - x-changelog differs across the merged source definitions and was not carried
+  version: '1.0'
+  description: 'Operations tagged Portfolio Holdings across 2 of this provider''s published API definitions: morningstar-dws-investment-details-managed-investments-openapi.json, morningstar-dws-time-series-sync-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Portfolio Holdings
 paths:
   /direct-web-services/v1/investments/{id}/full-portfolio-holdings-month-end-or-quarter-end-most-recent:
     get:
-      summary: Get Full Portfolio Holdings Month-End or Quarter-End Most Recent data view.
+      summary: Get Full Portfolio Holdings Month-End or Quarter-End Most Recent data view
       parameters:
       - name: id
         in: path
@@ -150,6 +145,13 @@ paths:
           $ref: '#/components/responses/ResponseBadRequest'
         '500':
           $ref: '#/components/responses/ResponseInternalServerError'
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas
+    - url: https://www.apac-api.morningstar.com
+      description: APAC
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA
   /direct-web-services/v1/investments/{id}/portfolio-holdings-dates:
     post:
       summary: Retrieve portfolio holdings date
@@ -184,12 +186,19 @@ paths:
           $ref: '#/components/responses/ResponsePortfolioHoldingsDates'
         '400':
           $ref: '#/components/responses/ResponsePortfolioHoldingsDatesBadRequest'
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas
+    - url: https://www.apac-api.morningstar.com
+      description: APAC
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA
   /direct-web-services/time-series/v1/portfolio-holdings/carbon-risk-level-classification/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Carbon Risk Level Classification time series.
-      description: The fund's Historical Carbon Risk Score is assigned to one of five risk categories:Portfolio Carbon Risk Score Risk Level0 Negligible   0.
+      summary: Get Carbon Risk Level Classification time series
+      description: The fund's Historical Carbon Risk Score is assigned to one of five risk categories:Portfolio Carbon Risk Score Risk Level0 Negligible 0.
       parameters:
       - name: ids
         in: path
@@ -456,11 +465,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsCarbonRiskLevelClassification
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/carbon-risk-score-category-average/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Carbon Risk Score Category Average time series.
+      summary: Get Carbon Risk Score Category Average time series
       description: The average Carbon Risk Score for portfolios within the Morningstar Category.
       parameters:
       - name: ids
@@ -728,11 +744,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsCarbonRiskScoreCategoryAverage
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/carbon-risk-score-percent-rank-in-category/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Carbon Risk Score Percent Rank In Category time series.
+      summary: Get Carbon Risk Score Percent Rank In Category time series
       description: The portfolio's percent rank within its Morningstar Category, based on its Portfolio Carbon Risk Score.
       parameters:
       - name: ids
@@ -1000,11 +1023,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsCarbonRiskScorePercentRankInCategory
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/historical-carbon-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Historical Carbon Risk Score time series.
+      summary: Get Historical Carbon Risk Score time series
       description: The historical weighted average of the trailing 12 months of Portfolio Carbon Risk Scores. Historical portfolio scores are not equal-weighted; rather, more-recent portfolios are weighted more heavily than older portfolios.
       parameters:
       - name: ids
@@ -1272,11 +1302,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsHistoricalCarbonRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/historical-corporate-esg-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Historical Corporate ESG Risk Score time series.
+      summary: Get Historical Corporate ESG Risk Score time series
       description: The Morningstar Historical Corporate ESG Risk Score is a weighted average of the trailing 12 months of Morningstar Portfolio Corporate ESG Risk Scores.
       parameters:
       - name: ids
@@ -1544,11 +1581,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsHistoricalCorporateEsgRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/historical-sovereign-esg-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Historical Sovereign ESG Risk Score time series.
+      summary: Get Historical Sovereign ESG Risk Score time series
       description: The Morningstar Historical Sovereign ESG Risk Score is a weighted average of the trailing 12 months of Morningstar Portfolio Sovereign ESG Risk Scores.
       parameters:
       - name: ids
@@ -1816,11 +1860,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsHistoricalSovereignEsgRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/portfolio-carbon-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Portfolio Carbon Risk Score time series.
+      summary: Get Portfolio Carbon Risk Score time series
       description: The asset-weighted average of the carbon risk scores for the portfolio's covered, corporate holdings.
       parameters:
       - name: ids
@@ -2088,11 +2139,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsPortfolioCarbonRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/portfolio-corporate-esg-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Portfolio Corporate ESG Risk Score time series.
+      summary: Get Portfolio Corporate ESG Risk Score time series
       description: The Morningstar Portfolio Corporate ESG Risk Score is an asset-weighted average of Sustainalytics' company-level ESG Risk Score.
       parameters:
       - name: ids
@@ -2360,11 +2418,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsPortfolioCorporateEsgRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/portfolio-environmental-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Portfolio Environmental Risk Score time series.
+      summary: Get Portfolio Environmental Risk Score time series
       description: The asset-weighted average of the Company Environmental Risk scores for the covered corporate holdings in a portfolio.
       parameters:
       - name: ids
@@ -2632,11 +2697,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsPortfolioEnvironmentalRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/portfolio-governance-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Portfolio Governance Risk Score time series.
+      summary: Get Portfolio Governance Risk Score time series
       description: The asset-weighted average of the company Governance Risk Scores for the covered corporate holdings in a portfolio.
       parameters:
       - name: ids
@@ -2904,11 +2976,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsPortfolioGovernanceRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/portfolio-social-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Portfolio Social Risk Score time series.
+      summary: Get Portfolio Social Risk Score time series
       description: The asset-weighted average of the Company Social Risk Scores for the covered corporate holdings in a portfolio.
       parameters:
       - name: ids
@@ -3176,11 +3255,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsPortfolioSocialRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/portfolio-sovereign-esg-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Portfolio Sovereign ESG Risk Score time series.
+      summary: Get Portfolio Sovereign ESG Risk Score time series
       description: The Morningstar Portfolio Sovereign ESG Risk Score is an asset-weighted average of Sustainalytics' Country Risk Score.
       parameters:
       - name: ids
@@ -3448,11 +3534,18 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsPortfolioSovereignEsgRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
   /direct-web-services/time-series/v1/portfolio-holdings/portfolio-unallocated-risk-score/{ids}:
     get:
       tags:
       - Portfolio Holdings
-      summary: Get Portfolio Unallocated Risk Score time series.
+      summary: Get Portfolio Unallocated Risk Score time series
       description: The asset-weighted average of the Company ESG Risk scores for the covered corporate holdings in a portfolio that do not have Environmental, Social, Governance scores.
       parameters:
       - name: ids
@@ -3720,74 +3813,135 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getPortfolioHoldingsPortfolioUnallocatedRiskScore
+    servers:
+    - url: https://www.us-api.morningstar.com
+      description: Americas (Production)
+    - url: https://www.apac-api.morningstar.com
+      description: APAC (Production)
+    - url: https://www.emea-api.morningstar.com
+      description: EMEA (Production)
 components:
-  responses:
-    ResponsePortfolioHoldingsDates:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponsePortfolioHoldingsDates'
-          examples:
-            ResponsePortfolioHoldingsDatesExample1:
-              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample1'
-            ResponsePortfolioHoldingsDatesExample2:
-              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample2'
-    ResponseStatus500:
-      description: '500'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            ResponseStatus500Example1:
-              $ref: '#/components/examples/ResponseStatus500Example1'
-    ResponseTimeSeriesSingleObservation:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseTimeSeriesSingleObservation'
-    ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecent:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecent'
-          examples:
-            ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecentExample1:
-              $ref: '#/components/examples/ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecentExample1'
-    ResponseStatus400:
-      description: '400'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            ResponseStatus400Example1:
-              $ref: '#/components/examples/ResponseStatus400Example1'
-    ResponseInternalServerError:
-      description: '500'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponsePortfolioHoldingsDatesBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-          examples:
-            ResponsePortfolioHoldingsDateBadRequestExample1:
-              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesBadRequestExample1'
-    ResponseBadRequest:
-      description: '400'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   schemas:
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    ResponsePortfolioHoldingsDates:
+      type: object
+      properties:
+        portfolioDates:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPortfolioHoldingsDates'
+          description: List of available portfolio dates
+          nullable: true
+        identifiers:
+          $ref: '#/components/schemas/OutputIdentifiers'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+      additionalProperties: false
+      description: Response model for portfolio holdings dates endpoint
+      title: ResponsePortfolioHoldingsDates
+    OutputPortfolioHoldingsDates:
+      type: object
+      properties:
+        portfolioDate:
+          type: string
+          description: Portfolio date in YYYY-MM-DD format
+          nullable: true
+        holdingsView:
+          type: string
+          description: Holdings view identifier
+          nullable: true
+      additionalProperties: false
+      description: Portfolio date information
+      title: OutputPortfolioHoldingsDates
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecent:
+      type: object
+      properties:
+        holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputHoldings'
+        identifiers:
+          $ref: '#/components/schemas/OutputIdentifiers'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
     OutputHoldings:
       type: object
       properties:
@@ -3980,244 +4134,6 @@ components:
       additionalProperties: false
       title: OutputHoldings
       description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputInvestmentSingleObservation:
-      title: OutputInvestmentSingleObservation
-      type: object
-      additionalProperties: false
-      properties:
-        identifiers:
-          $ref: '#/components/schemas/OutputIdentifiers_2'
-        timeSeries:
-          $ref: '#/components/schemas/OutputTimeSeriesSingleObservation'
-        metadata:
-          $ref: '#/components/schemas/OutputInvestmentsMetadata'
-    OutputMetadataMessageInvestment:
-      title: OutputMetadataMessageInvestment
-      type: object
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: Indicates identifier value passed in request.
-          example: 0P000PPP6Q
-          readOnly: true
-        idType:
-          type: string
-          description: Indicates the identifier type passed in request.
-          example: performanceId
-          readOnly: true
-    ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecent:
-      type: object
-      properties:
-        holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputHoldings'
-        identifiers:
-          $ref: '#/components/schemas/OutputIdentifiers'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-    OutputInvestmentsMetadata:
-      title: OutputInvestmentsMetadata
-      description: Provides the identifier look up details passed in request.
-      type: object
-      additionalProperties: false
-      properties:
-        exchangeCountry:
-          type: string
-          example: GBR
-          default: USA
-          description: Indicates exchange country used to look up investment. Represented by 3-character ISO 3166-1 country codes.
-          minLength: 3
-          maxLength: 3
-        domicile:
-          type: string
-          example: GBR
-          default: USA
-          description: Indicates domicile used to look up investment. Represented by  3-character ISO 3166-1 country codes.
-          minLength: 3
-          maxLength: 3
-        baseCurrency:
-          type: string
-          example: GBP
-          default: USD
-          description: Indicates base currency used to look up investment. Represented by  3-character ISO 4217 currency codes.
-          minLength: 3
-          maxLength: 3
-    DataModelSingleObservation:
-      title: DataModelSingleObservation
-      description: Represents a time series of single observations, where each entry contains a date and its corresponding value.
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-          example: '2025-09-06'
-        value:
-          type: number
-          example: 1.108
-    OutputPortfolioHoldingsDates:
-      type: object
-      properties:
-        portfolioDate:
-          type: string
-          description: Portfolio date in YYYY-MM-DD format
-          nullable: true
-        holdingsView:
-          type: string
-          description: Holdings view identifier
-          nullable: true
-      additionalProperties: false
-      description: Portfolio date information
-      title: OutputPortfolioHoldingsDates
-    ErrorResponse:
-      title: ErrorResponse
-      description: Defines the structure of an error response returned when a bad or invalid request is submitted. Includes the HTTP status code, descriptive message, and request identifier for traceability.
-      type: object
-      properties:
-        statusCode:
-          description: Numeric HTTP status code associated with the error.
-          type: integer
-          format: int32
-          example: 400
-          readOnly: true
-        errorCode:
-          description: Identifier for a specific type of error.
-          type: string
-          example: 400.timeSeries.009
-          readOnly: true
-        message:
-          type: string
-          description: Descriptive message providing details about the error or validation failure.
-          example: Invalid frequency 'm' for datapoint 'daily-closing-price'.
-          readOnly: true
-        requestId:
-          description: Indicates unique request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          readOnly: true
-          type: string
-      additionalProperties: false
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
-      description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputMetadata_2:
-      description: Metadata returned in response. Includes information about identifiers for which no results were found.
-      title: OutputMetadata
-      type: object
-      properties:
-        messages:
-          $ref: '#/components/schemas/OutputMetadataMessages_2'
-        requestId:
-          description: Indicates the request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          type: string
-          readOnly: true
-        time:
-          description: Indicates time response was returned.
-          example: '2025-10-02T10:54:36.9161062Z'
-          type: string
-          format: date-time
-          readOnly: true
-      additionalProperties: false
-    OutputMetadataMessages_2:
-      description: Provides information about identifiers for which no results were returned.
-      title: OutputMetadataMessages
-      type: object
-      additionalProperties: false
-      properties:
-        investments:
-          description: Indicates identifiers for which no results were returned.
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessageInvestment'
-        type:
-          type: string
-          description: Indicates the message type.
-          example: Warning
-          readOnly: true
-          const: Warning
-        message:
-          type: string
-          description: Description of the issue encountered.
-          example: 'Lookup : Invalid investments.'
-          readOnly: true
-        code:
-          type: string
-          description: Code associated with the message.
-          example: 404.common.125
-          readOnly: true
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-      description: All fields are nullable. Empty or `null` value fields are not returned.
     OutputInvalidInvestments:
       type: object
       properties:
@@ -4265,6 +4181,116 @@ components:
       additionalProperties: false
       title: OutputInvalidInvestments
       description: All fields are nullable. Empty or `null` value fields are not returned.
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    RequestPortfolioHoldingsDates:
+      type: object
+      properties:
+        holdingsView:
+          type: string
+          description: Holdings view to retrieve. Allowed values are `10`, `25`, or `full`.
+          nullable: true
+          enum:
+          - '10'
+          - '25'
+          - full
+        type:
+          type: string
+          description: Type of portfolio dates to retrieve. Allowed values are `mostRecent`, `timeSeries`, or `staticDates`.
+          nullable: true
+          enum:
+          - mostRecent
+          - timeSeries
+          - staticDates
+        frequency:
+          type: string
+          description: Frequency used when `type` is `timeSeries`. Allowed values are `d` (daily) or `m` (monthly).
+          nullable: true
+          enum:
+          - d
+          - m
+        startDate:
+          type: string
+          description: Start date in `YYYY-MM-DD` format. Required when `type` is `timeSeries`.
+          nullable: true
+        endDate:
+          type: string
+          description: End date in `YYYY-MM-DD` format. Required when `type` is `timeSeries`.
+          nullable: true
+        dates:
+          type: array
+          items:
+            type: string
+            minItems: 1
+            maxItems: 10
+          description: Array of dates in `YYYY-MM-DD` format. Required when `type` is `staticDates`. Maximum of 10 dates accepted.
+          nullable: true
+        idType:
+          type: string
+          description: Type of identifier provided in the `id` field.
+          default: performanceId
+          nullable: true
+          enum:
+          - performanceId
+          - securityId
+          - cusip
+          - isin
+          - sedol
+          - tradingSymbol
+          - fundCode
+          - msid
+          - ticker
+        baseCurrency:
+          type: string
+          description: Base currency used to resolve the investment identifier.
+          nullable: true
+        domicile:
+          type: string
+          description: Domicile used to resolve the investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Exchange country used to resolve the investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Exchange identifier used to resolve the investment identifier.
+          nullable: true
+      additionalProperties: false
+      description: Request model for portfolio holdings dates endpoint
+      required:
+      - holdingsView
+      - type
+      title: RequestPortfolioHoldingsDates
     OutputIdentifiers_2:
       title: OutputIdentifiers
       description: Specifies the identifier type used to specify the target investment in the request.
@@ -4288,31 +4314,6 @@ components:
         tradingSymbol:
           type: string
           example: MDLOX
-    ResponseTimeSeriesSingleObservation:
-      title: ResponseTimeSeriesSingleObservation
-      readOnly: true
-      description: List of investments for which time series data was returned.
-      type: object
-      additionalProperties: false
-      properties:
-        investments:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/OutputInvestmentSingleObservation'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata_2'
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
     OutputTimeSeriesSingleObservation:
       title: OutputTimeSeriesSingleObservation
       type: object
@@ -4580,22 +4581,48 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DataModelSingleObservation'
-    ResponsePortfolioHoldingsDates:
+    OutputMetadataMessageInvestment:
+      title: OutputMetadataMessageInvestment
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Indicates identifier value passed in request.
+          example: 0P000PPP6Q
+          readOnly: true
+        idType:
+          type: string
+          description: Indicates the identifier type passed in request.
+          example: performanceId
+          readOnly: true
+    ErrorResponse:
+      title: ErrorResponse
+      description: Defines the structure of an error response returned when a bad or invalid request is submitted. Includes the HTTP status code, descriptive message, and request identifier for traceability.
       type: object
       properties:
-        portfolioDates:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPortfolioHoldingsDates'
-          description: List of available portfolio dates
-          nullable: true
-        identifiers:
-          $ref: '#/components/schemas/OutputIdentifiers'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
+        statusCode:
+          description: Numeric HTTP status code associated with the error.
+          type: integer
+          format: int32
+          example: 400
+          readOnly: true
+        errorCode:
+          description: Identifier for a specific type of error.
+          type: string
+          example: 400.timeSeries.009
+          readOnly: true
+        message:
+          type: string
+          description: Descriptive message providing details about the error or validation failure.
+          example: Invalid frequency 'm' for datapoint 'daily-closing-price'.
+          readOnly: true
+        requestId:
+          description: Indicates unique request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          readOnly: true
+          type: string
       additionalProperties: false
-      description: Response model for portfolio holdings dates endpoint
-      title: ResponsePortfolioHoldingsDates
     OutputCategory:
       title: OutputCategory
       type: string
@@ -4609,143 +4636,117 @@ components:
       - portfolio-analytics
       - portfolio-holdings
       - reference
-    RequestPortfolioHoldingsDates:
+    ResponseTimeSeriesSingleObservation:
+      title: ResponseTimeSeriesSingleObservation
+      readOnly: true
+      description: List of investments for which time series data was returned.
       type: object
+      additionalProperties: false
       properties:
-        holdingsView:
-          type: string
-          description: Holdings view to retrieve. Allowed values are `10`, `25`, or `full`.
-          nullable: true
-          enum:
-          - '10'
-          - '25'
-          - full
-        type:
-          type: string
-          description: Type of portfolio dates to retrieve. Allowed values are `mostRecent`, `timeSeries`, or `staticDates`.
-          nullable: true
-          enum:
-          - mostRecent
-          - timeSeries
-          - staticDates
-        frequency:
-          type: string
-          description: Frequency used when `type` is `timeSeries`. Allowed values are `d` (daily) or `m` (monthly).
-          nullable: true
-          enum:
-          - d
-          - m
-        startDate:
-          type: string
-          description: Start date in `YYYY-MM-DD` format. Required when `type` is `timeSeries`.
-          nullable: true
-        endDate:
-          type: string
-          description: End date in `YYYY-MM-DD` format. Required when `type` is `timeSeries`.
-          nullable: true
-        dates:
+        investments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OutputInvestmentSingleObservation'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata_2'
+    OutputMetadataMessages_2:
+      description: Provides information about identifiers for which no results were returned.
+      title: OutputMetadataMessages
+      type: object
+      additionalProperties: false
+      properties:
+        investments:
+          description: Indicates identifiers for which no results were returned.
           type: array
           items:
-            type: string
-            minItems: 1
-            maxItems: 10
-          description: Array of dates in `YYYY-MM-DD` format. Required when `type` is `staticDates`. Maximum of 10 dates accepted.
-          nullable: true
-        idType:
+            $ref: '#/components/schemas/OutputMetadataMessageInvestment'
+        type:
           type: string
-          description: Type of identifier provided in the `id` field.
-          default: performanceId
-          nullable: true
-          enum:
-          - performanceId
-          - securityId
-          - cusip
-          - isin
-          - sedol
-          - tradingSymbol
-          - fundCode
-          - msid
-          - ticker
-        baseCurrency:
+          description: Indicates the message type.
+          example: Warning
+          readOnly: true
+          const: Warning
+        message:
           type: string
-          description: Base currency used to resolve the investment identifier.
-          nullable: true
-        domicile:
+          description: Description of the issue encountered.
+          example: 'Lookup : Invalid investments.'
+          readOnly: true
+        code:
           type: string
-          description: Domicile used to resolve the investment identifier.
-          nullable: true
+          description: Code associated with the message.
+          example: 404.common.125
+          readOnly: true
+    OutputInvestmentSingleObservation:
+      title: OutputInvestmentSingleObservation
+      type: object
+      additionalProperties: false
+      properties:
+        identifiers:
+          $ref: '#/components/schemas/OutputIdentifiers_2'
+        timeSeries:
+          $ref: '#/components/schemas/OutputTimeSeriesSingleObservation'
+        metadata:
+          $ref: '#/components/schemas/OutputInvestmentsMetadata'
+    OutputInvestmentsMetadata:
+      title: OutputInvestmentsMetadata
+      description: Provides the identifier look up details passed in request.
+      type: object
+      additionalProperties: false
+      properties:
         exchangeCountry:
           type: string
-          description: Exchange country used to resolve the investment identifier.
-          nullable: true
-        exchangeId:
+          example: GBR
+          default: USA
+          description: Indicates exchange country used to look up investment. Represented by 3-character ISO 3166-1 country codes.
+          minLength: 3
+          maxLength: 3
+        domicile:
           type: string
-          description: Exchange identifier used to resolve the investment identifier.
-          nullable: true
-      additionalProperties: false
-      description: Request model for portfolio holdings dates endpoint
-      required:
-      - holdingsView
-      - type
-      title: RequestPortfolioHoldingsDates
-    OutputMetadata:
+          example: GBR
+          default: USA
+          description: Indicates domicile used to look up investment. Represented by  3-character ISO 3166-1 country codes.
+          minLength: 3
+          maxLength: 3
+        baseCurrency:
+          type: string
+          example: GBP
+          default: USD
+          description: Indicates base currency used to look up investment. Represented by  3-character ISO 4217 currency codes.
+          minLength: 3
+          maxLength: 3
+    DataModelSingleObservation:
+      title: DataModelSingleObservation
+      description: Represents a time series of single observations, where each entry contains a date and its corresponding value.
       type: object
       properties:
-        requestId:
+        date:
           type: string
-          nullable: true
+          format: date
+          example: '2025-09-06'
+        value:
+          type: number
+          example: 1.108
+    OutputMetadata_2:
+      description: Metadata returned in response. Includes information about identifiers for which no results were found.
+      title: OutputMetadata
+      type: object
+      properties:
+        messages:
+          $ref: '#/components/schemas/OutputMetadataMessages_2'
+        requestId:
+          description: Indicates the request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          type: string
+          readOnly: true
         time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
           type: string
           format: date-time
           readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
       additionalProperties: false
-      title: OutputMetadata
-      description: All fields are nullable. Empty or `null` value fields are not returned.
   examples:
-    RequestPortfolioHoldingsDatesExample4:
-      summary: 'Date Type: Static Dates'
-      value:
-        holdingsView: '10'
-        type: staticDates
-        dates:
-        - '2024-06-30'
-        - '2024-12-31'
-        - '2023-12-31'
-        - '2023-06-30'
-        - '2016-12-31'
-        - '2018-12-31'
-        - '2019-06-30'
-        - '2013-06-30'
-    RequestPortfolioHoldingsDatesExample3:
-      summary: 'Date Type: Time Series and Frequency'
-      value:
-        holdingsView: '10'
-        type: timeSeries
-        startDate: '2014-06-30'
-        endDate: '2024-06-30'
-        frequency: m
-    ResponsePortfolioHoldingsDatesExample1:
-      summary: Top 10 Most Recent
-      value:
-        portfolioDates:
-        - portfolioDate: '2025-12-31'
-          holdingsView: '10'
-        identifiers:
-          performanceId: 0P00018P7K
-        metadata:
-          requestId: 3a11f005-394f-4f89-a17f-41d2ffe549f3
-          time: '2026-06-17T17:28:34.6382675Z'
     ResponsePortfolioHoldingsDatesExample2:
       summary: Top 10 Time Series
       value:
@@ -4950,13 +4951,30 @@ components:
           time: '2026-06-15T14:40:44.4183931Z'
           portfolioDate: '2026-05-29'
           portfolioCurrency: USD
-    ResponseStatus400Example1:
-      summary: 400 -  Bad Request
+    RequestPortfolioHoldingsDatesExample1:
+      summary: 'Date Type: Most Recent'
       value:
-        statusCode: 400
-        errorCode: 400.investmentDetails.002
-        message: Invalid date format. Expected format is yyyy-MM-d
-        requestId: 539d62a5-3586-4070-965e-0f7f64712d79
+        holdingsView: full
+        type: mostRecent
+    RequestPortfolioHoldingsDatesExample3:
+      summary: 'Date Type: Time Series and Frequency'
+      value:
+        holdingsView: '10'
+        type: timeSeries
+        startDate: '2014-06-30'
+        endDate: '2024-06-30'
+        frequency: m
+    ResponsePortfolioHoldingsDatesExample1:
+      summary: Top 10 Most Recent
+      value:
+        portfolioDates:
+        - portfolioDate: '2025-12-31'
+          holdingsView: '10'
+        identifiers:
+          performanceId: 0P00018P7K
+        metadata:
+          requestId: 3a11f005-394f-4f89-a17f-41d2ffe549f3
+          time: '2026-06-17T17:28:34.6382675Z'
     RequestPortfolioHoldingsDatesExample2:
       summary: 'Date Type: Time Series'
       value:
@@ -4964,6 +4982,27 @@ components:
         type: timeSeries
         startDate: '2014-06-30'
         endDate: '2024-06-30'
+    RequestPortfolioHoldingsDatesExample4:
+      summary: 'Date Type: Static Dates'
+      value:
+        holdingsView: '10'
+        type: staticDates
+        dates:
+        - '2024-06-30'
+        - '2024-12-31'
+        - '2023-12-31'
+        - '2023-06-30'
+        - '2016-12-31'
+        - '2018-12-31'
+        - '2019-06-30'
+        - '2013-06-30'
+    ResponseStatus400Example1:
+      summary: 400 -  Bad Request
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetails.002
+        message: Invalid date format. Expected format is yyyy-MM-d
+        requestId: 539d62a5-3586-4070-965e-0f7f64712d79
     ResponseStatus500Example1:
       summary: 500 - Internal Server Error
       value:
@@ -4971,11 +5010,72 @@ components:
         errorCode: 500.investmentDetails.003
         message: Error calling Investment API.
         requestId: 539d62a5-3586-4070-965e-0f7f64712d79
-    RequestPortfolioHoldingsDatesExample1:
-      summary: 'Date Type: Most Recent'
-      value:
-        holdingsView: full
-        type: mostRecent
+  responses:
+    ResponseInternalServerError:
+      description: '500'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseBadRequest:
+      description: '400'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecent:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecent'
+          examples:
+            ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecentExample1:
+              $ref: '#/components/examples/ResponseFullPortfolioHoldingsMonthEndOrQuarterEndMostRecentExample1'
+    ResponsePortfolioHoldingsDates:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponsePortfolioHoldingsDates'
+          examples:
+            ResponsePortfolioHoldingsDatesExample1:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample1'
+            ResponsePortfolioHoldingsDatesExample2:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample2'
+    ResponsePortfolioHoldingsDatesBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+          examples:
+            ResponsePortfolioHoldingsDateBadRequestExample1:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesBadRequestExample1'
+    ResponseStatus400:
+      description: '400'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            ResponseStatus400Example1:
+              $ref: '#/components/examples/ResponseStatus400Example1'
+    ResponseTimeSeriesSingleObservation:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseTimeSeriesSingleObservation'
+    ResponseStatus500:
+      description: '500'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            ResponseStatus500Example1:
+              $ref: '#/components/examples/ResponseStatus500Example1'
   requestBodies:
     RequestPortfolioHoldingsDates:
       required: true
@@ -4993,6 +5093,13 @@ components:
             RequestPortfolioHoldingsDatesExample4:
               $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample4'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: 'Obtain a token via the Authentication API''s `POST /token/oauth`
+
+        endpoint. Tokens are valid for 60 minutes and reusable across requests.'
+x-refined-from:
+- morningstar-dws-investment-details-managed-investments-openapi.json
+- morningstar-dws-time-series-sync-openapi.json

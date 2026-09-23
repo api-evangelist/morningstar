@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Industry-Specific Metrics API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Industry-Specific Metrics API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Industry-Specific Metrics
 paths:
@@ -1239,286 +1248,7 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 953
 components:
-  responses:
-    ResponseEquityBankReserveMetrics:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              bankReserveRatioDuration:
-                $ref: '#/components/schemas/OutputBankReserveRatioDuration'
-              bankReserveRatioSpot:
-                $ref: '#/components/schemas/OutputBankReserveRatioSpot'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityIndustrySpecificMetrics:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              bankReserveRatioDuration:
-                $ref: '#/components/schemas/OutputBankReserveRatioDuration'
-              bankReserveRatioSpot:
-                $ref: '#/components/schemas/OutputBankReserveRatioSpot'
-              fundFromOperations:
-                $ref: '#/components/schemas/OutputFundFromOperations'
-              netAssetValue:
-                $ref: '#/components/schemas/OutputNetAssetValue'
-              fundFromOperationsPerShare:
-                $ref: '#/components/schemas/OutputFundFromOperationsPerShare'
-              netAssetValuePerShare:
-                $ref: '#/components/schemas/OutputNetAssetValuePerShare'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityReitMetricsPerShare:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              fundFromOperationsPerShare:
-                $ref: '#/components/schemas/OutputFundFromOperationsPerShare'
-              netAssetValuePerShare:
-                $ref: '#/components/schemas/OutputNetAssetValuePerShare'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityReitMetrics:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              fundFromOperations:
-                $ref: '#/components/schemas/OutputFundFromOperations'
-              netAssetValue:
-                $ref: '#/components/schemas/OutputNetAssetValue'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
   schemas:
-    OutputFundFromOperationsPerShare:
-      type: object
-      properties:
-        reportPeriodEndDate:
-          type: string
-          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
-          nullable: true
-        accessionNumber:
-          type: string
-          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        documentFormType:
-          type: string
-          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
-          nullable: true
-        documentId:
-          type: integer
-          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
-          format: int32
-          nullable: true
-        fiscalYearEnd:
-          type: string
-          description: The company's fiscal year that it uses to report its financial statements
-          nullable: true
-        fundFromOperationsPerShareFileDate:
-          type: string
-          description: The date of the company's filings where fund from operations per share value was collected
-          nullable: true
-        isBestKnown:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isCalculatedOrCopy:
-          $ref: '#/components/schemas/CodeMappingInt'
-        isConsolidated:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isFiscalYearEndChange:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isIncomplete:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isIrregularPeriod:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        reportedBasicAdjustedFundFromOperationsPerShareValue:
-          type: number
-          description: Reported Basic AFFO per basic shares outstanding
-          format: double
-          nullable: true
-        reportedBasicFundFromOperationsPerShareValue:
-          type: number
-          description: Reported Basic FFO per basic shares outstanding
-          format: double
-          nullable: true
-        reportedDilutedAdjustedFundFromOperationsPerShareValue:
-          type: number
-          description: Reported Diluted AFFO per diluted shares outstanding
-          format: double
-          nullable: true
-        reportedDilutedFundFromOperationsPerShareValue:
-          type: number
-          description: Reported Diluted FFO per diluted shares outstanding
-          format: double
-          nullable: true
-        reportPeriodLength:
-          type: integer
-          description: 'Indicates number of period length reported by the company: for instance; 12-month annual report has report period length as 12.'
-          format: int32
-          nullable: true
-        reportPeriodLengthType:
-          type: string
-          description: 'Indicates unit of period length reported by the company: for instance; 12-month annual report has report period length type as months. General period length types include days; weeks; months and quarters.'
-          nullable: true
-        reportRawEndDate:
-          type: string
-          description: The actual report date when the company reports its financial statements
-          nullable: true
-        templateCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        typeOfPeriod:
-          type: string
-          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
-          nullable: true
-        unitOfReport:
-          type: integer
-          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
-          format: int64
-          nullable: true
-        numberOfMonths:
-          type: integer
-          description: ''
-          format: int32
-          nullable: true
-        reportPeriod:
-          type: string
-          description: ''
-          nullable: true
-        reportType:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputFundFromOperationsPerShare
-    OutputNetAssetValue:
-      type: object
-      properties:
-        accessionNumber:
-          type: string
-          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
-          nullable: true
-        adjustedBasicNetAssetValueValue:
-          type: number
-          description: Adjusted Basic Net Asset Value (NAV) for REIT's industry is not total equity; rather it is intending to show company's actual diluted market value. According to National Association of Real Estate Investment Trusts and European public real estate association; net asset value collected in Morningstar is more related to the estimated market value of a REIT's total assets (mostly real property) minus the value of all liabilities. To calculated net asset value; REIT's company need to revaluation their asset.
-          format: double
-          nullable: true
-        adjustedDilutedNetAssetValueValue:
-          type: number
-          description: Adjusted Diluted Net Asset Value (NAV) for REIT's industry is not total equity; rather it is intending to show company's actual diluted market value. According to National Association of Real Estate Investment Trusts and European public real estate association; net asset value collected in Morningstar is more related to the estimated market value of a REIT's total assets (mostly real property) minus the value of all liabilities. To calculated net asset value; REIT's company need to revaluation their asset.
-          format: double
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        documentFormType:
-          type: string
-          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
-          nullable: true
-        documentId:
-          type: integer
-          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
-          format: int32
-          nullable: true
-        epraNetDisposalValueValue:
-          type: number
-          description: 'Company''s net asset value that is calculated in a scenario when deferred tax; financial instruments; and certain other adjustments are calculated as to the full extent of their liability; including tax exposure not reflected in the Balance Sheet; net of any resulting tax: The data point is based on European Public Real Estate Association (EPRA) methodology standards'
-          format: double
-          nullable: true
-        epraNetReinstatementValueValue:
-          type: number
-          description: 'Company''s net asset value that aims to represent the value required to rebuild the entity and assumes that no selling of assets takes place: The data point is based on European Public Real Estate Association (EPRA) methodology standards'
-          format: double
-          nullable: true
-        epraNetTangibleAssetsValue:
-          type: number
-          description: 'Company''s net asset value that is calculated in a scenario that entities buy and sell assets; thereby crystallizing certain levels of deferred tax liability: The data point is based on European Public Real Estate Association (EPRA) methodology standards'
-          format: double
-          nullable: true
-        fiscalYearEnd:
-          type: string
-          description: The company's fiscal year that it uses to report its financial statements
-          nullable: true
-        isBestKnown:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isCalculatedOrCopy:
-          $ref: '#/components/schemas/CodeMappingInt'
-        isConsolidated:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isFiscalYearEndChange:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isIncomplete:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isIrregularPeriod:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        netAssetValueFileDate:
-          type: string
-          description: The date of the company's filings where net asset value was collected
-          nullable: true
-        reportRawEndDate:
-          type: string
-          description: The actual report date when the company reports its financial statements
-          nullable: true
-        templateCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        typeOfPeriod:
-          type: string
-          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
-          nullable: true
-        unitOfReport:
-          type: integer
-          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
-          format: int32
-          nullable: true
-        numberOfMonths:
-          type: integer
-          description: ''
-          format: int32
-          nullable: true
-        reportPeriod:
-          type: string
-          description: ''
-          nullable: true
-        reportType:
-          type: string
-          description: ''
-          nullable: true
-        reportPeriodEndDate:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputNetAssetValue
     OutputIdentifiers:
       type: object
       properties:
@@ -1551,28 +1281,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
     OutputFundFromOperations:
       type: object
       properties:
@@ -1674,6 +1382,200 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputFundFromOperations
+    OutputNetAssetValuePerShare:
+      type: object
+      properties:
+        reportPeriodEndDate:
+          type: string
+          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        adjustedBasicNetAssetValuePerShareValue:
+          type: number
+          description: Adjusted Basic Net Asset Value (NAV) is calculated by dividing the Adjusted Basic Net Asset Value (NAV) by the number of shares outstanding
+          format: double
+          nullable: true
+        adjustedDilutedNetAssetValuePerShareValue:
+          type: number
+          description: Adjusted Diluted Net Asset Value (NAV) per Share is calculated by dividing the Adjusted Diluted Net Asset Value (NAV) by the number of shares outstanding
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        documentFormType:
+          type: string
+          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
+          nullable: true
+        documentId:
+          type: integer
+          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
+          format: int32
+          nullable: true
+        epraNetDisposalValuePerShareValue:
+          type: number
+          description: 'The per share value of Net Disposal Value (EPRA): It is calculated by using Net Disposal Value (EPRA) / Number of fully diluted shares outstanding. The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        epraNetReinstatementValuePerShareValue:
+          type: number
+          description: 'The per share value of Net Reinstatement Value (EPRA): It is calculated using Net Reinstatement Value (EPRA) / Number of fully diluted shares outstanding. The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        epraNetTangibleAssetsPerShareValue:
+          type: number
+          description: 'The per share value of Net Tangible Assets (EPRA):  It is calculated by using Net Tangible Assets (EPRA) / Number of fully diluted shares outstanding. The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        fiscalYearEnd:
+          type: string
+          description: The company's fiscal year that it uses to report its financial statements
+          nullable: true
+        isBestKnown:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isCalculatedOrCopy:
+          $ref: '#/components/schemas/CodeMappingInt'
+        isConsolidated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isFiscalYearEndChange:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIncomplete:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIrregularPeriod:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        netAssetValuePerShareFileDate:
+          type: string
+          description: The date of the company's filings where net asset value per share was collected
+          nullable: true
+        reportRawEndDate:
+          type: string
+          description: The actual report date when the company reports its financial statements
+          nullable: true
+        templateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        typeOfPeriod:
+          type: string
+          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
+          nullable: true
+        unitOfReport:
+          type: integer
+          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
+          format: int32
+          nullable: true
+        numberOfMonths:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputNetAssetValuePerShare
+    OutputNetAssetValue:
+      type: object
+      properties:
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        adjustedBasicNetAssetValueValue:
+          type: number
+          description: Adjusted Basic Net Asset Value (NAV) for REIT's industry is not total equity; rather it is intending to show company's actual diluted market value. According to National Association of Real Estate Investment Trusts and European public real estate association; net asset value collected in Morningstar is more related to the estimated market value of a REIT's total assets (mostly real property) minus the value of all liabilities. To calculated net asset value; REIT's company need to revaluation their asset.
+          format: double
+          nullable: true
+        adjustedDilutedNetAssetValueValue:
+          type: number
+          description: Adjusted Diluted Net Asset Value (NAV) for REIT's industry is not total equity; rather it is intending to show company's actual diluted market value. According to National Association of Real Estate Investment Trusts and European public real estate association; net asset value collected in Morningstar is more related to the estimated market value of a REIT's total assets (mostly real property) minus the value of all liabilities. To calculated net asset value; REIT's company need to revaluation their asset.
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        documentFormType:
+          type: string
+          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
+          nullable: true
+        documentId:
+          type: integer
+          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
+          format: int32
+          nullable: true
+        epraNetDisposalValueValue:
+          type: number
+          description: 'Company''s net asset value that is calculated in a scenario when deferred tax; financial instruments; and certain other adjustments are calculated as to the full extent of their liability; including tax exposure not reflected in the Balance Sheet; net of any resulting tax: The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        epraNetReinstatementValueValue:
+          type: number
+          description: 'Company''s net asset value that aims to represent the value required to rebuild the entity and assumes that no selling of assets takes place: The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        epraNetTangibleAssetsValue:
+          type: number
+          description: 'Company''s net asset value that is calculated in a scenario that entities buy and sell assets; thereby crystallizing certain levels of deferred tax liability: The data point is based on European Public Real Estate Association (EPRA) methodology standards'
+          format: double
+          nullable: true
+        fiscalYearEnd:
+          type: string
+          description: The company's fiscal year that it uses to report its financial statements
+          nullable: true
+        isBestKnown:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isCalculatedOrCopy:
+          $ref: '#/components/schemas/CodeMappingInt'
+        isConsolidated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isFiscalYearEndChange:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIncomplete:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isIrregularPeriod:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        netAssetValueFileDate:
+          type: string
+          description: The date of the company's filings where net asset value was collected
+          nullable: true
+        reportRawEndDate:
+          type: string
+          description: The actual report date when the company reports its financial statements
+          nullable: true
+        templateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        typeOfPeriod:
+          type: string
+          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
+          nullable: true
+        unitOfReport:
+          type: integer
+          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
+          format: int32
+          nullable: true
+        numberOfMonths:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
+        reportPeriodEndDate:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputNetAssetValue
     CodeMappingBoolean:
       type: object
       properties:
@@ -1685,34 +1587,74 @@ components:
           nullable: true
       additionalProperties: false
       title: CodeMappingBoolean
-    OutputMetadataMessages:
+    CodeMappingLong:
       type: object
       properties:
-        type:
+        value:
           type: string
           nullable: true
         code:
-          type: string
+          type: integer
+          format: int64
           nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+      additionalProperties: false
+      title: CodeMappingLong
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
           nullable: true
         message:
           type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    OutputBankReserveRatioDuration:
+      description: Error details
+      title: OutputErrorDetails
+    OutputFundFromOperationsPerShare:
       type: object
       properties:
-        bankReserveRatioDurationFileDate:
+        reportPeriodEndDate:
           type: string
-          description: The date of the company's filings where bank reserve ratio duration value was collected
+          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        documentFormType:
+          type: string
+          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
+          nullable: true
+        documentId:
+          type: integer
+          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
+          format: int32
+          nullable: true
+        fiscalYearEnd:
+          type: string
+          description: The company's fiscal year that it uses to report its financial statements
+          nullable: true
+        fundFromOperationsPerShareFileDate:
+          type: string
+          description: The date of the company's filings where fund from operations per share value was collected
           nullable: true
         isBestKnown:
           $ref: '#/components/schemas/CodeMappingBoolean'
+        isCalculatedOrCopy:
+          $ref: '#/components/schemas/CodeMappingInt'
         isConsolidated:
           $ref: '#/components/schemas/CodeMappingBoolean'
         isFiscalYearEndChange:
@@ -1721,40 +1663,100 @@ components:
           $ref: '#/components/schemas/CodeMappingBoolean'
         isIrregularPeriod:
           $ref: '#/components/schemas/CodeMappingBoolean'
-        netInterestMarginValue:
+        reportedBasicAdjustedFundFromOperationsPerShareValue:
           type: number
-          description: It's a measure of the difference between the interest income generated by banks or other financial institutions and the amount of interest paid out to their lenders ; relative to the amount of their (interest-earning) assets.
+          description: Reported Basic AFFO per basic shares outstanding
           format: double
           nullable: true
-        netInterestSpreadValue:
+        reportedBasicFundFromOperationsPerShareValue:
           type: number
-          description: It's the difference between the average yield a bank receives from loans & other interest; accruing activities and the average rate it pays on deposits and borrowings.
+          description: Reported Basic FFO per basic shares outstanding
           format: double
+          nullable: true
+        reportedDilutedAdjustedFundFromOperationsPerShareValue:
+          type: number
+          description: Reported Diluted AFFO per diluted shares outstanding
+          format: double
+          nullable: true
+        reportedDilutedFundFromOperationsPerShareValue:
+          type: number
+          description: Reported Diluted FFO per diluted shares outstanding
+          format: double
+          nullable: true
+        reportPeriodLength:
+          type: integer
+          description: 'Indicates number of period length reported by the company: for instance; 12-month annual report has report period length as 12.'
+          format: int32
           nullable: true
         reportPeriodLengthType:
           type: string
           description: 'Indicates unit of period length reported by the company: for instance; 12-month annual report has report period length type as months. General period length types include days; weeks; months and quarters.'
           nullable: true
-        reportPeriodEndDate:
-          type: number
-          description: ''
-          format: double
+        reportRawEndDate:
+          type: string
+          description: The actual report date when the company reports its financial statements
+          nullable: true
+        templateCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        typeOfPeriod:
+          type: string
+          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
+          nullable: true
+        unitOfReport:
+          type: integer
+          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
+          format: int64
           nullable: true
         numberOfMonths:
           type: integer
           description: ''
           format: int32
           nullable: true
-        reportType:
-          type: string
-          description: ''
-          nullable: true
         reportPeriod:
           type: string
           description: ''
           nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
       additionalProperties: false
-      title: OutputBankReserveRatioDuration
+      title: OutputFundFromOperationsPerShare
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    CodeMappingInt:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingInt
     OutputInvalidInvestments:
       type: object
       properties:
@@ -1801,29 +1803,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    CodeMappingLong:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: integer
-          format: int64
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingLong
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
     OutputBankReserveRatioSpot:
       type: object
       properties:
@@ -1956,61 +1935,15 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputBankReserveRatioSpot
-    OutputNetAssetValuePerShare:
+    OutputBankReserveRatioDuration:
       type: object
       properties:
-        reportPeriodEndDate:
+        bankReserveRatioDurationFileDate:
           type: string
-          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
-          nullable: true
-        accessionNumber:
-          type: string
-          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
-          nullable: true
-        adjustedBasicNetAssetValuePerShareValue:
-          type: number
-          description: Adjusted Basic Net Asset Value (NAV) is calculated by dividing the Adjusted Basic Net Asset Value (NAV) by the number of shares outstanding
-          format: double
-          nullable: true
-        adjustedDilutedNetAssetValuePerShareValue:
-          type: number
-          description: Adjusted Diluted Net Asset Value (NAV) per Share is calculated by dividing the Adjusted Diluted Net Asset Value (NAV) by the number of shares outstanding
-          format: double
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        documentFormType:
-          type: string
-          description: 'The type of document filed by the company: for instance; 10-K (annual report) or 10-Q (quarterly report)'
-          nullable: true
-        documentId:
-          type: integer
-          description: Morningstar Document Id; a unique and unchanging Morningstar identifier assigned to each document
-          format: int32
-          nullable: true
-        epraNetDisposalValuePerShareValue:
-          type: number
-          description: 'The per share value of Net Disposal Value (EPRA): It is calculated by using Net Disposal Value (EPRA) / Number of fully diluted shares outstanding. The data point is based on European Public Real Estate Association (EPRA) methodology standards'
-          format: double
-          nullable: true
-        epraNetReinstatementValuePerShareValue:
-          type: number
-          description: 'The per share value of Net Reinstatement Value (EPRA): It is calculated using Net Reinstatement Value (EPRA) / Number of fully diluted shares outstanding. The data point is based on European Public Real Estate Association (EPRA) methodology standards'
-          format: double
-          nullable: true
-        epraNetTangibleAssetsPerShareValue:
-          type: number
-          description: 'The per share value of Net Tangible Assets (EPRA):  It is calculated by using Net Tangible Assets (EPRA) / Number of fully diluted shares outstanding. The data point is based on European Public Real Estate Association (EPRA) methodology standards'
-          format: double
-          nullable: true
-        fiscalYearEnd:
-          type: string
-          description: The company's fiscal year that it uses to report its financial statements
+          description: The date of the company's filings where bank reserve ratio duration value was collected
           nullable: true
         isBestKnown:
           $ref: '#/components/schemas/CodeMappingBoolean'
-        isCalculatedOrCopy:
-          $ref: '#/components/schemas/CodeMappingInt'
         isConsolidated:
           $ref: '#/components/schemas/CodeMappingBoolean'
         isFiscalYearEndChange:
@@ -2019,76 +1952,154 @@ components:
           $ref: '#/components/schemas/CodeMappingBoolean'
         isIrregularPeriod:
           $ref: '#/components/schemas/CodeMappingBoolean'
-        netAssetValuePerShareFileDate:
-          type: string
-          description: The date of the company's filings where net asset value per share was collected
+        netInterestMarginValue:
+          type: number
+          description: It's a measure of the difference between the interest income generated by banks or other financial institutions and the amount of interest paid out to their lenders ; relative to the amount of their (interest-earning) assets.
+          format: double
           nullable: true
-        reportRawEndDate:
-          type: string
-          description: The actual report date when the company reports its financial statements
+        netInterestSpreadValue:
+          type: number
+          description: It's the difference between the average yield a bank receives from loans & other interest; accruing activities and the average rate it pays on deposits and borrowings.
+          format: double
           nullable: true
-        templateCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        typeOfPeriod:
+        reportPeriodLengthType:
           type: string
-          description: Indicates the period type of financial statements. The period types include Discrete; Cumulative; Annual; TTM and Others. Discrete means a 3-month period for a quarter report and a 6-month period for a semi-annual report (SA1); Cumulative means a year-to-date period such as 6 months (Q2) and 9 months (Q3); Annual means a 12-month period; TTM means a derived trailing 12 months period;  Others is used for exceptional or unusual cases such as when a Fiscal Year End Change (FYC) occurs.
+          description: 'Indicates unit of period length reported by the company: for instance; 12-month annual report has report period length type as months. General period length types include days; weeks; months and quarters.'
           nullable: true
-        unitOfReport:
-          type: integer
-          description: 'The unit that the company uses when reporting the values within its financial statements: for instance; 1000 for value reported in thousands.'
-          format: int32
+        reportPeriodEndDate:
+          type: number
+          description: ''
+          format: double
           nullable: true
         numberOfMonths:
           type: integer
           description: ''
           format: int32
           nullable: true
-        reportPeriod:
-          type: string
-          description: ''
-          nullable: true
         reportType:
           type: string
           description: ''
           nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
       additionalProperties: false
-      title: OutputNetAssetValuePerShare
-    OutputMetadata:
+      title: OutputBankReserveRatioDuration
+    OutputMetadataMessages:
       type: object
       properties:
-        requestId:
+        type:
           type: string
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
+        code:
           type: string
           nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
+        investments:
           type: array
           items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
           nullable: true
       additionalProperties: false
-      title: OutputMetadata
-    CodeMappingInt:
+      title: OutputMetadataMessages
+    CodeMappingString:
       type: object
       properties:
         value:
           type: string
           nullable: true
         code:
-          type: integer
-          format: int32
+          type: string
           nullable: true
       additionalProperties: false
-      title: CodeMappingInt
+      title: CodeMappingString
+  responses:
+    ResponseEquityReitMetricsPerShare:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              fundFromOperationsPerShare:
+                $ref: '#/components/schemas/OutputFundFromOperationsPerShare'
+              netAssetValuePerShare:
+                $ref: '#/components/schemas/OutputNetAssetValuePerShare'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityIndustrySpecificMetrics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              bankReserveRatioDuration:
+                $ref: '#/components/schemas/OutputBankReserveRatioDuration'
+              bankReserveRatioSpot:
+                $ref: '#/components/schemas/OutputBankReserveRatioSpot'
+              fundFromOperations:
+                $ref: '#/components/schemas/OutputFundFromOperations'
+              netAssetValue:
+                $ref: '#/components/schemas/OutputNetAssetValue'
+              fundFromOperationsPerShare:
+                $ref: '#/components/schemas/OutputFundFromOperationsPerShare'
+              netAssetValuePerShare:
+                $ref: '#/components/schemas/OutputNetAssetValuePerShare'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityBankReserveMetrics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              bankReserveRatioDuration:
+                $ref: '#/components/schemas/OutputBankReserveRatioDuration'
+              bankReserveRatioSpot:
+                $ref: '#/components/schemas/OutputBankReserveRatioSpot'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityReitMetrics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              fundFromOperations:
+                $ref: '#/components/schemas/OutputFundFromOperations'
+              netAssetValue:
+                $ref: '#/components/schemas/OutputNetAssetValue'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

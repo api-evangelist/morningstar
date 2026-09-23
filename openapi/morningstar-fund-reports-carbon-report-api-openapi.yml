@@ -1,24 +1,12 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Research fund reports - carbon report API
+  description: The Research API provides on-demand access to Morningstar’s repository of equity and fund research.
   version: 1.0.0
-  title: Authorization Tokens Accounts fund reports - carbon report API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/research
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: fund reports - carbon report
 paths:
@@ -27,7 +15,18 @@ paths:
       tags:
       - fund reports - carbon report
       summary: Get a Carbon Report
-      description: "Get an Carbon Report for the fund specified in the `FundIdentifier` parameter.</br></br>\n Carbon Reports provide an investment level analysis of a fund’s carbon risk. The report uses Morningstar’s Portfolio Carbon Metrics to provide an overview of how well a portfolio is managing transition risk and other key \n carbon-related information, such as carbon intensity and fossil fuel exposure. You can use these metrics to identify and evaluate lower carbon-risk alternatives to funds or assess how well sustainable funds meet their stated mandates.\n</br></br>In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.</br></br>If a report exists, a presigned URL from which you can download the PDF is returned in the response."
+      description: 'Get an Carbon Report for the fund specified in the `FundIdentifier` parameter.
+
+
+        Carbon Reports provide an investment level analysis of a fund’s carbon risk. The report uses Morningstar’s Portfolio Carbon Metrics to provide an overview of how well a portfolio is managing transition risk and other key
+
+        carbon-related information, such as carbon intensity and fossil fuel exposure. You can use these metrics to identify and evaluate lower carbon-risk alternatives to funds or assess how well sustainable funds meet their stated mandates.
+
+
+        In the `pageSize` parameter, you can specify the page size for the returned PDF. Page size options are `Letter` or `A4`.
+
+
+        If a report exists, a presigned URL from which you can download the PDF is returned in the response.'
       operationId: CarbonReport
       parameters:
       - name: FundIdentifier
@@ -65,6 +64,6 @@ paths:
           content: {}
 components:
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer

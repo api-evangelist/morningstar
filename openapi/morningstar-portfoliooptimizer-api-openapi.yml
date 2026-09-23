@@ -1,24 +1,28 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts PortfolioOptimizer API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Portfolio Optimizer API
+  description: '### Request Limits
 
 
-    * Username - Your Client ID.
+    - Maximum of one portfolio can be passed in a request.
 
-    * Password - Your Client Secret.'
+    - Maximum of 250 holdings per portfolio.
+
+
+    ### Authentication API
+
+
+    Retrieve tokens required to authorize calls to the API. See documentation.'
+  version: '1.0'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas Production
+- url: https://www.apac-api.morningstar.com
+  description: APAC Production
+- url: https://www.emea-api.morningstar.com
+  description: EMEA Production
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: PortfolioOptimizer
 paths:
@@ -49,334 +53,25 @@ paths:
           $ref: '#/components/responses/ErrorResponse400'
         '500':
           $ref: '#/components/responses/ErrorResponse500'
+      operationId: postPortfolioanalysisV1PortfolioOptimizer
+      x-operation-id-source: derived
 components:
-  examples:
-    ErrorResponse500Example2:
-      summary: Internal Server Error - Error Fetching Covariance
-      value:
-        statusCode: 500
-        errorCode: 500.portfolioOptimizer.004
-        message: Error fetching covariance.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    PortfolioOptimizerResponseExample2:
-      summary: Portfolio Without Weight Specified - Optimized
-      value:
-        optimizedPortfolio:
-        - name: Portfolio Without Weight Specified
-          endDate: '2026-03-31'
-          holdings:
-          - securityName: Vanguard Total Intl Stock Idx Instl Sel
-            securityId: F00000WTNS
-            weight: 14.22472048
-          - securityName: Vanguard Total Bond Market Index I
-            securityId: FOUSA00DIL
-            weight: 53.94644095
-          - securityName: Vanguard Total Intl Bd Idx Admiral™
-            securityId: F00000NBIL
-            weight: 31.82883858
-        metadata:
-          requestId: a2859927-c9ac-499a-8f91-daa1d6ef06f4
-          time: '2026-04-28T14:19:35.2263747Z'
-    ErrorResponse400Example8:
-      summary: Bad Request - Total Weight Custom Target Asset Allocations Does Not Equal 100
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.010
-        message: The total weight of custom target asset allocations doesn't add up to 100.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse400Example15:
-      summary: Bad Request - Required Portfolios Input Missing
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.105
-        message: No portfolios present in request.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse400Example3:
-      summary: Bad Request - Error While Fetching Covariance
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.005
-        message: Bad Request while fetching covariance.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    PortfolioOptimizerRequestExample3:
-      summary: Request With Custom Target Allocations
-      value:
-        assetClassLineupId: US
-        targetAllocationId: moderate
-        portfolios:
-        - name: Portfolio ABC
-          holdings:
-          - SecurityId: F00000QK4O
-          - SecurityId: F00000W0CQ
-          - SecurityId: F000003Y6K
-          - SecurityId: F000002YE5
-          - SecurityId: FOUSA00GKI
-          - SecurityId: F00000YGWN
-          - SecurityId: FOUSA06VZ6
-          - SecurityId: FOUSA06WRK
-          - SecurityId: FOUSA06WRH
-        customTargetAllocations:
-        - assetClassId: stock_US
-          weight: 47.5
-        - assetClassId: stock_DM_xUS
-          weight: 10.5
-        - assetClassId: stock_EM
-          weight: 2
-        - assetClassId: bond_US_IG
-          weight: 26.5
-        - assetClassId: bond_US_HY
-          weight: 4
-        - assetClassId: bond_xUS
-          weight: 4
-        - assetClassId: cash
-          weight: 5.5
-    ErrorResponse400Example9:
-      summary: Bad Request - Maximum Number of Portfolios Exceeded
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.011
-        message: Portfolio optimizer is only supported with one portfolio.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse400Example14:
-      summary: Bad Request - Required Portfolio Holdings Input Missing
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.104
-        message: 'No holdings present in portfolio. Invalid portfolio: ''{Portfolio Name}''.'
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    PortfolioOptimizerRequestExample2:
-      summary: Portfolio Without Weight Specified
-      value:
-        assetClassLineupId: US
-        targetAllocationId: conservative
-        portfolios:
-        - name: Portfolio Without Weight Specified
-          holdings:
-          - securityName: Vanguard Total Intl Stock Idx Instl Sel
-            securityId: F00000WTNS
-          - securityName: Vanguard Total Bond Market Index I
-            securityId: FOUSA00DIL
-          - securityName: Vanguard Total Intl Bd Idx Admiral™
-            securityId: F00000NBIL
-        objectives:
-          trackingError: 0.5
-    ErrorResponse400Example5:
-      summary: Bad Request - Minumum Number of Asset Classes Not Met
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.007
-        message: Minimum two asset classes required for Target Allocations.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse400Example10:
-      summary: Bad Request - All Cash Portfolio Not Supported
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.012
-        message: All cash portfolio not supported.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    PortfolioOptimizerResponseExample1:
-      summary: Portfolio With Minimum and Maximum Weights - Optimized
-      value:
-        optimizedPortfolio:
-        - name: Portfolio With Minimum and Maximum Weights
-          endDate: '2026-03-31'
-          holdings:
-          - securityName: Vanguard Total Intl Stock Idx Instl Sel
-            securityId: F00000WTNS
-            weight: 4.99963084
-          - securityName: Vanguard Total Bond Market Index I
-            securityId: FOUSA00DIL
-            weight: 67.61701261
-          - securityName: Vanguard Total Intl Bd Idx Admiral™
-            securityId: F00000NBIL
-            weight: 27.38335655
-        metadata:
-          requestId: 4427c25e-f03e-440f-abb9-fd41edc1dce0
-          time: '2026-04-28T14:09:46.5568103Z'
-    ErrorResponse400Example11:
-      summary: Bad Request - Number of Holdings Does Not Meet Required Minimum
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.013
-        message: At least 2 holdings are required in portfolio.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse400Example2:
-      summary: Bad Request - Required Fields Missing
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.002
-        message: Either 'targetAllocationClassification' or 'customTargetAllocations' is required.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse400Example6:
-      summary: Bad Request - Configuration Not Available for Asset Class Line Up Id
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.008
-        message: 'Configuration not available for assetClassLineupId: ''{assetClassLineupIdName}''.'
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse500Example1:
-      summary: Internal Server Error - Error Fetching Monthly Returns
-      value:
-        statusCode: 500
-        errorCode: 500.portfolioOptimizer.003
-        message: Error fetching monthly returns.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse400Example4:
-      summary: Bad Request - Target Allocation Configuration Not Available
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.006
-        message: Target allocation configuration not available.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse400Example1:
-      summary: Bad Request - Configuration Not Available for Input Asset Class ID
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.001
-        message: 'Configuration not available for assetClassId: {''''}'
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    PortfolioOptimizerResponseExample3:
-      summary: Request With Custom Target Allocations
-      value:
-        optimizedPortfolio:
-        - name: Portfolio ABC
-          endDate: '2026-03-31'
-          holdings:
-          - securityName: AB Global Bond Z
-            securityId: F00000QK4O
-            weight: 1.73114627
-          - securityName: AB Small Cap Growth Z
-            securityId: F00000W0CQ
-            weight: 14.95884856
-          - securityName: Akre Focus ETF
-            securityId: F000003Y6K
-            weight: 14.95884856
-          - securityName: American Beacon International Eq Y
-            securityId: F000002YE5
-            weight: 6.04299834
-          - securityName: American Century Equity Income I
-            securityId: FOUSA00GKI
-            weight: 0.8234858
-          - securityName: American Century Inflation Adjs Bond I
-            securityId: F00000YGWN
-            weight: 39.5278459
-          - securityName: American Funds AMCAP F2
-            securityId: FOUSA06VZ6
-            weight: 14.63792278
-          - securityName: American Funds American Mutual F2
-            securityId: FOUSA06WRK
-            weight: 1.02529939
-          - securityName: American Funds EUPAC F2
-            securityId: FOUSA06WRH
-            weight: 6.29360441
-        metadata:
-          requestId: cdfa918a-8290-4de6-adc0-136e9afc0345
-          time: '2026-04-28T14:32:33.0318176Z'
-    ErrorResponse400Example7:
-      summary: Bad Request - Configuration Not Available for Target Allocation ID
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.009
-        message: 'Configuration not available for targetAllocationId: ''{targetAllocationIdName}''.'
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    PortfolioOptimizerRequestExample1:
-      summary: Portfolio with Minimum and Maximum Weights
-      value:
-        assetClassLineupId: US
-        targetAllocationId: conservative
-        portfolios:
-        - name: Portfolio With Minimum and Maximum Weights
-          holdings:
-          - securityName: Vanguard Total Intl Stock Idx Instl Sel
-            securityId: F00000WTNS
-            maxWeight: 5
-          - securityName: Vanguard Total Bond Market Index I
-            securityId: FOUSA00DIL
-            minWeight: 3
-          - securityName: Vanguard Total Intl Bd Idx Admiral™
-            securityId: F00000NBIL
-            minWeight: 3
-        objectives:
-          trackingError: 0.5
-    ErrorResponse400Example12:
-      summary: Bad Request - Portfolio Contains Duplicate Security IDs
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.014
-        message: Portfolio holding has duplicate security IDs.
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-    ErrorResponse400Example13:
-      summary: Bad Request - Maximum Number of Holdings Exceeded
-      value:
-        statusCode: 400
-        errorCode: 400.portfolioOptimizer.102
-        message: The number of holdings exceeds the maximum allowed holdings for this endpoint (250).
-        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
   schemas:
-    RequestPortfolioOptimizer:
-      required:
-      - assetClassLineupId
-      - targetAllocationId
-      - portfolios
-      - objectives
+    OutputInvalidHolding:
       type: object
-      description: Portfolio Optimizer Request
+      description: Describes an invalid holding returned in a warning message.
       properties:
-        assetClassLineupId:
-          type: string
-          description: Identifier for a set of target allocations based on region-specific asset class preferences and risk tolerances. Configured during implementation. See Default Target Allocations for Morningstar-defined default allocations.
-          example: MSTAR_US
-        targetAllocationId:
-          type: string
-          description: Identifier for the target asset allocation to optimize against.
-          example: Moderate
-        portfolios:
-          type: array
-          description: List of holdings to pass in the request. Only one portfolio is supported per request.
-          items:
-            $ref: '#/components/schemas/InputPortfolio'
-        objectives:
-          $ref: '#/components/schemas/InputObjectives'
-        customTargetAllocations:
-          type: array
-          description: A list of asset classes and allocated weights. Overrides the weights of the value specified in the targetAllocationId parameter. All weights must sum to 100.
-          nullable: true
-          items:
-            $ref: '#/components/schemas/InputCustomTargetAllocation'
-    OutputOptimizedHolding:
-      type: object
-      properties:
-        securityName:
-          type: string
-          description: Display name of the security.
-          nullable: true
         securityId:
           type: string
-          description: Morningstar unique identifier for the security.
+          description: Security identifier of the invalid holding.
           nullable: true
-          example: FOUSA00CEK
-        weight:
-          type: number
-          format: double
-          description: Optimised weight for this holding as a proportion of the portfolio (e.g. 1 = 100%).
-          nullable: true
-    InputPortfolio:
-      required:
-      - name
-      - holdings
-      type: object
-      description: Portfolio input object.
-      properties:
-        name:
+        status:
           type: string
-          minLength: 1
-          description: Portfolio name.
-          example: Portfolio Set 1
-        holdings:
-          type: array
-          description: List of portfolio holdings. Minimum 2 holdings required. Maximum 250 holdings allowed. Duplicate security IDs are not permitted.
-          items:
-            $ref: '#/components/schemas/InputPortfolioHolding'
+          description: Indicates why a holding is invalid.
+          enum:
+          - Unknown
+          - Invalid
+          - NotEntitled
     OutputMessage:
       type: object
       description: Message model.
@@ -430,6 +125,49 @@ components:
             $ref: '#/components/schemas/OutputOptimizedHolding'
         metadata:
           $ref: '#/components/schemas/OutputMetadata'
+    InputCustomTargetAllocation:
+      required:
+      - assetClassId
+      - weight
+      type: object
+      properties:
+        assetClassId:
+          type: string
+          description: Asset class identifier.
+          example: stock_US
+        weight:
+          type: number
+          format: double
+          description: Allocated weight for this asset class.
+          example: 5
+    InputObjectives:
+      required:
+      - trackingError
+      type: object
+      properties:
+        trackingError:
+          type: number
+          format: double
+          description: Maximum divergence from the benchmark.
+          default: 1
+          example: 2
+    OutputOptimizedHolding:
+      type: object
+      properties:
+        securityName:
+          type: string
+          description: Display name of the security.
+          nullable: true
+        securityId:
+          type: string
+          description: Morningstar unique identifier for the security.
+          nullable: true
+          example: FOUSA00CEK
+        weight:
+          type: number
+          format: double
+          description: Optimised weight for this holding as a proportion of the portfolio (e.g. 1 = 100%).
+          nullable: true
     InputPortfolioHolding:
       required:
       - SecurityId
@@ -453,67 +191,6 @@ components:
           default: 1
           example: 0.8
           nullable: true
-    ResponsePortfolioOptimizer:
-      type: object
-      description: Portfolio Optimizer Response
-      properties:
-        optimizedPortfolio:
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/OutputOptimizedPortfolio'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-    ResponseError:
-      type: object
-      description: Error details.
-      properties:
-        statusCode:
-          type: integer
-          format: int32
-          description: HTTP status code.
-        errorCode:
-          type: string
-          description: Application-specific error code.
-          nullable: true
-        message:
-          type: string
-          description: Human-readable error description.
-          nullable: true
-        requestId:
-          type: string
-          description: Unique identifier of the failed request, useful for support.
-          nullable: true
-    InputCustomTargetAllocation:
-      required:
-      - assetClassId
-      - weight
-      type: object
-      properties:
-        assetClassId:
-          type: string
-          description: Asset class identifier.
-          example: stock_US
-        weight:
-          type: number
-          format: double
-          description: Allocated weight for this asset class.
-          example: 5
-    OutputInvalidHolding:
-      type: object
-      description: Describes an invalid holding returned in a warning message.
-      properties:
-        securityId:
-          type: string
-          description: Security identifier of the invalid holding.
-          nullable: true
-        status:
-          type: string
-          description: Indicates why a holding is invalid.
-          enum:
-          - Unknown
-          - Invalid
-          - NotEntitled
     OutputMetadata:
       type: object
       description: Metadata model.
@@ -535,32 +212,358 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/OutputMessage'
-    InputObjectives:
-      required:
-      - trackingError
+    ResponsePortfolioOptimizer:
       type: object
+      description: Portfolio Optimizer Response
       properties:
-        trackingError:
-          type: number
-          format: double
-          description: Maximum divergence from the benchmark.
-          default: 1
-          example: 2
-  requestBodies:
+        optimizedPortfolio:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/OutputOptimizedPortfolio'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
     RequestPortfolioOptimizer:
-      required: true
+      required:
+      - assetClassLineupId
+      - targetAllocationId
+      - portfolios
+      - objectives
+      type: object
+      description: Portfolio Optimizer Request
+      properties:
+        assetClassLineupId:
+          type: string
+          description: Identifier for a set of target allocations based on region-specific asset class preferences and risk tolerances. Configured during implementation. See Default Target Allocations for Morningstar-defined default allocations.
+          example: MSTAR_US
+        targetAllocationId:
+          type: string
+          description: Identifier for the target asset allocation to optimize against.
+          example: Moderate
+        portfolios:
+          type: array
+          description: List of holdings to pass in the request. Only one portfolio is supported per request.
+          items:
+            $ref: '#/components/schemas/InputPortfolio'
+        objectives:
+          $ref: '#/components/schemas/InputObjectives'
+        customTargetAllocations:
+          type: array
+          description: A list of asset classes and allocated weights. Overrides the weights of the value specified in the targetAllocationId parameter. All weights must sum to 100.
+          nullable: true
+          items:
+            $ref: '#/components/schemas/InputCustomTargetAllocation'
+    InputPortfolio:
+      required:
+      - name
+      - holdings
+      type: object
+      description: Portfolio input object.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Portfolio name.
+          example: Portfolio Set 1
+        holdings:
+          type: array
+          description: List of portfolio holdings. Minimum 2 holdings required. Maximum 250 holdings allowed. Duplicate security IDs are not permitted.
+          items:
+            $ref: '#/components/schemas/InputPortfolioHolding'
+    ResponseError:
+      type: object
+      description: Error details.
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+          description: HTTP status code.
+        errorCode:
+          type: string
+          description: Application-specific error code.
+          nullable: true
+        message:
+          type: string
+          description: Human-readable error description.
+          nullable: true
+        requestId:
+          type: string
+          description: Unique identifier of the failed request, useful for support.
+          nullable: true
+  examples:
+    ErrorResponse400Example12:
+      summary: Bad Request - Portfolio Contains Duplicate Security IDs
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.014
+        message: Portfolio holding has duplicate security IDs.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example14:
+      summary: Bad Request - Required Portfolio Holdings Input Missing
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.104
+        message: 'No holdings present in portfolio. Invalid portfolio: ''{Portfolio Name}''.'
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    PortfolioOptimizerResponseExample1:
+      summary: Portfolio With Minimum and Maximum Weights - Optimized
+      value:
+        optimizedPortfolio:
+        - name: Portfolio With Minimum and Maximum Weights
+          endDate: '2026-03-31'
+          holdings:
+          - securityName: Vanguard Total Intl Stock Idx Instl Sel
+            securityId: F00000WTNS
+            weight: 4.99963084
+          - securityName: Vanguard Total Bond Market Index I
+            securityId: FOUSA00DIL
+            weight: 67.61701261
+          - securityName: Vanguard Total Intl Bd Idx Admiral™
+            securityId: F00000NBIL
+            weight: 27.38335655
+        metadata:
+          requestId: 4427c25e-f03e-440f-abb9-fd41edc1dce0
+          time: '2026-04-28T14:09:46.5568103Z'
+    ErrorResponse400Example5:
+      summary: Bad Request - Minumum Number of Asset Classes Not Met
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.007
+        message: Minimum two asset classes required for Target Allocations.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example8:
+      summary: Bad Request - Total Weight Custom Target Asset Allocations Does Not Equal 100
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.010
+        message: The total weight of custom target asset allocations doesn't add up to 100.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example11:
+      summary: Bad Request - Number of Holdings Does Not Meet Required Minimum
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.013
+        message: At least 2 holdings are required in portfolio.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    PortfolioOptimizerRequestExample1:
+      summary: Portfolio with Minimum and Maximum Weights
+      value:
+        assetClassLineupId: US
+        targetAllocationId: conservative
+        portfolios:
+        - name: Portfolio With Minimum and Maximum Weights
+          holdings:
+          - securityName: Vanguard Total Intl Stock Idx Instl Sel
+            securityId: F00000WTNS
+            maxWeight: 5
+          - securityName: Vanguard Total Bond Market Index I
+            securityId: FOUSA00DIL
+            minWeight: 3
+          - securityName: Vanguard Total Intl Bd Idx Admiral™
+            securityId: F00000NBIL
+            minWeight: 3
+        objectives:
+          trackingError: 0.5
+    PortfolioOptimizerResponseExample3:
+      summary: Request With Custom Target Allocations
+      value:
+        optimizedPortfolio:
+        - name: Portfolio ABC
+          endDate: '2026-03-31'
+          holdings:
+          - securityName: AB Global Bond Z
+            securityId: F00000QK4O
+            weight: 1.73114627
+          - securityName: AB Small Cap Growth Z
+            securityId: F00000W0CQ
+            weight: 14.95884856
+          - securityName: Akre Focus ETF
+            securityId: F000003Y6K
+            weight: 14.95884856
+          - securityName: American Beacon International Eq Y
+            securityId: F000002YE5
+            weight: 6.04299834
+          - securityName: American Century Equity Income I
+            securityId: FOUSA00GKI
+            weight: 0.8234858
+          - securityName: American Century Inflation Adjs Bond I
+            securityId: F00000YGWN
+            weight: 39.5278459
+          - securityName: American Funds AMCAP F2
+            securityId: FOUSA06VZ6
+            weight: 14.63792278
+          - securityName: American Funds American Mutual F2
+            securityId: FOUSA06WRK
+            weight: 1.02529939
+          - securityName: American Funds EUPAC F2
+            securityId: FOUSA06WRH
+            weight: 6.29360441
+        metadata:
+          requestId: cdfa918a-8290-4de6-adc0-136e9afc0345
+          time: '2026-04-28T14:32:33.0318176Z'
+    ErrorResponse400Example6:
+      summary: Bad Request - Configuration Not Available for Asset Class Line Up Id
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.008
+        message: 'Configuration not available for assetClassLineupId: ''{assetClassLineupIdName}''.'
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse500Example2:
+      summary: Internal Server Error - Error Fetching Covariance
+      value:
+        statusCode: 500
+        errorCode: 500.portfolioOptimizer.004
+        message: Error fetching covariance.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example15:
+      summary: Bad Request - Required Portfolios Input Missing
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.105
+        message: No portfolios present in request.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example1:
+      summary: Bad Request - Configuration Not Available for Input Asset Class ID
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.001
+        message: 'Configuration not available for assetClassId: {''''}'
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example10:
+      summary: Bad Request - All Cash Portfolio Not Supported
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.012
+        message: All cash portfolio not supported.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example7:
+      summary: Bad Request - Configuration Not Available for Target Allocation ID
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.009
+        message: 'Configuration not available for targetAllocationId: ''{targetAllocationIdName}''.'
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example2:
+      summary: Bad Request - Required Fields Missing
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.002
+        message: Either 'targetAllocationClassification' or 'customTargetAllocations' is required.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    PortfolioOptimizerRequestExample3:
+      summary: Request With Custom Target Allocations
+      value:
+        assetClassLineupId: US
+        targetAllocationId: moderate
+        portfolios:
+        - name: Portfolio ABC
+          holdings:
+          - SecurityId: F00000QK4O
+          - SecurityId: F00000W0CQ
+          - SecurityId: F000003Y6K
+          - SecurityId: F000002YE5
+          - SecurityId: FOUSA00GKI
+          - SecurityId: F00000YGWN
+          - SecurityId: FOUSA06VZ6
+          - SecurityId: FOUSA06WRK
+          - SecurityId: FOUSA06WRH
+        customTargetAllocations:
+        - assetClassId: stock_US
+          weight: 47.5
+        - assetClassId: stock_DM_xUS
+          weight: 10.5
+        - assetClassId: stock_EM
+          weight: 2
+        - assetClassId: bond_US_IG
+          weight: 26.5
+        - assetClassId: bond_US_HY
+          weight: 4
+        - assetClassId: bond_xUS
+          weight: 4
+        - assetClassId: cash
+          weight: 5.5
+    ErrorResponse400Example4:
+      summary: Bad Request - Target Allocation Configuration Not Available
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.006
+        message: Target allocation configuration not available.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    PortfolioOptimizerRequestExample2:
+      summary: Portfolio Without Weight Specified
+      value:
+        assetClassLineupId: US
+        targetAllocationId: conservative
+        portfolios:
+        - name: Portfolio Without Weight Specified
+          holdings:
+          - securityName: Vanguard Total Intl Stock Idx Instl Sel
+            securityId: F00000WTNS
+          - securityName: Vanguard Total Bond Market Index I
+            securityId: FOUSA00DIL
+          - securityName: Vanguard Total Intl Bd Idx Admiral™
+            securityId: F00000NBIL
+        objectives:
+          trackingError: 0.5
+    PortfolioOptimizerResponseExample2:
+      summary: Portfolio Without Weight Specified - Optimized
+      value:
+        optimizedPortfolio:
+        - name: Portfolio Without Weight Specified
+          endDate: '2026-03-31'
+          holdings:
+          - securityName: Vanguard Total Intl Stock Idx Instl Sel
+            securityId: F00000WTNS
+            weight: 14.22472048
+          - securityName: Vanguard Total Bond Market Index I
+            securityId: FOUSA00DIL
+            weight: 53.94644095
+          - securityName: Vanguard Total Intl Bd Idx Admiral™
+            securityId: F00000NBIL
+            weight: 31.82883858
+        metadata:
+          requestId: a2859927-c9ac-499a-8f91-daa1d6ef06f4
+          time: '2026-04-28T14:19:35.2263747Z'
+    ErrorResponse400Example9:
+      summary: Bad Request - Maximum Number of Portfolios Exceeded
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.011
+        message: Portfolio optimizer is only supported with one portfolio.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example13:
+      summary: Bad Request - Maximum Number of Holdings Exceeded
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.102
+        message: The number of holdings exceeds the maximum allowed holdings for this endpoint (250).
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse500Example1:
+      summary: Internal Server Error - Error Fetching Monthly Returns
+      value:
+        statusCode: 500
+        errorCode: 500.portfolioOptimizer.003
+        message: Error fetching monthly returns.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+    ErrorResponse400Example3:
+      summary: Bad Request - Error While Fetching Covariance
+      value:
+        statusCode: 400
+        errorCode: 400.portfolioOptimizer.005
+        message: Bad Request while fetching covariance.
+        requestId: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+  responses:
+    ErrorResponse500:
+      description: '500: Internal Server Error'
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/RequestPortfolioOptimizer'
+            $ref: '#/components/schemas/ResponseError'
           examples:
-            PortfolioOptimizerRequestExample1:
-              $ref: '#/components/examples/PortfolioOptimizerRequestExample1'
-            PortfolioOptimizerRequestExample2:
-              $ref: '#/components/examples/PortfolioOptimizerRequestExample2'
-            PortfolioOptimizerRequestExample3:
-              $ref: '#/components/examples/PortfolioOptimizerRequestExample3'
-  responses:
+            ErrorResponse500Example1:
+              $ref: '#/components/examples/ErrorResponse500Example1'
+            ErrorResponse500Example2:
+              $ref: '#/components/examples/ErrorResponse500Example2'
     ResponsePortfolioOptimizer:
       description: '200: OK'
       content:
@@ -611,18 +614,23 @@ components:
               $ref: '#/components/examples/ErrorResponse400Example14'
             ErrorResponse400Example15:
               $ref: '#/components/examples/ErrorResponse400Example15'
-    ErrorResponse500:
-      description: '500: Internal Server Error'
+  requestBodies:
+    RequestPortfolioOptimizer:
+      required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ResponseError'
+            $ref: '#/components/schemas/RequestPortfolioOptimizer'
           examples:
-            ErrorResponse500Example1:
-              $ref: '#/components/examples/ErrorResponse500Example1'
-            ErrorResponse500Example2:
-              $ref: '#/components/examples/ErrorResponse500Example2'
+            PortfolioOptimizerRequestExample1:
+              $ref: '#/components/examples/PortfolioOptimizerRequestExample1'
+            PortfolioOptimizerRequestExample2:
+              $ref: '#/components/examples/PortfolioOptimizerRequestExample2'
+            PortfolioOptimizerRequestExample3:
+              $ref: '#/components/examples/PortfolioOptimizerRequestExample3'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

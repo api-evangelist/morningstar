@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Total Shares Outstanding API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Total Shares Outstanding API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Total Shares Outstanding
 paths:
@@ -1254,142 +1263,7 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 905
 components:
-  responses:
-    ResponseEquityTotalSharesOutstanding:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              performanceLevelTotalSharesOutstanding:
-                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstanding'
-              companyLevelTotalSharesOutstanding:
-                $ref: '#/components/schemas/OutputCompanyLevelTotalSharesOutstanding'
-              totalSharesOutstandingRaw:
-                $ref: '#/components/schemas/OutputTotalSharesOutstandingRaw'
-              performanceLevelTotalSharesOutstandingTreasury:
-                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstandingTreasury'
-              totalSharesOutstandingRawTreasury:
-                $ref: '#/components/schemas/OutputTotalSharesOutstandingRawTreasury'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityTotalSharesOutstandingTreasury:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              performanceLevelTotalSharesOutstandingTreasury:
-                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstandingTreasury'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityTotalSharesOutstandingUnadjusted:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              totalSharesOutstandingRaw:
-                $ref: '#/components/schemas/OutputTotalSharesOutstandingRaw'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityTotalSharesOutstandingUnadjustedTreasury:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              totalSharesOutstandingRawTreasury:
-                $ref: '#/components/schemas/OutputTotalSharesOutstandingRawTreasury'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityTotalSharesOutstandingShareLevel:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              performanceLevelTotalSharesOutstanding:
-                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstanding'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityTotalSharesOutstandingCompanyLevel:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              companyLevelTotalSharesOutstanding:
-                $ref: '#/components/schemas/OutputCompanyLevelTotalSharesOutstanding'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   schemas:
-    OutputPerformanceLevelTotalSharesOutstandingTreasury:
-      type: object
-      properties:
-        totalSharesOutstandingDate:
-          type: string
-          description: ''
-          nullable: true
-        treasuryShares:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        shareType:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputPerformanceLevelTotalSharesOutstandingTreasury
-    OutputCompanyLevelTotalSharesOutstanding:
-      type: object
-      properties:
-        totalSharesOutstandingDate:
-          type: string
-          description: ''
-          nullable: true
-        companyLevelTotalSharesOutstandings:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        shareType:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputCompanyLevelTotalSharesOutstanding
     OutputIdentifiers:
       type: object
       properties:
@@ -1422,6 +1296,35 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputCompanyLevelTotalSharesOutstanding:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        companyLevelTotalSharesOutstandings:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyLevelTotalSharesOutstanding
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
     OutputErrorDetails:
       type: object
       properties:
@@ -1444,136 +1347,29 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    CodeMappingBoolean:
+    OutputMetadata:
       type: object
       properties:
-        value:
+        requestId:
           type: string
           nullable: true
-        code:
-          type: boolean
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingBoolean
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
           nullable: true
-        code:
+        portfolioCurrency:
           type: string
           nullable: true
-        investments:
+        messages:
           type: array
           items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    OutputPerformanceLevelTotalSharesOutstanding:
-      type: object
-      properties:
-        totalSharesOutstandingDate:
-          type: string
-          description: ''
-          nullable: true
-        fileDate:
-          type: string
-          description: ''
-          nullable: true
-        fivePercentFloat:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        floatDate:
-          type: string
-          description: ''
-          nullable: true
-        floatPercentShare:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        floatShare:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        quotedValue:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        reasonOfShareChange:
-          type: string
-          description: ''
-          nullable: true
-        totalSharesOutstanding:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        unquotedValue:
-          type: string
-          description: ''
-          nullable: true
-        shareType:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputPerformanceLevelTotalSharesOutstanding
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
-      additionalProperties: false
-      title: OutputInvalidInvestments
+      title: OutputMetadata
     OutputTotalSharesOutstandingRaw:
       type: object
       properties:
@@ -1661,30 +1457,245 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputTotalSharesOutstandingRawTreasury
-    OutputMetadata:
+    OutputInvalidInvestments:
       type: object
       properties:
-        requestId:
+        id:
           type: string
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
+        idType:
           type: string
           nullable: true
-        portfolioCurrency:
+        status:
           type: string
           nullable: true
-        messages:
+        datapointId:
           type: array
           items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
           nullable: true
       additionalProperties: false
-      title: OutputMetadata
+      title: OutputInvalidInvestments
+    OutputPerformanceLevelTotalSharesOutstanding:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        fileDate:
+          type: string
+          description: ''
+          nullable: true
+        fivePercentFloat:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        floatDate:
+          type: string
+          description: ''
+          nullable: true
+        floatPercentShare:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        floatShare:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        quotedValue:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        reasonOfShareChange:
+          type: string
+          description: ''
+          nullable: true
+        totalSharesOutstanding:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        unquotedValue:
+          type: string
+          description: ''
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputPerformanceLevelTotalSharesOutstanding
+    OutputPerformanceLevelTotalSharesOutstandingTreasury:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        treasuryShares:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputPerformanceLevelTotalSharesOutstandingTreasury
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+  responses:
+    ResponseEquityTotalSharesOutstandingCompanyLevel:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputCompanyLevelTotalSharesOutstanding'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTotalSharesOutstandingTreasury:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              performanceLevelTotalSharesOutstandingTreasury:
+                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstandingTreasury'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityTotalSharesOutstanding:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              performanceLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstanding'
+              companyLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputCompanyLevelTotalSharesOutstanding'
+              totalSharesOutstandingRaw:
+                $ref: '#/components/schemas/OutputTotalSharesOutstandingRaw'
+              performanceLevelTotalSharesOutstandingTreasury:
+                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstandingTreasury'
+              totalSharesOutstandingRawTreasury:
+                $ref: '#/components/schemas/OutputTotalSharesOutstandingRawTreasury'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTotalSharesOutstandingUnadjustedTreasury:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              totalSharesOutstandingRawTreasury:
+                $ref: '#/components/schemas/OutputTotalSharesOutstandingRawTreasury'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTotalSharesOutstandingUnadjusted:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              totalSharesOutstandingRaw:
+                $ref: '#/components/schemas/OutputTotalSharesOutstandingRaw'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTotalSharesOutstandingShareLevel:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              performanceLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstanding'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

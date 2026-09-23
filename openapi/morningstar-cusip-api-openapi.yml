@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts CUSIP API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details CUSIP API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: CUSIP
 paths:
@@ -157,9 +166,7 @@ paths:
           languageExample9:
             summary: Korean
             value: KOR
-      description: '
-
-        The CUSIP package provides the CUSIP, and associated ISINs, of issued shares, for clients holding the appropriate CUSIP license with CUSIP Global Services.
+      description: 'The CUSIP package provides the CUSIP, and associated ISINs, of issued shares, for clients holding the appropriate CUSIP license with CUSIP Global Services.
 
 
         Most recent data supported.'
@@ -176,47 +183,6 @@ paths:
       x-cpqId: 17
 components:
   schemas:
-    CodeMappingBoolean:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: boolean
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingBoolean
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
     OutputShareClassInformation:
       type: object
       properties:
@@ -337,28 +303,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputShareClassInformation
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
     OutputIdentifiers:
       type: object
       properties:
@@ -391,6 +335,38 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputCusip:
+      type: object
+      properties:
+        custodian:
+          type: string
+          description: ''
+          nullable: true
+        underlyingFundCusip:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputCusip
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -437,6 +413,17 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
     OutputMetadata:
       type: object
       properties:
@@ -460,20 +447,46 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
-    OutputCusip:
+    OutputErrorDetails:
       type: object
       properties:
-        custodian:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
           type: string
-          description: ''
+          description: Custom error code
           nullable: true
-        underlyingFundCusip:
+        message:
           type: string
-          description: ''
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputCusip
+      description: Error details
+      title: OutputErrorDetails
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
   responses:
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseCusip:
       description: OK
       content:
@@ -495,13 +508,9 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

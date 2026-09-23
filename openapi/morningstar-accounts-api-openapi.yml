@@ -1,24 +1,12 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: ByAllAccounts Accounts API
+  version: v1.0
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
-security:
-- BasicAuth: []
+- url: https://www.byallaccounts.net/api/v1
+  description: SSO using DataConnect API
+- url: https://www.us-api.morningstar.com/aggapi/v1
+  description: SSO using Morningstar Authentication
 tags:
 - name: Accounts
 paths:
@@ -27,7 +15,20 @@ paths:
       tags:
       - Accounts
       summary: Request aggregation of accounts for an authenticated investor user
-      description: 'Initiate demand aggregation  of accounts for the authenticated investor from a financial institution. Use the `class` parameter to restrict which accounts to aggregate by specifying one or more class values: investment, noninvestment, or other. </br></br>Aggregation gathers holdings and transactions for the accounts from associated Financial Institutions. It does not discover new accounts that are available to the user from those financial institutions. The request will not attempt to aggregate any account that is disabled due to a login error as repeated retries with incorrect credentials could cause an account to be locked out.</br></br>Aggregation runs asynchronously. This endpoint validates inputs and locates target accounts for aggregation. If either of these operations fails, an error code is returned. If both operations succeed, the aggregation is submitted.  </br></br>Aggregation progress can be observed and monitored using the following endpoints:</br>`GET /activities/summary`</br>`GET /credentials/accounts`'
+      description: 'Initiate demand aggregation of accounts for the authenticated investor from a financial institution. Use the `class` parameter to restrict which accounts to aggregate by specifying one or more class values: investment, noninvestment, or other.
+
+
+        Aggregation gathers holdings and transactions for the accounts from associated Financial Institutions. It does not discover new accounts that are available to the user from those financial institutions. The request will not attempt to aggregate any account that is disabled due to a login error as repeated retries with incorrect credentials could cause an account to be locked out.
+
+
+        Aggregation runs asynchronously. This endpoint validates inputs and locates target accounts for aggregation. If either of these operations fails, an error code is returned. If both operations succeed, the aggregation is submitted.
+
+
+        Aggregation progress can be observed and monitored using the following endpoints:
+
+        `GET /activities/summary`
+
+        `GET /credentials/accounts`'
       operationId: aggregateAccountsUsingPOST
       parameters:
       - name: class
@@ -59,7 +60,7 @@ paths:
       tags:
       - Accounts
       summary: Delete an account
-      description: 'Delete the account identified by the `id` parameter. '
+      description: Delete the account identified by the `id` parameter.
       operationId: deleteUsingDELETE
       parameters:
       - name: id
@@ -81,8 +82,3 @@ paths:
         '500':
           description: Internal Server Error
       deprecated: false
-components:
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic

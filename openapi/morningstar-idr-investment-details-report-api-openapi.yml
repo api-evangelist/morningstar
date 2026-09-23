@@ -1,24 +1,13 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  description: Internal and external teams use the Portolio Analysis (US) API to integrate Morningstar's calculated data directly into their own tools, software, and applications.
   version: 1.0.0
-  title: Authorization Tokens Accounts IDR (Investment Details Report) API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: Portfolio Analysis (US) IDR (Investment Details Report) API
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/portfolioanalysis/v1
+  description: PROD
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
 - name: IDR (Investment Details Report)
 paths:
@@ -27,7 +16,10 @@ paths:
       tags:
       - IDR (Investment Details Report)
       summary: Get an Investment Details Report
-      description: Get an Investment Details Report for the securities specified in the `securities` parameter.  Reports are generated in PDF format. You can specify that the PDF opens online or is downloaded as an attachment. </br></br>Use the `currencyId` parameter to define the currency of the data in the report. To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.
+      description: 'Get an Investment Details Report for the securities specified in the `securities` parameter. Reports are generated in PDF format. You can specify that the PDF opens online or is downloaded as an attachment.
+
+
+        Use the `currencyId` parameter to define the currency of the data in the report. To override the default value in the Accept-Language HTTP header, use the `langcult` parameter.'
       operationId: InvestmentDetailsReportV1_GetIDR
       parameters:
       - name: securities
@@ -76,6 +68,6 @@ paths:
       deprecated: false
 components:
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

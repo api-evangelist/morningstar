@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Basic Reference API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Basic Reference API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Basic Reference
 paths:
@@ -113,9 +122,7 @@ paths:
           exchangeIdExample2:
             summary: London Stock Exchange (LSE)
             value: EX$$$$XLON
-      description: '
-
-        The Basic Reference package contains the core data required to identify a company, stock, and specific listing of that stock. Data includes items such as ISINs (excluding those issued by CUSIP Global Services), trading symbols, details of the exchange on which the stock is listed, Legal Entity Identifiers (LEI), and the Securities and Exchange Commission’s Central Index Key. Most recent data supported.'
+      description: The Basic Reference package contains the core data required to identify a company, stock, and specific listing of that stock. Data includes items such as ISINs (excluding those issued by CUSIP Global Services), trading symbols, details of the exchange on which the stock is listed, Legal Entity Identifiers (LEI), and the Securities and Exchange Commission’s Central Index Key. Most recent data supported.
       operationId: getEquityBasicReferenceDataset
       tags:
       - Basic Reference
@@ -129,36 +136,158 @@ paths:
       x-cpqId: 911
 components:
   schemas:
-    CodeMappingBoolean:
+    OutputShareClassInformation:
       type: object
       properties:
-        value:
+        commonShareSubType:
           type: string
+          description: Refers to the type of securities that can be found within the equity database. For the vast majority; this value will populate as null for regular common shares. For a minority of share classes; this will populate as either Participating Preferred; Closed-End Fund; Foreign Share; or Foreign Participated Preferred which reflects our limited coverage of these types of securities within our equity database.
           nullable: true
-        code:
+        conversionRatio:
+          type: number
+          description: The relationship between the chosen share class and the primary share class
+          format: double
+          nullable: true
+        cusip:
+          type: string
+          description: ''
+          nullable: true
+        directInvest:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        dividendReinvest:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        drRatio:
+          type: number
+          description: The number of underlying common shares backing each depositary receipt (DR) traded.
+          format: double
+          nullable: true
+        exchangeCode:
+          type: string
+          description: A symbol for the stock exchange name; usually consisting of 3 to 5 characters; examples include NYSE; NAS; LSE; OTCBB ($$$ is used for private/unlisted securities)
+          nullable: true
+        exchangeSubMarketGlobalId:
+          type: string
+          description: Indicates a different marketplace or the different market tiers within a stock exchange.
+          nullable: true
+        investmentId:
+          type: string
+          description: Morningstar Issuer Id/ Investment Id
+          nullable: true
+        investmentName:
+          type: string
+          description: Morningstar standard investment name
+          nullable: true
+        investmentPrimaryIssuer:
+          $ref: '#/components/schemas/CodeMappingString'
+        shareClassDescription:
+          type: string
+          description: ''
+          nullable: true
+        investmentStatus:
+          type: integer
+          description: '0: obsolete1: active9: other'
+          format: int32
+          nullable: true
+        investmentType:
+          type: string
+          description: 'The abbreviation for investment type classifications: Equity (EQ); Depositary Receipt (DR); Preferred Equity (PE); Unlisted Equity (UE)'
+          nullable: true
+        ipoDate:
+          type: string
+          description: The initial day that the share begins trading on a public exchange
+          nullable: true
+        ipoOfferPrice:
+          type: number
+          description: Indicates the price at which an issuer sells its shares under an initial public offering (IPO). The offer price is set by the issuer and its underwriters.
+          format: double
+          nullable: true
+        ipoOfferPriceRange:
+          type: string
+          description: The estimated offer price range (low-high) for a new IPO. The field should be used until the final IPO price becomes available; as populated in the data field IPO Offer Price.
+          nullable: true
+        isDr:
           type: boolean
+          description: 'Indicates if the share class is a depositary receipt: TRUE denotes it is an ADR or GDR; otherwise FALSE'
+          nullable: true
+        isin:
+          type: string
+          description: ''
+          nullable: true
+        isMainShare:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isPrimaryPerformanceId:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        marketSymbol:
+          type: string
+          description: An arrangement of characters representing a particular security listed on an exchange or traded publicly generated and maintained by market data (also known as Realtime). For example; Morningstar's market symbol is 126.1.MORN where 126 refers to Realtime exchange code for NASDAQ; 1 refers to security type equity; and the last set of characters refers to company's actual symbol.
+          nullable: true
+        parValue:
+          type: number
+          description: Nominal value of a security determined by the issuing company
+          format: double
+          nullable: true
+        performanceStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        securityType:
+          type: string
+          description: 'Indicates security type classification at the share class level: Common Stock (ST00000001); Preferred Stock (ST00000002); Industry (ST00000003); Index (ST00000004); ETF (ST00000005); Closed-end Fund (ST00000006); Investment Trusts (ST00000007); Note (ST00000009); Warrant (ST00000008); Units (ST000000A1); Rights (ST000000B1); Unlisted Common (ST000000C1); Unlisted Preferred (ST000000C2)'
+          nullable: true
+        sedol:
+          type: string
+          description: The stock exchange daily official list (SEDOL) is a seven-character identification code assigned by the London Stock Exchange. For securities issued in the UK the Sedol may be converted to an ISIN.
+          nullable: true
+        segmentMicCode:
+          type: string
+          description: 'Indicates the Exchange ISO Market Segment Identifier Code (MIC). Reference: https://www.iso20022.org/market-identifier-codes ($$$ is used for private/unlisted securities)'
+          nullable: true
+        symbol:
+          type: string
+          description: 'An arrangement of characters (often letters) representing a particular security listed on an exchange or otherwise traded publicly: Note that Morningstar''s multi-share class symbols will often contain a period within the symbol; e.g. BRK.B for Berkshire Hathaway Class B'
+          nullable: true
+        tradingCurrency:
+          type: string
+          description: 3 Character ISO code of the currency that the exchange price is denominated in; i.e. the trading currency of the security
+          nullable: true
+        tradingStatus:
+          $ref: '#/components/schemas/CodeMappingString'
+        underlyingDrIssuerId:
+          type: string
+          description: ''
           nullable: true
       additionalProperties: false
-      title: CodeMappingBoolean
-    OutputMetadataMessages:
+      title: OutputShareClassInformation
+    OutputIdentifiers:
       type: object
       properties:
-        type:
+        performanceId:
           type: string
           nullable: true
-        code:
+        securityId:
           type: string
           nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+        cusip:
+          type: string
           nullable: true
-        message:
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
+      title: OutputIdentifiers
     OutputCompanyInformation:
       type: object
       properties:
@@ -281,137 +410,6 @@ components:
           $ref: '#/components/schemas/CodeMappingBoolean'
       additionalProperties: false
       title: OutputCompanyInformation
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
-    OutputShareClassInformation:
-      type: object
-      properties:
-        commonShareSubType:
-          type: string
-          description: Refers to the type of securities that can be found within the equity database. For the vast majority; this value will populate as null for regular common shares. For a minority of share classes; this will populate as either Participating Preferred; Closed-End Fund; Foreign Share; or Foreign Participated Preferred which reflects our limited coverage of these types of securities within our equity database.
-          nullable: true
-        conversionRatio:
-          type: number
-          description: The relationship between the chosen share class and the primary share class
-          format: double
-          nullable: true
-        cusip:
-          type: string
-          description: ''
-          nullable: true
-        directInvest:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        dividendReinvest:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        drRatio:
-          type: number
-          description: The number of underlying common shares backing each depositary receipt (DR) traded.
-          format: double
-          nullable: true
-        exchangeCode:
-          type: string
-          description: A symbol for the stock exchange name; usually consisting of 3 to 5 characters; examples include NYSE; NAS; LSE; OTCBB ($$$ is used for private/unlisted securities)
-          nullable: true
-        exchangeSubMarketGlobalId:
-          type: string
-          description: Indicates a different marketplace or the different market tiers within a stock exchange.
-          nullable: true
-        investmentId:
-          type: string
-          description: Morningstar Issuer Id/ Investment Id
-          nullable: true
-        investmentName:
-          type: string
-          description: Morningstar standard investment name
-          nullable: true
-        investmentPrimaryIssuer:
-          $ref: '#/components/schemas/CodeMappingString'
-        shareClassDescription:
-          type: string
-          description: ''
-          nullable: true
-        investmentStatus:
-          type: integer
-          description: '0: obsolete1: active9: other'
-          format: int32
-          nullable: true
-        investmentType:
-          type: string
-          description: 'The abbreviation for investment type classifications: Equity (EQ); Depositary Receipt (DR); Preferred Equity (PE); Unlisted Equity (UE)'
-          nullable: true
-        ipoDate:
-          type: string
-          description: The initial day that the share begins trading on a public exchange
-          nullable: true
-        ipoOfferPrice:
-          type: number
-          description: Indicates the price at which an issuer sells its shares under an initial public offering (IPO). The offer price is set by the issuer and its underwriters.
-          format: double
-          nullable: true
-        ipoOfferPriceRange:
-          type: string
-          description: The estimated offer price range (low-high) for a new IPO. The field should be used until the final IPO price becomes available; as populated in the data field IPO Offer Price.
-          nullable: true
-        isDr:
-          type: boolean
-          description: 'Indicates if the share class is a depositary receipt: TRUE denotes it is an ADR or GDR; otherwise FALSE'
-          nullable: true
-        isin:
-          type: string
-          description: ''
-          nullable: true
-        isMainShare:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isPrimaryPerformanceId:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        marketSymbol:
-          type: string
-          description: An arrangement of characters representing a particular security listed on an exchange or traded publicly generated and maintained by market data (also known as Realtime). For example; Morningstar's market symbol is 126.1.MORN where 126 refers to Realtime exchange code for NASDAQ; 1 refers to security type equity; and the last set of characters refers to company's actual symbol.
-          nullable: true
-        parValue:
-          type: number
-          description: Nominal value of a security determined by the issuing company
-          format: double
-          nullable: true
-        performanceStatus:
-          $ref: '#/components/schemas/CodeMappingString'
-        securityType:
-          type: string
-          description: 'Indicates security type classification at the share class level: Common Stock (ST00000001); Preferred Stock (ST00000002); Industry (ST00000003); Index (ST00000004); ETF (ST00000005); Closed-end Fund (ST00000006); Investment Trusts (ST00000007); Note (ST00000009); Warrant (ST00000008); Units (ST000000A1); Rights (ST000000B1); Unlisted Common (ST000000C1); Unlisted Preferred (ST000000C2)'
-          nullable: true
-        sedol:
-          type: string
-          description: The stock exchange daily official list (SEDOL) is a seven-character identification code assigned by the London Stock Exchange. For securities issued in the UK the Sedol may be converted to an ISIN.
-          nullable: true
-        segmentMicCode:
-          type: string
-          description: 'Indicates the Exchange ISO Market Segment Identifier Code (MIC). Reference: https://www.iso20022.org/market-identifier-codes ($$$ is used for private/unlisted securities)'
-          nullable: true
-        symbol:
-          type: string
-          description: 'An arrangement of characters (often letters) representing a particular security listed on an exchange or otherwise traded publicly: Note that Morningstar''s multi-share class symbols will often contain a period within the symbol; e.g. BRK.B for Berkshire Hathaway Class B'
-          nullable: true
-        tradingCurrency:
-          type: string
-          description: 3 Character ISO code of the currency that the exchange price is denominated in; i.e. the trading currency of the security
-          nullable: true
-        tradingStatus:
-          $ref: '#/components/schemas/CodeMappingString'
-        underlyingDrIssuerId:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputShareClassInformation
     OutputErrorDetails:
       type: object
       properties:
@@ -434,38 +432,34 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    OutputIdentifiers:
+    OutputDelistInformation:
       type: object
       properties:
-        performanceId:
+        delistingDate:
+          type: string
+          description: The effective date on which a security was delisted from an exchange
+          nullable: true
+      additionalProperties: false
+      title: OutputDelistInformation
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
           type: string
           nullable: true
-        securityId:
+        code:
           type: string
           nullable: true
-        cusip:
-          type: string
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
+        message:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputIdentifiers
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -512,18 +506,28 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    CodeMappingLong:
+    CodeMappingString:
       type: object
       properties:
         value:
           type: string
           nullable: true
         code:
-          type: integer
-          format: int64
+          type: string
           nullable: true
       additionalProperties: false
-      title: CodeMappingLong
+      title: CodeMappingString
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
     OutputMetadata:
       type: object
       properties:
@@ -547,22 +551,19 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
-    OutputDelistInformation:
+    CodeMappingLong:
       type: object
       properties:
-        delistingDate:
+        value:
           type: string
-          description: The effective date on which a security was delisted from an exchange
+          nullable: true
+        code:
+          type: integer
+          format: int64
           nullable: true
       additionalProperties: false
-      title: OutputDelistInformation
+      title: CodeMappingLong
   responses:
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseInternalServerError:
       description: Internal Server
       content:
@@ -586,7 +587,15 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

@@ -1,31 +1,37 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts buckets API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Report Retrieval (US) Buckets API
+  version: 1.1.1
+  description: 'The Report Retrieval API is used to retrieve reports generated and stored in the web-based version of Morningstar Office.
 
 
-    * Username - Your Client ID.
+    With this API you can:
 
-    * Password - Your Client Secret.'
+    * Get report metadata.
+
+    * Get metadata for ''buckets'', the folders where reports are stored.
+
+    * Filter results by household ID in a bucket.
+
+    * Filter results by report name or bucket ID.
+
+    * Assign reports to household(s).
+
+    * Publish or unpublish report(s) to the Client Web Portal.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/report-api/v1/report-retrieval
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/report-api/v1/report-retrieval
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
-- name: buckets
+- name: Buckets
 paths:
   /buckets:
     get:
       tags:
-      - buckets
+      - Buckets
       summary: Get buckets
       description: Get all buckets.
       operationId: getBucketsMetadata
@@ -48,7 +54,7 @@ paths:
   /buckets/{bucketId}:
     get:
       tags:
-      - buckets
+      - Buckets
       summary: Get a bucket
       description: Get the bucket specified in the `bucketId` parameter.
       operationId: getBucketsMetadataSingle
@@ -79,6 +85,25 @@ paths:
           description: Not found
 components:
   schemas:
+    BucketMetaData:
+      type: object
+      properties:
+        items:
+          type: integer
+          example: 1
+          description: Number of buckets found.
+    BucketList:
+      required:
+      - totalRecords
+      - displayRecords
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/BucketMetaData'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bucket'
     Bucket:
       required:
       - bucketId
@@ -120,26 +145,7 @@ components:
           type: string
           format: date-time
           example: 2019-01-02T01:59Z
-    BucketList:
-      required:
-      - totalRecords
-      - displayRecords
-      type: object
-      properties:
-        metadata:
-          $ref: '#/components/schemas/BucketMetaData'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Bucket'
-    BucketMetaData:
-      type: object
-      properties:
-        items:
-          type: integer
-          example: 1
-          description: Number of buckets found.
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

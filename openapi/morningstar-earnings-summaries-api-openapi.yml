@@ -1,24 +1,23 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Earnings Summaries API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+  title: AI Insights Earnings Summaries API
+  x-changelog:
+  - date: '2026-05-21'
+    changes:
+    - Analyst Highlights. Corrected `prefer` header value. Updated to `respond-async`.
+  description: '# Overview
 
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The AI Insights API from Morningstar offers an AI-driven solution to access financial analysis and insights on a wide range of investments, built atop Morningstar''s proprietary analyst research.'
+  version: '1.0'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas Production
+- url: https://www.apac-api.morningstar.com
+  description: APAC Production
+- url: https://www.emea-api.morningstar.com
+  description: EMEA Production
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Earnings Summaries
 paths:
@@ -27,8 +26,23 @@ paths:
       tags:
       - Earnings Summaries
       operationId: postEarningsSummaries
-      summary: Returns earnings summaries for a list of companies.
-      description: "Submit a list of company identifiers to retrieve AI-generated earnings release summaries. Results are returned synchronously.\n\n  #### Supported Identifier Types\n\n  * `companyId` - Morningstar company ID (default).\n  * `performanceId`, `securityId`, `msid`, `isin`, `cusip`, `tradingSymbol`\n  \n  When using non-unique identifiers such as `tradingSymbol` or `isin`, apply\n  optional filters (`baseCurrency`, `domicile`, `exchangeCountry`) to improve\n  match accuracy.\n"
+      summary: Returns earnings summaries for a list of companies
+      description: 'Submit a list of company identifiers to retrieve AI-generated earnings release summaries. Results are returned synchronously.
+
+
+        #### Supported Identifier Types
+
+
+        * `companyId` - Morningstar company ID (default).
+
+        * `performanceId`, `securityId`, `msid`, `isin`, `cusip`, `tradingSymbol`
+
+
+        When using non-unique identifiers such as `tradingSymbol` or `isin`, apply
+
+        optional filters (`baseCurrency`, `domicile`, `exchangeCountry`) to improve
+
+        match accuracy.'
       requestBody:
         required: true
         content:
@@ -232,6 +246,82 @@ paths:
                 $ref: '#/components/schemas/ErrorDetails'
 components:
   schemas:
+    EarningsSummaryItemMetadata:
+      description: Filing and publication metadata associated with an earnings summary result.
+      type: object
+      required:
+      - companyName
+      - filingType
+      - filingUpdatedAt
+      - earningsReleaseSummaryPublishedAt
+      properties:
+        companyName:
+          type: string
+          description: Full legal name of the company.
+          example: Apple Inc.
+        filingType:
+          type: string
+          description: The SEC filing type associated with the earnings release.
+          enum:
+          - 8-K
+          - 10-Q
+          - 10-K
+          example: 8-K
+        filingUpdatedAt:
+          type: string
+          format: date
+          description: The date on which the filing was last updated (YYYY-MM-DD).
+          example: '2025-05-21'
+        earningsReleaseSummaryPublishedAt:
+          type: string
+          format: date-time
+          description: ISO 8601 datetime at which the earnings release summary was published.
+          example: '2025-05-28T08:11:48.095000'
+    ResponseMessage:
+      description: A warning or informational message relating to one or more investments.
+      type: object
+      properties:
+        investments:
+          type:
+          - array
+          - 'null'
+          description: The investments this message applies to.
+          items:
+            $ref: '#/components/schemas/InvestmentLookupInputDetails'
+        type:
+          $ref: '#/components/schemas/MessageType'
+        message:
+          type:
+          - string
+          - 'null'
+          description: Human-readable description of the warning or issue.
+        code:
+          type:
+          - string
+          - 'null'
+          description: Machine-readable error or warning code.
+      additionalProperties: false
+    EarningsSummaryCompany:
+      description: A single company's earnings summary result.
+      type: object
+      required:
+      - identifiers
+      - summary
+      - metadata
+      properties:
+        identifiers:
+          type: object
+          description: Map of identifier types to their resolved values for this company. Typically contains `companyId`.
+          additionalProperties:
+            type: string
+          example:
+            companyId: 0C00000378
+        summary:
+          type: string
+          description: AI-generated summary of the company's most recent earnings release.
+          example: Apple Inc. reported strong quarterly earnings with revenue beating analyst expectations. iPhone sales drove growth in the quarter.
+        metadata:
+          $ref: '#/components/schemas/EarningsSummaryItemMetadata'
     EarningsSummariesRequestInput:
       description: Request body for the Earnings Summaries endpoint.
       required:
@@ -265,161 +355,6 @@ components:
           - asc
           - desc
           default: desc
-      additionalProperties: false
-    ResponseMessage:
-      description: A warning or informational message relating to one or more investments.
-      type: object
-      properties:
-        investments:
-          type:
-          - array
-          - 'null'
-          description: The investments this message applies to.
-          items:
-            $ref: '#/components/schemas/InvestmentLookupInputDetails'
-        type:
-          $ref: '#/components/schemas/MessageType'
-        message:
-          type:
-          - string
-          - 'null'
-          description: Human-readable description of the warning or issue.
-        code:
-          type:
-          - string
-          - 'null'
-          description: Machine-readable error or warning code.
-      additionalProperties: false
-    EarningsSummaryItemMetadata:
-      description: Filing and publication metadata associated with an earnings summary result.
-      type: object
-      required:
-      - companyName
-      - filingType
-      - filingUpdatedAt
-      - earningsReleaseSummaryPublishedAt
-      properties:
-        companyName:
-          type: string
-          description: Full legal name of the company.
-          example: Apple Inc.
-        filingType:
-          type: string
-          description: The SEC filing type associated with the earnings release.
-          enum:
-          - 8-K
-          - 10-Q
-          - 10-K
-          example: 8-K
-        filingUpdatedAt:
-          type: string
-          format: date
-          description: The date on which the filing was last updated (YYYY-MM-DD).
-          example: '2025-05-21'
-        earningsReleaseSummaryPublishedAt:
-          type: string
-          format: date-time
-          description: ISO 8601 datetime at which the earnings release summary was published.
-          example: '2025-05-28T08:11:48.095000'
-    EarningsSummariesResponse:
-      description: Response body returned by the Earnings Summaries endpoint.
-      type: object
-      required:
-      - companies
-      - metadata
-      properties:
-        companies:
-          type: array
-          description: List of earnings summary results for matched companies.
-          items:
-            $ref: '#/components/schemas/EarningsSummaryCompany'
-        metadata:
-          $ref: '#/components/schemas/ResponseMetadataWithMessages'
-    InvestmentLookupInputDetails:
-      description: Describes an investment referenced in a response message, including its resolved identifiers.
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The identifier value as supplied in the original request.
-        idType:
-          type:
-          - string
-          - 'null'
-          description: The identifier type as supplied in the original request.
-        companyId:
-          type:
-          - string
-          - 'null'
-          description: Resolved Morningstar company ID, if available.
-        performanceId:
-          type:
-          - string
-          - 'null'
-          description: Resolved Morningstar performance ID, if available.
-        baseCurrency:
-          type:
-          - string
-          - 'null'
-          description: Base currency filter applied during lookup.
-        domicile:
-          type:
-          - string
-          - 'null'
-          description: Domicile filter applied during lookup.
-        exchangeCountry:
-          type:
-          - string
-          - 'null'
-          description: Exchange country filter applied during lookup.
-      additionalProperties: false
-    EarningsSummaryCompany:
-      description: A single company's earnings summary result.
-      type: object
-      required:
-      - identifiers
-      - summary
-      - metadata
-      properties:
-        identifiers:
-          type: object
-          description: Map of identifier types to their resolved values for this company. Typically contains `companyId`.
-          additionalProperties:
-            type: string
-          example:
-            companyId: 0C00000378
-        summary:
-          type: string
-          description: AI-generated summary of the company's most recent earnings release.
-          example: Apple Inc. reported strong quarterly earnings with revenue beating analyst expectations. iPhone sales drove growth in the quarter.
-        metadata:
-          $ref: '#/components/schemas/EarningsSummaryItemMetadata'
-    ErrorDetails:
-      description: Standard error response body.
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          format: int32
-          description: HTTP status code.
-        errorCode:
-          type:
-          - string
-          - 'null'
-          description: Morningstar-specific error code (e.g. `400.aiInsights.007`).
-        message:
-          type:
-          - string
-          - 'null'
-          description: Human-readable description of the error.
-        requestId:
-          type:
-          - string
-          - 'null'
-          format: uuid
-          description: Request identifier to include when contacting support.
       additionalProperties: false
     EarningsSummaryInvestmentInput:
       description: A single investment identifier submitted in an Earnings Summaries request.
@@ -495,7 +430,88 @@ components:
       enum:
       - Warning
       - Error
+    ErrorDetails:
+      description: Standard error response body.
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+          description: HTTP status code.
+        errorCode:
+          type:
+          - string
+          - 'null'
+          description: Morningstar-specific error code (e.g. `400.aiInsights.007`).
+        message:
+          type:
+          - string
+          - 'null'
+          description: Human-readable description of the error.
+        requestId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Request identifier to include when contacting support.
+      additionalProperties: false
+    InvestmentLookupInputDetails:
+      description: Describes an investment referenced in a response message, including its resolved identifiers.
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The identifier value as supplied in the original request.
+        idType:
+          type:
+          - string
+          - 'null'
+          description: The identifier type as supplied in the original request.
+        companyId:
+          type:
+          - string
+          - 'null'
+          description: Resolved Morningstar company ID, if available.
+        performanceId:
+          type:
+          - string
+          - 'null'
+          description: Resolved Morningstar performance ID, if available.
+        baseCurrency:
+          type:
+          - string
+          - 'null'
+          description: Base currency filter applied during lookup.
+        domicile:
+          type:
+          - string
+          - 'null'
+          description: Domicile filter applied during lookup.
+        exchangeCountry:
+          type:
+          - string
+          - 'null'
+          description: Exchange country filter applied during lookup.
+      additionalProperties: false
+    EarningsSummariesResponse:
+      description: Response body returned by the Earnings Summaries endpoint.
+      type: object
+      required:
+      - companies
+      - metadata
+      properties:
+        companies:
+          type: array
+          description: List of earnings summary results for matched companies.
+          items:
+            $ref: '#/components/schemas/EarningsSummaryCompany'
+        metadata:
+          $ref: '#/components/schemas/ResponseMetadataWithMessages'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

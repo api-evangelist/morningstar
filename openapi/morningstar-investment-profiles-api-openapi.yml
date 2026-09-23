@@ -1,24 +1,14 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Investment Profiles API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: Morningstar Investment Profiles API
+  version: '1.0'
+  description: 'Operations tagged Investment Profiles across 2 of this provider''s published API definitions: morningstar-dws-risk-profiler-openapi.json, morningstar-risk-profiler-us-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
-security:
-- BasicAuth: []
+- url: https://www.us-api.morningstar.com/risk-profiler
+- url: https://www.apac-api.morningstar.com/risk-profiler
+- url: https://www.emea-api.morningstar.com/risk-profiler
+- url: https://www.us-api.morningstar.com/finametrica-profiler/v1
+  variables: {}
 tags:
 - name: Investment Profiles
 paths:
@@ -72,12 +62,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse502'
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-profiler
+    - url: https://www.apac-api.morningstar.com/risk-profiler
+    - url: https://www.emea-api.morningstar.com/risk-profiler
   /v1/investment-profiles:
     post:
       tags:
       - Investment Profiles
       summary: Generate best fit risk tolerance or suitability score ranges
-      description: "Generate best fit risk tolerance or suitability score ranges for a suite of custom model portfolios or investment profiles. The best fit ranges divide the 0 to 100 risk tolerance or suitability scoring scale across the model portfolios or investment profiles, showing, for this suite of model portfolios or investment profiles, which is most appropriate for a particular risk tolerance or suitability score.\n\n\n  Define each model portfolio or investment profile name, description, asset allocation, and profileriskscore (the portfolio risk score or growth asset percentage of the model portfolio or investment profile depending on the region). Available asset classes by region are list below. In the response, a unique profileid for each model portfolio or investment profile is returned together with the min and max risk tolerance or suitability score range, this is the best fit range. The identifier can be used for future retrieval of the custom model portfolio or investment profile. The best score ranges can be stored for future use.\n"
+      description: 'Generate best fit risk tolerance or suitability score ranges for a suite of custom model portfolios or investment profiles. The best fit ranges divide the 0 to 100 risk tolerance or suitability scoring scale across the model portfolios or investment profiles, showing, for this suite of model portfolios or investment profiles, which is most appropriate for a particular risk tolerance or suitability score.
+
+
+        Define each model portfolio or investment profile name, description, asset allocation, and profileriskscore (the portfolio risk score or growth asset percentage of the model portfolio or investment profile depending on the region). Available asset classes by region are list below. In the response, a unique profileid for each model portfolio or investment profile is returned together with the min and max risk tolerance or suitability score range, this is the best fit range. The identifier can be used for future retrieval of the custom model portfolio or investment profile. The best score ranges can be stored for future use.'
       operationId: postInvestmentProfiles
       parameters:
       - name: X-API-RequestId
@@ -130,6 +127,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse502'
       x-codegen-request-body-name: requestBody
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-profiler
+    - url: https://www.apac-api.morningstar.com/risk-profiler
+    - url: https://www.emea-api.morningstar.com/risk-profiler
   /investment-profiles/{profileId}:
     get:
       summary: Get investment profiles
@@ -188,6 +189,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+    servers:
+    - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
+      variables: {}
   /investment-profiles:
     post:
       summary: Create investment profile
@@ -253,32 +257,77 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+    servers:
+    - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
+      variables: {}
 components:
   schemas:
-    InvestmentProfilesPayloadResponse_2:
+    Ranges:
+      title: Range
       type: object
-      title: InvestmentProfilesPayloadResponse
       properties:
+        low:
+          type: integer
+          description: Low range
+          example: 10
         id:
+          type: integer
+          description: High range
+          example: 30
+    InvestmentPolicyPayloadRequest:
+      title: InvestmentPolicyPayloadRequest
+      type: object
+      properties:
+        title:
           type: string
-          description: Record unique identifie
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        createdAt:
+          description: Investment policy title
+          example: Conservative
+        text:
           type: string
-          description: Record creation dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        region:
+          description: Investment policy text
+          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
+        min:
+          type: integer
+          description: Minimum score range
+          example: 10
+        max:
+          type: integer
+          description: Maximum score range
+          example: 30
+        assetClass:
+          $ref: '#/components/schemas/AssetClassPayloadRequest'
+    ErrorResponse422:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
           type: string
-          description: Investment profile region
-          enum:
-          - USA
-          - CA
-          - UK
-          - EUR
-        investmentPolicies:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvestmentPolicyPayload'
+          description: Error Message
+          example: Unprocessable Entity
+        status:
+          type: string
+          description: Error Status
+          example: UNPROCESSABLE_ENTITY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse404:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
+          type: string
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
     ComfortRangesPayloadResponse:
       title: ComfortRangesPayload
       type: object
@@ -293,6 +342,72 @@ components:
           $ref: '#/components/schemas/Ranges'
         tooLittleRisk:
           $ref: '#/components/schemas/Ranges'
+    InvestmentPolicyPayload:
+      title: InvestmentPolicyPayload
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        title:
+          type: string
+          description: Investment policy title
+          example: Conservative
+        text:
+          type: string
+          description: Investment policy text
+          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
+        min:
+          type: integer
+          description: Minimum score range
+          example: 10
+        max:
+          type: integer
+          description: Maximum score range
+          example: 30
+        profileRiskScore:
+          type: integer
+          description: Portfolio Risk Score value. Value must be in the range 0 - 110.
+          example: 30
+        assetClass:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetClassPayload'
+        comfortScoreRanges:
+          $ref: '#/components/schemas/ComfortRangesPayloadResponse'
+    ErrorResponse400:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse502:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Received an invalid response from the upstream server
+        status:
+          type: string
+          description: Error Status
+          example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
     AssetClassPayloadRequest:
       title: AssetClassPayloadRequest
       type: object
@@ -325,18 +440,6 @@ components:
           type: number
           description: Cash
           example: 40.9
-    AssetClassPayload:
-      title: AssetClassPayload
-      type: object
-      properties:
-        label:
-          type: string
-          description: Asset label
-          example: US Stocks
-        count:
-          type: number
-          description: Asset value
-          example: 24
     InvestmentProfilesPayloadResponse:
       title: InvestmentProfilesPayloadResponse
       type: object
@@ -361,6 +464,124 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InvestmentPolicyPayload'
+    ErrorResponse500:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    AssetClassPayload:
+      title: AssetClassPayload
+      type: object
+      properties:
+        label:
+          type: string
+          description: Asset label
+          example: US Stocks
+        count:
+          type: number
+          description: Asset value
+          example: 24
+    InvestmentProfilesPayloadRequest:
+      title: InvestmentProfilesPayloadRequest
+      type: object
+      properties:
+        region:
+          type: string
+          description: Asset class region
+          enum:
+          - en-US
+          - en-CA
+          - en-GB
+          - fr-CA
+        investmentPolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvestmentPolicyPayloadRequest'
+    Ranges_2:
+      type: object
+      title: Range
+      properties:
+        low:
+          type: integer
+          description: Low range
+          example: 10
+        high:
+          type: integer
+          description: High range
+          example: 30
+    InvestmentPolicyPayloadRequest_2:
+      type: object
+      title: InvestmentPolicyPayloadRequest
+      properties:
+        title:
+          type: string
+          description: Investment policy title. Value must be alphanumeric
+          example: Conservative
+          minLength: 1
+          maxLength: 1000
+        text:
+          type: string
+          description: Investment policy text
+          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
+          minLength: 1
+          maxLength: 1000
+        profileRiskScore:
+          type: integer
+          description: Portfolio Risk Score value. Value must be in the range 0 - 110.
+          example: 30
+        assetClass:
+          $ref: '#/components/schemas/AssetClassPayloadRequest'
+    InvestmentProfilesPayloadResponse_2:
+      type: object
+      title: InvestmentProfilesPayloadResponse
+      properties:
+        id:
+          type: string
+          description: Record unique identifie
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        createdAt:
+          type: string
+          description: Record creation dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        region:
+          type: string
+          description: Investment profile region
+          enum:
+          - USA
+          - CA
+          - UK
+          - EUR
+        investmentPolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvestmentPolicyPayload'
+    AssetClassPayload_2:
+      type: object
+      title: AssetClassPayload
+      properties:
+        label:
+          type: string
+          description: Asset label
+          example: US Stocks
+        count:
+          type: number
+          description: Asset value
+          example: 24
+        category:
+          type: string
+          description: Asset category
+          example: Bond
     CustomAssetClassLabel:
       type: object
       title: CustomAssetClassLabel
@@ -409,22 +630,6 @@ components:
           type: string
           description: Alternatives custom label
           example: Custom Alternatives
-    InvestmentProfilesPayloadRequest:
-      title: InvestmentProfilesPayloadRequest
-      type: object
-      properties:
-        region:
-          type: string
-          description: Asset class region
-          enum:
-          - en-US
-          - en-CA
-          - en-GB
-          - fr-CA
-        investmentPolicies:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvestmentPolicyPayloadRequest'
     InvestmentProfilesPayloadRequest_2:
       type: object
       title: InvestmentProfilesPayloadRequest
@@ -453,177 +658,6 @@ components:
           maxItems: 7
           items:
             $ref: '#/components/schemas/InvestmentPolicyPayloadRequest_2'
-    ErrorResponse400:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    Ranges:
-      title: Range
-      type: object
-      properties:
-        low:
-          type: integer
-          description: Low range
-          example: 10
-        id:
-          type: integer
-          description: High range
-          example: 30
-    InvestmentPolicyPayload:
-      title: InvestmentPolicyPayload
-      type: object
-      properties:
-        id:
-          type: string
-          description: Unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        title:
-          type: string
-          description: Investment policy title
-          example: Conservative
-        text:
-          type: string
-          description: Investment policy text
-          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
-        min:
-          type: integer
-          description: Minimum score range
-          example: 10
-        max:
-          type: integer
-          description: Maximum score range
-          example: 30
-        profileRiskScore:
-          type: integer
-          description: Portfolio Risk Score value. Value must be in the range 0 - 110.
-          example: 30
-        assetClass:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetClassPayload'
-        comfortScoreRanges:
-          $ref: '#/components/schemas/ComfortRangesPayloadResponse'
-    ErrorResponse500:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Internal Server Error
-        status:
-          type: string
-          description: Error Status
-          example: INTERNAL_SERVER_ERROR
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    InvestmentPolicyPayloadRequest:
-      title: InvestmentPolicyPayloadRequest
-      type: object
-      properties:
-        title:
-          type: string
-          description: Investment policy title
-          example: Conservative
-        text:
-          type: string
-          description: Investment policy text
-          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
-        min:
-          type: integer
-          description: Minimum score range
-          example: 10
-        max:
-          type: integer
-          description: Maximum score range
-          example: 30
-        assetClass:
-          $ref: '#/components/schemas/AssetClassPayloadRequest'
-    ErrorResponse502:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Received an invalid response from the upstream server
-        status:
-          type: string
-          description: Error Status
-          example: BAD_GATEWAY
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    ErrorResponse422:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Unprocessable Entity
-        status:
-          type: string
-          description: Error Status
-          example: UNPROCESSABLE_ENTITY
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    ErrorResponse404:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server can't find the requested resource
-        status:
-          type: string
-          description: Error Status
-          example: NOT_FOUND
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    InvestmentPolicyPayloadRequest_2:
-      type: object
-      title: InvestmentPolicyPayloadRequest
-      properties:
-        title:
-          type: string
-          description: Investment policy title. Value must be alphanumeric
-          example: Conservative
-          minLength: 1
-          maxLength: 1000
-        text:
-          type: string
-          description: Investment policy text
-          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
-          minLength: 1
-          maxLength: 1000
-        profileRiskScore:
-          type: integer
-          description: Portfolio Risk Score value. Value must be in the range 0 - 110.
-          example: 30
-        assetClass:
-          $ref: '#/components/schemas/AssetClassPayloadRequest'
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic
+x-refined-from:
+- morningstar-dws-risk-profiler-openapi.json
+- morningstar-risk-profiler-us-openapi.json

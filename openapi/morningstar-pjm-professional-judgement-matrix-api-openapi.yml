@@ -1,24 +1,11 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts PJM (Professional Judgement Matrix) API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: Risk Profiler PJM (Professional Judgement Matrix) API
+  version: 2.0.0
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
-security:
-- BasicAuth: []
+- url: https://www.us-api.morningstar.com/risk-profiler
+- url: https://www.apac-api.morningstar.com/risk-profiler
+- url: https://www.emea-api.morningstar.com/risk-profiler
 tags:
 - name: PJM (Professional Judgement Matrix)
 paths:
@@ -30,12 +17,10 @@ paths:
       description: 'Submit a custom Professional Judgement Matrix configuration. In the response, a unique pjmid for the submitted configuration is returned. The identifier can be used for future retrieval of the custom Professional Judgement Matrix configuration.
 
 
-        For each consideration, define the risk tolerance score cap for each option. For example,  `“basic knowledge” : 68` means that the suitability score of a client with basic investment knowledge will be capped at 68. Refer to the [Morningstar Risk Profiler Methodology](https://developer.morningstar.com/content/hidden-from-navigation/MorningstarRiskProfilerMethodology_v4.pdf) documentation for further details.
+        For each consideration, define the risk tolerance score cap for each option. For example, `“basic knowledge” : 68` means that the suitability score of a client with basic investment knowledge will be capped at 68. Refer to the Morningstar Risk Profiler Methodology documentation for further details.
 
 
-        If a custom Professional Judgement Matrix configuration is not defined, the engine will use the default configuration as defined in the Morningstar Risk Profiler Methodology documentation to calculate the suitability score.
-
-        '
+        If a custom Professional Judgement Matrix configuration is not defined, the engine will use the default configuration as defined in the Morningstar Risk Profiler Methodology documentation to calculate the suitability score.'
       operationId: submitPjmConfiguration
       parameters:
       - name: X-API-RequestId
@@ -142,6 +127,165 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse502'
 components:
   schemas:
+    ErrorResponse404:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
+          type: string
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ComposurePayload:
+      title: ComposurePayload
+      type: object
+      properties:
+        never:
+          type: integer
+          description: Not experienced a financial downturn
+          example: 50
+        noImpact:
+          type: integer
+          description: No impact, Didn't make any changes to the investment plan.
+          example: 60
+        boughtShares:
+          type: integer
+          description: Saw an opportunity and bought more shares
+          example: 90
+        soldShares:
+          type: integer
+          description: Was nervous and sold shares
+          example: 90
+        unknown:
+          type: integer
+          description: Unknown
+          example: 100
+      description: Configurable to cap the max score based on the 4 possible responses
+    ErrorResponse400:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse502:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Received an invalid response from the upstream server
+        status:
+          type: string
+          description: Error Status
+          example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    PjmResponsePayload:
+      title: PjmResponsePayload
+      type: object
+      properties:
+        pjmId:
+          type: string
+          description: Record unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        createdAt:
+          type: string
+          description: Record creation dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        timeHorizon:
+          $ref: '#/components/schemas/TimeHorizonPayload'
+        knowledge:
+          $ref: '#/components/schemas/KnowledgePayload'
+        experience:
+          $ref: '#/components/schemas/ExperiencePayload'
+        composure:
+          $ref: '#/components/schemas/ComposurePayload'
+    KnowledgePayload:
+      title: KnowledgePayload
+      type: object
+      properties:
+        basicKnowledge:
+          type: integer
+          description: Don't have or very little knowledge about investing
+          example: 50
+        moderateKnowledge:
+          type: integer
+          description: Have basic to moderate knowledge about investing
+          example: 60
+        veryKnowledge:
+          type: integer
+          description: Very knowledgeable about investing
+          example: 90
+        unknown:
+          type: integer
+          description: Unknown
+          example: 100
+      description: Configurable to cap the max score based on the 3 possible responses
+    ExperiencePayload:
+      title: ExperiencePayload
+      type: object
+      properties:
+        noPrior:
+          type: integer
+          description: No prior equity investment experience
+          example: 68
+        prior:
+          type: integer
+          description: Prior equity investment experience
+          example: 90
+        unknown:
+          type: integer
+          description: Unknown
+          example: 100
+      description: Configurable to cap the max score based on the 2 possible responses
+    PjmRequestPayload:
+      title: PjmRequestPayload
+      type: object
+      properties:
+        timeHorizon:
+          $ref: '#/components/schemas/TimeHorizonPayload'
+        knowledge:
+          $ref: '#/components/schemas/KnowledgePayload'
+        experience:
+          $ref: '#/components/schemas/ExperiencePayload'
+        composure:
+          $ref: '#/components/schemas/ComposurePayload'
+    ErrorResponse500:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
     TimeHorizonPayload:
       title: TimeHorizonPayload
       type: object
@@ -235,166 +379,3 @@ components:
           description: More than 20 years
           example: 50
       description: Configurable to set the maximum score depending on the selection provided up a maximum of 22 options
-    PjmResponsePayload:
-      title: PjmResponsePayload
-      type: object
-      properties:
-        pjmId:
-          type: string
-          description: Record unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        createdAt:
-          type: string
-          description: Record creation dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        timeHorizon:
-          $ref: '#/components/schemas/TimeHorizonPayload'
-        knowledge:
-          $ref: '#/components/schemas/KnowledgePayload'
-        experience:
-          $ref: '#/components/schemas/ExperiencePayload'
-        composure:
-          $ref: '#/components/schemas/ComposurePayload'
-    ComposurePayload:
-      title: ComposurePayload
-      type: object
-      properties:
-        never:
-          type: integer
-          description: Not experienced a financial downturn
-          example: 50
-        noImpact:
-          type: integer
-          description: No impact, Didn't make any changes to the investment plan.
-          example: 60
-        boughtShares:
-          type: integer
-          description: Saw an opportunity and bought more shares
-          example: 90
-        soldShares:
-          type: integer
-          description: Was nervous and sold shares
-          example: 90
-        unknown:
-          type: integer
-          description: Unknown
-          example: 100
-      description: Configurable to cap the max score based on the 4 possible responses
-    ErrorResponse400:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    PjmRequestPayload:
-      title: PjmRequestPayload
-      type: object
-      properties:
-        timeHorizon:
-          $ref: '#/components/schemas/TimeHorizonPayload'
-        knowledge:
-          $ref: '#/components/schemas/KnowledgePayload'
-        experience:
-          $ref: '#/components/schemas/ExperiencePayload'
-        composure:
-          $ref: '#/components/schemas/ComposurePayload'
-    ErrorResponse500:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Internal Server Error
-        status:
-          type: string
-          description: Error Status
-          example: INTERNAL_SERVER_ERROR
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    ExperiencePayload:
-      title: ExperiencePayload
-      type: object
-      properties:
-        noPrior:
-          type: integer
-          description: No prior equity investment experience
-          example: 68
-        prior:
-          type: integer
-          description: Prior equity investment experience
-          example: 90
-        unknown:
-          type: integer
-          description: Unknown
-          example: 100
-      description: Configurable to cap the max score based on the 2 possible responses
-    ErrorResponse502:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Received an invalid response from the upstream server
-        status:
-          type: string
-          description: Error Status
-          example: BAD_GATEWAY
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    KnowledgePayload:
-      title: KnowledgePayload
-      type: object
-      properties:
-        basicKnowledge:
-          type: integer
-          description: Don't have or very little knowledge about investing
-          example: 50
-        moderateKnowledge:
-          type: integer
-          description: Have basic to moderate knowledge about investing
-          example: 60
-        veryKnowledge:
-          type: integer
-          description: Very knowledgeable about investing
-          example: 90
-        unknown:
-          type: integer
-          description: Unknown
-          example: 100
-      description: Configurable to cap the max score based on the 3 possible responses
-    ErrorResponse404:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server can't find the requested resource
-        status:
-          type: string
-          description: Error Status
-          example: NOT_FOUND
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic

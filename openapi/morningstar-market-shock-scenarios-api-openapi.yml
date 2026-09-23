@@ -1,24 +1,32 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Risk Analytics market shock scenarios API
   version: 1.0.0
-  title: Authorization Tokens Accounts market shock scenarios API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+  description: 'Use the API to:
 
-    To request a token, click Authorize and enter the following credentials:
+    * Calculate performance attribution, risk attribution, and active exposure for investment(s) based on predefined risk models.
+
+    * Forecast the impact on investments if market and macroeconomic events reoccur by using predefined and custom scenarios.
+
+    * Retrieve scenario metadata including IDs that you use with other endpoints.
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    To retrieve the risk model IDs used with the endpoints in this API, use the Risk Models API.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/risk-analytics/v1
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/risk-analytics/v1
+  description: UAT
+- url: https://www.emea-api.morningstar.com/risk-analytics/v1
+  description: PROD
+- url: https://www.emea-uat-api.morningstar.com/risk-analytics/v1
+  description: UAT
+- url: https://www.apac-api.morningstar.com/risk-analytics/v1
+  description: PROD
+- url: https://www.apac-uat-api.morningstar.com/risk-analytics/v1
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
 - name: market shock scenarios
 paths:
@@ -27,7 +35,7 @@ paths:
       tags:
       - market shock scenarios
       summary: Get all custom market shock scenarios
-      description: 'Get a list of all your custom market shock scenarios. The response will include the unique ID for each scenario.  You use the ID with other endpoints to return information based on that scenario. '
+      description: Get a list of all your custom market shock scenarios. The response will include the unique ID for each scenario. You use the ID with other endpoints to return information based on that scenario.
       operationId: get_market_shock_scenario
       parameters:
       - name: is-new
@@ -57,7 +65,7 @@ paths:
       tags:
       - market shock scenarios
       summary: Get details for a custom market shock scenario
-      description: Get details for a specific custom market shock scenario. The response will return the  target market index and market movement number.
+      description: Get details for a specific custom market shock scenario. The response will return the target market index and market movement number.
       operationId: get_market_shock_scenario_item
       parameters:
       - name: scenario_id
@@ -88,7 +96,7 @@ paths:
       tags:
       - market shock scenarios
       summary: Calculate returns forecast for a fund based on a custom market shock scenario
-      description: Based on a specific risk model and custom market shock scenario, calculate returns forecast for a fund.  The response will return the mean forecasted return, volatility, VaR and CVaR.
+      description: Based on a specific risk model and custom market shock scenario, calculate returns forecast for a fund. The response will return the mean forecasted return, volatility, VaR and CVaR.
       operationId: post_market_forecast
       parameters:
       - name: scenario_id
@@ -123,6 +131,13 @@ paths:
       x-codegen-request-body-name: payload
 components:
   schemas:
+    idType:
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+      type: object
     ForecastReturnModel:
       required:
       - investments
@@ -153,6 +168,13 @@ components:
           items:
             $ref: '#/components/schemas/Holdings'
       type: object
+    holding:
+      properties:
+        identifier:
+          type: string
+        weight:
+          type: number
+      type: object
     Holdings:
       required:
       - id
@@ -164,21 +186,7 @@ components:
         id:
           type: string
       type: object
-    holding:
-      properties:
-        identifier:
-          type: string
-        weight:
-          type: number
-      type: object
-    idType:
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-      type: object
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

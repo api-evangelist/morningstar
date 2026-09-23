@@ -1,33 +1,36 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: (US) Autocomplete API
+  description: 'Search for securities using partial strings based on name, ticker, or CUSIP. You can:
+
+    * Limit search to specific security universes.
+
+    * Specify data points to return in the response.
+
+    * Specify a language and currency for the response data.'
   version: 1.0.0
-  title: Authorization Tokens Accounts autocomplete API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/ec/v1
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/ec/v1
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
-- name: autocomplete
+- name: Autocomplete
 paths:
   /autocomplete:
     get:
       tags:
-      - autocomplete
+      - Autocomplete
       summary: Get securities
-      description: Get securities based on the search string specified in the `query` parameter. The search string can be part of an investment name, ticker symbol, or CUSIP. For example, if the search string is 'large', the API will return all securities that include 'large' in their name. <br/><br/>Response time is influenced by the number of results to return specified in the `results` parameter. The default value is '10'.<br/><br/>To override the default value in the Accept-Language HTTP header, use the `langCult` parameter. You can also define the currency of the data returned. Only one currency can be specified.
+      description: 'Get securities based on the search string specified in the `query` parameter. The search string can be part of an investment name, ticker symbol, or CUSIP. For example, if the search string is ''large'', the API will return all securities that include ''large'' in their name.
+
+
+        Response time is influenced by the number of results to return specified in the `results` parameter. The default value is ''10''.
+
+
+        To override the default value in the Accept-Language HTTP header, use the `langCult` parameter. You can also define the currency of the data returned. Only one currency can be specified.'
       operationId: AutoComplete_GetAutoCompleteData
       parameters:
       - name: query
@@ -165,6 +168,6 @@ components:
           type: string
           readOnly: true
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

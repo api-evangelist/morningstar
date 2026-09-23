@@ -1,24 +1,14 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Questionnaires API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: Morningstar Questionnaires API
+  version: '1.0'
+  description: 'Operations tagged Questionnaires across 2 of this provider''s published API definitions: morningstar-dws-risk-profiler-openapi.json, morningstar-risk-profiler-us-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
-security:
-- BasicAuth: []
+- url: https://www.us-api.morningstar.com/risk-profiler
+- url: https://www.apac-api.morningstar.com/risk-profiler
+- url: https://www.emea-api.morningstar.com/risk-profiler
+- url: https://www.us-api.morningstar.com/finametrica-profiler/v1
+  variables: {}
 tags:
 - name: Questionnaires
 paths:
@@ -27,9 +17,7 @@ paths:
       tags:
       - Questionnaires
       summary: Get risk tolerance questionnaire
-      description: 'Get questions and possible options for the risk tolerance questionnaire. Questions and options can be stored for future requests. There are two versions of the questionnaire.
-
-        '
+      description: Get questions and possible options for the risk tolerance questionnaire. Questions and options can be stored for future requests. There are two versions of the questionnaire.
       operationId: requestRiskQuestionnaire
       parameters:
       - name: id
@@ -91,14 +79,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse502'
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-profiler
+    - url: https://www.apac-api.morningstar.com/risk-profiler
+    - url: https://www.emea-api.morningstar.com/risk-profiler
   /v1/questionnaires/experience-questionnaires/{questionnaireId}:
     get:
       tags:
       - Questionnaires
       summary: Get Experience questionnaire
-      description: 'Get questions and possible options for the experience questionnaire. Questions and options can be stored for future requests. The experience questionnaire captures the Professional Judgement Matrix considerations and does not contribute to the risk tolerance scoring. Please select the appropriate language and country parameters to ensure you retrieve the correct version for your region. </br></br> **Important:** Select the relevant language and country parameters to ensure you retrieve the correct version for your region.
+      description: 'Get questions and possible options for the experience questionnaire. Questions and options can be stored for future requests. The experience questionnaire captures the Professional Judgement Matrix considerations and does not contribute to the risk tolerance scoring. Please select the appropriate language and country parameters to ensure you retrieve the correct version for your region.
 
-        '
+
+        **Important:** Select the relevant language and country parameters to ensure you retrieve the correct version for your region.'
       operationId: requestExperienceQuestionnaire
       parameters:
       - name: questionnaireId
@@ -159,14 +152,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse502'
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-profiler
+    - url: https://www.apac-api.morningstar.com/risk-profiler
+    - url: https://www.emea-api.morningstar.com/risk-profiler
   /v1/questionnaires/kyc-questionnaires/{questionnaireId}:
     get:
       tags:
       - Questionnaires
       summary: Get Know Your Client questionnaire
-      description: 'Get questions and possible options for the know-your-client questionnaire. Questions and options can be stored for future requests. The know-your-client questionnaire captures demographic data for research purposes only and does not contribute to the risk tolerance scoring.  </br></br> **Important:** Select the relevant language and country parameters to ensure you retrieve the correct version for your region.
+      description: 'Get questions and possible options for the know-your-client questionnaire. Questions and options can be stored for future requests. The know-your-client questionnaire captures demographic data for research purposes only and does not contribute to the risk tolerance scoring.
 
-        '
+
+        **Important:** Select the relevant language and country parameters to ensure you retrieve the correct version for your region.'
       operationId: requestKycQuestionnaire
       parameters:
       - name: questionnaireId
@@ -227,6 +225,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse502'
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-profiler
+    - url: https://www.apac-api.morningstar.com/risk-profiler
+    - url: https://www.emea-api.morningstar.com/risk-profiler
   /questionnaires/risk-questionnaires/{questionnaireId}:
     get:
       summary: Get risk tolerance questionnaire
@@ -301,6 +303,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+    servers:
+    - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
+      variables: {}
   /questionnaires/experience-questionnaires/{questionnaireId}:
     get:
       summary: Get experience questionnaire
@@ -372,6 +377,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+    servers:
+    - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
+      variables: {}
   /questionnaires/kyc-questionnaires/{questionnaireId}:
     get:
       summary: Get know your client questionnaire
@@ -445,8 +453,63 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+    servers:
+    - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
+      variables: {}
 components:
   schemas:
+    Paragraph:
+      title: Paragraph
+      type: object
+      properties:
+        text:
+          type: string
+          description: Paragraph text
+          example: Compared to others, how do you rate your willingness to take financial risks?
+        htmlMarkup:
+          type: boolean
+          description: True if the text field is an HTML markup, otherwise text field is plain text
+          example: false
+        image:
+          type: boolean
+          description: True if the paragraph is an image, otherwise is text
+          example: true
+        imageHref:
+          type: string
+          description: Image URL
+          example: https://www.morningstart.com/finametrica/images/risk.png
+    ErrorResponse404:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
+          type: string
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    Questionnaire:
+      title: Questionnaire
+      type: object
+      properties:
+        title:
+          type: string
+          description: Questionnaire title
+          example: FinaMetrica 10
+        id:
+          type: string
+          description: Questionnaire unique identifier
+          example: FM10S30
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
     Question:
       type: object
       properties:
@@ -474,26 +537,38 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Option'
-    Paragraph:
-      title: Paragraph
+    ErrorResponse400:
+      title: ErrorResponse
       type: object
       properties:
-        text:
+        message:
           type: string
-          description: Paragraph text
-          example: Compared to others, how do you rate your willingness to take financial risks?
-        htmlMarkup:
-          type: boolean
-          description: True if the text field is an HTML markup, otherwise text field is plain text
-          example: false
-        image:
-          type: boolean
-          description: True if the paragraph is an image, otherwise is text
-          example: true
-        imageHref:
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
           type: string
-          description: Image URL
-          example: https://www.morningstart.com/finametrica/images/risk.png
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse502:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Received an invalid response from the upstream server
+        status:
+          type: string
+          description: Error Status
+          example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
     Option:
       title: Option
       type: object
@@ -522,38 +597,6 @@ components:
           type: string
           description: Image URL
           example: https://www.morningstart.com/finametrica/images/risk.png
-    ErrorResponse400:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    Questionnaire:
-      title: Questionnaire
-      type: object
-      properties:
-        title:
-          type: string
-          description: Questionnaire title
-          example: FinaMetrica 10
-        id:
-          type: string
-          description: Questionnaire unique identifier
-          example: FM10S30
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
     ErrorResponse500:
       title: ErrorResponse
       type: object
@@ -570,39 +613,61 @@ components:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    ErrorResponse502:
-      title: ErrorResponse
+    Question_2:
       type: object
       properties:
-        message:
+        id:
           type: string
-          description: Error Message
-          example: Received an invalid response from the upstream server
-        status:
+          example: FM10-1
+          description: Question unique identifier
+        titleText:
           type: string
-          description: Error Status
-          example: BAD_GATEWAY
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    ErrorResponse404:
-      title: ErrorResponse
+          description: Question title text
+          example: Self-Rating
+        multipleSelect:
+          type: boolean
+          description: Multiple selections for the question, if this is true the question allows multiple answers
+          example: false
+        displayOrder:
+          type: integer
+          description: Question display order
+          example: '1'
+        paragraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paragraph'
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option_2'
+    Option_2:
       type: object
+      title: Option
       properties:
-        message:
+        id:
           type: string
-          description: Error Message
-          example: Server can't find the requested resource
-        status:
+          example: FM10-1-1
+          description: Option unique identifier
+        text:
           type: string
-          description: Error Status
-          example: NOT_FOUND
-        timestamp:
+          example: Extremely low risk taker.
+          description: Option text
+        displayOrder:
+          type: integer
+          example: '1'
+          description: Question display order
+        htmlMarkup:
+          type: boolean
+          example: false
+          description: True if the text field is an HTML markup, otherwise text field is plain text
+        image:
+          type: boolean
+          example: false
+          description: True if the option is an image, otherwise is text
+        imageHref:
           type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic
+          example: https://www.morningstart.com/finametrica/images/risk.png
+          description: Image URL
+x-refined-from:
+- morningstar-dws-risk-profiler-openapi.json
+- morningstar-risk-profiler-us-openapi.json

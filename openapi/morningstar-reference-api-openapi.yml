@@ -1,24 +1,41 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Reference API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+  title: Time Series - Sync Reference API
+  version: '1.0'
+  x-changelog:
+  - date: '2026-07-14'
+    changes:
+    - ADDED /fund-research/portfolio-esg-risk-rating
+    - ADDED /fund-sustainability/portfolio-esg-risk-rating
+    - ADDED /performance/daily-bid-price
+    - ADDED /performance/daily-offer-price
+    - ADDED /performance/fund-size-comprehensive-daily
+    - ADDED /performance/fund-size-comprehensive-monthly
+    - ADDED /performance/fund-size-surveyed-daily
+    - ADDED /performance/fund-size-surveyed-monthly
+    - REMOVED sinceInception parameter from /performance/daily-ohlcv. sinceInception not supported for multivariate data points.
+  - date: '2026-04-20'
+    changes:
+    - Added base URL for Americas to list of servers.
+  - date: '2026-06-02'
+    changes:
+    - Updated typo in OutputTimeSeriesSingleObservation schema name.
+  - date: '2026-04-20'
+    changes:
+    - Added base URL for Americas to list of servers.
+  description: '## Overview
 
-    To request a token, click Authorize and enter the following credentials:
 
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    Time Series - Sync is designed for integration with real-time web applications, dashboards, and analytical tools where responsiveness and flexibility are critical.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas (Production)
+- url: https://www.apac-api.morningstar.com
+  description: APAC (Production)
+- url: https://www.emea-api.morningstar.com
+  description: EMEA (Production)
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Reference
 paths:
@@ -26,7 +43,7 @@ paths:
     get:
       tags:
       - Reference
-      summary: Get Daily Closing Price time series.
+      summary: Get Daily Closing Price time series
       description: Closing price generally refers to the last price at which a stock trades during a regular trading session.
       parameters:
       - name: ids
@@ -298,7 +315,7 @@ paths:
     get:
       tags:
       - Reference
-      summary: Get Summary Risk Indicator (SRI) Value time series.
+      summary: Get Summary Risk Indicator (SRI) Value time series
       description: The investment's Summary Risk Indicator (SRI) denoting the level of risk calculated in accordance with the Packaged Retail and Insurance based Investment Product (PRIIP) classification.
       parameters:
       - name: ids
@@ -567,48 +584,45 @@ paths:
           $ref: '#/components/responses/ResponseStatus500'
       operationId: getReferenceSriValue
 components:
+  examples:
+    ResponseStatus400Example1:
+      summary: 400 -  Bad Request
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetails.002
+        message: Invalid date format. Expected format is yyyy-MM-d
+        requestId: 539d62a5-3586-4070-965e-0f7f64712d79
+    ResponseStatus500Example1:
+      summary: 500 - Internal Server Error
+      value:
+        statusCode: 500
+        errorCode: 500.investmentDetails.003
+        message: Error calling Investment API.
+        requestId: 539d62a5-3586-4070-965e-0f7f64712d79
   schemas:
-    OutputMetadataMessages:
-      description: Provides information about identifiers for which no results were returned.
-      title: OutputMetadataMessages
-      type: object
+    OutputIdentifiers:
+      title: OutputIdentifiers
+      description: Specifies the identifier type used to specify the target investment in the request.
       additionalProperties: false
       properties:
-        investments:
-          description: Indicates identifiers for which no results were returned.
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessageInvestment'
-        type:
+        performanceId:
           type: string
-          description: Indicates the message type.
-          example: Warning
-          readOnly: true
-          const: Warning
-        message:
+          example: 0P00002CI5
+        isin:
           type: string
-          description: Description of the issue encountered.
-          example: 'Lookup : Invalid investments.'
-          readOnly: true
-        code:
+          example: US2562191062
+        securityId:
           type: string
-          description: Code associated with the message.
-          example: 404.common.125
-          readOnly: true
-    ResponseTimeSeriesSingleObservation:
-      title: ResponseTimeSeriesSingleObservation
-      readOnly: true
-      description: List of investments for which time series data was returned.
-      type: object
-      additionalProperties: false
-      properties:
-        investments:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/OutputInvestmentSingleObservation'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
+          example: FCUSA0000P
+        cusip:
+          type: string
+          example: 459200101
+        sedol:
+          type: string
+          example: B4TT7L5
+        tradingSymbol:
+          type: string
+          example: MDLOX
     OutputTimeSeriesSingleObservation:
       title: OutputTimeSeriesSingleObservation
       type: object
@@ -876,6 +890,21 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DataModelSingleObservation'
+    OutputMetadataMessageInvestment:
+      title: OutputMetadataMessageInvestment
+      type: object
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: Indicates identifier value passed in request.
+          example: 0P000PPP6Q
+          readOnly: true
+        idType:
+          type: string
+          description: Indicates the identifier type passed in request.
+          example: performanceId
+          readOnly: true
     ErrorResponse:
       title: ErrorResponse
       description: Defines the structure of an error response returned when a bad or invalid request is submitted. Includes the HTTP status code, descriptive message, and request identifier for traceability.
@@ -903,17 +932,6 @@ components:
           readOnly: true
           type: string
       additionalProperties: false
-    OutputInvestmentSingleObservation:
-      title: OutputInvestmentSingleObservation
-      type: object
-      additionalProperties: false
-      properties:
-        identifiers:
-          $ref: '#/components/schemas/OutputIdentifiers'
-        timeSeries:
-          $ref: '#/components/schemas/OutputTimeSeriesSingleObservation'
-        metadata:
-          $ref: '#/components/schemas/OutputInvestmentsMetadata'
     OutputCategory:
       title: OutputCategory
       type: string
@@ -927,63 +945,58 @@ components:
       - portfolio-analytics
       - portfolio-holdings
       - reference
-    OutputIdentifiers:
-      title: OutputIdentifiers
-      description: Specifies the identifier type used to specify the target investment in the request.
-      additionalProperties: false
-      properties:
-        performanceId:
-          type: string
-          example: 0P00002CI5
-        isin:
-          type: string
-          example: US2562191062
-        securityId:
-          type: string
-          example: FCUSA0000P
-        cusip:
-          type: string
-          example: 459200101
-        sedol:
-          type: string
-          example: B4TT7L5
-        tradingSymbol:
-          type: string
-          example: MDLOX
-    OutputMetadataMessageInvestment:
-      title: OutputMetadataMessageInvestment
+    ResponseTimeSeriesSingleObservation:
+      title: ResponseTimeSeriesSingleObservation
+      readOnly: true
+      description: List of investments for which time series data was returned.
       type: object
       additionalProperties: false
       properties:
-        id:
-          type: string
-          description: Indicates identifier value passed in request.
-          example: 0P000PPP6Q
-          readOnly: true
-        idType:
-          type: string
-          description: Indicates the identifier type passed in request.
-          example: performanceId
-          readOnly: true
-    OutputMetadata:
-      description: Metadata returned in response. Includes information about identifiers for which no results were found.
-      title: OutputMetadata
+        investments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OutputInvestmentSingleObservation'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+    OutputMetadataMessages:
+      description: Provides information about identifiers for which no results were returned.
+      title: OutputMetadataMessages
       type: object
-      properties:
-        messages:
-          $ref: '#/components/schemas/OutputMetadataMessages'
-        requestId:
-          description: Indicates the request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          type: string
-          readOnly: true
-        time:
-          description: Indicates time response was returned.
-          example: '2025-10-02T10:54:36.9161062Z'
-          type: string
-          format: date-time
-          readOnly: true
       additionalProperties: false
+      properties:
+        investments:
+          description: Indicates identifiers for which no results were returned.
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessageInvestment'
+        type:
+          type: string
+          description: Indicates the message type.
+          example: Warning
+          readOnly: true
+          const: Warning
+        message:
+          type: string
+          description: Description of the issue encountered.
+          example: 'Lookup : Invalid investments.'
+          readOnly: true
+        code:
+          type: string
+          description: Code associated with the message.
+          example: 404.common.125
+          readOnly: true
+    OutputInvestmentSingleObservation:
+      title: OutputInvestmentSingleObservation
+      type: object
+      additionalProperties: false
+      properties:
+        identifiers:
+          $ref: '#/components/schemas/OutputIdentifiers'
+        timeSeries:
+          $ref: '#/components/schemas/OutputTimeSeriesSingleObservation'
+        metadata:
+          $ref: '#/components/schemas/OutputInvestmentsMetadata'
     OutputInvestmentsMetadata:
       title: OutputInvestmentsMetadata
       description: Provides the identifier look up details passed in request.
@@ -1023,37 +1036,26 @@ components:
         value:
           type: number
           example: 1.108
-  examples:
-    ResponseStatus400Example1:
-      summary: 400 -  Bad Request
-      value:
-        statusCode: 400
-        errorCode: 400.investmentDetails.002
-        message: Invalid date format. Expected format is yyyy-MM-d
-        requestId: 539d62a5-3586-4070-965e-0f7f64712d79
-    ResponseStatus500Example1:
-      summary: 500 - Internal Server Error
-      value:
-        statusCode: 500
-        errorCode: 500.investmentDetails.003
-        message: Error calling Investment API.
-        requestId: 539d62a5-3586-4070-965e-0f7f64712d79
+    OutputMetadata:
+      description: Metadata returned in response. Includes information about identifiers for which no results were found.
+      title: OutputMetadata
+      type: object
+      properties:
+        messages:
+          $ref: '#/components/schemas/OutputMetadataMessages'
+        requestId:
+          description: Indicates the request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          type: string
+          readOnly: true
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          type: string
+          format: date-time
+          readOnly: true
+      additionalProperties: false
   responses:
-    ResponseStatus500:
-      description: '500'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            ResponseStatus500Example1:
-              $ref: '#/components/examples/ResponseStatus500Example1'
-    ResponseTimeSeriesSingleObservation:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseTimeSeriesSingleObservation'
     ResponseStatus400:
       description: '400'
       content:
@@ -1063,7 +1065,24 @@ components:
           examples:
             ResponseStatus400Example1:
               $ref: '#/components/examples/ResponseStatus400Example1'
+    ResponseTimeSeriesSingleObservation:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseTimeSeriesSingleObservation'
+    ResponseStatus500:
+      description: '500'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            ResponseStatus500Example1:
+              $ref: '#/components/examples/ResponseStatus500Example1'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

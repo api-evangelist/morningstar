@@ -1,24 +1,12 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: equity - company research API
+  description: The Research API provides on-demand access to Morningstar’s repository of equity and fund research.
   version: 1.0.0
-  title: Authorization Tokens Accounts equity - company research API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/research
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: equity - company research
 paths:
@@ -27,7 +15,27 @@ paths:
       tags:
       - equity - company research
       summary: Get a company-related report
-      description: "Get the **most recent** version of a company-related report for the company specified in the `companyIdentifier` parameter. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>  The following document types can be retrieved using this endpoint:\n  </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br>- Thematic Research</br></br>A URL returned in the response is used to access the document file.\n  </br></br>**Note** To get current and historical company-related research documents, use\n  the **equity - rps document** endpoints."
+      description: 'Get the **most recent** version of a company-related report for the company specified in the `companyIdentifier` parameter. You can identify a company using a performance ID (for example,`0P00012BBI`) or `exchange:ticker` value, (for example, `XNAS:GOOG`).
+
+
+        The following document types can be retrieved using this endpoint:
+
+
+        - Company Report
+
+        - Stock Analyst Note
+
+        - Valuation Model
+
+        - Thematic Research
+
+
+        A URL returned in the response is used to access the document file.
+
+
+        **Note** To get current and historical company-related research documents, use
+
+        the **equity - rps document** endpoints.'
       operationId: Get
       parameters:
       - name: companyIdentifier
@@ -79,7 +87,27 @@ paths:
       tags:
       - equity - company research
       summary: Get a company-related report
-      description: "Get the **most recent** version of a company-related report for the company specified in the `companyIdentifier` parameter. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br> The following document types can be retrieved using this endpoint:\n  </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br>- Thematic Research</br></br>A URL returned in the response is used to access the document file.\n  </br></br>**Note** To get current and historical company-related research documents, use\n  the **equity - rps document** endpoints."
+      description: 'Get the **most recent** version of a company-related report for the company specified in the `companyIdentifier` parameter. You can identify a company using a performance ID (for example,`0P00012BBI`) or `exchange:ticker` value, (for example, `XNAS:GOOG`).
+
+
+        The following document types can be retrieved using this endpoint:
+
+
+        - Company Report
+
+        - Stock Analyst Note
+
+        - Valuation Model
+
+        - Thematic Research
+
+
+        A URL returned in the response is used to access the document file.
+
+
+        **Note** To get current and historical company-related research documents, use
+
+        the **equity - rps document** endpoints.'
       operationId: Get2
       parameters:
       - name: companyIdentifier
@@ -128,6 +156,6 @@ paths:
           content: {}
 components:
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer

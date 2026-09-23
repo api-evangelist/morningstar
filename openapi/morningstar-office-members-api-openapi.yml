@@ -1,24 +1,24 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Household Members (US) Office Members API
   version: 1.0.0
-  title: Authorization Tokens Accounts Office Members API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  description: 'Use the Household Members API to retrieve household member lists and member profiles, and to update member and client profiles for Morningstar Office.
 
 
-    * Username - Your Client ID.
+    With this API you can:
 
-    * Password - Your Client Secret.'
+    * Get member list for a specific household.
+
+    * Get a specific member''s profile.
+
+    * Update household client''s and member''s profiles.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/office/v1
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/office/v1
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
 - name: Office Members
 paths:
@@ -27,7 +27,10 @@ paths:
       tags:
       - Office Members
       summary: Get household's member list
-      description: Get list of all members for a household. </br></br> `householdId` can be  retrieved by using the <a href="https://developer.morningstar.com/apis/financial-planning/households-us/2.0.2">Households API</a>.
+      description: 'Get list of all members for a household.
+
+
+        `householdId` can be retrieved by using the Households API.'
       operationId: getMembers
       parameters:
       - in: header
@@ -95,7 +98,73 @@ paths:
       tags:
       - Office Members
       summary: Update member profile
-      description: "Updates a member profile. </br></br> `relationshipId` cannot be changed to or from 1. </br></br> \n`relationshipId` mapping:</br></br> `1` = Self</br> `3` = Spouse</br> `6` = Attorney</br> `7` = Accountant</br> `8` = Aunt</br> `38` = Beneficiary</br> `33` = Brother</br> `10` = Child</br> `11` = Cousin</br> `37` = Daughter</br> `4` = Dependent</br> `12` = Ex-Spouse</br> `13` = Father</br> `14` = Friend</br> `15` = Granddaughter</br> `16` = Grandparent</br> `17` = Grandson</br> `39` = Grantor</br> `34` = Insurance Agent</br> `18` = Mother</br> `19` = Niece</br> `30` = Nephew</br> `5` = Others</br> `40` = Partner</br> `31` = Sister</br> `36` = Son</br> `35` = Trustee</br> `32` = Uncle</br></br> `firstName` and `lastName` do not support these characters: ~!#^`[]{}|\\;\"<>?/"
+      description: 'Updates a member profile.
+
+
+        `relationshipId` cannot be changed to or from 1.
+
+
+        `relationshipId` mapping:
+
+
+        `1` = Self
+
+        `3` = Spouse
+
+        `6` = Attorney
+
+        `7` = Accountant
+
+        `8` = Aunt
+
+        `38` = Beneficiary
+
+        `33` = Brother
+
+        `10` = Child
+
+        `11` = Cousin
+
+        `37` = Daughter
+
+        `4` = Dependent
+
+        `12` = Ex-Spouse
+
+        `13` = Father
+
+        `14` = Friend
+
+        `15` = Granddaughter
+
+        `16` = Grandparent
+
+        `17` = Grandson
+
+        `39` = Grantor
+
+        `34` = Insurance Agent
+
+        `18` = Mother
+
+        `19` = Niece
+
+        `30` = Nephew
+
+        `5` = Others
+
+        `40` = Partner
+
+        `31` = Sister
+
+        `36` = Son
+
+        `35` = Trustee
+
+        `32` = Uncle
+
+
+        `firstName` and `lastName` do not support these characters: ~!#^`[]{}|\;"<>?/'
       operationId: updateMember
       requestBody:
         description: The member to update.
@@ -143,72 +212,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    Member:
-      type: object
-      required:
-      - memberId
-      properties:
-        firstName:
-          type: string
-          format: string
-          maxLength: 50
-          example: Sample
-        lastName:
-          type: string
-          format: string
-          maxLength: 50
-          example: Client
-        address1:
-          type: string
-          format: string
-          maxLength: 50
-          example: 22 W. Washington St.
-        address2:
-          type: string
-          format: string
-          maxLength: 50
-          example: FL 7
-        address3:
-          type: string
-          format: string
-          maxLength: 50
-          example: Rm. 700
-        city:
-          type: string
-          format: string
-          maxLength: 30
-          example: Chicago
-        state:
-          type: string
-          format: string
-          maxLength: 20
-          example: IL
-        zipCode:
-          type: string
-          format: string
-          maxLength: 10
-          example: 60602
-        email:
-          type: string
-          format: string
-          maxLength: 60
-        memberId:
-          type: string
-          format: string
-          example: 1234567
-        name:
-          type: string
-          format: string
-          maxLength: 60
-          example: Sample Client
-        relationshipId:
-          type: string
-          format: string
-          example: 1
-        relationshipName:
-          type: string
-          format: string
-          example: Self
     MemberProfile:
       type: object
       required:
@@ -296,6 +299,15 @@ components:
           type: string
           format: string
           example: null
+    MemberList:
+      type: object
+      required:
+      - id
+      properties:
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Member'
     MemberPost400:
       type: object
       properties:
@@ -306,6 +318,72 @@ components:
         id:
           type: string
           format: uuid
+    Member:
+      type: object
+      required:
+      - memberId
+      properties:
+        firstName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Sample
+        lastName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Client
+        address1:
+          type: string
+          format: string
+          maxLength: 50
+          example: 22 W. Washington St.
+        address2:
+          type: string
+          format: string
+          maxLength: 50
+          example: FL 7
+        address3:
+          type: string
+          format: string
+          maxLength: 50
+          example: Rm. 700
+        city:
+          type: string
+          format: string
+          maxLength: 30
+          example: Chicago
+        state:
+          type: string
+          format: string
+          maxLength: 20
+          example: IL
+        zipCode:
+          type: string
+          format: string
+          maxLength: 10
+          example: 60602
+        email:
+          type: string
+          format: string
+          maxLength: 60
+        memberId:
+          type: string
+          format: string
+          example: 1234567
+        name:
+          type: string
+          format: string
+          maxLength: 60
+          example: Sample Client
+        relationshipId:
+          type: string
+          format: string
+          example: 1
+        relationshipName:
+          type: string
+          format: string
+          example: Self
     UpdateMemberProfile:
       type: object
       required:
@@ -395,16 +473,7 @@ components:
           type: string
           format: string
           example: 1
-    MemberList:
-      type: object
-      required:
-      - id
-      properties:
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/Member'
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

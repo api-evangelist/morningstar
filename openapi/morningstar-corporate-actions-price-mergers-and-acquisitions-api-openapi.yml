@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Corporate Actions Price Mergers and Acquisitions API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Corporate Actions Price Mergers and…
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Corporate Actions Price Mergers and Acquisitions
 paths:
@@ -574,7 +583,31 @@ paths:
           endDateExample2:
             summary: Example 2
             value: '2025-12-31'
-      description: "The Corporate Actions – Price, Mergers and Acquisitions package provides data on dividends and other payments to shareholders, stock splits, rights issues, and spin offs, as well as mergers and acquisitions made by the issuing companies, and the adjustment factors relating to these corporate actions.\n\nThe package contains the following datasets:\n\n  - Capital Repayment\n\n  - Cash Dividend\n\n  - Mergers and Acquisitions\n\n  - Rights Issue\n\n  - Spin Off\n\n  - Stock Split\n\nTime series data supported."
+      description: 'The Corporate Actions – Price, Mergers and Acquisitions package provides data on dividends and other payments to shareholders, stock splits, rights issues, and spin offs, as well as mergers and acquisitions made by the issuing companies, and the adjustment factors relating to these corporate actions.
+
+
+        The package contains the following datasets:
+
+
+        - Capital Repayment
+
+
+        - Cash Dividend
+
+
+        - Mergers and Acquisitions
+
+
+        - Rights Issue
+
+
+        - Spin Off
+
+
+        - Stock Split
+
+
+        Time series data supported.'
       operationId: getEquityCorporateActionsPriceMergersAndAcquisitionsPackage
       tags:
       - Corporate Actions Price Mergers and Acquisitions
@@ -1253,6 +1286,38 @@ paths:
       x-cpqId: 914
 components:
   schemas:
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
     OutputCapitalRepayment:
       type: object
       properties:
@@ -1286,93 +1351,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputCapitalRepayment
-    OutputMergerAcquisition:
-      type: object
-      properties:
-        acquirerCompanyName:
-          type: string
-          description: Name of the acquirer company
-          nullable: true
-        acquirerPerformanceId:
-          type: string
-          description: Morningstar Share Class Id of the acquirer company
-          nullable: true
-        cashPerShare:
-          type: number
-          description: Cash amount offered/paid to acquire target on a per share basis
-          format: double
-          nullable: true
-        cashPerShareCurrency:
-          type: string
-          description: Currency of the cash amount offered/paid to acquire target on a per share basis
-          nullable: true
-        declareDate:
-          type: string
-          description: Date when the company announced the event
-          nullable: true
-        eventId:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        eventStatus:
-          type: string
-          description: 'Indicates status of the event: Announced; Approved; Rejected; Withdrawn; Postponed; Completed; Terminated; Other'
-          nullable: true
-        excludingDate:
-          type: string
-          description: Date when the event becomes effective
-          nullable: true
-        fractionShare:
-          type: string
-          description: 'Indicates fraction settlement: Cash; Disregard; Rounded; Other'
-          nullable: true
-        newShareRatio:
-          type: number
-          description: Number of new shares after the event
-          format: double
-          nullable: true
-        oldShareRatio:
-          type: number
-          description: Number of old shares before the event
-          format: double
-          nullable: true
-        payType:
-          type: string
-          description: 'Indicates the type of payment: Cash; Stock; Cash and Stock; Cash or Stock; Other'
-          nullable: true
-        percentAcquired:
-          type: integer
-          description: Percentage of the target's shares acquired in the transaction
-          format: int32
-          nullable: true
-        targetCompanyId:
-          type: string
-          description: Morningstar Company Id of the target company
-          nullable: true
-        targetCompanyName:
-          type: string
-          description: Name of the target company
-          nullable: true
-        targetPerformanceId:
-          type: string
-          description: Morningstar Share Class Id of the target company
-          nullable: true
-        totalTransactionCurrency:
-          type: string
-          description: Currency of the total value of the transaction paid by the acquirer
-          nullable: true
-        totalTransactionValue:
-          type: number
-          description: Total value of the transaction paid by the acquirer
-          format: double
-          nullable: true
-        transactionType:
-          type: string
-          description: 'Indicates the type of transaction: offer or merger'
-          nullable: true
-      additionalProperties: false
-      title: OutputMergerAcquisition
     OutputSpinOff:
       type: object
       properties:
@@ -1416,81 +1394,17 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputSpinOff
-    OutputRightsIssue:
+    CodeMappingBoolean:
       type: object
       properties:
-        excludingDate:
+        value:
           type: string
-          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
           nullable: true
-        adjustmentFactor:
-          type: number
-          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
-          format: double
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        declareDate:
-          type: string
-          description: Date when the company announced the event
-          nullable: true
-        existingShare:
-          type: number
-          description: Indicates the old shares prior to a rights issue offering
-          format: double
-          nullable: true
-        newShare:
-          type: number
-          description: Indicates the new shares to be issued in a rights issue offering
-          format: double
-          nullable: true
-        payDate:
-          type: string
-          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
-          nullable: true
-        recordDate:
-          type: string
-          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
-          nullable: true
-        subscriptionPrice:
-          type: number
-          description: Price at which the rights issue or capital repayment is offered by the company
-          format: double
+        code:
+          type: boolean
           nullable: true
       additionalProperties: false
-      title: OutputRightsIssue
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
+      title: CodeMappingBoolean
     OutputErrorDetails:
       type: object
       properties:
@@ -1555,128 +1469,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputStockSplit
-    CodeMappingBoolean:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: boolean
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingBoolean
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
-      additionalProperties: false
-      title: OutputInvalidInvestments
-    CodeMappingShort:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: integer
-          format: int32
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingShort
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
     OutputCashDividend:
       type: object
       properties:
@@ -1765,42 +1557,257 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputCashDividend
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    CodeMappingShort:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingShort
+    OutputRightsIssue:
+      type: object
+      properties:
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
+          nullable: true
+        adjustmentFactor:
+          type: number
+          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        existingShare:
+          type: number
+          description: Indicates the old shares prior to a rights issue offering
+          format: double
+          nullable: true
+        newShare:
+          type: number
+          description: Indicates the new shares to be issued in a rights issue offering
+          format: double
+          nullable: true
+        payDate:
+          type: string
+          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
+          nullable: true
+        recordDate:
+          type: string
+          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
+          nullable: true
+        subscriptionPrice:
+          type: number
+          description: Price at which the rights issue or capital repayment is offered by the company
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputRightsIssue
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputMergerAcquisition:
+      type: object
+      properties:
+        acquirerCompanyName:
+          type: string
+          description: Name of the acquirer company
+          nullable: true
+        acquirerPerformanceId:
+          type: string
+          description: Morningstar Share Class Id of the acquirer company
+          nullable: true
+        cashPerShare:
+          type: number
+          description: Cash amount offered/paid to acquire target on a per share basis
+          format: double
+          nullable: true
+        cashPerShareCurrency:
+          type: string
+          description: Currency of the cash amount offered/paid to acquire target on a per share basis
+          nullable: true
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        eventId:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        eventStatus:
+          type: string
+          description: 'Indicates status of the event: Announced; Approved; Rejected; Withdrawn; Postponed; Completed; Terminated; Other'
+          nullable: true
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective
+          nullable: true
+        fractionShare:
+          type: string
+          description: 'Indicates fraction settlement: Cash; Disregard; Rounded; Other'
+          nullable: true
+        newShareRatio:
+          type: number
+          description: Number of new shares after the event
+          format: double
+          nullable: true
+        oldShareRatio:
+          type: number
+          description: Number of old shares before the event
+          format: double
+          nullable: true
+        payType:
+          type: string
+          description: 'Indicates the type of payment: Cash; Stock; Cash and Stock; Cash or Stock; Other'
+          nullable: true
+        percentAcquired:
+          type: integer
+          description: Percentage of the target's shares acquired in the transaction
+          format: int32
+          nullable: true
+        targetCompanyId:
+          type: string
+          description: Morningstar Company Id of the target company
+          nullable: true
+        targetCompanyName:
+          type: string
+          description: Name of the target company
+          nullable: true
+        targetPerformanceId:
+          type: string
+          description: Morningstar Share Class Id of the target company
+          nullable: true
+        totalTransactionCurrency:
+          type: string
+          description: Currency of the total value of the transaction paid by the acquirer
+          nullable: true
+        totalTransactionValue:
+          type: number
+          description: Total value of the transaction paid by the acquirer
+          format: double
+          nullable: true
+        transactionType:
+          type: string
+          description: 'Indicates the type of transaction: offer or merger'
+          nullable: true
+      additionalProperties: false
+      title: OutputMergerAcquisition
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
   responses:
-    ResponseEquityRightsIssue:
+    ResponseEquityCapitalRepayment:
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              rightsIssue:
-                $ref: '#/components/schemas/OutputRightsIssue'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquitySpinOff:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              spinOff:
-                $ref: '#/components/schemas/OutputSpinOff'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityMergersAndAcquisitions:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              mergerAcquisition:
-                $ref: '#/components/schemas/OutputMergerAcquisition'
+              capitalRepayment:
+                $ref: '#/components/schemas/OutputCapitalRepayment'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
@@ -1834,19 +1841,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityCapitalRepayment:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              capitalRepayment:
-                $ref: '#/components/schemas/OutputCapitalRepayment'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityStockSplit:
       description: OK
       content:
@@ -1856,6 +1850,51 @@ components:
             properties:
               stockSplit:
                 $ref: '#/components/schemas/OutputStockSplit'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityMergersAndAcquisitions:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              mergerAcquisition:
+                $ref: '#/components/schemas/OutputMergerAcquisition'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityRightsIssue:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              rightsIssue:
+                $ref: '#/components/schemas/OutputRightsIssue'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquitySpinOff:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              spinOff:
+                $ref: '#/components/schemas/OutputSpinOff'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
@@ -1873,13 +1912,9 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

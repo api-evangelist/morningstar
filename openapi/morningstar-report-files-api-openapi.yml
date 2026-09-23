@@ -1,33 +1,31 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts report files API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
+  title: Manager (US) report files API
+  version: 1.0.1
+  description: 'You use the Report Files Manager API to:
 
-    To request a token, click Authorize and enter the following credentials:
+    * Download report files stored in the web-based version of Morningstar Office.
 
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    * Upload report files to the web-based version of Morningstar Office.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://office-integration.morningstar.com/report-file-manager/v1
+  description: PROD
+- url: https://office-integration-uat.morningstar.com/report-file-manager/v1
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
-- name: report files
+- name: Report Files
 paths:
   /report-files/{reportId}:
     get:
       tags:
-      - report files
+      - Report Files
       summary: Download a report
-      description: Download the report file specified in the `reportId` parameter. </br></br> `reportId` can be retrieved by using the [Report Retrieval API](/apis/financial-planning/report-retrieval-us).
+      description: 'Download the report file specified in the `reportId` parameter.
+
+
+        `reportId` can be retrieved by using the Report Retrieval API.'
       operationId: downloadReport
       parameters:
       - name: reportId
@@ -54,7 +52,7 @@ paths:
   /report-files:
     post:
       tags:
-      - report files
+      - Report Files
       summary: Upload a report
       description: Upload a report file. If a `bucketId` is not specified in the request body, the file will be uploaded to the root bucket.
       operationId: uploadReport
@@ -107,6 +105,6 @@ paths:
           description: Not found
 components:
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

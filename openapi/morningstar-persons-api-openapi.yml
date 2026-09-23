@@ -1,24 +1,12 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Persons API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: ByAllAccounts Persons API
+  version: v1.0
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
-security:
-- BasicAuth: []
+- url: https://www.byallaccounts.net/api/v1
+  description: SSO using DataConnect API
+- url: https://www.us-api.morningstar.com/aggapi/v1
+  description: SSO using Morningstar Authentication
 tags:
 - name: Persons
 paths:
@@ -27,7 +15,37 @@ paths:
       tags:
       - Persons
       summary: Register a new user
-      description: "Add an Investor Person to the system and associate it to a Firm and optionally to an Advisor. Registering a new Person does not require prior authentication. </br> <span>&#8226;</span> The Firm to which the Person is to be added must have the \"Investor self-signup\" feature enabled.  </br> <span>&#8226;</span> The user is created as SSO, non-SSO, or UIM JWT as determined by the Firm’s configuration for creating new “clients”.  </br></br>**Request Headers**</br>Registering a new Person does not require prior authentication, so JSESSIONID or CSRF-TOKEN are not required. </br></br>A UIM Admin JWT can optionally be submitted to this endpoint using the Authorization header with the header value \"Bearer <token-value>\".  The UIM Admin JWT holds a Service Administrator level authentication context  and the uimGuid for the user to be created must be provided in the post body. The endpoint will validate the JWT, extract the UIM Guid, and store the UIM Guid on the Person. The UIM Guid must be unique across the ByAllAccounts system (across all Persons). If not, then the Person is not created and HTTP 409 Conflict is returned with the person URI.</br></br>The POST body parameters listed in Model below are to be submitted in in JSON format as shown in the Example Value. </br></br>**Response Body**</br>Location header:  URI to new resource. For example:</br>\n  {\n   \"uri\": \"https://www.byallaccounts.net/api/v1/persons/12345\"\n  }\n  </br>Where 12345 is the BAA Person Id for the new Person. "
+      description: 'Add an Investor Person to the system and associate it to a Firm and optionally to an Advisor. Registering a new Person does not require prior authentication.
+
+        • The Firm to which the Person is to be added must have the "Investor self-signup" feature enabled.
+
+        • The user is created as SSO, non-SSO, or UIM JWT as determined by the Firm’s configuration for creating new “clients”.
+
+
+        **Request Headers**
+
+        Registering a new Person does not require prior authentication, so JSESSIONID or CSRF-TOKEN are not required.
+
+
+        A UIM Admin JWT can optionally be submitted to this endpoint using the Authorization header with the header value "Bearer ". The UIM Admin JWT holds a Service Administrator level authentication context and the uimGuid for the user to be created must be provided in the post body. The endpoint will validate the JWT, extract the UIM Guid, and store the UIM Guid on the Person. The UIM Guid must be unique across the ByAllAccounts system (across all Persons). If not, then the Person is not created and HTTP 409 Conflict is returned with the person URI.
+
+
+        The POST body parameters listed in Model below are to be submitted in in JSON format as shown in the Example Value.
+
+
+        **Response Body**
+
+        Location header: URI to new resource. For example:
+
+
+        {
+
+        "uri": "https://www.byallaccounts.net/api/v1/persons/12345"
+
+        }
+
+
+        Where 12345 is the BAA Person Id for the new Person.'
       operationId: postPersonsUsingPOST
       requestBody:
         description: param1
@@ -58,7 +76,7 @@ paths:
       tags:
       - Persons
       summary: Get profile data for a user
-      description: 'Fetch the profile data of a Person specified by the `id` parameter.   '
+      description: Fetch the profile data of a Person specified by the `id` parameter.
       operationId: getPersonUsingGET_1
       parameters:
       - name: id
@@ -219,7 +237,3 @@ components:
           description: UIM Guid for the Person if one was assigned at creation
           example: C5E883D3-8B92-438C-A43B-E70455FA1F06
       description: Profile data of a person
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic

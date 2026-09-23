@@ -1,31 +1,39 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Investor Pulse flow attribution API
   version: 1.0.0
-  title: Authorization Tokens Accounts flow attribution API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  description: 'Use the API to:
 
 
-    * Username - Your Client ID.
+    * Get information about flow models.
 
-    * Password - Your Client Secret.'
+    * Get forecasts based on specific flow models.
+
+    * Create historic and future flow attribution analyses.
+
+    * Calculate the impact of individual factors on future fund growth.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/invest-pulse/v1
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+  description: UAT
+- url: https://www.emea-api.morningstar.com/invest-pulse/v1
+  description: PROD
+- url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+  description: UAT
+- url: https://www.apac-api.morningstar.com/invest-pulse/v1
+  description: PROD
+- url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
 - name: flow attribution
 paths:
   /flow-attribution/calculate:
     post:
       summary: Create analysis of historic flow attribution for a share class
-      description: Create analysis of historic flow attribution for a specific share class and flow model.  Response will provide information about how each factor in the model contributed to or detracted from the growth of the share class.
+      description: Create analysis of historic flow attribution for a specific share class and flow model. Response will provide information about how each factor in the model contributed to or detracted from the growth of the share class.
       responses:
         '200':
           description: OK
@@ -49,9 +57,7 @@ paths:
   /flow-attribution/calculate-ex-ante:
     post:
       summary: Create analysis of future flow attribution for a share class
-      description: 'Create analysis of future flow attribution for a specific share class and flow model.  Response will provide information about how each factor in the model would contribute or detract from the growth of the share class.
-
-        '
+      description: Create analysis of future flow attribution for a specific share class and flow model. Response will provide information about how each factor in the model would contribute or detract from the growth of the share class.
       responses:
         '200':
           description: OK
@@ -103,6 +109,6 @@ components:
           example: F00000VRI7
       type: object
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

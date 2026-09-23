@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Ownership - Summary API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Ownership - Summary API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Ownership - Summary
 paths:
@@ -533,25 +542,35 @@ paths:
       x-cpqId: 930
 components:
   schemas:
-    OutputMetadataMessages:
+    OutputCompanyLevelInsiderTransactionStatistics:
       type: object
       properties:
-        type:
+        asOfDate:
           type: string
+          description: This refers to date on which insider shareholding is reported.
           nullable: true
-        code:
-          type: string
+        buyerCount:
+          type: integer
+          description: The count of buy transactions of the insiders
+          format: int32
           nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+        buyerShares:
+          type: number
+          description: The number of shares bought by an insider
+          format: double
           nullable: true
-        message:
-          type: string
+        sellerCount:
+          type: integer
+          description: The count of sell transactions of the insiders
+          format: int32
+          nullable: true
+        sellerShares:
+          type: number
+          description: The number of shares sold by an insider
+          format: double
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
+      title: OutputCompanyLevelInsiderTransactionStatistics
     OutputIdentifiers:
       type: object
       properties:
@@ -584,28 +603,25 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputErrorDetails:
+    OutputMetadataMessages:
       type: object
       properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
+        type:
           type: string
-          description: Custom error code
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
         message:
           type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
           nullable: true
       additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -652,48 +668,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputCompanyLevelInsiderHolding:
-      type: object
-      properties:
-        amountOwned:
-          type: number
-          description: AmountOwned is calculated on the company level (InsiderAmountOwned of the previous month + current month acquired - current month disposed) and TSO is to be picked on the basis on share class level.
-          format: double
-          nullable: true
-        asOfDate:
-          type: string
-          description: This refers to date on which insider shareholding is reported.
-          nullable: true
-        percentOwned:
-          type: number
-          description: The percentage of a particular security's shares that are owned by insiders.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputCompanyLevelInsiderHolding
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
     OutputOwnershipDataSummary:
       type: object
       properties:
@@ -767,36 +741,77 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputOwnershipDataSummary
-    OutputCompanyLevelInsiderTransactionStatistics:
+    OutputCompanyLevelInsiderHolding:
       type: object
       properties:
+        amountOwned:
+          type: number
+          description: AmountOwned is calculated on the company level (InsiderAmountOwned of the previous month + current month acquired - current month disposed) and TSO is to be picked on the basis on share class level.
+          format: double
+          nullable: true
         asOfDate:
           type: string
           description: This refers to date on which insider shareholding is reported.
           nullable: true
-        buyerCount:
-          type: integer
-          description: The count of buy transactions of the insiders
-          format: int32
-          nullable: true
-        buyerShares:
+        percentOwned:
           type: number
-          description: The number of shares bought by an insider
-          format: double
-          nullable: true
-        sellerCount:
-          type: integer
-          description: The count of sell transactions of the insiders
-          format: int32
-          nullable: true
-        sellerShares:
-          type: number
-          description: The number of shares sold by an insider
+          description: The percentage of a particular security's shares that are owned by insiders.
           format: double
           nullable: true
       additionalProperties: false
-      title: OutputCompanyLevelInsiderTransactionStatistics
+      title: OutputCompanyLevelInsiderHolding
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
   responses:
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityOwnershipSummaryFundsAndRegulatoryFilings:
       description: OK
       content:
@@ -810,12 +825,6 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityOwnershipSummary:
       description: OK
       content:
@@ -848,13 +857,15 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

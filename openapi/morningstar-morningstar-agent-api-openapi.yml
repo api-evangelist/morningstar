@@ -1,24 +1,10 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Morningstar Agent API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: Morningstar Agent API
+  description: The Morningstar Agent API makes it easy to retrieve answers from our content, without the need to build your own sync and ingestion pipelines. By connecting your generative AI application to the Morningstar Agent, you’ll be tapping into the same engine that powers Morningstar’s in-product generative AI capabilities to benefit from continuous enhancements implemented by our domain experts.
+  version: 0.1.0
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
-security:
-- BasicAuth: []
+- url: https://agents.morningstar.com
 tags:
 - name: Morningstar Agent
 paths:
@@ -153,6 +139,35 @@ paths:
       - BearerAuth: []
 components:
   schemas:
+    ThinkingMode:
+      type: string
+      enum:
+      - fast
+      - standard
+      - deep
+      title: ThinkingMode
+    TokenUsage:
+      properties:
+        input_tokens:
+          type: integer
+          title: Input Tokens
+          default: 0
+        output_tokens:
+          type: integer
+          title: Output Tokens
+          default: 0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        tools_called:
+          items:
+            type: string
+          type: array
+          title: Tools Called
+          default: []
+      type: object
+      title: TokenUsage
     RunResponse:
       properties:
         response:
@@ -166,18 +181,6 @@ components:
       required:
       - response
       title: RunResponse
-    RunRequest:
-      properties:
-        message:
-          type: string
-          title: Message
-        thinking_mode:
-          $ref: '#/components/schemas/ThinkingMode'
-          default: standard
-      type: object
-      required:
-      - message
-      title: RunRequest
     ValidationError:
       properties:
         loc:
@@ -213,36 +216,20 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    TokenUsage:
+    RunRequest:
       properties:
-        input_tokens:
-          type: integer
-          title: Input Tokens
-          default: 0
-        output_tokens:
-          type: integer
-          title: Output Tokens
-          default: 0
-        total_tokens:
-          type: integer
-          title: Total Tokens
-          default: 0
-        tools_called:
-          items:
-            type: string
-          type: array
-          title: Tools Called
-          default: []
+        message:
+          type: string
+          title: Message
+        thinking_mode:
+          $ref: '#/components/schemas/ThinkingMode'
+          default: standard
       type: object
-      title: TokenUsage
-    ThinkingMode:
-      type: string
-      enum:
-      - fast
-      - standard
-      - deep
-      title: ThinkingMode
+      required:
+      - message
+      title: RunRequest
   securitySchemes:
-    BasicAuth:
+    BearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT

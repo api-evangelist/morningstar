@@ -1,24 +1,14 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Portfolios API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  title: Morningstar Portfolios API
+  version: '1.0'
+  description: 'Operations tagged Portfolios across 2 of this provider''s published API definitions: morningstar-dws-risk-profiler-openapi.json, morningstar-risk-profiler-us-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
-security:
-- BasicAuth: []
+- url: https://www.us-api.morningstar.com/risk-profiler
+- url: https://www.apac-api.morningstar.com/risk-profiler
+- url: https://www.emea-api.morningstar.com/risk-profiler
+- url: https://www.us-api.morningstar.com/finametrica-profiler/v1
+  variables: {}
 tags:
 - name: Portfolios
 paths:
@@ -80,6 +70,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse502'
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-profiler
+    - url: https://www.apac-api.morningstar.com/risk-profiler
+    - url: https://www.emea-api.morningstar.com/risk-profiler
   /portfolios/investments:
     get:
       summary: Get the content of the mix of investments matrix
@@ -143,73 +137,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse502'
+    servers:
+    - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
+      variables: {}
 components:
   schemas:
-    MixInvestmentsHeader:
-      title: MixInvestmentsHeader
+    ErrorResponse404:
+      title: ErrorResponse
       type: object
       properties:
-        portfolio:
+        message:
           type: string
-          description: Header of the column for portfolio information.
-          example: Portfolio
-        highRisk:
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
           type: string
-          description: Header of the column for high risk information.
-          example: High Risk/Return %
-        mediumRisk:
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
           type: string
-          description: Header of the column for medium risk information.
-          example: Medium Risk/Return %
-        lowRisk:
-          type: string
-          description: Header of the column for low risk information.
-          example: Low Risk/Return %
-      description: Mix investments header
-    MixInvestmentsPayload_2:
-      type: object
-      title: MixInvestmentsPayload
-      properties:
-        title:
-          type: string
-          description: Title of the mix investments table
-          example: Mix of Investments in Portfolio
-        headers:
-          $ref: '#/components/schemas/MixInvestmentsHeader_2'
-        mixInvestmentsPortfolio:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvestmentPortfolio_2'
-          example:
-          - portfolio: Portfolio 1
-            highRisk: 0
-            mediumRisk: 0
-            lowRisk: 100
-          - portfolio: Portfolio 2
-            highRisk: 0
-            mediumRisk: 30
-            lowRisk: 70
-    InvestmentPortfolio_2:
-      type: object
-      title: InvestmentPortfolio
-      description: Investment portfolio object that represents the mix of investments in portfolio
-      properties:
-        portfolio:
-          type: string
-          description: portfolio's name
-          example: Portfolio 1
-        highRisk:
-          type: integer
-          description: High risk value
-          example: 1
-        mediumRisk:
-          type: integer
-          description: Medium risk value
-          example: 0
-        lowRisk:
-          type: integer
-          description: Low risk value
-          example: 100
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
     ErrorResponse400:
       title: ErrorResponse
       type: object
@@ -222,22 +170,6 @@ components:
           type: string
           description: Error Status
           example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    ErrorResponse500:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Internal Server Error
-        status:
-          type: string
-          description: Error Status
-          example: INTERNAL_SERVER_ERROR
         timestamp:
           type: string
           description: Error Timestamp
@@ -258,6 +190,27 @@ components:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
+    InvestmentPortfolio:
+      title: InvestmentPortfolio
+      type: object
+      properties:
+        portfolio:
+          type: string
+          description: portfolio's name
+          example: Portfolio 1
+        highRisk:
+          type: integer
+          description: High risk value
+          example: 1
+        mediumRisk:
+          type: integer
+          description: Medium risk value
+          example: 0
+        lowRisk:
+          type: integer
+          description: Low risk value
+          example: 100
+      description: Investment portfolio object that represents the mix of investments in portfolio.
     MixInvestmentsPayload:
       title: MixInvestmentsPayload
       type: object
@@ -282,9 +235,47 @@ components:
           items:
             $ref: '#/components/schemas/InvestmentPortfolio'
       description: Mix investments payload
-    InvestmentPortfolio:
-      title: InvestmentPortfolio
+    ErrorResponse500:
+      title: ErrorResponse
       type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    MixInvestmentsHeader:
+      title: MixInvestmentsHeader
+      type: object
+      properties:
+        portfolio:
+          type: string
+          description: Header of the column for portfolio information.
+          example: Portfolio
+        highRisk:
+          type: string
+          description: Header of the column for high risk information.
+          example: High Risk/Return %
+        mediumRisk:
+          type: string
+          description: Header of the column for medium risk information.
+          example: Medium Risk/Return %
+        lowRisk:
+          type: string
+          description: Header of the column for low risk information.
+          example: Low Risk/Return %
+      description: Mix investments header
+    InvestmentPortfolio_2:
+      type: object
+      title: InvestmentPortfolio
+      description: Investment portfolio object that represents the mix of investments in portfolio
       properties:
         portfolio:
           type: string
@@ -302,7 +293,29 @@ components:
           type: integer
           description: Low risk value
           example: 100
-      description: Investment portfolio object that represents the mix of investments in portfolio.
+    MixInvestmentsPayload_2:
+      type: object
+      title: MixInvestmentsPayload
+      properties:
+        title:
+          type: string
+          description: Title of the mix investments table
+          example: Mix of Investments in Portfolio
+        headers:
+          $ref: '#/components/schemas/MixInvestmentsHeader_2'
+        mixInvestmentsPortfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvestmentPortfolio_2'
+          example:
+          - portfolio: Portfolio 1
+            highRisk: 0
+            mediumRisk: 0
+            lowRisk: 100
+          - portfolio: Portfolio 2
+            highRisk: 0
+            mediumRisk: 30
+            lowRisk: 70
     MixInvestmentsHeader_2:
       type: object
       title: MixInvestmentsHeader
@@ -323,23 +336,6 @@ components:
           type: string
           description: Header of the column for low risk information.
           example: Low Risk/Return %
-    ErrorResponse404:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server can't find the requested resource
-        status:
-          type: string
-          description: Error Status
-          example: NOT_FOUND
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic
+x-refined-from:
+- morningstar-dws-risk-profiler-openapi.json
+- morningstar-risk-profiler-us-openapi.json

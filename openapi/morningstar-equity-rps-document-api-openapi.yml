@@ -1,24 +1,12 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Research equity - rps document API
+  description: The Research API provides on-demand access to Morningstar’s repository of equity and fund research.
   version: 1.0.0
-  title: Authorization Tokens Accounts equity - rps document API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/research
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: equity - rps document
 paths:
@@ -27,7 +15,25 @@ paths:
       tags:
       - equity - rps document
       summary: Get a Research Publishing System (RPS) document
-      description: 'Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.</br></br>**Note** The three **equity - rps document** endpoints return almost the same content. In addition to the content also returned by the other two endpoints, this endpoint must be used for Thematic Research documents, as this research is not associated with any specific company. We recommend you use this endpoint as it is the simplest and returns all document types including thematic research.</br></br>The following document types can be retrieved using this endpoint: </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br>- Thematic Research</br></br>A URL returned in the response is used to access the document file. '
+      description: 'Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.
+
+
+        **Note** The three **equity - rps document** endpoints return almost the same content. In addition to the content also returned by the other two endpoints, this endpoint must be used for Thematic Research documents, as this research is not associated with any specific company. We recommend you use this endpoint as it is the simplest and returns all document types including thematic research.
+
+
+        The following document types can be retrieved using this endpoint:
+
+
+        - Company Report
+
+        - Stock Analyst Note
+
+        - Valuation Model
+
+        - Thematic Research
+
+
+        A URL returned in the response is used to access the document file.'
       operationId: GetRpsDocument3
       parameters:
       - name: documentId
@@ -65,7 +71,23 @@ paths:
       tags:
       - equity - rps document
       summary: Get a Research Publishing System (RPS) document
-      description: 'Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.</br></br>You must enter a `companyIdentifier` value when using this endpoint. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>The following document types can be retrieved using this endpoint\: </br></br> - Company Report</br> - Stock Analyst Notes</br>- Valuation Model</br></br>**Note** To retrieve Thematic Research, use the `/equity/v1/research_document/{documentId}/{reportView}` endpoint.'
+      description: 'Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.
+
+
+        You must enter a `companyIdentifier` value when using this endpoint. You can identify a company using a performance ID (for example,`0P00012BBI`) or `exchange:ticker` value, (for example, `XNAS:GOOG`).
+
+
+        The following document types can be retrieved using this endpoint\:
+
+
+        - Company Report
+
+        - Stock Analyst Notes
+
+        - Valuation Model
+
+
+        **Note** To retrieve Thematic Research, use the `/equity/v1/research_document/{documentId}/{reportView}` endpoint.'
       operationId: GetRpsDocument
       parameters:
       - name: companyIdentifier
@@ -113,7 +135,23 @@ paths:
       tags:
       - equity - rps document
       summary: Get a Research Publishing System (RPS) document
-      description: 'Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.</br></br>You must enter a `companyIdentifier` value when using this endpoint. You can identify a company using a performance ID (for example,`0P00012BBI`)  or `exchange:ticker` value, (for example, `XNAS:GOOG`). </br></br>The following document types can be retrieved using this endpoint\: </br></br> - Company Report</br> - Stock Analyst Note</br>- Valuation Model</br></br>**Note** To retrieve Thematic Research, use the `/equity/v1/research_document/{documentId}/{reportView}` endpoint.'
+      description: 'Get the Research Publishing System (RPS) document specifed in the `documentId` parameter. You can use this endpoint to retrieve current and historical company research documents.
+
+
+        You must enter a `companyIdentifier` value when using this endpoint. You can identify a company using a performance ID (for example,`0P00012BBI`) or `exchange:ticker` value, (for example, `XNAS:GOOG`).
+
+
+        The following document types can be retrieved using this endpoint\:
+
+
+        - Company Report
+
+        - Stock Analyst Note
+
+        - Valuation Model
+
+
+        **Note** To retrieve Thematic Research, use the `/equity/v1/research_document/{documentId}/{reportView}` endpoint.'
       operationId: GetRpsDocument2
       parameters:
       - name: companyIdentifier
@@ -143,6 +181,6 @@ paths:
           content: {}
 components:
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer

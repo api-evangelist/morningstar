@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Reference Change API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Reference Change API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Reference Change
 paths:
@@ -564,108 +573,6 @@ paths:
       x-cpqId: 920
 components:
   schemas:
-    OutputExchangeCodeChangeLog:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The effective date when the exchange code for the share class was changed
-          nullable: true
-        changeFrom:
-          type: string
-          description: The exchange code that the share class changes from
-          nullable: true
-        changeTo:
-          type: string
-          description: The exchange code that the share class changes to
-          nullable: true
-      additionalProperties: false
-      title: OutputExchangeCodeChangeLog
-    OutputIsinChangeLog:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The effective date when the ISIN for the share class was changed
-          nullable: true
-        changeFrom:
-          type: string
-          description: The ISIN that the share class changes from
-          nullable: true
-        changeTo:
-          type: string
-          description: The ISIN that the share class changes to
-          nullable: true
-      additionalProperties: false
-      title: OutputIsinChangeLog
-    OutputCentralIndexKeyChangeLog:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The effective date when the company status was changed
-          nullable: true
-        changeFrom:
-          type: string
-          description: The status that the company changes from
-          nullable: true
-        changeTo:
-          type: string
-          description: The status that the company changes to
-          nullable: true
-      additionalProperties: false
-      title: OutputCentralIndexKeyChangeLog
-    OutputDomicileCountryChangeLog:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The effective date when the domicile country for the company was changed
-          nullable: true
-        changeFrom:
-          type: string
-          description: The domicile country that the company changes from
-          nullable: true
-        changeTo:
-          type: string
-          description: The domicile country that the company changes to
-          nullable: true
-      additionalProperties: false
-      title: OutputDomicileCountryChangeLog
-    OutputEntityReferenceEntityNameChange:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: Effective date is the date on which the company name comes into existence as approved by the firm.
-          nullable: true
-        changeFrom:
-          type: string
-          description: The English translation of the foreign legal name if/when applicable
-          nullable: true
-        changeTo:
-          type: string
-          description: The English translation of the foreign legal name if/when applicable
-          nullable: true
-      additionalProperties: false
-      title: OutputEntityReferenceEntityNameChange
-    OutputLegalNameChangeLog:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The starting date that an associated data point value is applicable to.
-          nullable: true
-        changeFrom:
-          type: string
-          description: Company Legal Name before the change.
-          nullable: true
-        changeTo:
-          type: string
-          description: Compay Legal Name after the change.
-          nullable: true
-      additionalProperties: false
-      title: OutputLegalNameChangeLog
     OutputIdentifiers:
       type: object
       properties:
@@ -698,6 +605,78 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputConversionRatioChangeLog:
+      type: object
+      properties:
+        changeFrom:
+          type: number
+          description: The conversion ratio value of a security before the change.
+          format: double
+          nullable: true
+        changeTo:
+          type: number
+          description: The conversion ratio value of a security after the change.
+          format: double
+          nullable: true
+        totalSharesOutstandingDate:
+          type: string
+          description: The as of date of the total shares outstanding value
+          nullable: true
+      additionalProperties: false
+      title: OutputConversionRatioChangeLog
+    OutputDomicileCountryChangeLog:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The effective date when the domicile country for the company was changed
+          nullable: true
+        changeFrom:
+          type: string
+          description: The domicile country that the company changes from
+          nullable: true
+        changeTo:
+          type: string
+          description: The domicile country that the company changes to
+          nullable: true
+      additionalProperties: false
+      title: OutputDomicileCountryChangeLog
+    OutputLegalNameChangeLog:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The starting date that an associated data point value is applicable to.
+          nullable: true
+        changeFrom:
+          type: string
+          description: Company Legal Name before the change.
+          nullable: true
+        changeTo:
+          type: string
+          description: Compay Legal Name after the change.
+          nullable: true
+      additionalProperties: false
+      title: OutputLegalNameChangeLog
+    OutputDrRatioChangeLog:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The as of date when the change of par ratio became effective.
+          nullable: true
+        changeFrom:
+          type: number
+          description: The conversion ratio value of a security before the change.
+          format: double
+          nullable: true
+        changeTo:
+          type: number
+          description: The conversion ratio value of a security after the change.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputDrRatioChangeLog
     OutputErrorDetails:
       type: object
       properties:
@@ -720,63 +699,80 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    OutputDrRatioChangeLog:
+    OutputExchangeCodeChangeLog:
       type: object
       properties:
         effectiveDate:
           type: string
-          description: The as of date when the change of par ratio became effective.
+          description: The effective date when the exchange code for the share class was changed
           nullable: true
         changeFrom:
-          type: number
-          description: The conversion ratio value of a security before the change.
-          format: double
+          type: string
+          description: The exchange code that the share class changes from
           nullable: true
         changeTo:
-          type: number
-          description: The conversion ratio value of a security after the change.
-          format: double
+          type: string
+          description: The exchange code that the share class changes to
           nullable: true
       additionalProperties: false
-      title: OutputDrRatioChangeLog
-    OutputMetadataMessages:
+      title: OutputExchangeCodeChangeLog
+    OutputSymbolChangeLog:
       type: object
       properties:
-        type:
+        effectiveDate:
+          type: string
+          description: The effective date when the symbol for the share class was changed
+          nullable: true
+        changeFrom:
+          type: string
+          description: The symbol that the share class changes from
+          nullable: true
+        changeTo:
+          type: string
+          description: The symbol that the share class changes to
+          nullable: true
+      additionalProperties: false
+      title: OutputSymbolChangeLog
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
           type: string
           nullable: true
-        code:
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
           nullable: true
-        investments:
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
           type: array
           items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    OutputConversionRatioChangeLog:
+      title: OutputMetadata
+    OutputCentralIndexKeyChangeLog:
       type: object
       properties:
+        effectiveDate:
+          type: string
+          description: The effective date when the company status was changed
+          nullable: true
         changeFrom:
-          type: number
-          description: The conversion ratio value of a security before the change.
-          format: double
+          type: string
+          description: The status that the company changes from
           nullable: true
         changeTo:
-          type: number
-          description: The conversion ratio value of a security after the change.
-          format: double
-          nullable: true
-        totalSharesOutstandingDate:
           type: string
-          description: The as of date of the total shares outstanding value
+          description: The status that the company changes to
           nullable: true
       additionalProperties: false
-      title: OutputConversionRatioChangeLog
+      title: OutputCentralIndexKeyChangeLog
     OutputInvalidInvestments:
       type: object
       properties:
@@ -823,85 +819,66 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputSymbolChangeLog:
+    OutputIsinChangeLog:
       type: object
       properties:
         effectiveDate:
           type: string
-          description: The effective date when the symbol for the share class was changed
+          description: The effective date when the ISIN for the share class was changed
           nullable: true
         changeFrom:
           type: string
-          description: The symbol that the share class changes from
+          description: The ISIN that the share class changes from
           nullable: true
         changeTo:
           type: string
-          description: The symbol that the share class changes to
+          description: The ISIN that the share class changes to
           nullable: true
       additionalProperties: false
-      title: OutputSymbolChangeLog
-    OutputMetadata:
+      title: OutputIsinChangeLog
+    OutputMetadataMessages:
       type: object
       properties:
-        requestId:
+        type:
           type: string
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
+        code:
           type: string
           nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
+        investments:
           type: array
           items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
           nullable: true
       additionalProperties: false
-      title: OutputMetadata
+      title: OutputMetadataMessages
+    OutputEntityReferenceEntityNameChange:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: Effective date is the date on which the company name comes into existence as approved by the firm.
+          nullable: true
+        changeFrom:
+          type: string
+          description: The English translation of the foreign legal name if/when applicable
+          nullable: true
+        changeTo:
+          type: string
+          description: The English translation of the foreign legal name if/when applicable
+          nullable: true
+      additionalProperties: false
+      title: OutputEntityReferenceEntityNameChange
   responses:
-    ResponseEquityCompanyLevelReferenceChange:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              centralIndexKeyChangeLog:
-                $ref: '#/components/schemas/OutputCentralIndexKeyChangeLog'
-              domicileCountryChangeLog:
-                $ref: '#/components/schemas/OutputDomicileCountryChangeLog'
-              entityReferenceEntityNameChange:
-                $ref: '#/components/schemas/OutputEntityReferenceEntityNameChange'
-              legalNameChangeLog:
-                $ref: '#/components/schemas/OutputLegalNameChangeLog'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseInternalServerError:
       description: Internal Server
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityIsinChange:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              isinChangeLog:
-                $ref: '#/components/schemas/OutputIsinChangeLog'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseBadRequest:
       description: Bad Request
       content:
@@ -923,6 +900,25 @@ components:
                 $ref: '#/components/schemas/OutputExchangeCodeChangeLog'
               symbolChangeLog:
                 $ref: '#/components/schemas/OutputSymbolChangeLog'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCompanyLevelReferenceChange:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              centralIndexKeyChangeLog:
+                $ref: '#/components/schemas/OutputCentralIndexKeyChangeLog'
+              domicileCountryChangeLog:
+                $ref: '#/components/schemas/OutputDomicileCountryChangeLog'
+              entityReferenceEntityNameChange:
+                $ref: '#/components/schemas/OutputEntityReferenceEntityNameChange'
+              legalNameChangeLog:
+                $ref: '#/components/schemas/OutputLegalNameChangeLog'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
@@ -956,7 +952,22 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityIsinChange:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              isinChangeLog:
+                $ref: '#/components/schemas/OutputIsinChangeLog'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

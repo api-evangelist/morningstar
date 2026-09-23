@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Ownership - Insiders API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Ownership - Insiders API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Ownership - Insiders
 paths:
@@ -564,47 +573,76 @@ paths:
       x-cpqId: 927
 components:
   schemas:
-    CodeMappingBoolean:
+    OutputInsiderHoldingsDetail:
       type: object
       properties:
-        value:
+        asOfDate:
           type: string
+          description: Date upon which the shares are held by shareholder; or the transaction happens
           nullable: true
-        code:
-          type: boolean
+        holdingDescription:
+          type: string
+          description: If an insider's interest is duplicated with other insiders or major shareholders; such as an insider representing a major shareholder on the board of directors; this is detailed in holding description. The content of this field is entered as 'dup 1'; 'dup A'; 'dup A and B' etc; where dup is abbreviated from duplicate. Related owners can be identified by the content of the field; for instance; where two owners of shares in the same company have reference to dup A in holding description there is a relationship between them that the local reporting regulations require to be disclosed to the market. This item relates only to insiders of LSE-listed companies. See data ID 46003 for the corresponding item in the UK major shareholder transactions file
+          nullable: true
+        isActive:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        numberOfShares:
+          type: number
+          description: Number of shares of the security owned by the shareholder; or the Number of shares after transaction
+          format: double
+          nullable: true
+        personId:
+          type: string
+          description: The Morningstar identifier for the director nominee
+          nullable: true
+        personName:
+          type: string
+          description: A person's full name; including their first name and surname and often any middle names; Prefix & Suffix
+          nullable: true
+        shareClassLevelPercentage:
+          type: number
+          description: Percentage of share holding  at shareclass level
+          format: double
+          nullable: true
+        sharesPercentage:
+          type: number
+          description: ''
+          format: double
           nullable: true
       additionalProperties: false
-      title: CodeMappingBoolean
-    OutputMetadataMessages:
+      title: OutputInsiderHoldingsDetail
+    OutputIdentifiers:
       type: object
       properties:
-        type:
+        performanceId:
           type: string
           nullable: true
-        code:
+        securityId:
           type: string
           nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+        cusip:
+          type: string
           nullable: true
-        message:
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
+      title: OutputIdentifiers
     OutputInsider:
       type: object
       properties:
@@ -646,107 +684,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInsider
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
-      additionalProperties: false
-      title: OutputInvalidInvestments
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
     OutputInsiderTradingActivity:
       type: object
       properties:
@@ -953,6 +890,116 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInsiderTradingActivity
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputErrorDetails:
       type: object
       properties:
@@ -975,45 +1022,13 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    OutputInsiderHoldingsDetail:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: Date upon which the shares are held by shareholder; or the transaction happens
-          nullable: true
-        holdingDescription:
-          type: string
-          description: If an insider's interest is duplicated with other insiders or major shareholders; such as an insider representing a major shareholder on the board of directors; this is detailed in holding description. The content of this field is entered as 'dup 1'; 'dup A'; 'dup A and B' etc; where dup is abbreviated from duplicate. Related owners can be identified by the content of the field; for instance; where two owners of shares in the same company have reference to dup A in holding description there is a relationship between them that the local reporting regulations require to be disclosed to the market. This item relates only to insiders of LSE-listed companies. See data ID 46003 for the corresponding item in the UK major shareholder transactions file
-          nullable: true
-        isActive:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        numberOfShares:
-          type: number
-          description: Number of shares of the security owned by the shareholder; or the Number of shares after transaction
-          format: double
-          nullable: true
-        personId:
-          type: string
-          description: The Morningstar identifier for the director nominee
-          nullable: true
-        personName:
-          type: string
-          description: A person's full name; including their first name and surname and often any middle names; Prefix & Suffix
-          nullable: true
-        shareClassLevelPercentage:
-          type: number
-          description: Percentage of share holding  at shareclass level
-          format: double
-          nullable: true
-        sharesPercentage:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputInsiderHoldingsDetail
   responses:
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityInsiderTradingActivities:
       description: OK
       content:
@@ -1027,12 +1042,19 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
+    ResponseEquityOwnershipDetailTenPercentInsiders:
+      description: OK
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
+            type: object
+            properties:
+              insider:
+                $ref: '#/components/schemas/OutputInsider'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityOwnershipDetailInsiders:
       description: OK
       content:
@@ -1061,26 +1083,15 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityOwnershipDetailTenPercentInsiders:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              insider:
-                $ref: '#/components/schemas/OutputInsider'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

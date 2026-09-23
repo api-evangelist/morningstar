@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Transcripts API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Transcripts API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Transcripts
 paths:
@@ -288,114 +297,46 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 941
 components:
+  responses:
+    ResponseEquityTranscripts:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              transcriptsCompany:
+                $ref: '#/components/schemas/OutputTranscriptsCompany'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityEarningCallsTranscripts:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              transcriptsCompany:
+                $ref: '#/components/schemas/OutputTranscriptsCompany'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
   schemas:
-    OutputTranscriptLink:
-      type: object
-      properties:
-        href:
-          type: string
-          nullable: true
-        rel:
-          type: string
-          nullable: true
-        method:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputTranscriptLink
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    OutputTranscriptsCompany:
-      type: object
-      properties:
-        links:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputTranscriptLink'
-          nullable: true
-        eventDatetime:
-          type: string
-          description: ''
-          nullable: true
-        category:
-          type: string
-          description: ''
-          nullable: true
-        eventId:
-          type: integer
-          description: ''
-          format: int32
-          nullable: true
-        eventName:
-          type: string
-          description: ''
-          nullable: true
-        eventType:
-          type: string
-          description: ''
-          nullable: true
-        eventUrl:
-          type: string
-          description: ''
-          nullable: true
-        fiscalPeriod:
-          type: string
-          description: ''
-          nullable: true
-        fiscalYear:
-          type: integer
-          description: ''
-          format: int32
-          nullable: true
-        jobId:
-          type: string
-          description: ''
-          nullable: true
-        messageType:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputTranscriptsCompany
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
     OutputIdentifiers:
       type: object
       properties:
@@ -428,6 +369,61 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputTranscriptLink:
+      type: object
+      properties:
+        href:
+          type: string
+          nullable: true
+        rel:
+          type: string
+          nullable: true
+        method:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputTranscriptLink
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -497,46 +493,61 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
-  responses:
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityTranscripts:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              transcriptsCompany:
-                $ref: '#/components/schemas/OutputTranscriptsCompany'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityEarningCallsTranscripts:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              transcriptsCompany:
-                $ref: '#/components/schemas/OutputTranscriptsCompany'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
+    OutputTranscriptsCompany:
+      type: object
+      properties:
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputTranscriptLink'
+          nullable: true
+        eventDatetime:
+          type: string
+          description: ''
+          nullable: true
+        category:
+          type: string
+          description: ''
+          nullable: true
+        eventId:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        eventName:
+          type: string
+          description: ''
+          nullable: true
+        eventType:
+          type: string
+          description: ''
+          nullable: true
+        eventUrl:
+          type: string
+          description: ''
+          nullable: true
+        fiscalPeriod:
+          type: string
+          description: ''
+          nullable: true
+        fiscalYear:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        jobId:
+          type: string
+          description: ''
+          nullable: true
+        messageType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputTranscriptsCompany
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

@@ -1,33 +1,32 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Morningstar Securities API
   version: 1.0.0
-  title: Authorization Tokens Accounts securities API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  description: 'Operations tagged securities across 2 of this provider''s published API definitions: morningstar-securities-global-openapi.json, morningstar-securities-us-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.emea-api.morningstar.com/ecint/v1
+  description: PROD
+- url: https://www.emea-uat-api.morningstar.com/ecint/v1
+  description: UAT
+- url: https://www.apac-api.morningstar.com/ecint/v1
+  description: PROD
+- url: https://www.apac-uat-api.morningstar.com/ecint/v1
+  description: UAT
+- url: https://www.us-api.morningstar.com/ec/v1/
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/ec/v1/
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
-- name: securities
+- name: Securities
 paths:
   /securities/{securityId}:
     get:
       summary: Get information for the security specified
       description: Information returned depends on the view specifed in the request.
       tags:
-      - securities
+      - Securities
       operationId: LocalwithJWT
       deprecated: false
       parameters:
@@ -72,12 +71,30 @@ paths:
         '200':
           description: OK
           headers: {}
+    servers:
+    - url: https://www.emea-api.morningstar.com/ecint/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/ecint/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/ecint/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/ecint/v1
+      description: UAT
   /securities/{secIds}:
     get:
       tags:
-      - securities
+      - Securities
       summary: Get securities data
-      description: Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used  in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted.  The value(s) entered appear as the first data point in the output for each security. </br></br> Use the `dataPoints` parameter to specify the data returned in the response. You can enter  a data point ID or the corresponding short ID.  You can only specify data points your configuration is enabled for. </br></br>To override the default value in the Accept-Language HTTP header, use the `langCult` parameter. You can also define the currency of the data returned. Only one currency can be specified. </br></br>This call works with the `POST /securities/{secIds}` call to create and fetch the data.
+      description: 'Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted. The value(s) entered appear as the first data point in the output for each security.
+
+
+        Use the `dataPoints` parameter to specify the data returned in the response. You can enter a data point ID or the corresponding short ID. You can only specify data points your configuration is enabled for.
+
+
+        To override the default value in the Accept-Language HTTP header, use the `langCult` parameter. You can also define the currency of the data returned. Only one currency can be specified.
+
+
+        This call works with the `POST /securities/{secIds}` call to create and fetch the data.'
       operationId: Securities_GetSecuritiesDetails
       parameters:
       - name: secIds
@@ -141,9 +158,18 @@ paths:
           description: Internal Server Error
     post:
       tags:
-      - securities
+      - Securities
       summary: Create securities data
-      description: Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used  in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted.  The value(s) entered appear as the first data point in the output for each security.  </br></br>Use the`dataPoints` parameter to specify the data returned in the response. You can enter  a data point ID or the corresponding short ID.  You can only specify data points your configuration is enabled for. </br></br>To override the default value in the Accept-Language HTTP header, use the `langcult` parameter. You can also define the currency of the data returned. Only one currency can be specified. </br></br>This call works with the `GET /securities/{secIds}` call to create and fetch the data..
+      description: 'Create response data for the securities specified in the `secIds` parameter. You can specify up to 20 securities. The primary identifier used in the call is the Morningstar security ID. Ticker identifers or CUSIP are also accepted. The value(s) entered appear as the first data point in the output for each security.
+
+
+        Use the`dataPoints` parameter to specify the data returned in the response. You can enter a data point ID or the corresponding short ID. You can only specify data points your configuration is enabled for.
+
+
+        To override the default value in the Accept-Language HTTP header, use the `langcult` parameter. You can also define the currency of the data returned. Only one currency can be specified.
+
+
+        This call works with the `GET /securities/{secIds}` call to create and fetch the data..'
       operationId: Securities_PostSecuritiesDetails
       parameters:
       - name: secIds
@@ -224,10 +250,15 @@ paths:
           description: Forbidden
         '500':
           description: Internal Server Error
+    servers:
+    - url: https://www.us-api.morningstar.com/ec/v1/
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/ec/v1/
+      description: UAT
   /securities/{secIds}/vabenefits:
     get:
       tags:
-      - securities
+      - Securities
       summary: Get benefits data for variable annuity subaccounts
       description: Get benefits data for variable annunity subaccounts for the securities specified in the `secIds` paramter.
       operationId: Securities_Get
@@ -263,6 +294,11 @@ paths:
           description: Forbidden
         '500':
           description: Internal Server Error
+    servers:
+    - url: https://www.us-api.morningstar.com/ec/v1/
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/ec/v1/
+      description: UAT
 components:
   schemas:
     SecuritiesRequestModel:
@@ -290,6 +326,9 @@ components:
         customBenchmark:
           type: string
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer
+x-refined-from:
+- morningstar-securities-global-openapi.json
+- morningstar-securities-us-openapi.json

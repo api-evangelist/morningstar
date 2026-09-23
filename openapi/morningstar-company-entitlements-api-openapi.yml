@@ -1,24 +1,13 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: EC Usage Statistics company entitlements API
+  description: The EC Usage Statistics API allows you to query Morningstar usage tracking information logged by EC components and US APIs.
   version: 1.0.0
-  title: Authorization Tokens Accounts company entitlements API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
-security:
-- BasicAuth: []
+- url: https://www.us-api.morningstar.com/ec-usage-statistics
+  description: PROD (live data)
+- url: https://www.us-qa-api.morningstar.com/ec-usage-statistics
+  description: QA (test data)
 tags:
 - name: company entitlements
 paths:
@@ -104,7 +93,12 @@ paths:
       tags:
       - company entitlements
       summary: Create a company entitlement
-      description: "Create a company entitlement for the company and namespaces specified in the request body. A namespace in an entitlement can be:\n\n * a complete namespace, e.g. `abc.opp.screener`, to give the companyId access to that namespace only\n * a partial namespace, e.g. `abc.opp`, to give the companyId access to all namespaces that begin with that prefix, e.g. `abc.opp.screener` and `abc.opp.xray`"
+      description: 'Create a company entitlement for the company and namespaces specified in the request body. A namespace in an entitlement can be:
+
+
+        * a complete namespace, e.g. `abc.opp.screener`, to give the companyId access to that namespace only
+
+        * a partial namespace, e.g. `abc.opp`, to give the companyId access to all namespaces that begin with that prefix, e.g. `abc.opp.screener` and `abc.opp.xray`'
       operationId: createEntitlement
       requestBody:
         required: true
@@ -588,8 +582,3 @@ paths:
                   message:
                     type: string
                     example: An error occurred
-components:
-  securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic

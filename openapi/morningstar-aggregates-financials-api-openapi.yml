@@ -1,24 +1,33 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts Aggregates Financials API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  title: Investment Details Aggregates Financials API
+  description: '**Description**
 
 
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+    The Investment Details - Equities (Sync) API enables you to request detailed information for equity investments in your entitled universe.'
+  version: v1
+  x-changelog:
+  - date: '2026-06-30'
+    changes:
+    - Updated OutputOwnershipDataFundCompany schema.
+    - Updated OutputOwnershipDataMutualFund schema.
+    - Updated OutputInsiderHoldingsDetail schema.
+    - Updated OutputInsider schema.
+  - date: '2026-06-10'
+    changes:
+    - Added new data points to a number of schemas.
+  - date: '2026-05-14'
+    changes:
+    - Updated a number of data types in OutputViewEquityCompensation. See data dictionary v1.6 for data points impacted.
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com
+  description: Americas
+- url: https://www.apac-api.morningstar.com
+  description: APAC
+- url: https://www.emea-api.morningstar.com
+  description: EMEA
 security:
-- BasicAuth: []
+- Bearer: []
 tags:
 - name: Aggregates Financials
 paths:
@@ -152,7 +161,31 @@ paths:
           countryIdExample2:
             summary: JPN (Japan)
             value: JPN
-      description: "\nThe Aggregates – Financials package provides financial statement and ratios aggregated by industry classification, using Morningstar’s Morningstar Global Equity Classification Structure to give industry-wide averages on a country-by-country basis to use to benchmark a company’s financial performance relative to other companies in that industry, industry group, or sector.\n\nThe package contains the following datasets:\n\n  *   Industry Aggregates - Dividend Yields\n\n  *   Industry Aggregates - Operation Ratios\n\n  *   Industry Aggregates - Enterprise Value Ratios\n\n  *   Industry Aggregates - Financial Statements\n\n  *   Industry Aggregates - Price Multiples\n\n  *   Industry Aggregates - Price Yields\n\nMost recent and time series data supported."
+      description: 'The Aggregates – Financials package provides financial statement and ratios aggregated by industry classification, using Morningstar’s Morningstar Global Equity Classification Structure to give industry-wide averages on a country-by-country basis to use to benchmark a company’s financial performance relative to other companies in that industry, industry group, or sector.
+
+
+        The package contains the following datasets:
+
+
+        * Industry Aggregates - Dividend Yields
+
+
+        * Industry Aggregates - Operation Ratios
+
+
+        * Industry Aggregates - Enterprise Value Ratios
+
+
+        * Industry Aggregates - Financial Statements
+
+
+        * Industry Aggregates - Price Multiples
+
+
+        * Industry Aggregates - Price Yields
+
+
+        Most recent and time series data supported.'
       operationId: getEquityAggregatesFinancialsPackage
       tags:
       - Aggregates Financials
@@ -1066,254 +1099,38 @@ paths:
       x-cpqId: 936
 components:
   schemas:
-    OutputAggregationLeverage:
+    OutputIdentifiers:
       type: object
       properties:
-        periodEndDate:
+        performanceId:
           type: string
-          description: The month-end date of the industry aggregated value
           nullable: true
-        debtToAssetsRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
+        securityId:
+          type: string
           nullable: true
-        debtToAssetsRatioValue:
-          type: number
-          description: 'The aggregated value of Debt to Assets Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Debt to Assets Ratio: This ratio represents the value of a company''s total debt relative to its total assets. This can be used as a leverage ratio to measure a company''s financial risk. This is calculated using Total Debt divided by Total Asset.'
-          format: double
+        cusip:
+          type: string
           nullable: true
-        debtToEquityRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
+        isin:
+          type: string
           nullable: true
-        debtToEquityRatioValue:
-          type: number
-          description: 'The aggregated value of Debt to Equity Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Debt to Equity Ratio: This ratio represents the value of a company''s long term debt relative to its total equity. This can be used as a leverage ratio to measure a company''s financial risk. This is calculated using Long-term debt and Capital Lease Obiligation; divided by Total Equity.'
-          format: double
+        sedol:
+          type: string
           nullable: true
-        equityMultiplierRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
+        tradingSymbol:
+          type: string
           nullable: true
-        equityMultiplierRatioValue:
-          type: number
-          description: 'The aggregated value of Equity Multiplier Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Equity Multiplier Ratio: This ratio represents the value of a company''s total assets relative to its total equity. This can be used to measure a company''s financial leverage and is often referred to as the Financial Leverage Ratio. This is calculated using Total Assets divided by Total Equity.'
-          format: double
+        fundCode:
+          type: string
           nullable: true
-        numberOfCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
-          format: int32
+        msid:
+          type: string
           nullable: true
-        totalDebtToEquityRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        totalDebtToEquityRatioValue:
-          type: number
-          description: 'The aggregated value of Total Debt to Equity Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Total Debt to Equity Ratio: This ratio represents the value of a company''s total debt relative to its total equity. This can be used to measure the company''s financial leverage. This is calculated using Total Debt divided by Total Equity.'
-          format: double
-          nullable: true
-        totalDebtToInvestedCapitalRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        totalDebtToInvestedCapitalRatioValue:
-          type: number
-          description: 'The aggregated value of Total Debt to Invested Capital Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Total Debt to Invested Capital Ratio: This ratio represents the value of a company''s total debt relative to its invested capital. This can be used to measure the company''s financial leverage. This is calculated using Total Debt divided by Invested Capital.'
-          format: double
+        ticker:
+          type: string
           nullable: true
       additionalProperties: false
-      title: OutputAggregationLeverage
-    OutputAggregationPriceMultiples:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date of the industry aggregated value
-          nullable: true
-        capeRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        capeRatioValue:
-          type: number
-          description: 'The aggregated value of CAPE Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. CAPE Ratio: The Cyclically-Adjusted-Price-to-Earnings Ratio measures the value of the company using real earnings per share (EPS) over a 10-year period to smooth out fluctuations in corporate profits that occur over different periods of a business cycle. This is calculated using Stock Price divided by the average of the company''s earnings for the last ten years; adjusted for inflation.'
-          format: double
-          nullable: true
-        normalizedPriceEarningsToGrowthRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        normalizedPriceEarningsToGrowthRatioValue:
-          type: number
-          description: 'The aggregated value of Normalized PEG Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized PEG Ratio: This calculation represents the Normalized Price to Earnings ratio divided by the normalized earnings growth rate. This can be used to determine the fair value of the stock price; while accounting for the company''s earnings growth. This can be calculated using Normalized Price to Earnings / (Normalized Diluted EPS 5Y Growth*100).'
-          format: double
-          nullable: true
-        normalizedPriceToEarningsRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        normalizedPriceToEarningsRatioValue:
-          type: number
-          description: 'The aggregated value of Normalized Price to Earnings Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Price to Earnings Ratio: This ratio represents the value of a company''s stock price relative to its normalized earnings per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Normalized EPS (TTM).'
-          format: double
-          nullable: true
-        normalizedPriceToEbitdaRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        normalizedPriceToEbitdaRatioValue:
-          type: number
-          description: 'The aggregated value of Normalized Price To EBITDA Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Price To EBITDA Ratio: This ratio represents the value of a company''s stock price relative to its normalized EBITDA per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by normalized EBITDA per share (TTM).'
-          format: double
-          nullable: true
-        normalizedPriceToEbitdarRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        normalizedPriceToEbitdarRatioValue:
-          type: number
-          description: 'The aggregated value of Normalized Price to EBITDAR Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Price to EBITDAR Ratio: This ratio represents the value of a company''s stock price relative to its Normalized EBITDAR per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Normalized EBITDAR (TTM) per share.'
-          format: double
-          nullable: true
-        normalizedPriceToEbitRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        normalizedPriceToEbitRatioValue:
-          type: number
-          description: 'The aggregated value of Normalized Price to EBIT Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Price to EBIT Ratio: This ratio represents the value of a company''s stock price relative to its normalized EBIT per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by normalized EBIT per share (TTM).'
-          format: double
-          nullable: true
-        numberOfCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
-          format: int32
-          nullable: true
-        priceEarningsToGrowthRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceEarningsToGrowthRatioValue:
-          type: number
-          description: 'The aggregated value of Price/Earnings to Growth Ratio (PEG); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price/Earnings to Growth Ratio (PEG): This calculation represents the Price to Earnings ratio divided by the earnings growth rate. This can be used to determine the fair value of the stock price; while accounting for the company''s earnings growth. This is calculated using Price to Earnings / (Earnings Per Share Used for Calculations 5Y TTM Growth*100).'
-          format: double
-          nullable: true
-        priceToBookRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToBookRatioValue:
-          type: number
-          description: 'The aggregated value of Price To Book Ratio (PB); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price To Book Ratio (PB): This ratio represents the value of a company''s stock price relative to its common equity book value. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Common Equity Book Value.'
-          format: double
-          nullable: true
-        priceToCashFlowRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToCashFlowRatioValue:
-          type: number
-          description: 'The aggregated value of Price To Cash Flow Ratio (PCF); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price To Cash Flow Ratio (PCF): This ratio represents the value of a company''s stock price relative to its operating cash flow. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Cash Flow from Operating Activities before changes in Net Working Capital.'
-          format: double
-          nullable: true
-        priceToCashRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToCashRatioValue:
-          type: number
-          description: 'The aggregated value of Price to Cash Ratio (PC); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to Cash Ratio (PC): This ratio represents the value of a company''s stock price relative to its cash and cash equivalents. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Cash; Cash Equivalents and Short Term Investments.'
-          format: double
-          nullable: true
-        priceToEarningsRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToEarningsRatioValue:
-          type: number
-          description: 'The aggregated value of Price To Earnings Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Price To Earnings Ratio: This ratio represents the value of a company''s stock price relative to its earnings per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Earnings Per Share (TTM).'
-          format: double
-          nullable: true
-        priceToEbitdaRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToEbitdaRatioValue:
-          type: number
-          description: 'The aggregated value of Price to EBITDA Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to EBITDA Ratio: This ratio represents the value of a company''s stock price relative to its EBITDA per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by EBITDA per share (TTM).'
-          format: double
-          nullable: true
-        priceToEbitdarRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToEbitdarRatioValue:
-          type: number
-          description: 'The aggregated value of Price to EBITDAR Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to EBITDAR Ratio: This ratio represents the value of a company''s stock price relative to its EBITDAR per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by EBITDAR per share (TTM).'
-          format: double
-          nullable: true
-        priceToEbitRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToEbitRatioValue:
-          type: number
-          description: 'The aggregated value of Price to EBIT Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to EBIT Ratio: This ratio represents the value of a company''s stock price relative to its EBIT per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by EBIT per share (TTM).'
-          format: double
-          nullable: true
-        priceToFreeCashFlowRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToFreeCashFlowRatioValue:
-          type: number
-          description: 'The aggregated value of Price to FCF Ratio (PFCF); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to FCF Ratio (PFCF): This ratio represents the value of a company''s stock price relative to its free cash flow. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Free Cash Flow (TTM).'
-          format: double
-          nullable: true
-        priceToSalesRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToSalesRatioValue:
-          type: number
-          description: 'The aggregated value of Price To Sales Ratio (PS); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price To Sales Ratio (PS): This ratio represents the value of a company''s stock price relative to its total revenue. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Total Revenue (TTM).'
-          format: double
-          nullable: true
-        priceToTangibleBookValueRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        priceToTangibleBookValueRatioValue:
-          type: number
-          description: Total Outstanding Amount Of Senior Secured Bonds And Notes
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputAggregationPriceMultiples
+      title: OutputIdentifiers
     OutputAggregationPriceYields:
       type: object
       properties:
@@ -1418,101 +1235,41 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputAggregationPriceYields
-    OutputAggregationMargins:
+    OutputAggregationLeverage:
       type: object
       properties:
         periodEndDate:
           type: string
           description: The month-end date of the industry aggregated value
           nullable: true
-        ebitdaMarginNumberOfEligibleCompanies:
+        debtToAssetsRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
           format: int64
           nullable: true
-        ebitdaMarginValue:
+        debtToAssetsRatioValue:
           type: number
-          description: 'The aggregated value of EBITDA Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. EBITDA Margin: This ratio represents the value of a company''s EBITDA relative to its total revenue. This can be used to measure a company''s profitability. This is calculated using EBITDA divided by Total Revenue.'
+          description: 'The aggregated value of Debt to Assets Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Debt to Assets Ratio: This ratio represents the value of a company''s total debt relative to its total assets. This can be used as a leverage ratio to measure a company''s financial risk. This is calculated using Total Debt divided by Total Asset.'
           format: double
           nullable: true
-        ebitMarginNumberOfEligibleCompanies:
+        debtToEquityRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
           format: int64
           nullable: true
-        ebitMarginValue:
+        debtToEquityRatioValue:
           type: number
-          description: 'The aggregated value of EBIT Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. EBIT Margin: This ratio represents the value of a company''s EBIT relative to its total revenue. This can be used to measure a company''s profitability. This is calculated using Earnings Before Interest and Tax divided by Total Revenue.'
+          description: 'The aggregated value of Debt to Equity Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Debt to Equity Ratio: This ratio represents the value of a company''s long term debt relative to its total equity. This can be used as a leverage ratio to measure a company''s financial risk. This is calculated using Long-term debt and Capital Lease Obiligation; divided by Total Equity.'
           format: double
           nullable: true
-        ebtMarginNumberOfEligibleCompanies:
+        equityMultiplierRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
           format: int64
           nullable: true
-        ebtMarginValue:
+        equityMultiplierRatioValue:
           type: number
-          description: 'The aggregated value of Earnings Before Tax Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Earnings Before Tax Margin: This ratio represents the value of a company''s pretax income relative to its total revenue. This can be used to measure a company''s profitability. This is calculated using Pretax Income divided by Total Revenue.'
-          format: double
-          nullable: true
-        grossMarginNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        grossMarginValue:
-          type: number
-          description: 'The aggregated value of Gross Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Gross Margin: This ratio represents the value a company''s gross profit relative to its total revenue. This can be used to measure a company''s profitability. This is caldulated using Gross Profit divided by Total Revenue.'
-          format: double
-          nullable: true
-        netProfitMarginNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        netProfitMarginValue:
-          type: number
-          description: 'The aggregated value of Net Profit Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Net Profit Margin: This calculation represents the value of a company''s net income relative to its total revenue. This can be used to measure a company''s profitability. This is calculated using Net Income from Continuing Operations divided by Total Revenue.'
-          format: double
-          nullable: true
-        normalizedEbitdaMarginNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        normalizedEbitdaMarginValue:
-          type: number
-          description: 'The aggregated value of Normalized EBITDA Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized EBITDA Margin: This ratio represents the value of a company''s normalized EBITDA relative to its total revenue. This can be used to fairly measue a company''s profitability. This is calculated using Normalized EBITDA divided by Total Revenue.'
-          format: double
-          nullable: true
-        normalizedEbitdarMarginNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        normalizedEbitdarMarginValue:
-          type: number
-          description: 'The aggregated value of Normalized EBITDAR Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized EBITDAR Margin: This ratio represents the value of a company''s normalized EBITDAR relative to its total revenue. This can be used to fairly measue a company''s profitability. This is calculated using Normalized EBITDAR divided by Total Revenue.'
-          format: double
-          nullable: true
-        normalizedEbitMarginNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        normalizedEbitMarginValue:
-          type: number
-          description: 'The aggregated value of Normalized EBIT Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized EBIT Margin: This ratio represents the value of a company''s normalized EBIT relative to its total revenue. This can be used to fairly measue a company''s profitability. This is calculated using Normalized EBIT divided by Total Revenue.'
-          format: double
-          nullable: true
-        normalizedNetProfitMarginNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        normalizedNetProfitMarginValue:
-          type: number
-          description: 'The aggregated value of Normalized Net Profit Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Net Profit Margin: This ratio represents the value of a company''s normalized income relative to its total revenue. This can be used to fairly measure a company''s profitability. This is calculated using Normalized Income divided by Total Revenue.'
+          description: 'The aggregated value of Equity Multiplier Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Equity Multiplier Ratio: This ratio represents the value of a company''s total assets relative to its total equity. This can be used to measure a company''s financial leverage and is often referred to as the Financial Leverage Ratio. This is calculated using Total Assets divided by Total Equity.'
           format: double
           nullable: true
         numberOfCompanies:
@@ -1520,33 +1277,83 @@ components:
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
           format: int32
           nullable: true
-        operatingMarginNumberOfEligibleCompanies:
+        totalDebtToEquityRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
           format: int64
           nullable: true
-        operatingMarginValue:
+        totalDebtToEquityRatioValue:
           type: number
-          description: 'The aggregated value of Operating Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Operating Margin: This ratio represents the value of a company''s operating profit/loss relative to its total revenue. This can be used to measure the profitability of a company''s core operations. This is calculated using Total Operating Profit/Loss divided by Total Revenue.'
+          description: 'The aggregated value of Total Debt to Equity Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Total Debt to Equity Ratio: This ratio represents the value of a company''s total debt relative to its total equity. This can be used to measure the company''s financial leverage. This is calculated using Total Debt divided by Total Equity.'
+          format: double
+          nullable: true
+        totalDebtToInvestedCapitalRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        totalDebtToInvestedCapitalRatioValue:
+          type: number
+          description: 'The aggregated value of Total Debt to Invested Capital Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Total Debt to Invested Capital Ratio: This ratio represents the value of a company''s total debt relative to its invested capital. This can be used to measure the company''s financial leverage. This is calculated using Total Debt divided by Invested Capital.'
           format: double
           nullable: true
       additionalProperties: false
-      title: OutputAggregationMargins
-    OutputAggregationDailyDividendMetrics:
+      title: OutputAggregationLeverage
+    OutputAggregationProfitability:
       type: object
       properties:
-        asOfDate:
+        periodEndDate:
           type: string
-          description: The calendar date of the industry aggregated value
+          description: The month-end date of the industry aggregated value
           nullable: true
-        forwardDividendYieldNumberOfEligibleCompanies:
+        freeCashFlowToNetIncomeRatioNumberOfEligibleCompanies:
+          type: number
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: double
+          nullable: true
+        freeCashFlowToNetIncomeRatioValue:
+          type: number
+          description: 'The aggregated value of FCF to Net Income Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. FCF to Net Income Ratio: This ratio represents the value of a company''s free cash flow relative to its net income. This can be used to measure a company''s ability to transfer each dollar worth of earnings into cash. This is calculated using the Free Cash Flow divided by Net Income.'
+          format: double
+          nullable: true
+        freeCashFlowToSalesRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
           format: int64
           nullable: true
-        forwardDividendYieldValue:
+        freeCashFlowToSalesRatioValue:
           type: number
-          description: 'The aggregated value of Forward Dividend Yield; is derived using all eligible companies who are constituents in the specified Morningstar Index. Forward Dividend Yield: This ratio represents the value of a company''s estimated dividend relative to its stock price. This can be used to measure the amount a company is expected to pay out versus retaining for future growth. This is calculated using Forward Dividend divided by Stock Price.'
+          description: 'The aggregated value of FCF to Sales Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. FCF to Sales Ratio: This ratio represents the value of a company''s free cash flow relative to its total revenue. This can be used to measure a company''s ability to convert each dollar worth of revenue into cash. This is calculated using the Free Cash Flow divided by Total Revenue.'
+          format: double
+          nullable: true
+        normalizedReturnOnAssetRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        normalizedReturnOnAssetRatioValue:
+          type: number
+          description: 'The aggregated value of Normalized ROA; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized ROA: This ratio represents the value of a company''s normalized income relative to its total assets. This can be used to measure the company''s ability to utilize its assets efficiently to generate earnings from its normal operations. This is calculated using Normalized Income (TTM) divided by Average Total Assets.'
+          format: double
+          nullable: true
+        normalizedReturnOnEquityRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        normalizedReturnOnEquityRatioValue:
+          type: number
+          description: 'The aggregated value of Normalized ROE; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized ROE: This ratio represents the value of a company''s normalized income relative to its total equity. This can be used to measure the company''s ability to utilize its equity efficiently to generate earnings from its normal operations. This is calculated using Normalized Income (TTM) divided by Average Total Equity.'
+          format: double
+          nullable: true
+        normalizedReturnOnInvestedCapitalRatioNumberOfEligibleCompanies:
+          type: number
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: double
+          nullable: true
+        normalizedReturnOnInvestedCapitalRatioValue:
+          type: number
+          description: 'The aggregated value of Normalized ROIC; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized ROIC: This ratio represents the value of a company''s normalized net operating profit after tax relative to its Invested Capital. This can be used to measure the company''s ability to utilize its invested capital efficiently to generate earnings from its normal operations. This is calculated using Normalized Net operating profit after tax (TTM) divided by Invested Capital.'
           format: double
           nullable: true
         numberOfCompanies:
@@ -1554,145 +1361,38 @@ components:
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
           format: int32
           nullable: true
-        trailingDividendYieldNumberOfEligibleCompanies:
+        returnOnAssetRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
           format: int64
           nullable: true
-        trailingDividendYieldValue:
+        returnOnAssetRatioValue:
           type: number
-          description: 'The aggregated value of Trailing Dividend Yield; is derived using all eligible companies who are constituents in the specified Morningstar Index. Trailing Dividend Yield: This ratio represents the value of the company''s trailing dividend relative to its stock price. This can be used to measure the rate of return on the company''s stock. This is calculated using Trailing Dividend divided by Stock Price.'
+          description: 'The aggregated value of Return on Asset Ratio (ROA); is derived using all eligible companies who are constituents in the specified Morningstar Index. Return on Asset Ratio (ROA): This ratio represents the value of a company''s net income relative to its total assets. This can be used to determine how much profit a company generates on its asset base. This is calculated using Net Income from Continuting Operations (TTM) divided by Average Total Assets.'
           format: double
           nullable: true
-      additionalProperties: false
-      title: OutputAggregationDailyDividendMetrics
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    OutputAggregationMonthlyDividendMetrics:
-      type: object
-      properties:
-        periodEndDate:
-          type: string
-          description: The month-end date of the industry aggregated value
-          nullable: true
-        dividendPayoutRatioNumberOfEligibleCompanies:
+        returnOnEquityRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
+          format: int64
           nullable: true
-        dividendPayoutRatioValue:
+        returnOnEquityRatioValue:
           type: number
-          description: 'The aggregated value of Dividend Payout Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Dividend Payout Ratio: This ratio represents the value of the company''s dividend paid back to shareholders relative to its net income. This can be used to measure the amount a company is paying out versus retaining for future growth. This is calculated using Dividend Per Share divided by Earnings Per Share.'
+          description: 'The aggregated value of Return on Equity Ratio (ROE); is derived using all eligible companies who are constituents in the specified Morningstar Index. Return on Equity Ratio (ROE): This ratio represents the value of a company''s net income relative to its total equity. This can be used to determine how much profit a company generates on the money shareholders have invested in the firm. This is calculated using Net Income from Continuting Operations (TTM) divided by Average Total Equity'
           format: double
           nullable: true
-        normalizedDividendPayoutRatioNumberOfEligibleCompanies:
+        returnOnInvestedCapitalRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
+          format: int64
           nullable: true
-        normalizedDividendPayoutRatioValue:
+        returnOnInvestedCapitalRatioValue:
           type: number
-          description: 'The aggregated value of Normalized Dividend Payout Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Dividend Payout Ratio: This ratio represents the value of the company''s dividend paid back to shareholders relative to its normalized net income. This can be used to measure the amount a company is paying back to shareholders versus retaining for future growth. This is calculated using Dividend Per Share divided by Normalized Earnings Per Share.'
-          format: double
-          nullable: true
-        normalizedRetentionRateNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        normalizedRetentionRateValue:
-          type: number
-          description: 'The aggregated value of Normalized Retention Rate; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Retention Rate: This ratio represents the pecentage of normalized income that the company keeps as retained earnings rather than paying out as dividends. This can be used to indicate whether or not the company is a growth company. This is calculated using 1 minus the Dividend Payout Ratio.'
-          format: double
-          nullable: true
-        numberOfCompanies:
-          type: integer
-          description: ''
-          format: int32
-          nullable: true
-        sustainableGrowthRateNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int32
-          nullable: true
-        sustainableGrowthRateValue:
-          type: number
-          description: 'The aggregated value of Sustainable Growth Rate; is derived using all eligible companies who are constituents in the specified Morningstar Index. Sustainable Growth Rate: This calculation measures the approximate rate at which a company could grow using internally generated cash; without issuing additional debt or equity. This can be used to measure the growth a company can fund from internally generated resources; without increasing debt levels or issuing equity. This is calculated by multiplying the company''s Retention Rate by its Return on Equity.'
+          description: 'The aggregated value of Return on Invested Capital Ratio (ROIC); is derived using all eligible companies who are constituents in the specified Morningstar Index. Return on Invested Capital Ratio (ROIC): This ratio represents the value of a company''s net operating profit after tax relative to its Invested Capital. This can be used to measure how much profit a company generates on its capital base. This is calculated using Net operating profit after tax (TTM) divided by Invested Capital.'
           format: double
           nullable: true
       additionalProperties: false
-      title: OutputAggregationMonthlyDividendMetrics
+      title: OutputAggregationProfitability
     OutputAggregationFinancialHealthRatios:
       type: object
       properties:
@@ -1857,136 +1557,28 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputAggregationFinancialHealthRatios
-    OutputAggregationEfficiencyRatios:
+    OutputErrorDetails:
       type: object
       properties:
-        periodEndDate:
-          type: string
-          description: The month-end date of the industry aggregated value
-          nullable: true
-        assetTurnoverRatioNumberOfEligibleCompanies:
+        statusCode:
           type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        assetTurnoverRatioValue:
-          type: number
-          description: 'The aggregated value of Asset Turnover Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Asset Turnover Ratio: This ratio represents the value of a company''s total revenue relative to the value of its assets. This can be used to measure a company''s ability to use its assets efficiently to generate revenue. This is calculated using Total Revenue (TTM) divided by Average Total Assets.'
-          format: double
-          nullable: true
-        cashConversionCycleNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        cashConversionCycleValue:
-          type: number
-          description: 'The aggregated value of Cash Conversion Cycle; is derived using all eligible companies who are constituents in the specified Morningstar Index. Cash Conversion Cycle: This ratio represents the time it takes a company to convert its resources into cash. This ratio measures the amount of time that each dollar of the company is spent on the production and sale of goods before it is converted back into cash. This is calculated using Days in Sales + Days in Inventory - Days in Payment.'
-          format: double
-          nullable: true
-        equityTurnoverRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        equityTurnoverRatioValue:
-          type: number
-          description: 'The aggregated value of Equity Turnover Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Equity Turnover Ratio: This ratio represents the value of a company''s total revenue relative to its average equity. This can be used to measure a company''s ability to use the equity efficiently to generate revenue. This is calculated using Total Revenue (TTM) divided by Average Equity.'
-          format: double
-          nullable: true
-        expenseRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        expenseRatioValue:
-          type: number
-          description: 'The aggregated value of Expense Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Expense Ratio: This ratio represents the total expenses an insurer faces as a result of underwriting a policy as a percentage of premiums earned. This can be used to measure the profitability of an insurance company. This is calculated using (Deferred Policy Acquisition Amortization Expense + Fees and Commission Expense + Other Underwriting Expenses + Selling; General and Administrative) / Net Premiums Earned'
-          format: double
-          nullable: true
-        fixedAssetTurnoverRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        fixedAssetTurnoverRatioValue:
-          type: number
-          description: 'The aggregated value of Fixed Asset Turnover Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Fixed Asset Turnover Ratio: This ratio represents the value of a company''s total revenue relative to its fixed assets. This can be used to measure a company''s ability to use its fixed asset efficiently to generate revenue. This is calculated using Total Revenue (TTM) / (Average Net Property; Plant and Equipment/Net Mineral Property Interests and Exploration Assets).'
-          format: double
-          nullable: true
-        lossRatioNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        lossRatioValue:
-          type: number
-          description: 'The aggregated value of Loss Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Loss Ratio: This ratio represents the losses an insurer faces as a result of paying out insurance claims as a percentage of premiums earned. This can be used to measure the profitability of an insurance company. This is calculated using Benefits; Claims and Loss Adjustment Expense; Net (TTM) divided by Net Premiums Earned.'
-          format: double
-          nullable: true
-        numberOfCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
+          description: Status Code
           format: int32
-          nullable: true
-        salesPerFullTimeEmployeeNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        salesPerFullTimeEmployeeValue:
-          type: number
-          description: 'The aggregated value of Sales Per Full Time Employee; is derived using all eligible companies who are constituents in the specified Morningstar Index. Sales Per Full Time Employee: This calculation represents the amount of revenue generated by each full time employee. This can be used to measure a company''s productivity. This is calculated using Total Revenue (TTM) divided by Number of Full Time Employees.'
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputAggregationEfficiencyRatios
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
         errorCode:
           type: string
+          description: Custom error code
           nullable: true
-        performanceId:
+        message:
           type: string
-          description: Performance ID (if not passed in request).
+          description: Message
           nullable: true
-        companyId:
+        requestId:
           type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputInvalidInvestments
+      description: Error details
+      title: OutputErrorDetails
     OutputAggregationEnterpriseValueCalculations:
       type: object
       properties:
@@ -2105,17 +1697,40 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputAggregationEnterpriseValueCalculations
-    CodeMappingString:
+    OutputAggregationDailyDividendMetrics:
       type: object
       properties:
-        value:
+        asOfDate:
           type: string
+          description: The calendar date of the industry aggregated value
           nullable: true
-        code:
-          type: string
+        forwardDividendYieldNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        forwardDividendYieldValue:
+          type: number
+          description: 'The aggregated value of Forward Dividend Yield; is derived using all eligible companies who are constituents in the specified Morningstar Index. Forward Dividend Yield: This ratio represents the value of a company''s estimated dividend relative to its stock price. This can be used to measure the amount a company is expected to pay out versus retaining for future growth. This is calculated using Forward Dividend divided by Stock Price.'
+          format: double
+          nullable: true
+        numberOfCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
+          format: int32
+          nullable: true
+        trailingDividendYieldNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        trailingDividendYieldValue:
+          type: number
+          description: 'The aggregated value of Trailing Dividend Yield; is derived using all eligible companies who are constituents in the specified Morningstar Index. Trailing Dividend Yield: This ratio represents the value of the company''s trailing dividend relative to its stock price. This can be used to measure the rate of return on the company''s stock. This is calculated using Trailing Dividend divided by Stock Price.'
+          format: double
           nullable: true
       additionalProperties: false
-      title: CodeMappingString
+      title: OutputAggregationDailyDividendMetrics
     OutputMetadata:
       type: object
       properties:
@@ -3265,61 +2880,125 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputAggregationFinancialStatementsSimpleSummation
-    OutputAggregationProfitability:
+    OutputAggregationMonthlyDividendMetrics:
       type: object
       properties:
         periodEndDate:
           type: string
           description: The month-end date of the industry aggregated value
           nullable: true
-        freeCashFlowToNetIncomeRatioNumberOfEligibleCompanies:
-          type: number
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: double
-          nullable: true
-        freeCashFlowToNetIncomeRatioValue:
-          type: number
-          description: 'The aggregated value of FCF to Net Income Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. FCF to Net Income Ratio: This ratio represents the value of a company''s free cash flow relative to its net income. This can be used to measure a company''s ability to transfer each dollar worth of earnings into cash. This is calculated using the Free Cash Flow divided by Net Income.'
-          format: double
-          nullable: true
-        freeCashFlowToSalesRatioNumberOfEligibleCompanies:
+        dividendPayoutRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
+          format: int32
           nullable: true
-        freeCashFlowToSalesRatioValue:
+        dividendPayoutRatioValue:
           type: number
-          description: 'The aggregated value of FCF to Sales Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. FCF to Sales Ratio: This ratio represents the value of a company''s free cash flow relative to its total revenue. This can be used to measure a company''s ability to convert each dollar worth of revenue into cash. This is calculated using the Free Cash Flow divided by Total Revenue.'
+          description: 'The aggregated value of Dividend Payout Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Dividend Payout Ratio: This ratio represents the value of the company''s dividend paid back to shareholders relative to its net income. This can be used to measure the amount a company is paying out versus retaining for future growth. This is calculated using Dividend Per Share divided by Earnings Per Share.'
           format: double
           nullable: true
-        normalizedReturnOnAssetRatioNumberOfEligibleCompanies:
+        normalizedDividendPayoutRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
+          format: int32
           nullable: true
-        normalizedReturnOnAssetRatioValue:
+        normalizedDividendPayoutRatioValue:
           type: number
-          description: 'The aggregated value of Normalized ROA; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized ROA: This ratio represents the value of a company''s normalized income relative to its total assets. This can be used to measure the company''s ability to utilize its assets efficiently to generate earnings from its normal operations. This is calculated using Normalized Income (TTM) divided by Average Total Assets.'
+          description: 'The aggregated value of Normalized Dividend Payout Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Dividend Payout Ratio: This ratio represents the value of the company''s dividend paid back to shareholders relative to its normalized net income. This can be used to measure the amount a company is paying back to shareholders versus retaining for future growth. This is calculated using Dividend Per Share divided by Normalized Earnings Per Share.'
           format: double
           nullable: true
-        normalizedReturnOnEquityRatioNumberOfEligibleCompanies:
+        normalizedRetentionRateNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
+          format: int32
           nullable: true
-        normalizedReturnOnEquityRatioValue:
+        normalizedRetentionRateValue:
           type: number
-          description: 'The aggregated value of Normalized ROE; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized ROE: This ratio represents the value of a company''s normalized income relative to its total equity. This can be used to measure the company''s ability to utilize its equity efficiently to generate earnings from its normal operations. This is calculated using Normalized Income (TTM) divided by Average Total Equity.'
+          description: 'The aggregated value of Normalized Retention Rate; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Retention Rate: This ratio represents the pecentage of normalized income that the company keeps as retained earnings rather than paying out as dividends. This can be used to indicate whether or not the company is a growth company. This is calculated using 1 minus the Dividend Payout Ratio.'
           format: double
           nullable: true
-        normalizedReturnOnInvestedCapitalRatioNumberOfEligibleCompanies:
-          type: number
+        numberOfCompanies:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        sustainableGrowthRateNumberOfEligibleCompanies:
+          type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        sustainableGrowthRateValue:
+          type: number
+          description: 'The aggregated value of Sustainable Growth Rate; is derived using all eligible companies who are constituents in the specified Morningstar Index. Sustainable Growth Rate: This calculation measures the approximate rate at which a company could grow using internally generated cash; without issuing additional debt or equity. This can be used to measure the growth a company can fund from internally generated resources; without increasing debt levels or issuing equity. This is calculated by multiplying the company''s Retention Rate by its Return on Equity.'
           format: double
           nullable: true
-        normalizedReturnOnInvestedCapitalRatioValue:
+      additionalProperties: false
+      title: OutputAggregationMonthlyDividendMetrics
+    OutputAggregationPriceMultiples:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date of the industry aggregated value
+          nullable: true
+        capeRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        capeRatioValue:
           type: number
-          description: 'The aggregated value of Normalized ROIC; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized ROIC: This ratio represents the value of a company''s normalized net operating profit after tax relative to its Invested Capital. This can be used to measure the company''s ability to utilize its invested capital efficiently to generate earnings from its normal operations. This is calculated using Normalized Net operating profit after tax (TTM) divided by Invested Capital.'
+          description: 'The aggregated value of CAPE Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. CAPE Ratio: The Cyclically-Adjusted-Price-to-Earnings Ratio measures the value of the company using real earnings per share (EPS) over a 10-year period to smooth out fluctuations in corporate profits that occur over different periods of a business cycle. This is calculated using Stock Price divided by the average of the company''s earnings for the last ten years; adjusted for inflation.'
+          format: double
+          nullable: true
+        normalizedPriceEarningsToGrowthRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        normalizedPriceEarningsToGrowthRatioValue:
+          type: number
+          description: 'The aggregated value of Normalized PEG Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized PEG Ratio: This calculation represents the Normalized Price to Earnings ratio divided by the normalized earnings growth rate. This can be used to determine the fair value of the stock price; while accounting for the company''s earnings growth. This can be calculated using Normalized Price to Earnings / (Normalized Diluted EPS 5Y Growth*100).'
+          format: double
+          nullable: true
+        normalizedPriceToEarningsRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        normalizedPriceToEarningsRatioValue:
+          type: number
+          description: 'The aggregated value of Normalized Price to Earnings Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Price to Earnings Ratio: This ratio represents the value of a company''s stock price relative to its normalized earnings per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Normalized EPS (TTM).'
+          format: double
+          nullable: true
+        normalizedPriceToEbitdaRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        normalizedPriceToEbitdaRatioValue:
+          type: number
+          description: 'The aggregated value of Normalized Price To EBITDA Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Price To EBITDA Ratio: This ratio represents the value of a company''s stock price relative to its normalized EBITDA per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by normalized EBITDA per share (TTM).'
+          format: double
+          nullable: true
+        normalizedPriceToEbitdarRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        normalizedPriceToEbitdarRatioValue:
+          type: number
+          description: 'The aggregated value of Normalized Price to EBITDAR Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Price to EBITDAR Ratio: This ratio represents the value of a company''s stock price relative to its Normalized EBITDAR per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Normalized EBITDAR (TTM) per share.'
+          format: double
+          nullable: true
+        normalizedPriceToEbitRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        normalizedPriceToEbitRatioValue:
+          type: number
+          description: 'The aggregated value of Normalized Price to EBIT Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Price to EBIT Ratio: This ratio represents the value of a company''s stock price relative to its normalized EBIT per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by normalized EBIT per share (TTM).'
           format: double
           nullable: true
         numberOfCompanies:
@@ -3327,39 +3006,425 @@ components:
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
           format: int32
           nullable: true
-        returnOnAssetRatioNumberOfEligibleCompanies:
+        priceEarningsToGrowthRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
+          format: int32
           nullable: true
-        returnOnAssetRatioValue:
+        priceEarningsToGrowthRatioValue:
           type: number
-          description: 'The aggregated value of Return on Asset Ratio (ROA); is derived using all eligible companies who are constituents in the specified Morningstar Index. Return on Asset Ratio (ROA): This ratio represents the value of a company''s net income relative to its total assets. This can be used to determine how much profit a company generates on its asset base. This is calculated using Net Income from Continuting Operations (TTM) divided by Average Total Assets.'
+          description: 'The aggregated value of Price/Earnings to Growth Ratio (PEG); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price/Earnings to Growth Ratio (PEG): This calculation represents the Price to Earnings ratio divided by the earnings growth rate. This can be used to determine the fair value of the stock price; while accounting for the company''s earnings growth. This is calculated using Price to Earnings / (Earnings Per Share Used for Calculations 5Y TTM Growth*100).'
           format: double
           nullable: true
-        returnOnEquityRatioNumberOfEligibleCompanies:
+        priceToBookRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
+          format: int32
           nullable: true
-        returnOnEquityRatioValue:
+        priceToBookRatioValue:
           type: number
-          description: 'The aggregated value of Return on Equity Ratio (ROE); is derived using all eligible companies who are constituents in the specified Morningstar Index. Return on Equity Ratio (ROE): This ratio represents the value of a company''s net income relative to its total equity. This can be used to determine how much profit a company generates on the money shareholders have invested in the firm. This is calculated using Net Income from Continuting Operations (TTM) divided by Average Total Equity'
+          description: 'The aggregated value of Price To Book Ratio (PB); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price To Book Ratio (PB): This ratio represents the value of a company''s stock price relative to its common equity book value. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Common Equity Book Value.'
           format: double
           nullable: true
-        returnOnInvestedCapitalRatioNumberOfEligibleCompanies:
+        priceToCashFlowRatioNumberOfEligibleCompanies:
           type: integer
           description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
+          format: int32
           nullable: true
-        returnOnInvestedCapitalRatioValue:
+        priceToCashFlowRatioValue:
           type: number
-          description: 'The aggregated value of Return on Invested Capital Ratio (ROIC); is derived using all eligible companies who are constituents in the specified Morningstar Index. Return on Invested Capital Ratio (ROIC): This ratio represents the value of a company''s net operating profit after tax relative to its Invested Capital. This can be used to measure how much profit a company generates on its capital base. This is calculated using Net operating profit after tax (TTM) divided by Invested Capital.'
+          description: 'The aggregated value of Price To Cash Flow Ratio (PCF); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price To Cash Flow Ratio (PCF): This ratio represents the value of a company''s stock price relative to its operating cash flow. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Cash Flow from Operating Activities before changes in Net Working Capital.'
+          format: double
+          nullable: true
+        priceToCashRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        priceToCashRatioValue:
+          type: number
+          description: 'The aggregated value of Price to Cash Ratio (PC); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to Cash Ratio (PC): This ratio represents the value of a company''s stock price relative to its cash and cash equivalents. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Cash; Cash Equivalents and Short Term Investments.'
+          format: double
+          nullable: true
+        priceToEarningsRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        priceToEarningsRatioValue:
+          type: number
+          description: 'The aggregated value of Price To Earnings Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Price To Earnings Ratio: This ratio represents the value of a company''s stock price relative to its earnings per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Earnings Per Share (TTM).'
+          format: double
+          nullable: true
+        priceToEbitdaRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        priceToEbitdaRatioValue:
+          type: number
+          description: 'The aggregated value of Price to EBITDA Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to EBITDA Ratio: This ratio represents the value of a company''s stock price relative to its EBITDA per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by EBITDA per share (TTM).'
+          format: double
+          nullable: true
+        priceToEbitdarRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        priceToEbitdarRatioValue:
+          type: number
+          description: 'The aggregated value of Price to EBITDAR Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to EBITDAR Ratio: This ratio represents the value of a company''s stock price relative to its EBITDAR per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by EBITDAR per share (TTM).'
+          format: double
+          nullable: true
+        priceToEbitRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        priceToEbitRatioValue:
+          type: number
+          description: 'The aggregated value of Price to EBIT Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to EBIT Ratio: This ratio represents the value of a company''s stock price relative to its EBIT per share. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by EBIT per share (TTM).'
+          format: double
+          nullable: true
+        priceToFreeCashFlowRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        priceToFreeCashFlowRatioValue:
+          type: number
+          description: 'The aggregated value of Price to FCF Ratio (PFCF); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price to FCF Ratio (PFCF): This ratio represents the value of a company''s stock price relative to its free cash flow. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Free Cash Flow (TTM).'
+          format: double
+          nullable: true
+        priceToSalesRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        priceToSalesRatioValue:
+          type: number
+          description: 'The aggregated value of Price To Sales Ratio (PS); is derived using all eligible companies who are constituents in the specified Morningstar Index. Price To Sales Ratio (PS): This ratio represents the value of a company''s stock price relative to its total revenue. This can be used to determine the fair value the stock price. This is calculated using Stock Price divided by Total Revenue (TTM).'
+          format: double
+          nullable: true
+        priceToTangibleBookValueRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int32
+          nullable: true
+        priceToTangibleBookValueRatioValue:
+          type: number
+          description: Total Outstanding Amount Of Senior Secured Bonds And Notes
           format: double
           nullable: true
       additionalProperties: false
-      title: OutputAggregationProfitability
+      title: OutputAggregationPriceMultiples
+    OutputAggregationMargins:
+      type: object
+      properties:
+        periodEndDate:
+          type: string
+          description: The month-end date of the industry aggregated value
+          nullable: true
+        ebitdaMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        ebitdaMarginValue:
+          type: number
+          description: 'The aggregated value of EBITDA Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. EBITDA Margin: This ratio represents the value of a company''s EBITDA relative to its total revenue. This can be used to measure a company''s profitability. This is calculated using EBITDA divided by Total Revenue.'
+          format: double
+          nullable: true
+        ebitMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        ebitMarginValue:
+          type: number
+          description: 'The aggregated value of EBIT Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. EBIT Margin: This ratio represents the value of a company''s EBIT relative to its total revenue. This can be used to measure a company''s profitability. This is calculated using Earnings Before Interest and Tax divided by Total Revenue.'
+          format: double
+          nullable: true
+        ebtMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        ebtMarginValue:
+          type: number
+          description: 'The aggregated value of Earnings Before Tax Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Earnings Before Tax Margin: This ratio represents the value of a company''s pretax income relative to its total revenue. This can be used to measure a company''s profitability. This is calculated using Pretax Income divided by Total Revenue.'
+          format: double
+          nullable: true
+        grossMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        grossMarginValue:
+          type: number
+          description: 'The aggregated value of Gross Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Gross Margin: This ratio represents the value a company''s gross profit relative to its total revenue. This can be used to measure a company''s profitability. This is caldulated using Gross Profit divided by Total Revenue.'
+          format: double
+          nullable: true
+        netProfitMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        netProfitMarginValue:
+          type: number
+          description: 'The aggregated value of Net Profit Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Net Profit Margin: This calculation represents the value of a company''s net income relative to its total revenue. This can be used to measure a company''s profitability. This is calculated using Net Income from Continuing Operations divided by Total Revenue.'
+          format: double
+          nullable: true
+        normalizedEbitdaMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        normalizedEbitdaMarginValue:
+          type: number
+          description: 'The aggregated value of Normalized EBITDA Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized EBITDA Margin: This ratio represents the value of a company''s normalized EBITDA relative to its total revenue. This can be used to fairly measue a company''s profitability. This is calculated using Normalized EBITDA divided by Total Revenue.'
+          format: double
+          nullable: true
+        normalizedEbitdarMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        normalizedEbitdarMarginValue:
+          type: number
+          description: 'The aggregated value of Normalized EBITDAR Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized EBITDAR Margin: This ratio represents the value of a company''s normalized EBITDAR relative to its total revenue. This can be used to fairly measue a company''s profitability. This is calculated using Normalized EBITDAR divided by Total Revenue.'
+          format: double
+          nullable: true
+        normalizedEbitMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        normalizedEbitMarginValue:
+          type: number
+          description: 'The aggregated value of Normalized EBIT Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized EBIT Margin: This ratio represents the value of a company''s normalized EBIT relative to its total revenue. This can be used to fairly measue a company''s profitability. This is calculated using Normalized EBIT divided by Total Revenue.'
+          format: double
+          nullable: true
+        normalizedNetProfitMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        normalizedNetProfitMarginValue:
+          type: number
+          description: 'The aggregated value of Normalized Net Profit Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Normalized Net Profit Margin: This ratio represents the value of a company''s normalized income relative to its total revenue. This can be used to fairly measure a company''s profitability. This is calculated using Normalized Income divided by Total Revenue.'
+          format: double
+          nullable: true
+        numberOfCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
+          format: int32
+          nullable: true
+        operatingMarginNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        operatingMarginValue:
+          type: number
+          description: 'The aggregated value of Operating Margin; is derived using all eligible companies who are constituents in the specified Morningstar Index. Operating Margin: This ratio represents the value of a company''s operating profit/loss relative to its total revenue. This can be used to measure the profitability of a company''s core operations. This is calculated using Total Operating Profit/Loss divided by Total Revenue.'
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputAggregationMargins
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputAggregationEfficiencyRatios:
+      type: object
+      properties:
+        periodEndDate:
+          type: string
+          description: The month-end date of the industry aggregated value
+          nullable: true
+        assetTurnoverRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        assetTurnoverRatioValue:
+          type: number
+          description: 'The aggregated value of Asset Turnover Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Asset Turnover Ratio: This ratio represents the value of a company''s total revenue relative to the value of its assets. This can be used to measure a company''s ability to use its assets efficiently to generate revenue. This is calculated using Total Revenue (TTM) divided by Average Total Assets.'
+          format: double
+          nullable: true
+        cashConversionCycleNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        cashConversionCycleValue:
+          type: number
+          description: 'The aggregated value of Cash Conversion Cycle; is derived using all eligible companies who are constituents in the specified Morningstar Index. Cash Conversion Cycle: This ratio represents the time it takes a company to convert its resources into cash. This ratio measures the amount of time that each dollar of the company is spent on the production and sale of goods before it is converted back into cash. This is calculated using Days in Sales + Days in Inventory - Days in Payment.'
+          format: double
+          nullable: true
+        equityTurnoverRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        equityTurnoverRatioValue:
+          type: number
+          description: 'The aggregated value of Equity Turnover Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Equity Turnover Ratio: This ratio represents the value of a company''s total revenue relative to its average equity. This can be used to measure a company''s ability to use the equity efficiently to generate revenue. This is calculated using Total Revenue (TTM) divided by Average Equity.'
+          format: double
+          nullable: true
+        expenseRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        expenseRatioValue:
+          type: number
+          description: 'The aggregated value of Expense Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Expense Ratio: This ratio represents the total expenses an insurer faces as a result of underwriting a policy as a percentage of premiums earned. This can be used to measure the profitability of an insurance company. This is calculated using (Deferred Policy Acquisition Amortization Expense + Fees and Commission Expense + Other Underwriting Expenses + Selling; General and Administrative) / Net Premiums Earned'
+          format: double
+          nullable: true
+        fixedAssetTurnoverRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        fixedAssetTurnoverRatioValue:
+          type: number
+          description: 'The aggregated value of Fixed Asset Turnover Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Fixed Asset Turnover Ratio: This ratio represents the value of a company''s total revenue relative to its fixed assets. This can be used to measure a company''s ability to use its fixed asset efficiently to generate revenue. This is calculated using Total Revenue (TTM) / (Average Net Property; Plant and Equipment/Net Mineral Property Interests and Exploration Assets).'
+          format: double
+          nullable: true
+        lossRatioNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        lossRatioValue:
+          type: number
+          description: 'The aggregated value of Loss Ratio; is derived using all eligible companies who are constituents in the specified Morningstar Index. Loss Ratio: This ratio represents the losses an insurer faces as a result of paying out insurance claims as a percentage of premiums earned. This can be used to measure the profitability of an insurance company. This is calculated using Benefits; Claims and Loss Adjustment Expense; Net (TTM) divided by Net Premiums Earned.'
+          format: double
+          nullable: true
+        numberOfCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
+          format: int32
+          nullable: true
+        salesPerFullTimeEmployeeNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        salesPerFullTimeEmployeeValue:
+          type: number
+          description: 'The aggregated value of Sales Per Full Time Employee; is derived using all eligible companies who are constituents in the specified Morningstar Index. Sales Per Full Time Employee: This calculation represents the amount of revenue generated by each full time employee. This can be used to measure a company''s productivity. This is calculated using Total Revenue (TTM) divided by Number of Full Time Employees.'
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputAggregationEfficiencyRatios
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
   responses:
+    ResponseEquityIndustryAggregatesEnterpriseValueRatios:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              aggregationEnterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputAggregationEnterpriseValueCalculations'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityIndustryAggregatesPriceYields:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              aggregationPriceYields:
+                $ref: '#/components/schemas/OutputAggregationPriceYields'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityIndustryAggregatesOperationRatios:
       description: OK
       content:
@@ -3383,38 +3448,6 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityIndustryAggregatesDividendYields:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              aggregationDailyDividendMetrics:
-                $ref: '#/components/schemas/OutputAggregationDailyDividendMetrics'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityIndustryAggregatesPriceMultiples:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              aggregationPriceMultiples:
-                $ref: '#/components/schemas/OutputAggregationPriceMultiples'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityIndustryAggregatesFinancialStatements:
       description: OK
       content:
@@ -3424,19 +3457,6 @@ components:
             properties:
               aggregationFinancialStatementsSimpleSummation:
                 $ref: '#/components/schemas/OutputAggregationFinancialStatementsSimpleSummation'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityIndustryAggregatesEnterpriseValueRatios:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              aggregationEnterpriseValueCalculations:
-                $ref: '#/components/schemas/OutputAggregationEnterpriseValueCalculations'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
@@ -3474,26 +3494,41 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityIndustryAggregatesPriceYields:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              aggregationPriceYields:
-                $ref: '#/components/schemas/OutputAggregationPriceYields'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseBadRequest:
       description: Bad Request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityIndustryAggregatesPriceMultiples:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              aggregationPriceMultiples:
+                $ref: '#/components/schemas/OutputAggregationPriceMultiples'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityIndustryAggregatesDividendYields:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              aggregationDailyDividendMetrics:
+                $ref: '#/components/schemas/OutputAggregationDailyDividendMetrics'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
-    BasicAuth:
+    Bearer:
       type: http
-      scheme: basic
+      scheme: bearer
+      bearerFormat: JWT
+      description: Obtain a token via the Authentication API's `POST /token/oauth` endpoint. Tokens are valid for 60 minutes and reusable across requests.

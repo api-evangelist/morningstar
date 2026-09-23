@@ -1,31 +1,30 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
-  version: 1.0.0
-  title: Authorization Tokens Accounts households API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
+  version: 2.0.2
+  title: (US) Households API
+  description: 'The Households API is used by the web-based version of Morningstar Office to get information about the households managed by an advisor.
 
 
-    * Username - Your Client ID.
+    With this API you can:
 
-    * Password - Your Client Secret.'
+
+    * Get household IDs
+
+    * Get household profiles'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/office-household/v2
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/office-household/v2
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
-- name: households
+- name: Households
 paths:
   /households:
     get:
       tags:
-      - households
+      - Households
       summary: Get household IDs
       description: Get all household IDs for an advisor. The household ID can be used with the Portfolios API to return information about household accounts.
       operationId: getHouseholdAccountsUsingGET_1
@@ -54,16 +53,6 @@ components:
         response_status:
           type: string
       title: APIMetaStatusResponse
-    HouseholdIndex:
-      type: object
-      properties:
-        householdType:
-          type: string
-        id:
-          type: string
-        name:
-          type: string
-      title: HouseholdIndex
     ApiHouseholdResponseForHouseholds:
       type: object
       properties:
@@ -74,7 +63,17 @@ components:
           items:
             $ref: '#/components/schemas/HouseholdIndex'
       title: ApiHouseholdResponseForHouseholds
+    HouseholdIndex:
+      type: object
+      properties:
+        householdType:
+          type: string
+        id:
+          type: string
+        name:
+          type: string
+      title: HouseholdIndex
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer

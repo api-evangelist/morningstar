@@ -1,33 +1,42 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
+  title: Morningstar Models API
   version: 1.0.0
-  title: Authorization Tokens Accounts models API
-  description: 'Use the `oauth` endpoint to generate the secure, time-limited JSON Web Tokens (JWTs) used to authorize access to APIs and components.</br></br>
-
-    To request a token, click Authorize and enter the following credentials:
-
-
-    * Username - Your Client ID.
-
-    * Password - Your Client Secret.'
+  description: 'Operations tagged models across 2 of this provider''s published API definitions: morningstar-investor-pulse-openapi.json, morningstar-risk-models-openapi.json. Each path carries the servers of the definition it was published in.'
 servers:
-- url: https://www.us-api.morningstar.com/token
-  description: PROD US
-- url: https://www.emea-api.morningstar.com/token
-  description: PROD EMEA
-- url: https://www.apac-api.morningstar.com/token
-  description: PROD APAC
+- url: https://www.us-api.morningstar.com/invest-pulse/v1
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+  description: UAT
+- url: https://www.emea-api.morningstar.com/invest-pulse/v1
+  description: PROD
+- url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+  description: UAT
+- url: https://www.apac-api.morningstar.com/invest-pulse/v1
+  description: PROD
+- url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+  description: UAT
+- url: https://www.us-api.morningstar.com/risk-model/v1
+  description: PROD
+- url: https://www.us-uat-api.morningstar.com/risk-model/v1
+  description: UAT
+- url: https://www.emea-api.morningstar.com/risk-model/v1
+  description: PROD
+- url: https://www.emea-uat-api.morningstar.com/risk-model/v1
+  description: UAT
+- url: https://www.apac-api.morningstar.com/risk-model/v1
+  description: PROD
+- url: https://www.apac-uat-api.morningstar.com/risk-model/v1
+  description: UAT
 security:
-- BasicAuth: []
+- bearerAuth: []
 tags:
-- name: models
+- name: Models
 paths:
   /models:
     get:
       summary: Get flow models
-      description: 'Get all flow models. The response will include the unique ID of each model.  You use the ID with other endpoints to return data based on that model. Only models that your account is enabled for will be returned.
-
-        '
+      description: Get all flow models. The response will include the unique ID of each model. You use the ID with other endpoints to return data based on that model. Only models that your account is enabled for will be returned.
       responses:
         '200':
           description: OK
@@ -41,7 +50,20 @@ paths:
           description: Internal Server Error.
       operationId: get_models
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
   /models/{flow_model_id}/category-forecast:
     parameters:
     - in: query
@@ -69,7 +91,7 @@ paths:
         - usa-univariate-category-fundflow
     get:
       summary: Get category forecasts for a flow model
-      description: Get all category forecasts for the model specified in the `flow_model_id` parameter.  You can specify a time period (in months) to narrow the results returned.  You can also request that only accumulated data is returned in the response.
+      description: Get all category forecasts for the model specified in the `flow_model_id` parameter. You can specify a time period (in months) to narrow the results returned. You can also request that only accumulated data is returned in the response.
       responses:
         '200':
           description: OK
@@ -83,7 +105,20 @@ paths:
           description: Internal Server Error.
       operationId: get_category_forecast
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
   /models/{flow_model_id}/category-forecast/{category_id}:
     parameters:
     - in: query
@@ -112,7 +147,7 @@ paths:
         - usa-univariate-category-fundflow
     get:
       summary: Get a category forecast for a flow model
-      description: Get category forecasts for the specified flow models and category.  You can specify a time period (in months) to narrow the results returned.  You can also request that only accumulated data is returned in the response.
+      description: Get category forecasts for the specified flow models and category. You can specify a time period (in months) to narrow the results returned. You can also request that only accumulated data is returned in the response.
       responses:
         '200':
           description: OK
@@ -126,7 +161,20 @@ paths:
           description: Internal Server Error.
       operationId: get_category_forecast_with_id
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
   /models/{flow_model_id}/factors:
     parameters:
     - required: true
@@ -138,9 +186,7 @@ paths:
         default: usa-equity-shareclass-fundflow
     get:
       summary: Get flow model factors
-      description: 'Get a full list of the factors used in the flow model specified.  In the response, the factors will be organized according to groupings defined for US equity, US allocation, and US fixed income.
-
-        '
+      description: Get a full list of the factors used in the flow model specified. In the response, the factors will be organized according to groupings defined for US equity, US allocation, and US fixed income.
       responses:
         '200':
           description: OK
@@ -154,7 +200,20 @@ paths:
           description: Internal Server Error.
       operationId: get_model_factor
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
   /models/{flow_model_id}/premia:
     parameters:
     - in: query
@@ -210,9 +269,13 @@ paths:
         - global-misc-shareclass-fundflow
     get:
       summary: Get premia data for a flow model
-      description: 'Get premia data for  the last 12 month average as of the latest month end  for the flow model specified in the `flow_model_id` parameter. The response will return premia for each factor in the model.  You use this information to understand which factors have driven fund flows, and to what extent, in a given asset class and region. </br></br> You can  request that only accumulated data is returned in the response.</br></br> Currently, 13 flow models are supported.
+      description: 'Get premia data for the last 12 month average as of the latest month end for the flow model specified in the `flow_model_id` parameter. The response will return premia for each factor in the model. You use this information to understand which factors have driven fund flows, and to what extent, in a given asset class and region.
 
-        '
+
+        You can request that only accumulated data is returned in the response.
+
+
+        Currently, 13 flow models are supported.'
       responses:
         '200':
           description: OK
@@ -226,7 +289,20 @@ paths:
           description: Internal Server Error.
       operationId: get_premia
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
   /models/{flow_model_id}/{fund_ids}/forecast-closure:
     parameters:
     - required: true
@@ -258,7 +334,10 @@ paths:
         - global-misc-shareclass-fundflow
     get:
       summary: Get closure probability forecast for a fund
-      description: Get a closure probability forecast for a specific fund and fund model.</br></br> Currently, 13 flow models are supported.
+      description: 'Get a closure probability forecast for a specific fund and fund model.
+
+
+        Currently, 13 flow models are supported.'
       responses:
         '200':
           description: OK
@@ -272,7 +351,20 @@ paths:
           description: Internal Server Error.
       operationId: get_dead_fund_with_model_id
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
   /models/{flow_model_id}/{share_class_ids}/exposures:
     parameters:
     - in: query
@@ -326,7 +418,10 @@ paths:
         - global-misc-shareclass-fundflow
     get:
       summary: Get exposures for a share class
-      description: Get exposures forecast for a specific share class  and fund model. </br></br> Currently, 13 flow models are supported.
+      description: 'Get exposures forecast for a specific share class and fund model.
+
+
+        Currently, 13 flow models are supported.'
       responses:
         '200':
           description: OK
@@ -340,7 +435,20 @@ paths:
           description: Internal Server Error.
       operationId: get_exposures_with_model_id
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
   /models/{flow_model_id}/{share_class_ids}/forecast-flow:
     parameters:
     - required: true
@@ -372,7 +480,10 @@ paths:
         - global-misc-shareclass-fundflow
     get:
       summary: Get growth forecast for a share class
-      description: Get growth forecast for a specific share class and fund model.  </br></br> Currently, 13 flow models are supported.
+      description: 'Get growth forecast for a specific share class and fund model.
+
+
+        Currently, 13 flow models are supported.'
       responses:
         '200':
           description: OK
@@ -386,7 +497,20 @@ paths:
           description: Internal Server Error.
       operationId: get_forecast_with_model_id
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/invest-pulse/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/invest-pulse/v1
+      description: UAT
   /models/{risk_model_id}/factors:
     get:
       responses:
@@ -412,7 +536,20 @@ paths:
           type: string
           default: morn-glb-eq-usd
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/risk-model/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/risk-model/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/risk-model/v1
+      description: UAT
   /models/{risk_model_id}/exposures:
     get:
       responses:
@@ -469,7 +606,7 @@ paths:
           - quarter_end
           default: month_end
       tags:
-      - models
+      - Models
     post:
       responses:
         '200':
@@ -522,7 +659,20 @@ paths:
               $ref: '#/components/schemas/Funds'
         required: true
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/risk-model/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/risk-model/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/risk-model/v1
+      description: UAT
   /models/{risk_model_id}/{fund_id}/holding-exposures:
     get:
       responses:
@@ -561,7 +711,20 @@ paths:
           type: string
           default: '2018-01-31T00:00:00.000Z'
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/risk-model/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/risk-model/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/risk-model/v1
+      description: UAT
   /models/{risk_model_id}/premia:
     get:
       responses:
@@ -620,20 +783,22 @@ paths:
           type: string
           default: '2012-06-01T00:00:00.000Z'
       tags:
-      - models
+      - Models
+    servers:
+    - url: https://www.us-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.us-uat-api.morningstar.com/risk-model/v1
+      description: UAT
+    - url: https://www.emea-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.emea-uat-api.morningstar.com/risk-model/v1
+      description: UAT
+    - url: https://www.apac-api.morningstar.com/risk-model/v1
+      description: PROD
+    - url: https://www.apac-uat-api.morningstar.com/risk-model/v1
+      description: UAT
 components:
   schemas:
-    Holdings:
-      required:
-      - id
-      properties:
-        holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/holding'
-        id:
-          type: string
-      type: object
     Funds:
       properties:
         portfolios:
@@ -665,7 +830,21 @@ components:
         weight:
           type: number
       type: object
+    Holdings:
+      required:
+      - id
+      properties:
+        holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/holding'
+        id:
+          type: string
+      type: object
   securitySchemes:
-    BasicAuth:
+    bearerAuth:
       type: http
-      scheme: basic
+      scheme: bearer
+x-refined-from:
+- morningstar-investor-pulse-openapi.json
+- morningstar-risk-models-openapi.json
