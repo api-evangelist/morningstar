@@ -162,6 +162,141 @@ paths:
       x-cpqId: 931
 components:
   schemas:
+    OutputShortInterest:
+      type: object
+      properties:
+        settlementDate:
+          type: string
+          description: Date when the short interest data becomes effective. It is the date specified for delivery of securities between securities firms. This date marks the official date for change of ownership and is used for accounting for long or short positions.
+          nullable: true
+        averageDailyVolume:
+          type: integer
+          description: The number of shares of stock traded each day; averaged over a 1 month period through the settlement date.
+          format: int64
+          nullable: true
+        daysToCover:
+          type: number
+          description: Calculated as the aggregate short interest for the month divided by the average daily share volume traded between short interest settlement dates. Also known as 'Short Interest Ratio'. Days To Cover = Short Interest / Average Daily Volume
+          format: double
+          nullable: true
+        daysToCoverPercentageChanged:
+          type: number
+          description: Calculated as the aggregate short interest for the month divided by the average daily share volume traded between short interest settlement dates. Also known as Short Interest Ratio. Days To Cover = Short Interest / Average Daily Volume
+          format: double
+          nullable: true
+        percentageChanged:
+          type: number
+          description: The percentage that the Short Interest shares have changed compared to the previous period. Percentage Changed = [(Current Short Interest / Previous Short Interest) - 1] * 100
+          format: double
+          nullable: true
+        percentageOfFloat:
+          type: number
+          description: Percentage of Short Interest shares to Float shares outstanding. Percentage of Float % = Short Interest / Float Shares * 100
+          format: double
+          nullable: true
+        percentageOfSharesOutstanding:
+          type: number
+          description: Percentage of Short Interest shares to total shares outstanding. Percentage of Shares Outstanding % = Short Interest / Total Shares Outstanding * 100
+          format: double
+          nullable: true
+        shortInterestValue:
+          type: integer
+          description: The total number of shares of a security that have been sold short by customers and securities firms that have not been repurchased to settle outstanding short positions in the market; the net short positions outstanding in the stock as of the settlement date.
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: OutputShortInterest
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -213,142 +348,13 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadataMessages
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
-      additionalProperties: false
-      title: OutputInvalidInvestments
-    OutputShortInterest:
-      type: object
-      properties:
-        settlementDate:
-          type: string
-          description: Date when the short interest data becomes effective. It is the date specified for delivery of securities between securities firms. This date marks the official date for change of ownership and is used for accounting for long or short positions.
-          nullable: true
-        averageDailyVolume:
-          type: integer
-          description: The number of shares of stock traded each day; averaged over a 1 month period through the settlement date.
-          format: int64
-          nullable: true
-        daysToCover:
-          type: number
-          description: Calculated as the aggregate short interest for the month divided by the average daily share volume traded between short interest settlement dates. Also known as 'Short Interest Ratio'. Days To Cover = Short Interest / Average Daily Volume
-          format: double
-          nullable: true
-        daysToCoverPercentageChanged:
-          type: number
-          description: Calculated as the aggregate short interest for the month divided by the average daily share volume traded between short interest settlement dates. Also known as Short Interest Ratio. Days To Cover = Short Interest / Average Daily Volume
-          format: double
-          nullable: true
-        percentageChanged:
-          type: number
-          description: The percentage that the Short Interest shares have changed compared to the previous period. Percentage Changed = [(Current Short Interest / Previous Short Interest) - 1] * 100
-          format: double
-          nullable: true
-        percentageOfFloat:
-          type: number
-          description: Percentage of Short Interest shares to Float shares outstanding. Percentage of Float % = Short Interest / Float Shares * 100
-          format: double
-          nullable: true
-        percentageOfSharesOutstanding:
-          type: number
-          description: Percentage of Short Interest shares to total shares outstanding. Percentage of Shares Outstanding % = Short Interest / Total Shares Outstanding * 100
-          format: double
-          nullable: true
-        shortInterestValue:
-          type: integer
-          description: The total number of shares of a security that have been sold short by customers and securities firms that have not been repurchased to settle outstanding short positions in the market; the net short positions outstanding in the stock as of the settlement date.
-          format: int64
-          nullable: true
-      additionalProperties: false
-      title: OutputShortInterest
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
   responses:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseInternalServerError:
       description: Internal Server
       content:
@@ -368,12 +374,6 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

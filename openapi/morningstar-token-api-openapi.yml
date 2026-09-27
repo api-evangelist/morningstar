@@ -41,36 +41,6 @@ paths:
         '401':
           $ref: '#/components/responses/ErrorResponse401'
 components:
-  examples:
-    ResponseTokenExample1:
-      summary: Output Authorization Token
-      value:
-        access_token: Rhci5jb20vaW50ZXJuYWxfY29tcGFueV9pZCI6IkNsaWVudDAiLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9kYXRhX3JvbGUiOlsiU2VhcmNoLkFDSURfU2VydmljZSJdLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9jb25maWdfaWQiOiJnbG9iYWxfYWRtaW5fYXBpcy4wMDFkMDAwMDAweDU5YjcuMjA2OTg0MzZfd2twbGMxaDciLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9tc3Rhcl9pZCI6IkZFMTUzOEM4LTg0RDMtNDlCRC05MzNELTdGQkEyOERGODAzMyIsImh0dHBzOi8vbW9ybmluZ3N0YXIuY29tL2VtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaHR0cHM6Ly9tb3JuaW5nc3Rhci5jb20vcGFzc3dvcmRDaGFuZ2VSZXF1aXJlZCI6ZmFsc2UsImh0dHBzOi8vbW9ybmluZ3N0YXIuY29tL3VpbV9yb2xlcyI6IkVBTVMsSU5WRVNUTUVOVEFQSV9JTlRFUk5BTF9TRVJWSUNFX0FDQ09VTlQiLCJpc3MiOiJodHRwczovL2xvZ2luLXByb2QubW9ybmluZ3N0YXIuY29tLyIsInN1YiI6ImF1dGgwfEZFMTUzOEM4LTg0RDMtNDlCRC05MzNELTdGQkEyOERGODAzMyIsImF1ZCI6WyJodHRwczovL2F1dGgwLWF3c3By
-        expires_in: 3599
-        token_type: Bearer
-    ErrorResponseExample1:
-      summary: '401: Unauthorized'
-      value:
-        error_message: Incorrect username or password
-  responses:
-    ResponseToken:
-      description: '200: OK'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputToken'
-          examples:
-            ResponseTokenExample1:
-              $ref: '#/components/examples/ResponseTokenExample1'
-    ErrorResponse401:
-      description: '401: Unauthorized'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            ErrorResponseExample1:
-              $ref: '#/components/examples/ErrorResponseExample1'
   schemas:
     ErrorResponse:
       type: object
@@ -106,6 +76,36 @@ components:
           description: The token type. Always `Bearer`.
           examples:
           - Bearer
+  examples:
+    ErrorResponseExample1:
+      summary: '401: Unauthorized'
+      value:
+        error_message: Incorrect username or password
+    ResponseTokenExample1:
+      summary: Output Authorization Token
+      value:
+        access_token: Rhci5jb20vaW50ZXJuYWxfY29tcGFueV9pZCI6IkNsaWVudDAiLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9kYXRhX3JvbGUiOlsiU2VhcmNoLkFDSURfU2VydmljZSJdLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9jb25maWdfaWQiOiJnbG9iYWxfYWRtaW5fYXBpcy4wMDFkMDAwMDAweDU5YjcuMjA2OTg0MzZfd2twbGMxaDciLCJodHRwczovL21vcm5pbmdzdGFyLmNvbS9tc3Rhcl9pZCI6IkZFMTUzOEM4LTg0RDMtNDlCRC05MzNELTdGQkEyOERGODAzMyIsImh0dHBzOi8vbW9ybmluZ3N0YXIuY29tL2VtYWlsX3ZlcmlmaWVkIjpmYWxzZSwiaHR0cHM6Ly9tb3JuaW5nc3Rhci5jb20vcGFzc3dvcmRDaGFuZ2VSZXF1aXJlZCI6ZmFsc2UsImh0dHBzOi8vbW9ybmluZ3N0YXIuY29tL3VpbV9yb2xlcyI6IkVBTVMsSU5WRVNUTUVOVEFQSV9JTlRFUk5BTF9TRVJWSUNFX0FDQ09VTlQiLCJpc3MiOiJodHRwczovL2xvZ2luLXByb2QubW9ybmluZ3N0YXIuY29tLyIsInN1YiI6ImF1dGgwfEZFMTUzOEM4LTg0RDMtNDlCRC05MzNELTdGQkEyOERGODAzMyIsImF1ZCI6WyJodHRwczovL2F1dGgwLWF3c3By
+        expires_in: 3599
+        token_type: Bearer
+  responses:
+    ResponseToken:
+      description: '200: OK'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputToken'
+          examples:
+            ResponseTokenExample1:
+              $ref: '#/components/examples/ResponseTokenExample1'
+    ErrorResponse401:
+      description: '401: Unauthorized'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            ErrorResponseExample1:
+              $ref: '#/components/examples/ErrorResponseExample1'
   securitySchemes:
     basicAuth:
       type: http

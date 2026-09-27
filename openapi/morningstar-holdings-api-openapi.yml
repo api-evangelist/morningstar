@@ -60,6 +60,21 @@ paths:
                 $ref: '#/components/schemas/ApiPortfolioAnalysisEntities'
 components:
   schemas:
+    TopHoldingListEntity:
+      type: object
+      properties:
+        additionalProperties:
+          $ref: '#/components/schemas/TopHoldingListDateEntity'
+      title: TopHoldingListEntity
+    ApiSnapshotEntity:
+      type: object
+      properties:
+        date:
+          type: string
+        topNHoldingsCount:
+          type: integer
+          format: int32
+      title: ApiSnapshotEntity
     APIMetaStatusResponse:
       type: object
       properties:
@@ -80,21 +95,6 @@ components:
         validation-end-date:
           type: string
       title: TopHoldingListDateEntity
-    TopHoldingListEntity:
-      type: object
-      properties:
-        additionalProperties:
-          $ref: '#/components/schemas/TopHoldingListDateEntity'
-      title: TopHoldingListEntity
-    ApiSnapshotEntity:
-      type: object
-      properties:
-        date:
-          type: string
-        topNHoldingsCount:
-          type: integer
-          format: int32
-      title: ApiSnapshotEntity
     ApiPortfolioAnalysisEntities:
       type: object
       properties:
@@ -107,6 +107,10 @@ components:
           items:
             $ref: '#/components/schemas/ApiPortfolioAnalysisEntity'
       title: ApiPortfolioAnalysisEntities
+    Map_string_string:
+      type: object
+      additionalProperties:
+        type: string
     ApiPortfolioAnalysisEntity:
       type: object
       properties:
@@ -140,10 +144,6 @@ components:
         topHoldingList:
           $ref: '#/components/schemas/TopHoldingListEntity'
       title: ApiPortfolioAnalysisEntity
-    Map_string_string:
-      type: object
-      additionalProperties:
-        type: string
   securitySchemes:
     bearerAuth:
       type: http

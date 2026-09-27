@@ -212,112 +212,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    MemberProfile:
-      type: object
-      required:
-      - householdId
-      - memberId
-      properties:
-        householdId:
-          type: string
-          format: uuid
-        memberId:
-          type: string
-          format: string
-          example: 1234567
-        firstName:
-          type: string
-          format: string
-          maxLength: 50
-          example: Sample
-        lastName:
-          type: string
-          format: string
-          maxLength: 50
-          example: Client
-        socialSecurityNumber:
-          type: string
-          format: string
-          example: '********1234'
-        dateOfBirth:
-          type: string
-          format: date
-          example: '1989-12-31'
-        desiredRetirementAge:
-          type: string
-          format: string
-          example: 75
-        address1:
-          type: string
-          format: string
-          maxLength: 50
-          example: 22 W. Washington St.
-        address2:
-          type: string
-          format: string
-          maxLength: 50
-          example: FL 7
-        address3:
-          type: string
-          format: string
-          maxLength: 50
-          example: Rm. 700
-        city:
-          type: string
-          format: string
-          maxLength: 30
-          example: Chicago
-        state:
-          type: string
-          format: string
-          maxLength: 20
-          example: IL
-        zipCode:
-          type: string
-          format: string
-          maxLength: 10
-          example: 60602
-        email:
-          type: string
-          format: string
-          maxLength: 60
-        homePhone:
-          type: string
-          format: string
-          maxLength: 20
-          example: 555-555555
-        workPhone:
-          type: string
-          format: string
-          maxLength: 20
-          example: 555-555555
-        relationshipId:
-          type: string
-          format: string
-          example: 1
-        status:
-          type: string
-          format: string
-          example: null
-    MemberList:
-      type: object
-      required:
-      - id
-      properties:
-        members:
-          type: array
-          items:
-            $ref: '#/components/schemas/Member'
-    MemberPost400:
-      type: object
-      properties:
-        message:
-          type: string
-          format: string
-          example: Missing firstName property.
-        id:
-          type: string
-          format: uuid
     Member:
       type: object
       required:
@@ -384,6 +278,25 @@ components:
           type: string
           format: string
           example: Self
+    MemberPost400:
+      type: object
+      properties:
+        message:
+          type: string
+          format: string
+          example: Missing firstName property.
+        id:
+          type: string
+          format: uuid
+    MemberList:
+      type: object
+      required:
+      - id
+      properties:
+        members:
+          type: array
+          items:
+            $ref: '#/components/schemas/Member'
     UpdateMemberProfile:
       type: object
       required:
@@ -473,6 +386,93 @@ components:
           type: string
           format: string
           example: 1
+    MemberProfile:
+      type: object
+      required:
+      - householdId
+      - memberId
+      properties:
+        householdId:
+          type: string
+          format: uuid
+        memberId:
+          type: string
+          format: string
+          example: 1234567
+        firstName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Sample
+        lastName:
+          type: string
+          format: string
+          maxLength: 50
+          example: Client
+        socialSecurityNumber:
+          type: string
+          format: string
+          example: '********1234'
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1989-12-31'
+        desiredRetirementAge:
+          type: string
+          format: string
+          example: 75
+        address1:
+          type: string
+          format: string
+          maxLength: 50
+          example: 22 W. Washington St.
+        address2:
+          type: string
+          format: string
+          maxLength: 50
+          example: FL 7
+        address3:
+          type: string
+          format: string
+          maxLength: 50
+          example: Rm. 700
+        city:
+          type: string
+          format: string
+          maxLength: 30
+          example: Chicago
+        state:
+          type: string
+          format: string
+          maxLength: 20
+          example: IL
+        zipCode:
+          type: string
+          format: string
+          maxLength: 10
+          example: 60602
+        email:
+          type: string
+          format: string
+          maxLength: 60
+        homePhone:
+          type: string
+          format: string
+          maxLength: 20
+          example: 555-555555
+        workPhone:
+          type: string
+          format: string
+          maxLength: 20
+          example: 555-555555
+        relationshipId:
+          type: string
+          format: string
+          example: 1
+        status:
+          type: string
+          format: string
+          example: null
   securitySchemes:
     bearerAuth:
       type: http

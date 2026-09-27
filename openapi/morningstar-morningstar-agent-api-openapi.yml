@@ -139,13 +139,19 @@ paths:
       - BearerAuth: []
 components:
   schemas:
-    ThinkingMode:
-      type: string
-      enum:
-      - fast
-      - standard
-      - deep
-      title: ThinkingMode
+    RunResponse:
+      properties:
+        response:
+          type: string
+          title: Response
+        token_usage:
+          anyOf:
+          - $ref: '#/components/schemas/TokenUsage'
+          - type: 'null'
+      type: object
+      required:
+      - response
+      title: RunResponse
     TokenUsage:
       properties:
         input_tokens:
@@ -168,19 +174,25 @@ components:
           default: []
       type: object
       title: TokenUsage
-    RunResponse:
+    RunRequest:
       properties:
-        response:
+        message:
           type: string
-          title: Response
-        token_usage:
-          anyOf:
-          - $ref: '#/components/schemas/TokenUsage'
-          - type: 'null'
+          title: Message
+        thinking_mode:
+          $ref: '#/components/schemas/ThinkingMode'
+          default: standard
       type: object
       required:
-      - response
-      title: RunResponse
+      - message
+      title: RunRequest
+    ThinkingMode:
+      type: string
+      enum:
+      - fast
+      - standard
+      - deep
+      title: ThinkingMode
     ValidationError:
       properties:
         loc:
@@ -216,18 +228,6 @@ components:
           title: Detail
       type: object
       title: HTTPValidationError
-    RunRequest:
-      properties:
-        message:
-          type: string
-          title: Message
-        thinking_mode:
-          $ref: '#/components/schemas/ThinkingMode'
-          default: standard
-      type: object
-      required:
-      - message
-      title: RunRequest
   securitySchemes:
     BearerAuth:
       type: http

@@ -80,7 +80,7 @@ paths:
       description: Get the content of the mix of investments matrix with the set of portfolios and their high, medium, low percentage of return.
       tags:
       - Portfolios
-      operationId: getMixInvestments
+      operationId: getPortfoliosInvestments
       parameters:
       - name: X-API-RequestId
         in: header
@@ -137,59 +137,34 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse502'
+      x-operation-id-source: normalized
+      x-operation-id-original: getMixInvestments
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
 components:
   schemas:
-    ErrorResponse404:
-      title: ErrorResponse
+    MixInvestmentsHeader:
+      title: MixInvestmentsHeader
       type: object
       properties:
-        message:
+        portfolio:
           type: string
-          description: Error Message
-          example: Server can't find the requested resource
-        status:
+          description: Header of the column for portfolio information.
+          example: Portfolio
+        highRisk:
           type: string
-          description: Error Status
-          example: NOT_FOUND
-        timestamp:
+          description: Header of the column for high risk information.
+          example: High Risk/Return %
+        mediumRisk:
           type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    ErrorResponse400:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
+          description: Header of the column for medium risk information.
+          example: Medium Risk/Return %
+        lowRisk:
           type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    ErrorResponse502:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Received an invalid response from the upstream server
-        status:
-          type: string
-          description: Error Status
-          example: BAD_GATEWAY
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
+          description: Header of the column for low risk information.
+          example: Low Risk/Return %
+      description: Mix investments header
     InvestmentPortfolio:
       title: InvestmentPortfolio
       type: object
@@ -211,6 +186,22 @@ components:
           description: Low risk value
           example: 100
       description: Investment portfolio object that represents the mix of investments in portfolio.
+    ErrorResponse502:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Received an invalid response from the upstream server
+        status:
+          type: string
+          description: Error Status
+          example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
     MixInvestmentsPayload:
       title: MixInvestmentsPayload
       type: object
@@ -251,9 +242,41 @@ components:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    MixInvestmentsHeader:
-      title: MixInvestmentsHeader
+    ErrorResponse404:
+      title: ErrorResponse
       type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
+          type: string
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse400:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    MixInvestmentsHeader_2:
+      type: object
+      title: MixInvestmentsHeader
       properties:
         portfolio:
           type: string
@@ -271,7 +294,6 @@ components:
           type: string
           description: Header of the column for low risk information.
           example: Low Risk/Return %
-      description: Mix investments header
     InvestmentPortfolio_2:
       type: object
       title: InvestmentPortfolio
@@ -316,26 +338,6 @@ components:
             highRisk: 0
             mediumRisk: 30
             lowRisk: 70
-    MixInvestmentsHeader_2:
-      type: object
-      title: MixInvestmentsHeader
-      properties:
-        portfolio:
-          type: string
-          description: Header of the column for portfolio information.
-          example: Portfolio
-        highRisk:
-          type: string
-          description: Header of the column for high risk information.
-          example: High Risk/Return %
-        mediumRisk:
-          type: string
-          description: Header of the column for medium risk information.
-          example: Medium Risk/Return %
-        lowRisk:
-          type: string
-          description: Header of the column for low risk information.
-          example: Low Risk/Return %
 x-refined-from:
 - morningstar-dws-risk-profiler-openapi.json
 - morningstar-risk-profiler-us-openapi.json

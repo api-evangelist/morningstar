@@ -528,50 +528,6 @@ paths:
       x-cpqId: 902
 components:
   schemas:
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
-    CodeMappingLong:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: integer
-          format: int64
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingLong
     OutputCompanyGrade:
       type: object
       properties:
@@ -591,6 +547,74 @@ components:
           $ref: '#/components/schemas/CodeMappingInt'
       additionalProperties: false
       title: OutputCompanyGrade
+    CodeMappingDecimal:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: number
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingDecimal
+    OutputStockStyle:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The calendar date when stock style datapoints are calculated
+          nullable: true
+        growthScore:
+          type: number
+          description: A high overall growth score indicates that a stock's per-share earnings; book value; revenues; and cash flow are expected to grow quickly relative to other stocks in the same scoring group. A weak growth orientation does not necessarily mean that a stock has a strong value orientation.
+          format: double
+          nullable: true
+        regionId:
+          $ref: '#/components/schemas/CodeMappingLong'
+        sizeScore:
+          type: number
+          description: Rather than a fixed number of large cap or small cap stocks; Morningstar uses a flexible system that isn't adversely affected by overall movements in the market. The Morningstar stock universe represents approximately 99% of the U.S. market for actively traded stocks. Giant-cap stocks are defined as the group that accounts for the top 40% of the capitalization of the Morningstar domestic stock universe; large-cap stocks represent the next 30%; mid-cap stocks represent the next 20%; small-cap stocks represent the next 7%; and micro-cap stocks represent the remaining 3%. Each stock is given a Size Score that ranges from -100 (very micro) to 400 (very giant). When classifying stocks to a Style Box; giant is included in large and micro is included in small.
+          format: double
+          nullable: true
+        styleBox:
+          $ref: '#/components/schemas/CodeMappingDecimal'
+        styleScore:
+          type: number
+          description: The scores for a stock's value and growth characteristics determine its horizontal placement. The Value-Growth Score is a reflection of the aggregate expectations of market participants for the future growth and required rate of return for a stock. We infer these expectations from the relation between current market prices and future growth and cost of capital expectations under the assumption of rational market participants and a simple model of stock value.
+          format: double
+          nullable: true
+        valueScore:
+          type: number
+          description: A high value score indicates that a stock's price is relatively low; given the anticipated per-sharing earnings; book value; revenues; cash flow; and dividends that the stock provides to investors. A high price relative to these measures indicates that a stock's value orientation is weak; but it does not necessarily mean that the stock is growth-oriented.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputStockStyle
+    OutputFinancialHealthGrade:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when Financial Health Grade data points are published
+          nullable: true
+        distanceToDefault:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        financialHealthGradeValue:
+          type: string
+          description: Financial health (A;B;C;D and F) grades will be assigned based on relative rankings of companies' distance to default scores within the qualified universe of Morningstar stocks
+          nullable: true
+        probabilityOfDefault:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputFinancialHealthGrade
     CodeMappingInt:
       type: object
       properties:
@@ -603,42 +627,6 @@ components:
           nullable: true
       additionalProperties: false
       title: CodeMappingInt
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    OutputMarketCapitalBreakpoint:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The calendar date when the market capital breakpoints datapoints are calculated
-          nullable: true
-        marketCapitalLevel:
-          type: string
-          description: Indicates the cumulative market capitalization value for stock style (size) breakpoints
-          nullable: true
-        marketCapitalSizeLevel:
-          type: string
-          description: 'Indicates the stock style (size) based on market capital breakpoints for each region: Giant-cap (G); Large-cap (L); Mid-cap (M); and Small-cap (S)'
-          nullable: true
-      additionalProperties: false
-      title: OutputMarketCapitalBreakpoint
     OutputInvalidInvestments:
       type: object
       properties:
@@ -685,74 +673,60 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputFinancialHealthGrade:
+    OutputErrorDetails:
       type: object
       properties:
-        asOfDate:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
           type: string
-          description: The calendar date when Financial Health Grade data points are published
+          description: Custom error code
           nullable: true
-        distanceToDefault:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        financialHealthGradeValue:
+        message:
           type: string
-          description: Financial health (A;B;C;D and F) grades will be assigned based on relative rankings of companies' distance to default scores within the qualified universe of Morningstar stocks
+          description: Message
           nullable: true
-        probabilityOfDefault:
-          type: number
-          description: ''
-          format: double
+        requestId:
+          type: string
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputFinancialHealthGrade
-    OutputStockStyle:
+      description: Error details
+      title: OutputErrorDetails
+    OutputIdentifiers:
       type: object
       properties:
-        effectiveDate:
-          type: string
-          description: The calendar date when stock style datapoints are calculated
-          nullable: true
-        growthScore:
-          type: number
-          description: A high overall growth score indicates that a stock's per-share earnings; book value; revenues; and cash flow are expected to grow quickly relative to other stocks in the same scoring group. A weak growth orientation does not necessarily mean that a stock has a strong value orientation.
-          format: double
-          nullable: true
-        regionId:
-          $ref: '#/components/schemas/CodeMappingLong'
-        sizeScore:
-          type: number
-          description: Rather than a fixed number of large cap or small cap stocks; Morningstar uses a flexible system that isn't adversely affected by overall movements in the market. The Morningstar stock universe represents approximately 99% of the U.S. market for actively traded stocks. Giant-cap stocks are defined as the group that accounts for the top 40% of the capitalization of the Morningstar domestic stock universe; large-cap stocks represent the next 30%; mid-cap stocks represent the next 20%; small-cap stocks represent the next 7%; and micro-cap stocks represent the remaining 3%. Each stock is given a Size Score that ranges from -100 (very micro) to 400 (very giant). When classifying stocks to a Style Box; giant is included in large and micro is included in small.
-          format: double
-          nullable: true
-        styleBox:
-          $ref: '#/components/schemas/CodeMappingDecimal'
-        styleScore:
-          type: number
-          description: The scores for a stock's value and growth characteristics determine its horizontal placement. The Value-Growth Score is a reflection of the aggregate expectations of market participants for the future growth and required rate of return for a stock. We infer these expectations from the relation between current market prices and future growth and cost of capital expectations under the assumption of rational market participants and a simple model of stock value.
-          format: double
-          nullable: true
-        valueScore:
-          type: number
-          description: A high value score indicates that a stock's price is relatively low; given the anticipated per-sharing earnings; book value; revenues; cash flow; and dividends that the stock provides to investors. A high price relative to these measures indicates that a stock's value orientation is weak; but it does not necessarily mean that the stock is growth-oriented.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputStockStyle
-    CodeMappingDecimal:
-      type: object
-      properties:
-        value:
+        performanceId:
           type: string
           nullable: true
-        code:
-          type: number
-          format: double
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
           nullable: true
       additionalProperties: false
-      title: CodeMappingDecimal
+      title: OutputIdentifiers
     OutputMetadata:
       type: object
       properties:
@@ -776,48 +750,80 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
-    OutputErrorDetails:
+    OutputMetadataMessages:
       type: object
       properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
+        type:
           type: string
-          description: Custom error code
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
         message:
           type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
           nullable: true
       additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
+      title: OutputMetadataMessages
+    CodeMappingLong:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingLong
+    OutputMarketCapitalBreakpoint:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The calendar date when the market capital breakpoints datapoints are calculated
+          nullable: true
+        marketCapitalLevel:
+          type: string
+          description: Indicates the cumulative market capitalization value for stock style (size) breakpoints
+          nullable: true
+        marketCapitalSizeLevel:
+          type: string
+          description: 'Indicates the stock style (size) based on market capital breakpoints for each region: Giant-cap (G); Large-cap (L); Mid-cap (M); and Small-cap (S)'
+          nullable: true
+      additionalProperties: false
+      title: OutputMarketCapitalBreakpoint
   responses:
-    ResponseInternalServerError:
-      description: Internal Server
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityStyleBox:
+    ResponseEquityStyleBoxBreakpoints:
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              stockStyle:
-                $ref: '#/components/schemas/OutputStockStyle'
+              marketCapitalBreakpoint:
+                $ref: '#/components/schemas/OutputMarketCapitalBreakpoint'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityStockGrades:
       description: OK
       content:
@@ -833,25 +839,19 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityStyleBoxBreakpoints:
+    ResponseEquityStyleBox:
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              marketCapitalBreakpoint:
-                $ref: '#/components/schemas/OutputMarketCapitalBreakpoint'
+              stockStyle:
+                $ref: '#/components/schemas/OutputStockStyle'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

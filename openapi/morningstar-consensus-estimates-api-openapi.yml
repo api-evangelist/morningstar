@@ -139,38 +139,6 @@ paths:
       x-cpqId: 918
 components:
   schemas:
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
     OutputConsensusRawEstimate:
       type: object
       properties:
@@ -230,25 +198,28 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputConsensusRawEstimate
-    OutputMetadataMessages:
+    OutputErrorDetails:
       type: object
       properties:
-        type:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
           type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+          description: Custom error code
           nullable: true
         message:
           type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
+      description: Error details
+      title: OutputErrorDetails
     OutputInvalidInvestments:
       type: object
       properties:
@@ -295,6 +266,38 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
     OutputMetadata:
       type: object
       properties:
@@ -318,29 +321,32 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
-    OutputErrorDetails:
+    OutputMetadataMessages:
       type: object
       properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
+        type:
           type: string
-          description: Custom error code
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
         message:
           type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
           nullable: true
       additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
+      title: OutputMetadataMessages
   responses:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseInternalServerError:
       description: Internal Server
       content:
@@ -360,12 +366,6 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

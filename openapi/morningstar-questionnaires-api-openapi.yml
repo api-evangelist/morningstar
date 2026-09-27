@@ -235,7 +235,7 @@ paths:
       description: Get questions and possible options for the Risk Tolerance questionnaire.
       tags:
       - Questionnaires
-      operationId: requestRiskQuestionnaire
+      operationId: getQuestionnairesRiskQuestionnairesByQuestionnaireId
       parameters:
       - name: questionnaireId
         in: path
@@ -303,6 +303,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: requestRiskQuestionnaire
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -312,7 +314,7 @@ paths:
       description: Get questions and possible options for the Experience questionnaire.
       tags:
       - Questionnaires
-      operationId: requestExperienceQuestionnaire
+      operationId: getQuestionnairesExperienceQuestionnairesByQuestionnaireId
       parameters:
       - name: questionnaireId
         in: path
@@ -377,6 +379,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: requestExperienceQuestionnaire
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -386,7 +390,7 @@ paths:
       description: Get questions and possible options for the Know Your Client questionnaire.
       tags:
       - Questionnaires
-      operationId: requestKycQuestionnaire
+      operationId: getQuestionnairesKycQuestionnairesByQuestionnaireId
       parameters:
       - name: questionnaireId
         in: path
@@ -453,63 +457,13 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: requestKycQuestionnaire
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
 components:
   schemas:
-    Paragraph:
-      title: Paragraph
-      type: object
-      properties:
-        text:
-          type: string
-          description: Paragraph text
-          example: Compared to others, how do you rate your willingness to take financial risks?
-        htmlMarkup:
-          type: boolean
-          description: True if the text field is an HTML markup, otherwise text field is plain text
-          example: false
-        image:
-          type: boolean
-          description: True if the paragraph is an image, otherwise is text
-          example: true
-        imageHref:
-          type: string
-          description: Image URL
-          example: https://www.morningstart.com/finametrica/images/risk.png
-    ErrorResponse404:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server can't find the requested resource
-        status:
-          type: string
-          description: Error Status
-          example: NOT_FOUND
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    Questionnaire:
-      title: Questionnaire
-      type: object
-      properties:
-        title:
-          type: string
-          description: Questionnaire title
-          example: FinaMetrica 10
-        id:
-          type: string
-          description: Questionnaire unique identifier
-          example: FM10S30
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
     Question:
       type: object
       properties:
@@ -537,22 +491,42 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Option'
-    ErrorResponse400:
-      title: ErrorResponse
+    Questionnaire:
+      title: Questionnaire
       type: object
       properties:
-        message:
+        title:
           type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
+          description: Questionnaire title
+          example: FinaMetrica 10
+        id:
           type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
+          description: Questionnaire unique identifier
+          example: FM10S30
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
+    Paragraph:
+      title: Paragraph
+      type: object
+      properties:
+        text:
           type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
+          description: Paragraph text
+          example: Compared to others, how do you rate your willingness to take financial risks?
+        htmlMarkup:
+          type: boolean
+          description: True if the text field is an HTML markup, otherwise text field is plain text
+          example: false
+        image:
+          type: boolean
+          description: True if the paragraph is an image, otherwise is text
+          example: true
+        imageHref:
+          type: string
+          description: Image URL
+          example: https://www.morningstart.com/finametrica/images/risk.png
     ErrorResponse502:
       title: ErrorResponse
       type: object
@@ -565,6 +539,54 @@ components:
           type: string
           description: Error Status
           example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse500:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse404:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
+          type: string
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse400:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
         timestamp:
           type: string
           description: Error Timestamp
@@ -597,22 +619,6 @@ components:
           type: string
           description: Image URL
           example: https://www.morningstart.com/finametrica/images/risk.png
-    ErrorResponse500:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Internal Server Error
-        status:
-          type: string
-          description: Error Status
-          example: INTERNAL_SERVER_ERROR
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
     Question_2:
       type: object
       properties:

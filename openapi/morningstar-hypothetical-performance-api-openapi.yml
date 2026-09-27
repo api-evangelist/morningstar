@@ -59,35 +59,157 @@ paths:
           description: Internal Server Error
 components:
   schemas:
-    OutputHypoPortfolioSummaryChartItem:
+    OutputPerformanceDate:
+      description: Key performance date reference points for the portfolio.
       type: object
       properties:
-        StartDate:
+        EarliestCommonDate:
+          description: The earliest date for which all holdings in the portfolio have return data.
           format: date-time
           type: string
-          description: Start date of the time series.
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputDataItemString'
-          description: Array of time-series data points.
-      description: Time-series growth data for a portfolio or benchmark.
-    OutputHypoSecuritySummaryPerformance:
+        EarliestAvailableDate:
+          description: The earliest date for which any holding in the portfolio has return data.
+          format: date-time
+          type: string
+        EarliestCommonExtendedDate:
+          description: The earliest common date calculated using extended return history where available.
+          format: date-time
+          type: string
+        EarliestCommonExtended10YearDate:
+          description: The earliest common date within a 10-year window, calculated using extended return history where available.
+          format: date-time
+          type: string
+        EarliestInceptionDate:
+          description: The inception date of the most recently launched holding in the portfolio.
+          format: date-time
+          type: string
+    OutputHypoInvestmentAssumptionSecurityItem:
       type: object
       properties:
-        AverageAnnualizedReturn:
+        Sequence:
+          format: int32
+          type: integer
+          description: Position of the security in the holdings array (1-based).
+        SecurityId:
+          type: string
+          description: Morningstar unique identifier of the security.
+        AnnualFee:
           format: double
           type: number
-          description: Average annualised return of the security over the illustration period.
-        CumulativeReturn:
+          description: Annual fee amount applied to the security.
+        AnnualFeeType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+          description: Whether the annual fee is expressed as a percentage or a fixed dollar amount.
+        AnnualFeeFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+          description: Frequency at which the annual fee is deducted.
+        DeferredLoadPercent:
+          description: Back-end sales charge applied on redemption, expressed as a range (e.g. `"0-0"`). The percentage typically declines the longer shares are held.
+          type: string
+        EndingMarketValue:
           format: double
           type: number
-          description: Total cumulative return of the security over the illustration period, calculated by geometrically linking single-period returns.
-        Day7Yield:
+          description: Market value of the security at the end of the illustration period.
+        FrontLoad:
           format: double
           type: number
-          description: 7-day annualised yield. Applicable to money market funds.
-      description: High-level performance metrics for a single security over the illustration period.
+          description: Front-end sales charge applied at the time of purchase, as a percentage of the investment amount.
+        HoldingPeriodEndDate:
+          format: date-time
+          type: string
+          description: End date of the holding period.
+        HoldingPeriodStartDate:
+          format: date-time
+          type: string
+          description: Start date of the holding period.
+        InitialInvestment:
+          format: double
+          type: number
+          description: Initial amount invested in the security.
+        Liquidate:
+          type: boolean
+          description: Whether the security is liquidated at the end of the illustration period.
+        RebalancePercent:
+          format: double
+          description: Target allocation percentage used when rebalancing.
+          type: number
+        ReinvestDistributionsCapGains:
+          type: boolean
+          description: Whether capital gains distributions are reinvested.
+        ReinvestDistributionsIncome:
+          type: boolean
+          description: Whether dividend and income distributions are reinvested.
+        SubsequentInvestmentWithdrawalAmount:
+          format: double
+          type: number
+          description: Recurring investment or withdrawal amount applied to the security.
+        SubsequentInvestmentWithdrawalFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+          description: Frequency at which the recurring investment or withdrawal is applied.
+        EntryExitFeeAmount:
+          format: double
+          type: number
+          description: Entry or exit fee amount. Australian Hypo only.
+        EntryExitFeeAmountType:
+          enum:
+          - Amount
+          - Percentage
+          type: string
+          description: Whether `EntryExitFeeAmount` is expressed as a percentage or a fixed dollar amount. Australian Hypo only.
+        EntryExitFeeType:
+          enum:
+          - CustomEntry
+          - CustomExit
+          - None
+          type: string
+          description: Type of entry/exit fee applied. Australian Hypo only.
+        TotalReturnPercent:
+          format: double
+          type: number
+          description: Total return for the security over the illustration period, as a percentage.
+        PeriodYears:
+          format: double
+          type: number
+          description: Length of the illustration period in years.
+      description: Investment assumptions applied to a single security in the hypothetical calculation.
+    OutputHypoMedianReturn:
+      type: object
+      properties:
+        ReturnData:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputHypoMedianReturnDataItem'
+          description: Array of period return data points.
+      description: Median return data across all securities for each period in the illustration.
+    OutputHypoReturnDataItem:
+      type: object
+      properties:
+        Id:
+          format: int32
+          type: integer
+          description: Sequential period identifier (1-based).
+        Date:
+          type: string
+          description: Date of the period.
+        Value:
+          format: double
+          type: number
+          description: Return value for the period.
+      description: A single period return data point with a date.
     OutputHypoSecurityPlanningAssumptions:
       type: object
       properties:
@@ -122,6 +244,240 @@ components:
           type: string
           description: How taxes are paid for this security — either out of pocket or by selling shares.
       description: Planning assumptions applied to a single security in the hypothetical calculation.
+    InputHypoView:
+      required:
+      - Id
+      type: object
+      properties:
+        Id:
+          description: Identifier of a predefined set of data points to return in the response.
+          default: Growth
+          enum:
+          - Growth
+          type: string
+    OutputHypoPlanningAssumptions:
+      type: object
+      properties:
+        Currency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+          description: Currency of the portfolio output values. ISO alpha-3 currency code.
+        RebalanceFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - Biennially
+          - None
+          type: string
+          description: Frequency at which the portfolio is rebalanced.
+        IllustrationTrailingTimePeriod:
+          default: YearToDate
+          enum:
+          - YearToDate
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          - EarliestAvailable
+          - EarliestCommon
+          - Customized
+          type: string
+          description: Time period used to determine the start and end dates of the illustration.
+        RebalanceThreshold:
+          format: double
+          type: number
+          description: Minimum allocation drift (in percentage points) that triggers a rebalance. For example, `5` means rebalancing occurs only when a holding drifts 5% or more from its target.
+        AllocationUpdateFrequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+          description: Frequency at which the target allocation is updated.
+        FederalIncomeTaxRate:
+          format: double
+          type: number
+          description: Federal income tax rate applied in the calculation, based on filing status and taxable income.
+        CapitalGainTaxRate:
+          format: double
+          type: number
+          description: Long-term capital gains tax rate applied in the calculation, based on filing status and taxable income.
+        StateIncomeTaxRate:
+          format: double
+          type: number
+          description: State income tax rate applied in the calculation.
+        CanadianIncomeMarginalTaxRate:
+          format: double
+          type: number
+          description: Canadian income marginal tax rate applied in the calculation. Canada only.
+        CanadianDividendMarginalTaxRate:
+          format: double
+          type: number
+          description: Canadian dividend marginal tax rate applied in the calculation. Canada only.
+        CanadianCapitalGainsMarginalTaxRate:
+          format: double
+          type: number
+          description: Canadian capital gains marginal tax rate applied in the calculation. Canada only.
+        PayTaxes:
+          enum:
+          - OutOfPocket
+          - SalesOfShares
+          type: string
+          description: How taxes are paid — either out of pocket or by selling shares.
+        PayFees:
+          enum:
+          - OutOfPocket
+          - SalesOfShares
+          type: string
+          description: How fees are paid — either out of pocket or by selling shares.
+      description: Summary of the planning assumptions used in the hypothetical calculation.
+    OutputHypoPortfolioSummaryChart:
+      type: object
+      properties:
+        Frequency:
+          enum:
+          - Monthly
+          type: string
+          description: Frequency of the chart data points.
+        Portfolio:
+          $ref: '#/components/schemas/OutputHypoPortfolioSummaryChartItem'
+          description: Time-series growth values for the portfolio.
+        Benchmark:
+          $ref: '#/components/schemas/OutputHypoPortfolioSummaryChartItem'
+          description: Time-series growth values for the benchmark.
+        NetAmountInvested:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemString'
+          description: Time-series net amount invested values.
+      description: Time-series data for rendering the portfolio growth chart.
+    RequestHypotheticalPerformance:
+      title: RequestHypotheticalPerformance
+      description: Generate hypothetical performance for up to 2 portfolios. Maximum of 100 holdings per portfolio.
+      required:
+      - RequestSettings
+      - Portfolios
+      type: object
+      properties:
+        View:
+          $ref: '#/components/schemas/InputHypoView'
+        RequestSettings:
+          description: Analysis settings for the request.
+          $ref: '#/components/schemas/InputHypoRequestSettings'
+        Portfolios:
+          type: array
+          minItems: 1
+          maxItems: 2
+          description: Array of portfolios to analyse. Maximum 2 portfolios per request. Maximum 100 holdings per portfolio.
+          items:
+            $ref: '#/components/schemas/InputPortfolioInput'
+    InputPortfolioInputHolding:
+      description: 'Each holding requires a security identifier and a position size. For the identifier, pass one of: `SecurityId`, `CUSIP`, `FundCode`, `ISIN`, `PerformanceId`, or `TradingSymbol`. If multiple identifiers are provided for a single holding, `SecurityId` takes priority; if `SecurityId` is absent, the last identifier listed in the object is used. For the position size, pass either `Weight` or `Value`.'
+      type: object
+      properties:
+        PerformanceId:
+          description: Morningstar performance identifier of a security.
+          type: string
+          examples:
+          - 0P00002QN3
+        SecurityId:
+          description: Morningstar unique identifier of a security. Use `CASH%0.000` for cash positions.
+          type: string
+          examples:
+          - FOUSA00DFS
+          - CASH%0.000
+        ISIN:
+          description: ISIN identifier of a security.
+          type: string
+          examples:
+          - US0378331005
+        CUSIP:
+          description: CUSIP identifier of a security.
+          type: string
+          examples:
+          - 09251T103
+        TradingSymbol:
+          description: Trading symbol (ticker) of a security.
+          type: string
+          examples:
+          - IBM
+        FundCode:
+          description: Fund code identifier of a security. Specific to Thai markets.
+          type: string
+          example: ABG
+        Weight:
+          description: Holding weight as a percentage of portfolio total. All holding weights must sum to 100. Requires `TotalValue` to be set on the portfolio.
+          minimum: 1
+          maximum: 100
+          example: 60
+          type: number
+          format: double
+        Value:
+          description: Market value of the holding in the portfolio currency.
+          minimum: 1
+          example: 25000
+          type: number
+          format: double
+        AssetBasedAnnualFee:
+          minimum: 0
+          default: 0
+          example: 1.15
+          format: double
+          description: Holding-level annual advisory fee as a percentage of holding value (e.g. `1.15` = 1.15%). Defaults to `0` (no fee). For Australian Hypo only, a dollar amount can be specified — see `AssetFeeType`. Holding-level fees are summed with portfolio-level fees. `AssetFeeFrequency` and `AssetFeeType` must match at both holding and portfolio level.
+          type: number
+        AssetFeeFrequency:
+          description: How often the holding-level asset-based fee is deducted. `None` is treated as `Monthly`. Must match `AssetFeeFrequency` at portfolio level when `AssetBasedAnnualFee` is set at holding level.
+          default: Monthly
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        AssetFeeType:
+          description: Specifies whether `AssetBasedAnnualFee` is expressed as a percentage or a fixed dollar amount. The `Amount` option is only supported for Australian Hypo. Must match `AssetFeeType` at portfolio level when `AssetBasedAnnualFee` is set at holding level.
+          default: Percentage
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        FrontLoadType:
+          description: Sales fee schedule applied to this holding on purchase or sale. Must match `FrontLoadType` at portfolio level when set at holding level.
+          default: Standard
+          enum:
+          - Standard
+          - Custom
+          - LetterOfIntent
+          - None
+          - CustomEntry
+          - CustomExit
+          type: string
+        LoadFeeType:
+          description: Specifies whether `LoadFeeAmount` is expressed as a fixed dollar amount or a percentage. Only applies when `FrontLoadType` is `Custom`. Must match `CustomFeeType` at portfolio level.
+          default: Amount
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        LoadFeeAmount:
+          format: double
+          description: Amount of the custom load fee. Only applies when `FrontLoadType` is `Custom`.
+          default: 0
+          type: number
     InputHypoCalculationSettingsPortfolio:
       description: Contains input parameters and their values used in the hypothetical calculations.
       type: object
@@ -201,6 +557,89 @@ components:
           description: If Apply Fee Schedule parameter is set to Custom, this parameter specifies the amount of the custom fee.
           default: 0
           type: number
+    InputHypoRequestSettings:
+      description: Analysis settings including output currency and hypothetical calculation parameters.
+      required:
+      - OutputCurrency
+      type: object
+      properties:
+        OutputCurrency:
+          type: string
+          description: Currency used to calculate output values.
+          default: USD
+          enum:
+          - USD
+          - CAD
+          - EUR
+          - GBP
+          - AUD
+        AssetClassGroupConfigs:
+          $ref: '#/components/schemas/InputAssetClassGroupConfigs'
+        HypoCalculationSettings:
+          description: Hypothetical performance calculation settings applied across all portfolios in the request. Can be overridden at portfolio level via `HypoCalculationSettings` on each portfolio.
+          $ref: '#/components/schemas/InputHypoCalculationSettings'
+    OutputHypoPortfolioSummaryChartItem:
+      type: object
+      properties:
+        StartDate:
+          format: date-time
+          type: string
+          description: Start date of the time series.
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemString'
+          description: Array of time-series data points.
+      description: Time-series growth data for a portfolio or benchmark.
+    InputPortfolioInput:
+      description: Object representing a portfolio to be analysed. Each holding must specify a security identifier and either `Weight` or `Value` to define its allocation. `TotalValue` is required when holdings use `Weight`. Maximum of 100 holdings per portfolio.
+      required:
+      - Name
+      - Currency
+      - Holdings
+      type: object
+      properties:
+        Name:
+          description: Portfolio name.
+          type: string
+        TotalValue:
+          description: Total market value of the portfolio in the portfolio currency. Required when holdings use `Weight`.
+          type: number
+          format: double
+          minimum: 1
+          example: 20000
+        Currency:
+          description: Portfolio currency. ISO alpha-3 currency code.
+          type: string
+          enum:
+          - USD
+          - CAD
+          - EUR
+          - GBP
+          - AUD
+          example: USD
+        HypoCalculationSettings:
+          description: Portfolio-level calculation settings. When set, overrides the request-level `HypoCalculationSettings` for this portfolio.
+          $ref: '#/components/schemas/InputHypoCalculationSettingsPortfolio'
+        Holdings:
+          type: array
+          minItems: 1
+          maxItems: 100
+          description: List of portfolio holdings. Maximum of 100 holdings per portfolio.
+          items:
+            $ref: '#/components/schemas/InputPortfolioInputHolding'
+    OutputHypoMedianReturnDataItem:
+      type: object
+      properties:
+        Id:
+          format: int32
+          type: integer
+          description: Sequential period identifier (1-based).
+        Value:
+          format: double
+          type: number
+          description: Return value for the period.
+      description: A single period return data point.
     OutputHypoSecuritySummaryItem:
       type: object
       properties:
@@ -329,6 +768,289 @@ components:
             $ref: '#/components/schemas/OutputDataItemString'
           description: Time-series of capital gain distribution values for the security.
       description: Performance summary for a single security over the illustration period.
+    OutputHypoBenchmarkPerformance:
+      type: object
+      properties:
+        Name:
+          type: string
+          description: Name of the benchmark.
+        StartDate:
+          format: date-time
+          type: string
+          description: Start date of the benchmark performance series.
+        Performance:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemString'
+          description: Array of time-series benchmark performance data points.
+      description: Time-series performance data for a benchmark associated with a security.
+    InputHypoCalculationSettings:
+      description: Contains input parameters and their values used in the hypothetical calculations.
+      type: object
+      properties:
+        ApplyFeeForRebalance:
+          description: When `true`, standard front-end and back-end charges are applied to any buys and sells triggered by rebalancing, using whichever fee schedule is configured (`FrontLoadType`). When `false`, no front-end or back-end charges are applied to rebalancing transactions.
+          default: false
+          type: boolean
+        ApplySalesCharge:
+          description: When `false`, standard deferred and redemption fees are not applied on redemption. Defaults to `false`.
+          default: false
+          type: boolean
+        AssetBasedAnnualFee:
+          minimum: 0
+          default: 0
+          example: 1.15
+          format: double
+          description: Annual asset-based fee as a percentage (e.g. `1.00` = 1%). For Australian Hypo, may be expressed as a dollar amount depending on `AssetFeeType`.
+          type: number
+        AssetFeeFrequency:
+          description: How often the asset-based fee is deducted. Defaults to `Monthly`. `None` also defaults to `Monthly`.
+          default: Monthly
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        AssetFeeType:
+          description: Whether `AssetBasedAnnualFee` is expressed as a percentage or a dollar amount. Australian Hypo only. Defaults to `Percentage`.
+          default: Percentage
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        CapitalGainTaxRate:
+          format: double
+          default: 0
+          description: Long-term capital gains tax rate applied to profits from the sale of capital assets. In Canada, referred to as the Capital Gains Marginal Tax Rate.
+          type: number
+        CustomFeeType:
+          description: Type of value supplied in `SalesFeeAmount` when `FrontLoadType` is `Custom` — either a percentage or a fixed dollar amount. Optional; only applies when `FrontLoadType=Custom`.
+          default: Amount
+          enum:
+          - Amount
+          - Percentage
+          type: string
+        DividendTaxRate:
+          format: double
+          default: 0
+          description: Tax rate applied to dividend income received from the portfolio. Canada only.
+          type: number
+        EndDate:
+          format: date
+          example: '2022-10-31'
+          description: End date of the illustration period. Required only when `IllustrationTrailingTimePeriod` is `Customized`.
+          type: string
+        EntryExitFeeType:
+          description: Type of custom entry or exit fee to apply. Australian Hypo only. Defaults to `None`.
+          default: None
+          enum:
+          - CustomEntry
+          - CustomExit
+          - None
+          type: string
+        FederalIncomeTaxRate:
+          format: double
+          default: 0
+          description: Federal income tax rate applied to income from the portfolio. In Canada, referred to as the Income Marginal Tax Rate.
+          type: number
+        FeeSchedule:
+          $ref: '#/components/schemas/InputHypoFeeSchedule'
+          description: Fee schedule details. Used when `FrontLoadType` is `LetterOfIntent`.
+        FilingStatus:
+          description: Tax filing status of the investor. Determines which tax rates and brackets apply. Defaults to `NoTaxes`.
+          default: NoTaxes
+          enum:
+          - NoTaxes
+          - Single
+          - MarriedFilingJointly
+          - MarriedFilingSeparately
+          - HeadOfHousehold
+          - Registered
+          - NonRegistered
+          type: string
+        FrontLoadType:
+          description: Sales fee schedule applied to purchases and sales. Defaults to `Standard`.
+          default: Standard
+          enum:
+          - Standard
+          - Custom
+          - LetterOfIntent
+          - None
+          - CustomEntry
+          - CustomExit
+          type: string
+        HypoType:
+          description: Type of hypothetical calculation to run. Defaults to `Portfolio`.
+          default: Portfolio
+          enum:
+          - Portfolio
+          - IndividualHoldings
+          - HoldingsComparison
+          - PortfolioComparison
+          type: string
+        IllustrationTrailingTimePeriod:
+          description: Trailing time period that defines the illustration start and end dates. When set to `Customized`, `StartDate` and `EndDate` must be provided. Defaults to `YearToDate`.
+          default: YearToDate
+          enum:
+          - YearToDate
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          - EarliestAvailable
+          - EarliestCommon
+          - Customized
+          - EarliestCommonExtended
+          - EarliestCommonExtended10Year
+          type: string
+        InvestmentDetailReturnsFrequency:
+          description: Frequency of the period-level investment detail records returned in the response. Defaults to `Monthly`.
+          default: Monthly
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+        LiquidateOnEndDate:
+          description: When `true`, all holdings are sold at month-end NAV/price on the end date and applicable taxes are applied. This affects total returns because taxes are calculated on the final market value.
+          default: false
+          type: boolean
+        PayFees:
+          description: How asset-based fees are paid — either out of pocket or by selling shares, at the beginning or end of the period. Defaults to `OutOfPocketBeginning`.
+          default: OutOfPocketBeginning
+          enum:
+          - OutOfPocketBeginning
+          - OutOfPocketEnding
+          - SalesOfSharesBeginning
+          - SalesOfSharesEnding
+          type: string
+        PayFeesUseCashFirst:
+          description: When `true` and `PayFees` is set to a sale-of-shares option, cash equivalents in the portfolio are used to cover fees before other securities are sold. Portfolio illustrations only.
+          default: false
+          type: boolean
+        PayTaxes:
+          description: How taxes are paid — either out of pocket or by selling shares. Defaults to `OutOfPocket`.
+          default: OutOfPocket
+          enum:
+          - OutOfPocket
+          - SalesOfShares
+          type: string
+        PortfolioAmountFee:
+          format: double
+          default: 0
+          description: Fixed dollar fee charged annually at the portfolio level.
+          type: number
+        RebalanceFrequency:
+          description: How often the portfolio is rebalanced to its target allocation. Defaults to `Monthly`.
+          default: Monthly
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - Biennially
+          - None
+          type: string
+        RebalanceThreshold:
+          format: double
+          description: Minimum allocation drift (%) that triggers a rebalance. For example, `5` means rebalancing only occurs if at least one holding drifts more than 5% from its target. Defaults to `0` (rebalance unconditionally at each `RebalanceFrequency` interval).
+          default: 0
+          type: number
+        ReinvestCapitalGains:
+          description: When `true`, capital gains distributions are reinvested. For Australian Hypo, `ReinvestDividends` and `ReinvestCapitalGains` must be set to the same value. Defaults to `false`.
+          default: false
+          type: boolean
+        ReinvestDividends:
+          description: When `true`, dividend and income distributions are reinvested. For Australian Hypo, `ReinvestDividends` and `ReinvestCapitalGains` must be set to the same value. Defaults to `false`.
+          default: false
+          type: boolean
+        ReturnCalcMethod:
+          description: Price basis used for return calculations — market price or NAV. Defaults to `MarketPrice`.
+          default: MarketPrice
+          enum:
+          - MarketPrice
+          - Nav
+          type: string
+        SalesFeeAmount:
+          format: double
+          description: Custom fee amount applied per the type defined in `CustomFeeType`. Used only when `FrontLoadType` is `Custom`. Defaults to `0`.
+          default: 0
+          type: number
+        StartDate:
+          format: date
+          example: '2012-10-31'
+          description: Start date of the illustration period. Required only when `IllustrationTrailingTimePeriod` is `Customized`.
+          type: string
+        StateIncomeTaxRate:
+          format: double
+          default: 0
+          description: State income tax rate applied to income from the portfolio.
+          type: number
+        SubsequentInvestmentAmount:
+          format: double
+          default: 0
+          description: Amount invested or withdrawn on a recurring basis, according to `SubsequentInvestmentWithdrawalFrequency`. See `SubsequentInvestmentType` for whether this is an investment or withdrawal.
+          type: number
+        SubsequentInvestmentType:
+          description: Whether `SubsequentInvestmentAmount` is applied as a recurring investment, a fixed withdrawal, or a percentage withdrawal.
+          default: Invest
+          enum:
+          - Invest
+          - Withdrawal
+          - WithdrawalPercentage
+          type: string
+        SubsequentInvestmentWithdrawalFrequency:
+          description: How often `SubsequentInvestmentAmount` is applied. The transaction is processed on the first month-end within each frequency period.
+          default: Monthly
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+        SubsequentInvestmentWithdrawalMonth:
+          description: Month offset (0–11) from the illustration start date at which the first subsequent transaction is applied. `0` = same month as the start date. Ignored when `SubsequentInvestmentWithdrawalFrequency` is `Monthly`.
+          default: 0
+          minimum: 0
+          maximum: 11
+          example: 3
+          type: number
+        SynchronizePortfolioStartDate:
+          description: When `true`, overrides `IllustrationTrailingTimePeriod` to use the `EarliestCommon` date across all portfolios in the request.
+          default: false
+          type: boolean
+        TaxableIncome:
+          format: double
+          default: 0
+          description: Annual taxable income of the investor, used to determine applicable tax brackets. Defaults to `0`.
+          type: number
+    InputAssetClassGroupConfig:
+      type: object
+      properties:
+        Id:
+          description: Asset class group identifier.
+          type: string
+          enum:
+          - ACG-CABROAD
+          - ACG-USBROAD
+          - ACG-USDETAILED-15
+          default: ACG-USBROAD
+    OutputHypoSecurityReturnsItem:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+          description: Morningstar unique identifier of the security.
+        ReturnData:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputHypoReturnDataItem'
+          description: Array of period return data points for the security.
+      description: Periodic return data for a single security.
     OutputHypoSecurityInvestmentDetails:
       type: object
       properties:
@@ -338,126 +1060,59 @@ components:
             $ref: '#/components/schemas/OutputHypoInvestmentDetailsItem'
           description: Array of period records for the security. Frequency determined by `InvestmentDetailReturnsFrequency`.
       description: Period-by-period investment activity breakdown for a single security.
-    OutputHypoInvestmentAssumptionSecurityItem:
+    InputHypoFeeDetails:
       type: object
       properties:
-        Sequence:
-          format: int32
-          type: integer
-          description: Position of the security in the holdings array (1-based).
-        SecurityId:
-          type: string
-          description: Morningstar unique identifier of the security.
-        AnnualFee:
+        Fee:
           format: double
+          description: Fee Amount
           type: number
-          description: Annual fee amount applied to the security.
-        AnnualFeeType:
+          minimum: 0
+          example: 3.25
+        FeeType:
+          description: type of fee
+          default: Percentage
           enum:
           - Amount
           - Percentage
           type: string
-          description: Whether the annual fee is expressed as a percentage or a fixed dollar amount.
-        AnnualFeeFrequency:
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          - None
-          type: string
-          description: Frequency at which the annual fee is deducted.
-        DeferredLoadPercent:
-          description: Back-end sales charge applied on redemption, expressed as a range (e.g. `"0-0"`). The percentage typically declines the longer shares are held.
-          type: string
-        EndingMarketValue:
+        AccountValueFrom:
           format: double
+          default: '0'
+          description: Minimum range value for fee
           type: number
-          description: Market value of the security at the end of the illustration period.
-        FrontLoad:
+        AccountValueTo:
           format: double
+          description: Maximum range value for fee
           type: number
-          description: Front-end sales charge applied at the time of purchase, as a percentage of the investment amount.
-        HoldingPeriodEndDate:
-          format: date-time
-          type: string
-          description: End date of the holding period.
-        HoldingPeriodStartDate:
-          format: date-time
-          type: string
-          description: Start date of the holding period.
-        InitialInvestment:
-          format: double
-          type: number
-          description: Initial amount invested in the security.
-        Liquidate:
-          type: boolean
-          description: Whether the security is liquidated at the end of the illustration period.
-        RebalancePercent:
-          format: double
-          description: Target allocation percentage used when rebalancing.
-          type: number
-        ReinvestDistributionsCapGains:
-          type: boolean
-          description: Whether capital gains distributions are reinvested.
-        ReinvestDistributionsIncome:
-          type: boolean
-          description: Whether dividend and income distributions are reinvested.
-        SubsequentInvestmentWithdrawalAmount:
-          format: double
-          type: number
-          description: Recurring investment or withdrawal amount applied to the security.
-        SubsequentInvestmentWithdrawalFrequency:
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          type: string
-          description: Frequency at which the recurring investment or withdrawal is applied.
-        EntryExitFeeAmount:
-          format: double
-          type: number
-          description: Entry or exit fee amount. Australian Hypo only.
-        EntryExitFeeAmountType:
-          enum:
-          - Amount
-          - Percentage
-          type: string
-          description: Whether `EntryExitFeeAmount` is expressed as a percentage or a fixed dollar amount. Australian Hypo only.
-        EntryExitFeeType:
-          enum:
-          - CustomEntry
-          - CustomExit
-          - None
-          type: string
-          description: Type of entry/exit fee applied. Australian Hypo only.
-        TotalReturnPercent:
-          format: double
-          type: number
-          description: Total return for the security over the illustration period, as a percentage.
-        PeriodYears:
-          format: double
-          type: number
-          description: Length of the illustration period in years.
-      description: Investment assumptions applied to a single security in the hypothetical calculation.
-    OutputHypoInvestmentDetails:
+    OutputHypoSecurityEndingMarketValueBreakdown:
       type: object
       properties:
-        PortfolioDetails:
+        Principal:
+          format: double
+          type: number
+          description: Portion of the ending market value attributable to the original principal investment.
+        Income:
+          format: double
+          type: number
+          description: Portion of the ending market value attributable to reinvested income distributions.
+        CapGain:
+          format: double
+          type: number
+          description: Portion of the ending market value attributable to reinvested capital gain distributions.
+      description: Breakdown of the ending market value of a security into its constituent return components.
+    OutputHypoSecuritiesReturns:
+      type: object
+      properties:
+        MedianReturn:
+          $ref: '#/components/schemas/OutputHypoMedianReturn'
+          description: Median return across all securities for each period.
+        Security:
           type: array
           items:
-            $ref: '#/components/schemas/OutputHypoInvestmentDetailsItem'
-          description: Array of period records. Frequency determined by `InvestmentDetailReturnsFrequency`.
-        PortfolioTotalDistributionAndWithdrawal:
-          format: double
-          type: number
-          description: Total distributions and withdrawals over the illustration period.
-        PortfolioTotalNewInvestment:
-          format: double
-          type: number
-          description: Total new investment over the illustration period.
-      description: Period-by-period breakdown of portfolio investment activity over the illustration period.
+            $ref: '#/components/schemas/OutputHypoSecurityReturnsItem'
+          description: Array of per-security periodic return records.
+      description: Periodic return data for all securities and the median return across securities.
     OutputHypoHypo:
       type: object
       properties:
@@ -480,33 +1135,17 @@ components:
           $ref: '#/components/schemas/OutputHypoSecuritiesReturns'
           description: Periodic return data for each security and the median return across securities.
       description: Hypothetical performance result for a single portfolio.
-    OutputHypoSecuritiesReturns:
-      type: object
-      properties:
-        MedianReturn:
-          $ref: '#/components/schemas/OutputHypoMedianReturn'
-          description: Median return across all securities for each period.
-        Security:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputHypoSecurityReturnsItem'
-          description: Array of per-security periodic return records.
-      description: Periodic return data for all securities and the median return across securities.
-    OutputHypoReturnDataItem:
+    OutputDataItemString:
       type: object
       properties:
         Id:
-          format: int32
-          type: integer
-          description: Sequential period identifier (1-based).
-        Date:
           type: string
-          description: Date of the period.
+          description: Time period identifier.
         Value:
           format: double
           type: number
-          description: Return value for the period.
-      description: A single period return data point with a date.
+          description: Value for the time period.
+      description: A time-series data point with a string identifier and a numeric value.
     OutputSecurityItem:
       type: object
       properties:
@@ -785,42 +1424,23 @@ components:
           format: double
           description: Weight of the security as a percentage of the portfolio.
       description: Reference data for a security appearing in the response.
-    OutputHypoPortfolioSummary:
+    OutputHypoInvestmentDetails:
       type: object
       properties:
-        AsOfDate:
-          format: date-time
-          type: string
-          description: End date of the illustration period.
-        PlanningAssumptions:
-          $ref: '#/components/schemas/OutputHypoPlanningAssumptions'
-          description: Summary of the planning assumptions used in the calculation.
-        PortfolioSummaryPerformance:
-          $ref: '#/components/schemas/OutputHypoPortfolioSummaryPerformance'
-          description: High-level performance metrics for the portfolio.
-        InvestmentDetails:
-          $ref: '#/components/schemas/OutputHypoInvestmentDetails'
-          description: Period-by-period breakdown of portfolio investment activity.
-        PortfolioSummaryChart:
-          $ref: '#/components/schemas/OutputHypoPortfolioSummaryChart'
-          description: Time-series data for rendering the portfolio growth chart.
-      description: Aggregate portfolio-level performance summary for the illustration period.
-    OutputHypoSecurityEndingMarketValueBreakdown:
-      type: object
-      properties:
-        Principal:
+        PortfolioDetails:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputHypoInvestmentDetailsItem'
+          description: Array of period records. Frequency determined by `InvestmentDetailReturnsFrequency`.
+        PortfolioTotalDistributionAndWithdrawal:
           format: double
           type: number
-          description: Portion of the ending market value attributable to the original principal investment.
-        Income:
+          description: Total distributions and withdrawals over the illustration period.
+        PortfolioTotalNewInvestment:
           format: double
           type: number
-          description: Portion of the ending market value attributable to reinvested income distributions.
-        CapGain:
-          format: double
-          type: number
-          description: Portion of the ending market value attributable to reinvested capital gain distributions.
-      description: Breakdown of the ending market value of a security into its constituent return components.
+          description: Total new investment over the illustration period.
+      description: Period-by-period breakdown of portfolio investment activity over the illustration period.
     InputAssetClassGroupConfigs:
       description: Asset class group to query.
       type: object
@@ -830,142 +1450,6 @@ components:
           description: Asset class group identifier. Maximum of one value can be passed in a request.
           items:
             $ref: '#/components/schemas/InputAssetClassGroupConfig'
-    InputAssetClassGroupConfig:
-      type: object
-      properties:
-        Id:
-          description: Asset class group identifier.
-          type: string
-          enum:
-          - ACG-CABROAD
-          - ACG-USBROAD
-          - ACG-USDETAILED-15
-          default: ACG-USBROAD
-    OutputHypoSecurityReturnsItem:
-      type: object
-      properties:
-        SecurityId:
-          type: string
-          description: Morningstar unique identifier of the security.
-        ReturnData:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputHypoReturnDataItem'
-          description: Array of period return data points for the security.
-      description: Periodic return data for a single security.
-    OutputHypoPlanningAssumptions:
-      type: object
-      properties:
-        Currency:
-          enum:
-          - AUD
-          - CAD
-          - CNY
-          - EUR
-          - GBP
-          - INR
-          - JPY
-          - USD
-          type: string
-          description: Currency of the portfolio output values. ISO alpha-3 currency code.
-        RebalanceFrequency:
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          - Biennially
-          - None
-          type: string
-          description: Frequency at which the portfolio is rebalanced.
-        IllustrationTrailingTimePeriod:
-          default: YearToDate
-          enum:
-          - YearToDate
-          - Year1
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
-          - EarliestAvailable
-          - EarliestCommon
-          - Customized
-          type: string
-          description: Time period used to determine the start and end dates of the illustration.
-        RebalanceThreshold:
-          format: double
-          type: number
-          description: Minimum allocation drift (in percentage points) that triggers a rebalance. For example, `5` means rebalancing occurs only when a holding drifts 5% or more from its target.
-        AllocationUpdateFrequency:
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          - None
-          type: string
-          description: Frequency at which the target allocation is updated.
-        FederalIncomeTaxRate:
-          format: double
-          type: number
-          description: Federal income tax rate applied in the calculation, based on filing status and taxable income.
-        CapitalGainTaxRate:
-          format: double
-          type: number
-          description: Long-term capital gains tax rate applied in the calculation, based on filing status and taxable income.
-        StateIncomeTaxRate:
-          format: double
-          type: number
-          description: State income tax rate applied in the calculation.
-        CanadianIncomeMarginalTaxRate:
-          format: double
-          type: number
-          description: Canadian income marginal tax rate applied in the calculation. Canada only.
-        CanadianDividendMarginalTaxRate:
-          format: double
-          type: number
-          description: Canadian dividend marginal tax rate applied in the calculation. Canada only.
-        CanadianCapitalGainsMarginalTaxRate:
-          format: double
-          type: number
-          description: Canadian capital gains marginal tax rate applied in the calculation. Canada only.
-        PayTaxes:
-          enum:
-          - OutOfPocket
-          - SalesOfShares
-          type: string
-          description: How taxes are paid — either out of pocket or by selling shares.
-        PayFees:
-          enum:
-          - OutOfPocket
-          - SalesOfShares
-          type: string
-          description: How fees are paid — either out of pocket or by selling shares.
-      description: Summary of the planning assumptions used in the hypothetical calculation.
-    OutputPerformanceDate:
-      description: Key performance date reference points for the portfolio.
-      type: object
-      properties:
-        EarliestCommonDate:
-          description: The earliest date for which all holdings in the portfolio have return data.
-          format: date-time
-          type: string
-        EarliestAvailableDate:
-          description: The earliest date for which any holding in the portfolio has return data.
-          format: date-time
-          type: string
-        EarliestCommonExtendedDate:
-          description: The earliest common date calculated using extended return history where available.
-          format: date-time
-          type: string
-        EarliestCommonExtended10YearDate:
-          description: The earliest common date within a 10-year window, calculated using extended return history where available.
-          format: date-time
-          type: string
-        EarliestInceptionDate:
-          description: The inception date of the most recently launched holding in the portfolio.
-          format: date-time
-          type: string
     OutputHypoInvestmentDetailsItem:
       type: object
       properties:
@@ -1014,57 +1498,6 @@ components:
           type: number
           description: Total return for the period, as a percentage.
       description: Investment activity for a single period in the portfolio breakdown.
-    OutputHypoMedianReturn:
-      type: object
-      properties:
-        ReturnData:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputHypoMedianReturnDataItem'
-          description: Array of period return data points.
-      description: Median return data across all securities for each period in the illustration.
-    RequestHypotheticalPerformance:
-      title: RequestHypotheticalPerformance
-      description: Generate hypothetical performance for up to 2 portfolios. Maximum of 100 holdings per portfolio.
-      required:
-      - RequestSettings
-      - Portfolios
-      type: object
-      properties:
-        View:
-          $ref: '#/components/schemas/InputHypoView'
-        RequestSettings:
-          description: Analysis settings for the request.
-          $ref: '#/components/schemas/InputHypoRequestSettings'
-        Portfolios:
-          type: array
-          minItems: 1
-          maxItems: 2
-          description: Array of portfolios to analyse. Maximum 2 portfolios per request. Maximum 100 holdings per portfolio.
-          items:
-            $ref: '#/components/schemas/InputPortfolioInput'
-    OutputDataItemString:
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Time period identifier.
-        Value:
-          format: double
-          type: number
-          description: Value for the time period.
-      description: A time-series data point with a string identifier and a numeric value.
-    InputHypoView:
-      required:
-      - Id
-      type: object
-      properties:
-        Id:
-          description: Identifier of a predefined set of data points to return in the response.
-          default: Growth
-          enum:
-          - Growth
-          type: string
     InputHypoFeeSchedule:
       description: To pass different fee schedule to the hypo engine.If passed in input payload then are overridden inside feesch.
       type: object
@@ -1091,49 +1524,42 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InputHypoFeeDetails'
-    OutputHypoInvestmentAssumption:
+    OutputHypoSecuritySummaryPerformance:
       type: object
       properties:
-        Security:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputHypoInvestmentAssumptionSecurityItem'
-          description: Array of per-security investment assumption records.
-      description: Investment assumptions applied to each security in the hypothetical calculation.
-    ResponseHypotheticalPerformance:
+        AverageAnnualizedReturn:
+          format: double
+          type: number
+          description: Average annualised return of the security over the illustration period.
+        CumulativeReturn:
+          format: double
+          type: number
+          description: Total cumulative return of the security over the illustration period, calculated by geometrically linking single-period returns.
+        Day7Yield:
+          format: double
+          type: number
+          description: 7-day annualised yield. Applicable to money market funds.
+      description: High-level performance metrics for a single security over the illustration period.
+    OutputHypoPortfolioSummary:
       type: object
       properties:
-        PerformanceDate:
-          $ref: '#/components/schemas/OutputPerformanceDate'
-        Hypo:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputHypoHypo'
-        SecurityReference:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputSecurityItem'
-    InputHypoRequestSettings:
-      description: Analysis settings including output currency and hypothetical calculation parameters.
-      required:
-      - OutputCurrency
-      type: object
-      properties:
-        OutputCurrency:
+        AsOfDate:
+          format: date-time
           type: string
-          description: Currency used to calculate output values.
-          default: USD
-          enum:
-          - USD
-          - CAD
-          - EUR
-          - GBP
-          - AUD
-        AssetClassGroupConfigs:
-          $ref: '#/components/schemas/InputAssetClassGroupConfigs'
-        HypoCalculationSettings:
-          description: Hypothetical performance calculation settings applied across all portfolios in the request. Can be overridden at portfolio level via `HypoCalculationSettings` on each portfolio.
-          $ref: '#/components/schemas/InputHypoCalculationSettings'
+          description: End date of the illustration period.
+        PlanningAssumptions:
+          $ref: '#/components/schemas/OutputHypoPlanningAssumptions'
+          description: Summary of the planning assumptions used in the calculation.
+        PortfolioSummaryPerformance:
+          $ref: '#/components/schemas/OutputHypoPortfolioSummaryPerformance'
+          description: High-level performance metrics for the portfolio.
+        InvestmentDetails:
+          $ref: '#/components/schemas/OutputHypoInvestmentDetails'
+          description: Period-by-period breakdown of portfolio investment activity.
+        PortfolioSummaryChart:
+          $ref: '#/components/schemas/OutputHypoPortfolioSummaryChart'
+          description: Time-series data for rendering the portfolio growth chart.
+      description: Aggregate portfolio-level performance summary for the illustration period.
     OutputHypoSecuritySummary:
       type: object
       properties:
@@ -1143,59 +1569,6 @@ components:
             $ref: '#/components/schemas/OutputHypoSecuritySummaryItem'
           description: Array of per-security summary records.
       description: Per-security performance summaries for the illustration period.
-    OutputHypoBenchmarkPerformance:
-      type: object
-      properties:
-        Name:
-          type: string
-          description: Name of the benchmark.
-        StartDate:
-          format: date-time
-          type: string
-          description: Start date of the benchmark performance series.
-        Performance:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputDataItemString'
-          description: Array of time-series benchmark performance data points.
-      description: Time-series performance data for a benchmark associated with a security.
-    InputPortfolioInput:
-      description: Object representing a portfolio to be analysed. Each holding must specify a security identifier and either `Weight` or `Value` to define its allocation. `TotalValue` is required when holdings use `Weight`. Maximum of 100 holdings per portfolio.
-      required:
-      - Name
-      - Currency
-      - Holdings
-      type: object
-      properties:
-        Name:
-          description: Portfolio name.
-          type: string
-        TotalValue:
-          description: Total market value of the portfolio in the portfolio currency. Required when holdings use `Weight`.
-          type: number
-          format: double
-          minimum: 1
-          example: 20000
-        Currency:
-          description: Portfolio currency. ISO alpha-3 currency code.
-          type: string
-          enum:
-          - USD
-          - CAD
-          - EUR
-          - GBP
-          - AUD
-          example: USD
-        HypoCalculationSettings:
-          description: Portfolio-level calculation settings. When set, overrides the request-level `HypoCalculationSettings` for this portfolio.
-          $ref: '#/components/schemas/InputHypoCalculationSettingsPortfolio'
-        Holdings:
-          type: array
-          minItems: 1
-          maxItems: 100
-          description: List of portfolio holdings. Maximum of 100 holdings per portfolio.
-          items:
-            $ref: '#/components/schemas/InputPortfolioInputHolding'
     OutputHypoPortfolioSummaryPerformance:
       type: object
       properties:
@@ -1220,418 +1593,28 @@ components:
           type: number
           description: Cumulative return of the benchmark over the illustration period, calculated by geometrically linking single-period returns.
       description: High-level performance metrics for the portfolio over the illustration period.
-    InputHypoFeeDetails:
+    OutputHypoInvestmentAssumption:
       type: object
       properties:
-        Fee:
-          format: double
-          description: Fee Amount
-          type: number
-          minimum: 0
-          example: 3.25
-        FeeType:
-          description: type of fee
-          default: Percentage
-          enum:
-          - Amount
-          - Percentage
-          type: string
-        AccountValueFrom:
-          format: double
-          default: '0'
-          description: Minimum range value for fee
-          type: number
-        AccountValueTo:
-          format: double
-          description: Maximum range value for fee
-          type: number
-    OutputHypoMedianReturnDataItem:
-      type: object
-      properties:
-        Id:
-          format: int32
-          type: integer
-          description: Sequential period identifier (1-based).
-        Value:
-          format: double
-          type: number
-          description: Return value for the period.
-      description: A single period return data point.
-    InputPortfolioInputHolding:
-      description: 'Each holding requires a security identifier and a position size. For the identifier, pass one of: `SecurityId`, `CUSIP`, `FundCode`, `ISIN`, `PerformanceId`, or `TradingSymbol`. If multiple identifiers are provided for a single holding, `SecurityId` takes priority; if `SecurityId` is absent, the last identifier listed in the object is used. For the position size, pass either `Weight` or `Value`.'
-      type: object
-      properties:
-        PerformanceId:
-          description: Morningstar performance identifier of a security.
-          type: string
-          examples:
-          - 0P00002QN3
-        SecurityId:
-          description: Morningstar unique identifier of a security. Use `CASH%0.000` for cash positions.
-          type: string
-          examples:
-          - FOUSA00DFS
-          - CASH%0.000
-        ISIN:
-          description: ISIN identifier of a security.
-          type: string
-          examples:
-          - US0378331005
-        CUSIP:
-          description: CUSIP identifier of a security.
-          type: string
-          examples:
-          - 09251T103
-        TradingSymbol:
-          description: Trading symbol (ticker) of a security.
-          type: string
-          examples:
-          - IBM
-        FundCode:
-          description: Fund code identifier of a security. Specific to Thai markets.
-          type: string
-          example: ABG
-        Weight:
-          description: Holding weight as a percentage of portfolio total. All holding weights must sum to 100. Requires `TotalValue` to be set on the portfolio.
-          minimum: 1
-          maximum: 100
-          example: 60
-          type: number
-          format: double
-        Value:
-          description: Market value of the holding in the portfolio currency.
-          minimum: 1
-          example: 25000
-          type: number
-          format: double
-        AssetBasedAnnualFee:
-          minimum: 0
-          default: 0
-          example: 1.15
-          format: double
-          description: Holding-level annual advisory fee as a percentage of holding value (e.g. `1.15` = 1.15%). Defaults to `0` (no fee). For Australian Hypo only, a dollar amount can be specified — see `AssetFeeType`. Holding-level fees are summed with portfolio-level fees. `AssetFeeFrequency` and `AssetFeeType` must match at both holding and portfolio level.
-          type: number
-        AssetFeeFrequency:
-          description: How often the holding-level asset-based fee is deducted. `None` is treated as `Monthly`. Must match `AssetFeeFrequency` at portfolio level when `AssetBasedAnnualFee` is set at holding level.
-          default: Monthly
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          - None
-          type: string
-        AssetFeeType:
-          description: Specifies whether `AssetBasedAnnualFee` is expressed as a percentage or a fixed dollar amount. The `Amount` option is only supported for Australian Hypo. Must match `AssetFeeType` at portfolio level when `AssetBasedAnnualFee` is set at holding level.
-          default: Percentage
-          enum:
-          - Amount
-          - Percentage
-          type: string
-        FrontLoadType:
-          description: Sales fee schedule applied to this holding on purchase or sale. Must match `FrontLoadType` at portfolio level when set at holding level.
-          default: Standard
-          enum:
-          - Standard
-          - Custom
-          - LetterOfIntent
-          - None
-          - CustomEntry
-          - CustomExit
-          type: string
-        LoadFeeType:
-          description: Specifies whether `LoadFeeAmount` is expressed as a fixed dollar amount or a percentage. Only applies when `FrontLoadType` is `Custom`. Must match `CustomFeeType` at portfolio level.
-          default: Amount
-          enum:
-          - Amount
-          - Percentage
-          type: string
-        LoadFeeAmount:
-          format: double
-          description: Amount of the custom load fee. Only applies when `FrontLoadType` is `Custom`.
-          default: 0
-          type: number
-    InputHypoCalculationSettings:
-      description: Contains input parameters and their values used in the hypothetical calculations.
-      type: object
-      properties:
-        ApplyFeeForRebalance:
-          description: When `true`, standard front-end and back-end charges are applied to any buys and sells triggered by rebalancing, using whichever fee schedule is configured (`FrontLoadType`). When `false`, no front-end or back-end charges are applied to rebalancing transactions.
-          default: false
-          type: boolean
-        ApplySalesCharge:
-          description: When `false`, standard deferred and redemption fees are not applied on redemption. Defaults to `false`.
-          default: false
-          type: boolean
-        AssetBasedAnnualFee:
-          minimum: 0
-          default: 0
-          example: 1.15
-          format: double
-          description: Annual asset-based fee as a percentage (e.g. `1.00` = 1%). For Australian Hypo, may be expressed as a dollar amount depending on `AssetFeeType`.
-          type: number
-        AssetFeeFrequency:
-          description: How often the asset-based fee is deducted. Defaults to `Monthly`. `None` also defaults to `Monthly`.
-          default: Monthly
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          - None
-          type: string
-        AssetFeeType:
-          description: Whether `AssetBasedAnnualFee` is expressed as a percentage or a dollar amount. Australian Hypo only. Defaults to `Percentage`.
-          default: Percentage
-          enum:
-          - Amount
-          - Percentage
-          type: string
-        CapitalGainTaxRate:
-          format: double
-          default: 0
-          description: Long-term capital gains tax rate applied to profits from the sale of capital assets. In Canada, referred to as the Capital Gains Marginal Tax Rate.
-          type: number
-        CustomFeeType:
-          description: Type of value supplied in `SalesFeeAmount` when `FrontLoadType` is `Custom` — either a percentage or a fixed dollar amount. Optional; only applies when `FrontLoadType=Custom`.
-          default: Amount
-          enum:
-          - Amount
-          - Percentage
-          type: string
-        DividendTaxRate:
-          format: double
-          default: 0
-          description: Tax rate applied to dividend income received from the portfolio. Canada only.
-          type: number
-        EndDate:
-          format: date
-          example: '2022-10-31'
-          description: End date of the illustration period. Required only when `IllustrationTrailingTimePeriod` is `Customized`.
-          type: string
-        EntryExitFeeType:
-          description: Type of custom entry or exit fee to apply. Australian Hypo only. Defaults to `None`.
-          default: None
-          enum:
-          - CustomEntry
-          - CustomExit
-          - None
-          type: string
-        FederalIncomeTaxRate:
-          format: double
-          default: 0
-          description: Federal income tax rate applied to income from the portfolio. In Canada, referred to as the Income Marginal Tax Rate.
-          type: number
-        FeeSchedule:
-          $ref: '#/components/schemas/InputHypoFeeSchedule'
-          description: Fee schedule details. Used when `FrontLoadType` is `LetterOfIntent`.
-        FilingStatus:
-          description: Tax filing status of the investor. Determines which tax rates and brackets apply. Defaults to `NoTaxes`.
-          default: NoTaxes
-          enum:
-          - NoTaxes
-          - Single
-          - MarriedFilingJointly
-          - MarriedFilingSeparately
-          - HeadOfHousehold
-          - Registered
-          - NonRegistered
-          type: string
-        FrontLoadType:
-          description: Sales fee schedule applied to purchases and sales. Defaults to `Standard`.
-          default: Standard
-          enum:
-          - Standard
-          - Custom
-          - LetterOfIntent
-          - None
-          - CustomEntry
-          - CustomExit
-          type: string
-        HypoType:
-          description: Type of hypothetical calculation to run. Defaults to `Portfolio`.
-          default: Portfolio
-          enum:
-          - Portfolio
-          - IndividualHoldings
-          - HoldingsComparison
-          - PortfolioComparison
-          type: string
-        IllustrationTrailingTimePeriod:
-          description: Trailing time period that defines the illustration start and end dates. When set to `Customized`, `StartDate` and `EndDate` must be provided. Defaults to `YearToDate`.
-          default: YearToDate
-          enum:
-          - YearToDate
-          - Year1
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
-          - EarliestAvailable
-          - EarliestCommon
-          - Customized
-          - EarliestCommonExtended
-          - EarliestCommonExtended10Year
-          type: string
-        InvestmentDetailReturnsFrequency:
-          description: Frequency of the period-level investment detail records returned in the response. Defaults to `Monthly`.
-          default: Monthly
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          type: string
-        LiquidateOnEndDate:
-          description: When `true`, all holdings are sold at month-end NAV/price on the end date and applicable taxes are applied. This affects total returns because taxes are calculated on the final market value.
-          default: false
-          type: boolean
-        PayFees:
-          description: How asset-based fees are paid — either out of pocket or by selling shares, at the beginning or end of the period. Defaults to `OutOfPocketBeginning`.
-          default: OutOfPocketBeginning
-          enum:
-          - OutOfPocketBeginning
-          - OutOfPocketEnding
-          - SalesOfSharesBeginning
-          - SalesOfSharesEnding
-          type: string
-        PayFeesUseCashFirst:
-          description: When `true` and `PayFees` is set to a sale-of-shares option, cash equivalents in the portfolio are used to cover fees before other securities are sold. Portfolio illustrations only.
-          default: false
-          type: boolean
-        PayTaxes:
-          description: How taxes are paid — either out of pocket or by selling shares. Defaults to `OutOfPocket`.
-          default: OutOfPocket
-          enum:
-          - OutOfPocket
-          - SalesOfShares
-          type: string
-        PortfolioAmountFee:
-          format: double
-          default: 0
-          description: Fixed dollar fee charged annually at the portfolio level.
-          type: number
-        RebalanceFrequency:
-          description: How often the portfolio is rebalanced to its target allocation. Defaults to `Monthly`.
-          default: Monthly
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          - Biennially
-          - None
-          type: string
-        RebalanceThreshold:
-          format: double
-          description: Minimum allocation drift (%) that triggers a rebalance. For example, `5` means rebalancing only occurs if at least one holding drifts more than 5% from its target. Defaults to `0` (rebalance unconditionally at each `RebalanceFrequency` interval).
-          default: 0
-          type: number
-        ReinvestCapitalGains:
-          description: When `true`, capital gains distributions are reinvested. For Australian Hypo, `ReinvestDividends` and `ReinvestCapitalGains` must be set to the same value. Defaults to `false`.
-          default: false
-          type: boolean
-        ReinvestDividends:
-          description: When `true`, dividend and income distributions are reinvested. For Australian Hypo, `ReinvestDividends` and `ReinvestCapitalGains` must be set to the same value. Defaults to `false`.
-          default: false
-          type: boolean
-        ReturnCalcMethod:
-          description: Price basis used for return calculations — market price or NAV. Defaults to `MarketPrice`.
-          default: MarketPrice
-          enum:
-          - MarketPrice
-          - Nav
-          type: string
-        SalesFeeAmount:
-          format: double
-          description: Custom fee amount applied per the type defined in `CustomFeeType`. Used only when `FrontLoadType` is `Custom`. Defaults to `0`.
-          default: 0
-          type: number
-        StartDate:
-          format: date
-          example: '2012-10-31'
-          description: Start date of the illustration period. Required only when `IllustrationTrailingTimePeriod` is `Customized`.
-          type: string
-        StateIncomeTaxRate:
-          format: double
-          default: 0
-          description: State income tax rate applied to income from the portfolio.
-          type: number
-        SubsequentInvestmentAmount:
-          format: double
-          default: 0
-          description: Amount invested or withdrawn on a recurring basis, according to `SubsequentInvestmentWithdrawalFrequency`. See `SubsequentInvestmentType` for whether this is an investment or withdrawal.
-          type: number
-        SubsequentInvestmentType:
-          description: Whether `SubsequentInvestmentAmount` is applied as a recurring investment, a fixed withdrawal, or a percentage withdrawal.
-          default: Invest
-          enum:
-          - Invest
-          - Withdrawal
-          - WithdrawalPercentage
-          type: string
-        SubsequentInvestmentWithdrawalFrequency:
-          description: How often `SubsequentInvestmentAmount` is applied. The transaction is processed on the first month-end within each frequency period.
-          default: Monthly
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          type: string
-        SubsequentInvestmentWithdrawalMonth:
-          description: Month offset (0–11) from the illustration start date at which the first subsequent transaction is applied. `0` = same month as the start date. Ignored when `SubsequentInvestmentWithdrawalFrequency` is `Monthly`.
-          default: 0
-          minimum: 0
-          maximum: 11
-          example: 3
-          type: number
-        SynchronizePortfolioStartDate:
-          description: When `true`, overrides `IllustrationTrailingTimePeriod` to use the `EarliestCommon` date across all portfolios in the request.
-          default: false
-          type: boolean
-        TaxableIncome:
-          format: double
-          default: 0
-          description: Annual taxable income of the investor, used to determine applicable tax brackets. Defaults to `0`.
-          type: number
-    OutputHypoPortfolioSummaryChart:
-      type: object
-      properties:
-        Frequency:
-          enum:
-          - Monthly
-          type: string
-          description: Frequency of the chart data points.
-        Portfolio:
-          $ref: '#/components/schemas/OutputHypoPortfolioSummaryChartItem'
-          description: Time-series growth values for the portfolio.
-        Benchmark:
-          $ref: '#/components/schemas/OutputHypoPortfolioSummaryChartItem'
-          description: Time-series growth values for the benchmark.
-        NetAmountInvested:
+        Security:
           type: array
           items:
-            $ref: '#/components/schemas/OutputDataItemString'
-          description: Time-series net amount invested values.
-      description: Time-series data for rendering the portfolio growth chart.
-  requestBodies:
-    RequestHypotheticalPerformance:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RequestHypotheticalPerformance'
-          examples:
-            RequestHypoExample1:
-              $ref: '#/components/examples/RequestHypoExample1'
-  responses:
+            $ref: '#/components/schemas/OutputHypoInvestmentAssumptionSecurityItem'
+          description: Array of per-security investment assumption records.
+      description: Investment assumptions applied to each security in the hypothetical calculation.
     ResponseHypotheticalPerformance:
-      description: '200: OK'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseHypotheticalPerformance'
+      type: object
+      properties:
+        PerformanceDate:
+          $ref: '#/components/schemas/OutputPerformanceDate'
+        Hypo:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputHypoHypo'
+        SecurityReference:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputSecurityItem'
   examples:
     RequestHypoExample1:
       summary: Request-Level HypoCalculationSettings
@@ -1710,6 +1693,23 @@ components:
             FrontLoadType: Standard
             LoadFeeType: Amount
             LoadFeeAmount: 0
+  requestBodies:
+    RequestHypotheticalPerformance:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestHypotheticalPerformance'
+          examples:
+            RequestHypoExample1:
+              $ref: '#/components/examples/RequestHypoExample1'
+  responses:
+    ResponseHypotheticalPerformance:
+      description: '200: OK'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseHypotheticalPerformance'
   securitySchemes:
     Bearer:
       type: http

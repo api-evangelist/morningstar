@@ -1285,7 +1285,132 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 914
 components:
+  responses:
+    ResponseEquityRightsIssue:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              rightsIssue:
+                $ref: '#/components/schemas/OutputRightsIssue'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityStockSplit:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              stockSplit:
+                $ref: '#/components/schemas/OutputStockSplit'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCapitalRepayment:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              capitalRepayment:
+                $ref: '#/components/schemas/OutputCapitalRepayment'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCashDividend:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              cashDividend:
+                $ref: '#/components/schemas/OutputCashDividend'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquitySpinOff:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              spinOff:
+                $ref: '#/components/schemas/OutputSpinOff'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityMergersAndAcquisitions:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              mergerAcquisition:
+                $ref: '#/components/schemas/OutputMergerAcquisition'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityCorporateActionsPriceMergersAndAcquisitions:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              capitalRepayment:
+                $ref: '#/components/schemas/OutputCapitalRepayment'
+              cashDividend:
+                $ref: '#/components/schemas/OutputCashDividend'
+              mergerAcquisition:
+                $ref: '#/components/schemas/OutputMergerAcquisition'
+              rightsIssue:
+                $ref: '#/components/schemas/OutputRightsIssue'
+              spinOff:
+                $ref: '#/components/schemas/OutputSpinOff'
+              stockSplit:
+                $ref: '#/components/schemas/OutputStockSplit'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
   schemas:
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
     OutputIdentifiers:
       type: object
       properties:
@@ -1318,82 +1443,25 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputCapitalRepayment:
+    OutputMetadataMessages:
       type: object
       properties:
-        excludingDate:
+        type:
           type: string
-          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
           nullable: true
-        adjustmentFactor:
-          type: number
-          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
-          format: double
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        declareDate:
+        code:
           type: string
-          description: Date when the company announced the event
           nullable: true
-        payDate:
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
           type: string
-          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
-          nullable: true
-        recordDate:
-          type: string
-          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
-          nullable: true
-        subscriptionPrice:
-          type: number
-          description: Price at which the rights issue or capital repayment is offered by the company
-          format: double
           nullable: true
       additionalProperties: false
-      title: OutputCapitalRepayment
-    OutputSpinOff:
-      type: object
-      properties:
-        excludingDate:
-          type: string
-          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
-          nullable: true
-        adjustmentFactor:
-          type: number
-          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
-          format: double
-          nullable: true
-        childCompanyId:
-          type: string
-          description: A unique Morningstar Company Id that indicates the child company spun off
-          nullable: true
-        childPerformanceId:
-          type: string
-          description: A unique Morningstar Share Class Id that indicates the share class for the child company spun off
-          nullable: true
-        declareDate:
-          type: string
-          description: Date when the company announced the event
-          nullable: true
-        fractionShare:
-          type: string
-          description: 'Indicates how fractions are treated in the event of a spin-off: Possible values include Cash; Disregard; Rounded; and Other'
-          nullable: true
-        numberOfShares:
-          type: number
-          description: The number of child company shares offered in a spin-off
-          format: double
-          nullable: true
-        payDate:
-          type: string
-          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
-          nullable: true
-        recordDate:
-          type: string
-          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
-          nullable: true
-      additionalProperties: false
-      title: OutputSpinOff
+      title: OutputMetadataMessages
     CodeMappingBoolean:
       type: object
       properties:
@@ -1405,70 +1473,6 @@ components:
           nullable: true
       additionalProperties: false
       title: CodeMappingBoolean
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputStockSplit:
-      type: object
-      properties:
-        recordDate:
-          type: string
-          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
-          nullable: true
-        adjustmentFactor:
-          type: number
-          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
-          format: double
-          nullable: true
-        corporateActionType:
-          type: string
-          description: 'Indicates type of stock split event: Stock Split (SS) or Stock Dividend (SD)'
-          nullable: true
-        declareDate:
-          type: string
-          description: Date when the company announced the event
-          nullable: true
-        excludingDate:
-          type: string
-          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
-          nullable: true
-        isFunctionalStockSplit:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        payDate:
-          type: string
-          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
-          nullable: true
-        splitFrom:
-          type: number
-          description: Indicates the old shares (pre-split) of split ratio
-          format: double
-          nullable: true
-        splitTo:
-          type: number
-          description: Indicates the new shares (post-split) of split ratio
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputStockSplit
     OutputCashDividend:
       type: object
       properties:
@@ -1557,42 +1561,7 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputCashDividend
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    CodeMappingShort:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: integer
-          format: int32
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingShort
-    OutputRightsIssue:
+    OutputSpinOff:
       type: object
       properties:
         excludingDate:
@@ -1604,20 +1573,25 @@ components:
           description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
           format: double
           nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
+        childCompanyId:
+          type: string
+          description: A unique Morningstar Company Id that indicates the child company spun off
+          nullable: true
+        childPerformanceId:
+          type: string
+          description: A unique Morningstar Share Class Id that indicates the share class for the child company spun off
+          nullable: true
         declareDate:
           type: string
           description: Date when the company announced the event
           nullable: true
-        existingShare:
-          type: number
-          description: Indicates the old shares prior to a rights issue offering
-          format: double
+        fractionShare:
+          type: string
+          description: 'Indicates how fractions are treated in the event of a spin-off: Possible values include Cash; Disregard; Rounded; and Other'
           nullable: true
-        newShare:
+        numberOfShares:
           type: number
-          description: Indicates the new shares to be issued in a rights issue offering
+          description: The number of child company shares offered in a spin-off
           format: double
           nullable: true
         payDate:
@@ -1628,13 +1602,8 @@ components:
           type: string
           description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
           nullable: true
-        subscriptionPrice:
-          type: number
-          description: Price at which the rights issue or capital repayment is offered by the company
-          format: double
-          nullable: true
       additionalProperties: false
-      title: OutputRightsIssue
+      title: OutputSpinOff
     OutputInvalidInvestments:
       type: object
       properties:
@@ -1681,6 +1650,39 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+    OutputCapitalRepayment:
+      type: object
+      properties:
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
+          nullable: true
+        adjustmentFactor:
+          type: number
+          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        payDate:
+          type: string
+          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
+          nullable: true
+        recordDate:
+          type: string
+          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
+          nullable: true
+        subscriptionPrice:
+          type: number
+          description: Price at which the rights issue or capital repayment is offered by the company
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputCapitalRepayment
     OutputMergerAcquisition:
       type: object
       properties:
@@ -1768,150 +1770,148 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMergerAcquisition
-    OutputMetadataMessages:
+    OutputStockSplit:
       type: object
       properties:
-        type:
+        recordDate:
           type: string
+          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
           nullable: true
-        code:
+        adjustmentFactor:
+          type: number
+          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
+          format: double
+          nullable: true
+        corporateActionType:
           type: string
+          description: 'Indicates type of stock split event: Stock Split (SS) or Stock Dividend (SD)'
           nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
+          nullable: true
+        isFunctionalStockSplit:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        payDate:
+          type: string
+          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
+          nullable: true
+        splitFrom:
+          type: number
+          description: Indicates the old shares (pre-split) of split ratio
+          format: double
+          nullable: true
+        splitTo:
+          type: number
+          description: Indicates the new shares (post-split) of split ratio
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputStockSplit
+    OutputRightsIssue:
+      type: object
+      properties:
+        excludingDate:
+          type: string
+          description: Date when the event becomes effective; which is normally two business days before the record date. This is the date from which the security is traded without benefit (excluding)
+          nullable: true
+        adjustmentFactor:
+          type: number
+          description: The stock split (including stock dividend); rights issue; spin off or capital repayment factor that applies to price and per share data to adjust the history
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        declareDate:
+          type: string
+          description: Date when the company announced the event
+          nullable: true
+        existingShare:
+          type: number
+          description: Indicates the old shares prior to a rights issue offering
+          format: double
+          nullable: true
+        newShare:
+          type: number
+          description: Indicates the new shares to be issued in a rights issue offering
+          format: double
+          nullable: true
+        payDate:
+          type: string
+          description: Date when  the benefit; dividend amount or new shares; gets credited to the brokerage accounts of shareholders
+          nullable: true
+        recordDate:
+          type: string
+          description: Date when the shareholders recorded in the shareholder register are considered eligible to get benefit
+          nullable: true
+        subscriptionPrice:
+          type: number
+          description: Price at which the rights issue or capital repayment is offered by the company
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputRightsIssue
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
           nullable: true
         message:
           type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    CodeMappingString:
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    CodeMappingShort:
       type: object
       properties:
         value:
           type: string
           nullable: true
         code:
-          type: string
+          type: integer
+          format: int32
           nullable: true
       additionalProperties: false
-      title: CodeMappingString
-  responses:
-    ResponseEquityCapitalRepayment:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              capitalRepayment:
-                $ref: '#/components/schemas/OutputCapitalRepayment'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityCorporateActionsPriceMergersAndAcquisitions:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              capitalRepayment:
-                $ref: '#/components/schemas/OutputCapitalRepayment'
-              cashDividend:
-                $ref: '#/components/schemas/OutputCashDividend'
-              mergerAcquisition:
-                $ref: '#/components/schemas/OutputMergerAcquisition'
-              rightsIssue:
-                $ref: '#/components/schemas/OutputRightsIssue'
-              spinOff:
-                $ref: '#/components/schemas/OutputSpinOff'
-              stockSplit:
-                $ref: '#/components/schemas/OutputStockSplit'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityStockSplit:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              stockSplit:
-                $ref: '#/components/schemas/OutputStockSplit'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityMergersAndAcquisitions:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              mergerAcquisition:
-                $ref: '#/components/schemas/OutputMergerAcquisition'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityRightsIssue:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              rightsIssue:
-                $ref: '#/components/schemas/OutputRightsIssue'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquitySpinOff:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              spinOff:
-                $ref: '#/components/schemas/OutputSpinOff'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityCashDividend:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              cashDividend:
-                $ref: '#/components/schemas/OutputCashDividend'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
+      title: CodeMappingShort
   securitySchemes:
     Bearer:
       type: http

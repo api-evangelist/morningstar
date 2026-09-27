@@ -102,6 +102,72 @@ paths:
       deprecated: false
 components:
   schemas:
+    PersonDto:
+      title: PersonDto
+      required:
+      - firstName
+      - id
+      - lastName
+      - userAgreementAccepted
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the Person
+          format: int64
+          example: 778899
+        firstName:
+          type: string
+          description: First name of the Person
+          example: Rosalind
+        middleName:
+          type: string
+          description: Middle name of the Person
+          example: Elsie
+        lastName:
+          type: string
+          description: Last name of the Person
+          example: Franklin
+        emailAddress:
+          type: string
+          description: Email address of the Person
+        phoneNumber:
+          type: string
+          description: Phone number of the Person
+          example: '5085551212'
+        taxId:
+          type: string
+          description: Social Security Number or Tax ID of the Person
+          example: '111111111'
+        isSSOUser:
+          type: boolean
+          description: true if Person is an SSO-enabled user
+          example: true
+        advisorId:
+          type: integer
+          description: Id of the Person's Advisor
+          format: int64
+        firmTag1:
+          type: string
+          description: Firm Tag 1
+          example: xxx
+        firmTag2:
+          type: string
+          description: Firm Tag 2
+          example: yyy
+        firmTag3:
+          type: string
+          description: Firm Tag 3
+          example: ZZZ
+        userAgreementAccepted:
+          type: boolean
+          description: Indicates whether the user agreement has been accepted
+          example: true
+        uimGuid:
+          type: string
+          description: UIM Guid for the Person if one was assigned at creation
+          example: C5E883D3-8B92-438C-A43B-E70455FA1F06
+      description: Profile data of a person
     DataRecord:
       title: DataRecord
       type: object
@@ -171,69 +237,3 @@ components:
           description: 'Used in conjunction with Service Admin JWT.  The uimGuid for the user to be created. Must be unique across all Persons in the ByAllAccounts system. If not, HTTP 409 Conflict is returned with the person URI.  Ignored if a valid Service Admin JWT is not provided. </br> Required when a Service Admin JWT is submitted to the endpoint. '
           example: C5E883D3-8B92-438C-A43B-E70455FA1F06
       description: Profile data of a person to be added
-    PersonDto:
-      title: PersonDto
-      required:
-      - firstName
-      - id
-      - lastName
-      - userAgreementAccepted
-      type: object
-      properties:
-        id:
-          type: integer
-          description: ID of the Person
-          format: int64
-          example: 778899
-        firstName:
-          type: string
-          description: First name of the Person
-          example: Rosalind
-        middleName:
-          type: string
-          description: Middle name of the Person
-          example: Elsie
-        lastName:
-          type: string
-          description: Last name of the Person
-          example: Franklin
-        emailAddress:
-          type: string
-          description: Email address of the Person
-        phoneNumber:
-          type: string
-          description: Phone number of the Person
-          example: '5085551212'
-        taxId:
-          type: string
-          description: Social Security Number or Tax ID of the Person
-          example: '111111111'
-        isSSOUser:
-          type: boolean
-          description: true if Person is an SSO-enabled user
-          example: true
-        advisorId:
-          type: integer
-          description: Id of the Person's Advisor
-          format: int64
-        firmTag1:
-          type: string
-          description: Firm Tag 1
-          example: xxx
-        firmTag2:
-          type: string
-          description: Firm Tag 2
-          example: yyy
-        firmTag3:
-          type: string
-          description: Firm Tag 3
-          example: ZZZ
-        userAgreementAccepted:
-          type: boolean
-          description: Indicates whether the user agreement has been accepted
-          example: true
-        uimGuid:
-          type: string
-          description: UIM Guid for the Person if one was assigned at creation
-          example: C5E883D3-8B92-438C-A43B-E70455FA1F06
-      description: Profile data of a person

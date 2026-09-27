@@ -143,92 +143,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
-    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
-      required:
-      - Name
-      - Currency
-      - Holdings
-      type: object
-      properties:
-        Name:
-          type: string
-        TotalValue:
-          format: double
-          type: number
-        Currency:
-          enum:
-          - AUD
-          - CAD
-          - CNY
-          - EUR
-          - GBP
-          - INR
-          - JPY
-          - USD
-          type: string
-        Holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
-        Benchmark:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
-        IrrFees:
-          format: double
-          type: number
-        RiskFreeProxyId:
-          description: Default is set in the Configuration. This is a portfolio level override.
-          type: string
-    Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings:
-      type: object
-      properties:
-        RequestSettings:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.EsgRequestSettings'
-        Portfolios:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
-      example:
-        Portfolios:
-        - Name: TestPortfolio1
-          TotalValue: 10000
-          Holdings:
-          - SecurityId: F00000VCTT
-            Weight: 20
-          - SecurityId: 0P00002NW8
-            Weight: 10
-          - TradingSymbol: AAPL
-            Weight: 15
-          - ISIN: US09251T1034
-            Weight: 35
-          - CUSIP: '256219106'
-            Weight: 20
-          Benchmark:
-            Type: Standard
-            Holdings:
-            - SecurityId: XIUSA04G92
-              Type: XI
-              Weight: 100
-    Morningstar.PortfolioAnalysis.Models.Input.Esg.EsgRequestSettings:
-      type: object
-      properties:
-        OutputCurrency:
-          enum:
-          - AUD
-          - CAD
-          - CNY
-          - EUR
-          - GBP
-          - INR
-          - JPY
-          - USD
-          type: string
-        AnalysisDateTimePeriod:
-          enum:
-          - MonthEnd
-          - QuarterEnd
-          type: string
-        IncludeSecurityLevel:
-          type: boolean
     Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding:
       description: 'TODO: Implement same way as PortfolioInput'
       required:
@@ -330,6 +244,92 @@ components:
           type: string
         FundCode:
           type: string
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
+      required:
+      - Name
+      - Currency
+      - Holdings
+      type: object
+      properties:
+        Name:
+          type: string
+        TotalValue:
+          format: double
+          type: number
+        Currency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
+        IrrFees:
+          format: double
+          type: number
+        RiskFreeProxyId:
+          description: Default is set in the Configuration. This is a portfolio level override.
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.Esg.EsgRequestSettings:
+      type: object
+      properties:
+        OutputCurrency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        AnalysisDateTimePeriod:
+          enum:
+          - MonthEnd
+          - QuarterEnd
+          type: string
+        IncludeSecurityLevel:
+          type: boolean
+    Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings:
+      type: object
+      properties:
+        RequestSettings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Esg.EsgRequestSettings'
+        Portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
+      example:
+        Portfolios:
+        - Name: TestPortfolio1
+          TotalValue: 10000
+          Holdings:
+          - SecurityId: F00000VCTT
+            Weight: 20
+          - SecurityId: 0P00002NW8
+            Weight: 10
+          - TradingSymbol: AAPL
+            Weight: 15
+          - ISIN: US09251T1034
+            Weight: 35
+          - CUSIP: '256219106'
+            Weight: 20
+          Benchmark:
+            Type: Standard
+            Holdings:
+            - SecurityId: XIUSA04G92
+              Type: XI
+              Weight: 100
   securitySchemes:
     bearerAuth:
       type: http

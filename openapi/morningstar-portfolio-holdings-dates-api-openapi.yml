@@ -71,6 +71,115 @@ paths:
           $ref: '#/components/responses/ResponsePortfolioHoldingsDatesBadRequest'
 components:
   schemas:
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    ResponsePortfolioHoldingsDates:
+      type: object
+      properties:
+        portfolioDates:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPortfolioHoldingsDates'
+          description: List of available portfolio dates
+          nullable: true
+        identifiers:
+          $ref: '#/components/schemas/OutputIdentifiers'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+      additionalProperties: false
+      description: Response model for portfolio holdings dates endpoint
+      title: ResponsePortfolioHoldingsDates
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+      description: All fields are nullable. Empty or `null` value fields are not returned.
     OutputIdentifiers:
       type: object
       properties:
@@ -103,6 +212,26 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
       description: All fields are nullable. Empty or `null` value fields are not returned.
     OutputPortfolioHoldingsDates:
       type: object
@@ -200,147 +329,7 @@ components:
       - holdingsView
       - type
       title: RequestPortfolioHoldingsDates
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-      description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
-      additionalProperties: false
-      title: OutputInvalidInvestments
-      description: All fields are nullable. Empty or `null` value fields are not returned.
-    ResponsePortfolioHoldingsDates:
-      type: object
-      properties:
-        portfolioDates:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPortfolioHoldingsDates'
-          description: List of available portfolio dates
-          nullable: true
-        identifiers:
-          $ref: '#/components/schemas/OutputIdentifiers'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-      additionalProperties: false
-      description: Response model for portfolio holdings dates endpoint
-      title: ResponsePortfolioHoldingsDates
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-      description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
   examples:
-    ResponsePortfolioHoldingsDatesExample1:
-      summary: Top 10 Most Recent
-      value:
-        portfolioDates:
-        - portfolioDate: '2025-12-31'
-          holdingsView: '10'
-        identifiers:
-          performanceId: 0P00018P7K
-        metadata:
-          requestId: 3a11f005-394f-4f89-a17f-41d2ffe549f3
-          time: '2026-06-17T17:28:34.6382675Z'
     ResponsePortfolioHoldingsDatesExample2:
       summary: Top 10 Time Series
       value:
@@ -380,28 +369,22 @@ components:
         metadata:
           requestId: d50bc56a-bf63-440e-b6b1-ffc7d14c0ca3
           time: '2026-06-17T17:36:52.137352Z'
-    RequestPortfolioHoldingsDatesExample3:
-      summary: 'Date Type: Time Series and Frequency'
+    RequestPortfolioHoldingsDatesExample1:
+      summary: 'Data Type: Most Recent'
       value:
-        holdingsView: '10'
-        type: timeSeries
-        startDate: '2014-06-30'
-        endDate: '2024-06-30'
-        frequency: m
-    RequestPortfolioHoldingsDatesExample2:
-      summary: 'Data Type: Time Series'
+        holdingsView: full
+        type: mostRecent
+    ResponsePortfolioHoldingsDatesExample1:
+      summary: Top 10 Most Recent
       value:
-        holdingsView: '10'
-        type: timeSeries
-        startDate: '2014-06-30'
-        endDate: '2024-06-30'
-    ResponsePortfolioHoldingsDatesBadRequestExample1:
-      summary: Required Parameter Missing
-      value:
-        statusCode: 400
-        errorCode: 400.investmentDetails.001
-        message: The EndDate parameter is required.
-        requestId: cd8d3278-a273-4765-87aa-e0beff1f2975
+        portfolioDates:
+        - portfolioDate: '2025-12-31'
+          holdingsView: '10'
+        identifiers:
+          performanceId: 0P00018P7K
+        metadata:
+          requestId: 3a11f005-394f-4f89-a17f-41d2ffe549f3
+          time: '2026-06-17T17:28:34.6382675Z'
     RequestPortfolioHoldingsDatesExample4:
       summary: 'Date Type: Static Dates'
       value:
@@ -416,11 +399,44 @@ components:
         - '2018-12-31'
         - '2019-06-30'
         - '2013-06-30'
-    RequestPortfolioHoldingsDatesExample1:
-      summary: 'Data Type: Most Recent'
+    RequestPortfolioHoldingsDatesExample2:
+      summary: 'Data Type: Time Series'
       value:
-        holdingsView: full
-        type: mostRecent
+        holdingsView: '10'
+        type: timeSeries
+        startDate: '2014-06-30'
+        endDate: '2024-06-30'
+    RequestPortfolioHoldingsDatesExample3:
+      summary: 'Date Type: Time Series and Frequency'
+      value:
+        holdingsView: '10'
+        type: timeSeries
+        startDate: '2014-06-30'
+        endDate: '2024-06-30'
+        frequency: m
+    ResponsePortfolioHoldingsDatesBadRequestExample1:
+      summary: Required Parameter Missing
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetails.001
+        message: The EndDate parameter is required.
+        requestId: cd8d3278-a273-4765-87aa-e0beff1f2975
+  requestBodies:
+    RequestPortfolioHoldingsDates:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestPortfolioHoldingsDates'
+          examples:
+            RequestPortfolioHoldingsDatesExample1:
+              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample1'
+            RequestPortfolioHoldingsDatesExample2:
+              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample2'
+            RequestPortfolioHoldingsDatesExample3:
+              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample3'
+            RequestPortfolioHoldingsDatesExample4:
+              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample4'
   responses:
     ResponsePortfolioHoldingsDatesBadRequest:
       description: Bad Request
@@ -442,22 +458,6 @@ components:
               $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample1'
             ResponsePortfolioHoldingsDatesExample2:
               $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample2'
-  requestBodies:
-    RequestPortfolioHoldingsDates:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RequestPortfolioHoldingsDates'
-          examples:
-            RequestPortfolioHoldingsDatesExample1:
-              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample1'
-            RequestPortfolioHoldingsDatesExample2:
-              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample2'
-            RequestPortfolioHoldingsDatesExample3:
-              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample3'
-            RequestPortfolioHoldingsDatesExample4:
-              $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample4'
   securitySchemes:
     Bearer:
       type: http

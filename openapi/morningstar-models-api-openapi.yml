@@ -799,6 +799,24 @@ paths:
       description: UAT
 components:
   schemas:
+    holding:
+      properties:
+        identifier:
+          type: string
+        weight:
+          type: number
+      type: object
+    Holdings:
+      required:
+      - id
+      properties:
+        holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/holding'
+        id:
+          type: string
+      type: object
     Funds:
       properties:
         portfolios:
@@ -822,24 +840,6 @@ components:
               weight: 50
           items:
             $ref: '#/components/schemas/Holdings'
-      type: object
-    holding:
-      properties:
-        identifier:
-          type: string
-        weight:
-          type: number
-      type: object
-    Holdings:
-      required:
-      - id
-      properties:
-        holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/holding'
-        id:
-          type: string
       type: object
   securitySchemes:
     bearerAuth:

@@ -745,7 +745,7 @@ paths:
       description: Create a unique identifier for a client. You use this alphanumeric ID to identify your client within FinaMetrica. You must include the ID when submitting and retrieving a client's responses. The ID is generated based on the `externalId` (for example, client's email address) that is sent in the request. If your client already has an ID, you do not need to generate a new one. The ID will never expire.
       tags:
       - Clients
-      operationId: generateClientId
+      operationId: postClientsGenerateId
       parameters:
       - name: X-API-RequestId
         in: header
@@ -786,6 +786,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: generateClientId
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -795,7 +797,7 @@ paths:
       description: Submit a client’s responses to the risk tolerance questionnaire and return a risk tolerance score. In the response, a unique identifier for the questionnaire will be returned. The identifier can be used to retrieve the answers at any time in the future.
       tags:
       - Clients
-      operationId: submitRiskQuestionnaireResponse
+      operationId: postClientsRisksQuestionnaires
       parameters:
       - name: Accept-Language
         in: header
@@ -855,12 +857,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: submitRiskQuestionnaireResponse
     get:
       summary: Get risk tolerance responses history
       description: Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the responses the client has given to past questionnaires.
       tags:
       - Clients
-      operationId: getRiskQuestionnaireResponseHistory
+      operationId: getClientsRisksQuestionnaires
       parameters:
       - name: clientId
         in: query
@@ -909,6 +913,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: getRiskQuestionnaireResponseHistory
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -999,7 +1005,7 @@ paths:
       - Clients
       summary: Submit risk tolerance agreed score
       description: Submit a client’s agreed score. Before submitting a score, it must be discussed with the client and the client must agree with the score.
-      operationId: submitRiskQuestionnaireAgreedScore
+      operationId: patchClientsRisksQuestionnairesByResponseIdAgreedScore
       parameters:
       - name: responseId
         in: path
@@ -1058,6 +1064,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: submitRiskQuestionnaireAgreedScore
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -1067,7 +1075,7 @@ paths:
       description: Using the Professional Judgment Matrix (PJM) framework, calculates the suitability score and score constraints of an investment/portfolio.
       tags:
       - Clients
-      operationId: calculateSuitabilityScore
+      operationId: postClientsSolutionsCalculateSuitabilityScore
       parameters:
       - name: X-API-RequestId
         in: header
@@ -1125,6 +1133,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: calculateSuitabilityScore
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -1220,7 +1230,7 @@ paths:
       description: Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the responses the client has given to past questionnaires.
       tags:
       - Clients
-      operationId: getExperienceQuestionnaireResponseHistory
+      operationId: getClientsExperienceQuestionnaires
       parameters:
       - name: clientId
         in: query
@@ -1269,12 +1279,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: getExperienceQuestionnaireResponseHistory
     post:
       summary: Submit experience response
       description: Submit a client’s responses to the experience questionnaire. In the response, a unique identifier for the questionnaire will be returned. The identifier can be used to retrieve the answers at any time in the future.
       tags:
       - Clients
-      operationId: submitExperienceQuestionnaireResponse
+      operationId: postClientsExperienceQuestionnaires
       parameters:
       - name: Accept-Language
         in: header
@@ -1341,6 +1353,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: submitExperienceQuestionnaireResponse
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -1350,7 +1364,7 @@ paths:
       - Clients
       summary: Get experience response
       description: Get a specific experience questionnaire response for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted.
-      operationId: getExperienceQuestionnaireResponse
+      operationId: getClientsExperienceQuestionnairesByResponseId
       parameters:
       - name: clientId
         in: query
@@ -1422,6 +1436,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: getExperienceQuestionnaireResponse
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -1431,7 +1447,7 @@ paths:
       description: Get questionnaire responses for the client identified by the value in the `clientId` parameter. You can retrieve a list of all the responses the client has given to past questionnaires.
       tags:
       - Clients
-      operationId: getKycQuestionnaireResponseHistory
+      operationId: getClientsKycQuestionnaires
       parameters:
       - name: clientId
         in: query
@@ -1480,12 +1496,14 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: getKycQuestionnaireResponseHistory
     post:
       summary: Submit know your client response
       description: Submit a client’s responses to the know your client questionnaire. In the response, a unique identifier for the questionnaire will be returned. The identifier can be used to retrieve the answers at any time in the future.
       tags:
       - Clients
-      operationId: submitKycQuestionnaireResponse
+      operationId: postClientsKycQuestionnaires
       parameters:
       - name: Accept-Language
         in: header
@@ -1545,6 +1563,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: submitKycQuestionnaireResponse
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -1554,7 +1574,7 @@ paths:
       - Clients
       summary: Get know your client response
       description: Get a specific know your client questionnaire response for the client identified by the value in the `clientId` parameter. The questionnaire is identified by the value in the `id` parameter. This ID was returned in the response when the questionnaire was submitted.
-      operationId: getKycQuestionnaireResponse
+      operationId: getClientsKycQuestionnairesByResponseId
       parameters:
       - name: clientId
         in: query
@@ -1624,6 +1644,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse500'
+      x-operation-id-source: normalized
+      x-operation-id-original: getKycQuestionnaireResponse
     servers:
     - url: https://www.us-api.morningstar.com/finametrica-profiler/v1
       variables: {}
@@ -1641,216 +1663,6 @@ components:
           type: string
           description: Reason for suitability score cap
           example: Suitability score suggested limit is 68 due to investment knowledge and financial composure.
-    ErrorResponse404:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server can't find the requested resource
-        status:
-          type: string
-          description: Error Status
-          example: NOT_FOUND
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    SectionRiskToleranceScorePayload:
-      title: SectionRiskToleranceScorePayload
-      type: object
-      properties:
-        header:
-          type: string
-          description: Header of the section
-          example: About Risk Tolerance
-        paragraphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParagraphReport'
-        payloadComparedToInvestors:
-          $ref: '#/components/schemas/ComparedToInvestorsPayload'
-      description: Section with risk tolerance score information.
-    ComparedToInvestorsPayload:
-      title: ComparedToInvestorsPayload
-      type: object
-      properties:
-        calculatedScore:
-          type: integer
-          description: Calculated score
-          example: 52
-        agreedScore:
-          type: integer
-          description: Agreed score
-          example: 52
-        calculatedRiskGroup:
-          type: string
-          description: Calculated risk group
-          example: Average
-        calculatedRiskGroupValue:
-          type: string
-          description: Calculated risk group code
-          example: AVERAGE
-        agreedRiskGroup:
-          type: string
-          description: Agreed risk group
-          example: Average
-        agreedChangedDate:
-          type: string
-          description: Agreed change date
-          example: '2020-06-01T00:00:00.000Z'
-        completedDate:
-          type: string
-          description: Calculated date
-          example: '2020-06-01T00:00:00.000Z'
-        riskGroupLabels:
-          type: array
-          items:
-            $ref: '#/components/schemas/RiskGroupLabel'
-      description: Payload with information about the comparison with other investors.
-    YourDifferencesPayload:
-      title: YourDifferencesPayload
-      type: object
-      properties:
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuestionReport'
-      description: Information for your differences details.
-    DifferencePayload:
-      title: DifferencePayload
-      type: object
-      properties:
-        group:
-          type: string
-          description: Question risk group column by key difference map. (VERY_LOW, LOW, AVERAGE, HIGH, VERY_HIGH)
-          example: VERY_LOW
-        type:
-          type: string
-          description: Difference type. (STANDARD, RISKIER, LESS_RISKY)
-          example: STANDARD
-        value:
-          type: integer
-          description: Difference value from key difference map.
-          example: -1
-        text:
-          type: string
-          description: Text that describe if the question is riskier or less risky than the Very High/Very Low risk group.
-          example: Your answer is riskier than the most risky answer typically given by someone in the Very High risk group.
-      description: Difference payload
-    AgreedRPRequest:
-      title: AgreedRPRequest
-      type: object
-      properties:
-        clientId:
-          type: string
-          description: Client unique identifier
-          example: 3168dab3-4445-40c5-8295-5a816c6cd5de
-        agreedScore:
-          type: integer
-          description: Agreed score
-          example: 70
-        comment:
-          type: string
-          description: Comment for agreed score
-          example: This is a comment
-    ResponseGuidPayload:
-      title: ResponseGuidPayload
-      type: object
-      properties:
-        guid:
-          type: string
-          description: Unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-    SectionYourDifferencesPayload:
-      title: SectionYourDifferencesPayload
-      type: object
-      properties:
-        header:
-          type: string
-          description: Header of the section
-          example: Your differences
-        paragraphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParagraphReport'
-        payloadYourDifferences:
-          $ref: '#/components/schemas/YourDifferencesPayload'
-      description: Section with your differences information.
-    HistoryPayload:
-      title: HistoryPayload
-      type: object
-      properties:
-        completedDate:
-          type: string
-          description: Questionnaire response completed date (yyyy-mm-dd)
-          example: '2020-08-04T00:00:00.000Z'
-        createdAt:
-          type: string
-          description: Questionnaire response datetime UTC
-          example: 2020-08-04T20:07:36+0000
-        id:
-          type: string
-          description: Questionnaire response unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        person:
-          type: string
-          description: User name
-          example: Jhon Wiss
-        type:
-          type: string
-          description: Questionnaire type
-          example: FM10S30
-    QuestionPayload:
-      title: QuestionPayload
-      type: object
-      properties:
-        id:
-          type: string
-          description: Question unique identifier
-          example: FM10-1
-        title:
-          type: string
-          description: Question title
-          example: Willingness to take financial risk
-        text:
-          type: string
-          description: Question text
-          example: Compared to others, how do you rate your willingness to take financial risks?
-        displayOrder:
-          type: integer
-          description: Question display order
-          example: 1
-        multipleSelect:
-          type: boolean
-          description: Multiple selections for the question, if this is true the question allows multiple answers
-          example: false
-        options:
-          type: array
-          description: List of options for question
-          items:
-            $ref: '#/components/schemas/OptionPayload'
-    AgreedRPPayload:
-      title: AgreedRPPayload
-      type: object
-      properties:
-        agreedRPChange:
-          type: boolean
-          description: True if the risk profile changed, otherwise false
-          example: true
-        agreedScore:
-          type: integer
-          description: Score value
-          example: 80
-        changeDate:
-          type: string
-          description: Score changed date
-          example: 2018/09/15
-        comment:
-          type: string
-          description: Comment
-          example: This is a comment
     RiskFullPayload:
       title: RiskFullPayload
       type: object
@@ -1943,18 +1755,21 @@ components:
           type: boolean
           description: Show questionnaire popup
           example: true
-    GenerateIdRequest:
-      title: GenerateIdRequest
+    SectionSuitabilityScorePayload:
+      title: SectionSuitabilityScorePayload
       type: object
       properties:
-        externalId:
+        header:
           type: string
-          description: External unique identifier
-          example: myclientId@companydomain.com
-        sourceId:
-          type: string
-          description: External unique identifier
-          example: APPLICATION_NAME
+          description: Header of the section
+          example: Portfolio Suitability
+        paragraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParagraphReport'
+        payloadSuitabilityScore:
+          $ref: '#/components/schemas/SuitabilityScorePayload'
+      description: Section for suitability score
     QuestionReport:
       title: QuestionReport
       type: object
@@ -1980,94 +1795,254 @@ components:
           items:
             $ref: '#/components/schemas/DifferencePayload'
       description: Question report.
-    SuitabilityScorePayload:
-      title: SuitabilityScorePayload
+    AgreedRPRequest:
+      title: AgreedRPRequest
       type: object
       properties:
-        suitabilityScore:
+        clientId:
+          type: string
+          description: Client unique identifier
+          example: 3168dab3-4445-40c5-8295-5a816c6cd5de
+        agreedScore:
           type: integer
-          description: Suitability core number
+          description: Agreed score
+          example: 70
+        comment:
+          type: string
+          description: Comment for agreed score
+          example: This is a comment
+    ComparedToInvestorsPayload:
+      title: ComparedToInvestorsPayload
+      type: object
+      properties:
+        calculatedScore:
+          type: integer
+          description: Calculated score
           example: 52
-        investmentPolicies:
+        agreedScore:
+          type: integer
+          description: Agreed score
+          example: 52
+        calculatedRiskGroup:
+          type: string
+          description: Calculated risk group
+          example: Average
+        calculatedRiskGroupValue:
+          type: string
+          description: Calculated risk group code
+          example: AVERAGE
+        agreedRiskGroup:
+          type: string
+          description: Agreed risk group
+          example: Average
+        agreedChangedDate:
+          type: string
+          description: Agreed change date
+          example: '2020-06-01T00:00:00.000Z'
+        completedDate:
+          type: string
+          description: Calculated date
+          example: '2020-06-01T00:00:00.000Z'
+        riskGroupLabels:
           type: array
           items:
-            $ref: '#/components/schemas/InvestmentPolicyReport'
-      description: Information for your suitability score
-    SectionPayload:
-      title: SectionPayload
+            $ref: '#/components/schemas/RiskGroupLabel'
+      description: Payload with information about the comparison with other investors.
+    DifferencePayload:
+      title: DifferencePayload
+      type: object
+      properties:
+        group:
+          type: string
+          description: Question risk group column by key difference map. (VERY_LOW, LOW, AVERAGE, HIGH, VERY_HIGH)
+          example: VERY_LOW
+        type:
+          type: string
+          description: Difference type. (STANDARD, RISKIER, LESS_RISKY)
+          example: STANDARD
+        value:
+          type: integer
+          description: Difference value from key difference map.
+          example: -1
+        text:
+          type: string
+          description: Text that describe if the question is riskier or less risky than the Very High/Very Low risk group.
+          example: Your answer is riskier than the most risky answer typically given by someone in the Very High risk group.
+      description: Difference payload
+    OptionPayload:
+      title: OptionPayload
+      type: object
+      properties:
+        displayOrder:
+          type: integer
+          description: Option display order
+          example: 1
+        id:
+          type: string
+          description: Option unique identifier
+          example: '1'
+        text:
+          type: string
+          description: Option text
+          example: Extremely low risk taker
+        selected:
+          type: boolean
+          description: True if the option is selected by the client, false otherwise
+          example: true
+    AgreedRPPayload:
+      title: AgreedRPPayload
+      type: object
+      properties:
+        agreedRPChange:
+          type: boolean
+          description: True if the risk profile changed, otherwise false
+          example: true
+        agreedScore:
+          type: integer
+          description: Score value
+          example: 80
+        changeDate:
+          type: string
+          description: Score changed date
+          example: 2018/09/15
+        comment:
+          type: string
+          description: Comment
+          example: This is a comment
+    ParagraphReport:
+      title: ParagraphReport
+      type: object
+      properties:
+        content:
+          type: string
+          description: Paragraph text
+          example: Compared to others, how do you rate your willingness to take financial risks?
+        isHtml:
+          type: boolean
+          description: True if the text field is an HTML markup, otherwise text field is plain text
+          example: true
+        isImage:
+          type: boolean
+          description: True if the `content` field is a base64 encoded image, otherwise is regular text
+          example: false
+        displayOrder:
+          type: integer
+          description: Paragraph display order
+          example: 1
+      description: Option for report.
+    AssetClassPayload:
+      title: AssetClassPayload
+      type: object
+      properties:
+        label:
+          type: string
+          description: Asset label
+          example: US Stocks
+        count:
+          type: number
+          description: Asset value
+          example: 24
+    YourDifferencesPayload:
+      title: YourDifferencesPayload
+      type: object
+      properties:
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionReport'
+      description: Information for your differences details.
+    InvestmentPolicyReport:
+      title: InvestmentPolicyReport
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        title:
+          type: string
+          description: Investment policy title
+          example: Conservative
+        text:
+          type: string
+          description: Investment policy text
+          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
+        min:
+          type: integer
+          description: Minimum score range
+          example: 10
+        max:
+          type: integer
+          description: Maximum score range
+          example: 30
+        assetClass:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetClassPayload'
+      description: Investment policy report
+    HistoryPayload:
+      title: HistoryPayload
+      type: object
+      properties:
+        completedDate:
+          type: string
+          description: Questionnaire response completed date (yyyy-mm-dd)
+          example: '2020-08-04T00:00:00.000Z'
+        createdAt:
+          type: string
+          description: Questionnaire response datetime UTC
+          example: 2020-08-04T20:07:36+0000
+        id:
+          type: string
+          description: Questionnaire response unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        person:
+          type: string
+          description: User name
+          example: Jhon Wiss
+        type:
+          type: string
+          description: Questionnaire type
+          example: FM10S30
+    RiskGroupPayload:
+      title: RiskGroupPayload
+      type: object
+      properties:
+        title:
+          type: string
+          description: Title of the mix investments table
+          example: Mix of Investments in Portfolio
+        headers:
+          $ref: '#/components/schemas/MixInvestmentsHeader'
+        mixInvestmentsPortfolio:
+          type: array
+          example:
+          - portfolio: Portfolio 1
+            highRisk: 0
+            mediumRisk: 0
+            lowRisk: 100
+          - portfolio: Portfolio 2
+            highRisk: 0
+            mediumRisk: 30
+            lowRisk: 70
+          items:
+            $ref: '#/components/schemas/InvestmentPortfolio'
+      description: Payload with risk group information containing a representation of a portfolio's table.
+    SectionYourDifferencesPayload:
+      title: SectionYourDifferencesPayload
       type: object
       properties:
         header:
           type: string
           description: Header of the section
-          example: About Risk Tolerance
+          example: Your differences
         paragraphs:
           type: array
           items:
             $ref: '#/components/schemas/ParagraphReport'
-      description: Section that contains id, header, array of paragraphs that are going to be part of the report.
-    QuestionnaireResponsePayload:
-      title: QuestionnaireResponsePayload
-      type: object
-      properties:
-        id:
-          type: string
-          description: Questionnaire unique identifier
-          example: FM10S30
-        title:
-          type: string
-          description: Questionnaire title
-          example: Finametrica 10
-        questions:
-          type: array
-          description: List of questions
-          items:
-            $ref: '#/components/schemas/QuestionDifferencePayload'
-      description: Questionnaire response payload
-    CalculateSuitabilityScoreRequest:
-      title: CalculateSuitabilityScoreRequest
-      type: object
-      properties:
-        pjmId:
-          type: string
-          description: PJM configuration. Optional. If it’s not sent, a default configuration will be used.
-          example: PJM1
-        timeHorizon:
-          type: integer
-          description: When do you expect to need to withdraw a significant part (1/3 or more) of the money in your investment portfolio?
-          example: 3
-        riskToleranceScore:
-          type: integer
-          description: Risk tolerance score or the agreed risk tolerance score.
-          example: 20
-        knowledge:
-          type: integer
-          description: Answer to knowledge question in the experience questionnaire.
-          example: 3
-        experience:
-          type: integer
-          description: Answer to experience question in the experience questionnaire.
-          example: 3
-        composure:
-          type: integer
-          description: Answer to composure question in the experience questionnaire.
-          example: 3
-    ErrorResponse400:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
+        payloadYourDifferences:
+          $ref: '#/components/schemas/YourDifferencesPayload'
+      description: Section with your differences information.
     InvestmentPortfolio:
       title: InvestmentPortfolio
       type: object
@@ -2106,6 +2081,242 @@ components:
           description: True if the option was selected in stored responses
           example: false
       description: Option for report.
+    QuestionDifferencePayload:
+      title: QuestionDifferencePayload
+      type: object
+      properties:
+        id:
+          type: string
+          description: Question unique identifier
+          example: FM10-1
+        title:
+          type: string
+          description: Question title
+          example: Willingness to take financial risk
+        text:
+          type: integer
+          description: Question text
+        displayOrder:
+          type: integer
+          description: Question display order.
+          example: 1
+        multipleSelect:
+          type: boolean
+          description: Multiple selections for the question, if this is true the question allows multiple answers.
+          example: false
+        options:
+          type: array
+          description: List of options for question
+          items:
+            $ref: '#/components/schemas/OptionPayload'
+        difference:
+          $ref: '#/components/schemas/DifferencePayload'
+      description: Question difference payload
+    ResponseGuidPayload:
+      title: ResponseGuidPayload
+      type: object
+      properties:
+        guid:
+          type: string
+          description: Unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+    GenerateIdRequest:
+      title: GenerateIdRequest
+      type: object
+      properties:
+        externalId:
+          type: string
+          description: External unique identifier
+          example: myclientId@companydomain.com
+        sourceId:
+          type: string
+          description: External unique identifier
+          example: APPLICATION_NAME
+    CalculateSuitabilityScoreRequest:
+      title: CalculateSuitabilityScoreRequest
+      type: object
+      properties:
+        pjmId:
+          type: string
+          description: PJM configuration. Optional. If it’s not sent, a default configuration will be used.
+          example: PJM1
+        timeHorizon:
+          type: integer
+          description: When do you expect to need to withdraw a significant part (1/3 or more) of the money in your investment portfolio?
+          example: 3
+        riskToleranceScore:
+          type: integer
+          description: Risk tolerance score or the agreed risk tolerance score.
+          example: 20
+        knowledge:
+          type: integer
+          description: Answer to knowledge question in the experience questionnaire.
+          example: 3
+        experience:
+          type: integer
+          description: Answer to experience question in the experience questionnaire.
+          example: 3
+        composure:
+          type: integer
+          description: Answer to composure question in the experience questionnaire.
+          example: 3
+    SectionRiskGroupPayload:
+      title: SectionRiskGroupPayload
+      type: object
+      properties:
+        header:
+          type: string
+          description: Header of the section
+          example: About Your Risk Group
+        paragraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParagraphReport'
+        payloadRiskGroup:
+          $ref: '#/components/schemas/RiskGroupPayload'
+      description: Section with risk group information.
+    SuitabilityScorePayload:
+      title: SuitabilityScorePayload
+      type: object
+      properties:
+        suitabilityScore:
+          type: integer
+          description: Suitability core number
+          example: 52
+        investmentPolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvestmentPolicyReport'
+      description: Information for your suitability score
+    SectionPayload:
+      title: SectionPayload
+      type: object
+      properties:
+        header:
+          type: string
+          description: Header of the section
+          example: About Risk Tolerance
+        paragraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParagraphReport'
+      description: Section that contains id, header, array of paragraphs that are going to be part of the report.
+    ErrorResponse502:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Received an invalid response from the upstream server
+        status:
+          type: string
+          description: Error Status
+          example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse500:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    SectionRiskToleranceScorePayload:
+      title: SectionRiskToleranceScorePayload
+      type: object
+      properties:
+        header:
+          type: string
+          description: Header of the section
+          example: About Risk Tolerance
+        paragraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/ParagraphReport'
+        payloadComparedToInvestors:
+          $ref: '#/components/schemas/ComparedToInvestorsPayload'
+      description: Section with risk tolerance score information.
+    ResponseAndScorePayload:
+      title: ResponseAndScorePayload
+      type: object
+      properties:
+        createdAt:
+          type: string
+          description: Record creation dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        id:
+          type: string
+          description: Record unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        questionnaire:
+          $ref: '#/components/schemas/QuestionnaireResponsePayload'
+        score:
+          $ref: '#/components/schemas/RiskFullPayload'
+    QuestionRequest:
+      title: QuestionRequest
+      type: object
+      properties:
+        answers:
+          type: array
+          items:
+            type: string
+            description: Answer unique identifier
+            example: FM10-1-4
+        id:
+          type: string
+          description: Question unique identifier
+          example: FM10-1
+    QuestionnaireResponsePayload:
+      title: QuestionnaireResponsePayload
+      type: object
+      properties:
+        id:
+          type: string
+          description: Questionnaire unique identifier
+          example: FM10S30
+        title:
+          type: string
+          description: Questionnaire title
+          example: Finametrica 10
+        questions:
+          type: array
+          description: List of questions
+          items:
+            $ref: '#/components/schemas/QuestionDifferencePayload'
+      description: Questionnaire response payload
+    MixInvestmentsHeader:
+      title: MixInvestmentsHeader
+      type: object
+      properties:
+        portfolio:
+          type: string
+          description: Header of the column for portfolio information.
+          example: Portfolio
+        highRisk:
+          type: string
+          description: Header of the column for high risk information.
+          example: High Risk/Return %
+        mediumRisk:
+          type: string
+          description: Header of the column for medium risk information.
+          example: Medium Risk/Return %
+        lowRisk:
+          type: string
+          description: Header of the column for low risk information.
+          example: Low Risk/Return %
+      description: Mix investments header
     QuestionnaireRequest:
       title: QuestionnaireRequest
       type: object
@@ -2180,137 +2391,6 @@ components:
         sectionFooter:
           $ref: '#/components/schemas/SectionPayload'
       description: Content of the risk tolerance report with sections for static text, questionnaire responses, score values and footnotes.
-    QuestionRequest:
-      title: QuestionRequest
-      type: object
-      properties:
-        answers:
-          type: array
-          items:
-            type: string
-            description: Answer unique identifier
-            example: FM10-1-4
-        id:
-          type: string
-          description: Question unique identifier
-          example: FM10-1
-    QuestionnairePayload:
-      title: QuestionnairePayload
-      type: object
-      properties:
-        id:
-          type: string
-          description: Questionnaire unique identifier
-          example: FM10S30
-        title:
-          type: string
-          description: Questionnaire title
-          example: Finametrica 10
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuestionPayload'
-    SectionRiskGroupPayload:
-      title: SectionRiskGroupPayload
-      type: object
-      properties:
-        header:
-          type: string
-          description: Header of the section
-          example: About Your Risk Group
-        paragraphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParagraphReport'
-        payloadRiskGroup:
-          $ref: '#/components/schemas/RiskGroupPayload'
-      description: Section with risk group information.
-    ResponseAndScorePayload:
-      title: ResponseAndScorePayload
-      type: object
-      properties:
-        createdAt:
-          type: string
-          description: Record creation dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        id:
-          type: string
-          description: Record unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        questionnaire:
-          $ref: '#/components/schemas/QuestionnaireResponsePayload'
-        score:
-          $ref: '#/components/schemas/RiskFullPayload'
-    ParagraphReport:
-      title: ParagraphReport
-      type: object
-      properties:
-        content:
-          type: string
-          description: Paragraph text
-          example: Compared to others, how do you rate your willingness to take financial risks?
-        isHtml:
-          type: boolean
-          description: True if the text field is an HTML markup, otherwise text field is plain text
-          example: true
-        isImage:
-          type: boolean
-          description: True if the `content` field is a base64 encoded image, otherwise is regular text
-          example: false
-        displayOrder:
-          type: integer
-          description: Paragraph display order
-          example: 1
-      description: Option for report.
-    SectionSuitabilityScorePayload:
-      title: SectionSuitabilityScorePayload
-      type: object
-      properties:
-        header:
-          type: string
-          description: Header of the section
-          example: Portfolio Suitability
-        paragraphs:
-          type: array
-          items:
-            $ref: '#/components/schemas/ParagraphReport'
-        payloadSuitabilityScore:
-          $ref: '#/components/schemas/SuitabilityScorePayload'
-      description: Section for suitability score
-    MixInvestmentsHeader:
-      title: MixInvestmentsHeader
-      type: object
-      properties:
-        portfolio:
-          type: string
-          description: Header of the column for portfolio information.
-          example: Portfolio
-        highRisk:
-          type: string
-          description: Header of the column for high risk information.
-          example: High Risk/Return %
-        mediumRisk:
-          type: string
-          description: Header of the column for medium risk information.
-          example: Medium Risk/Return %
-        lowRisk:
-          type: string
-          description: Header of the column for low risk information.
-          example: Low Risk/Return %
-      description: Mix investments header
-    RiskGroupLabel:
-      title: RiskGroupLabel
-      type: object
-      properties:
-        groupName:
-          type: string
-          description: Name of the risk group
-          example: Average
-        range:
-          type: string
-          description: Range of the score within the risk group
-          example: 45-54
-      description: Risk group label
     BaseAnswerResponsePayload:
       title: BaseAnswerResponsePayload
       type: object
@@ -2329,8 +2409,21 @@ components:
           example: Experience
         questionnaire:
           $ref: '#/components/schemas/QuestionnairePayload'
-    QuestionDifferencePayload:
-      title: QuestionDifferencePayload
+    RiskGroupLabel:
+      title: RiskGroupLabel
+      type: object
+      properties:
+        groupName:
+          type: string
+          description: Name of the risk group
+          example: Average
+        range:
+          type: string
+          description: Range of the score within the risk group
+          example: 45-54
+      description: Risk group label
+    QuestionPayload:
+      title: QuestionPayload
       type: object
       properties:
         id:
@@ -2342,141 +2435,82 @@ components:
           description: Question title
           example: Willingness to take financial risk
         text:
-          type: integer
+          type: string
           description: Question text
+          example: Compared to others, how do you rate your willingness to take financial risks?
         displayOrder:
           type: integer
-          description: Question display order.
+          description: Question display order
           example: 1
         multipleSelect:
           type: boolean
-          description: Multiple selections for the question, if this is true the question allows multiple answers.
+          description: Multiple selections for the question, if this is true the question allows multiple answers
           example: false
         options:
           type: array
           description: List of options for question
           items:
             $ref: '#/components/schemas/OptionPayload'
-        difference:
-          $ref: '#/components/schemas/DifferencePayload'
-      description: Question difference payload
-    ErrorResponse502:
+    QuestionnairePayload:
+      title: QuestionnairePayload
+      type: object
+      properties:
+        id:
+          type: string
+          description: Questionnaire unique identifier
+          example: FM10S30
+        title:
+          type: string
+          description: Questionnaire title
+          example: Finametrica 10
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionPayload'
+    ErrorResponse404:
       title: ErrorResponse
       type: object
       properties:
         message:
           type: string
           description: Error Message
-          example: Received an invalid response from the upstream server
+          example: Server can't find the requested resource
         status:
           type: string
           description: Error Status
-          example: BAD_GATEWAY
+          example: NOT_FOUND
         timestamp:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    InvestmentPolicyReport:
-      title: InvestmentPolicyReport
+    ErrorResponse400:
+      title: ErrorResponse
       type: object
       properties:
-        id:
+        message:
           type: string
-          description: Unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        title:
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
           type: string
-          description: Investment policy title
-          example: Conservative
-        text:
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
           type: string
-          description: Investment policy text
-          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
-        min:
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    Ranges:
+      type: object
+      title: Range
+      properties:
+        low:
           type: integer
-          description: Minimum score range
+          description: Low range
           example: 10
-        max:
+        high:
           type: integer
-          description: Maximum score range
+          description: High range
           example: 30
-        assetClass:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetClassPayload'
-      description: Investment policy report
-    AssetClassPayload:
-      title: AssetClassPayload
-      type: object
-      properties:
-        label:
-          type: string
-          description: Asset label
-          example: US Stocks
-        count:
-          type: number
-          description: Asset value
-          example: 24
-    RiskGroupPayload:
-      title: RiskGroupPayload
-      type: object
-      properties:
-        title:
-          type: string
-          description: Title of the mix investments table
-          example: Mix of Investments in Portfolio
-        headers:
-          $ref: '#/components/schemas/MixInvestmentsHeader'
-        mixInvestmentsPortfolio:
-          type: array
-          example:
-          - portfolio: Portfolio 1
-            highRisk: 0
-            mediumRisk: 0
-            lowRisk: 100
-          - portfolio: Portfolio 2
-            highRisk: 0
-            mediumRisk: 30
-            lowRisk: 70
-          items:
-            $ref: '#/components/schemas/InvestmentPortfolio'
-      description: Payload with risk group information containing a representation of a portfolio's table.
-    ErrorResponse500:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Internal Server Error
-        status:
-          type: string
-          description: Error Status
-          example: INTERNAL_SERVER_ERROR
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    OptionPayload:
-      title: OptionPayload
-      type: object
-      properties:
-        displayOrder:
-          type: integer
-          description: Option display order
-          example: 1
-        id:
-          type: string
-          description: Option unique identifier
-          example: '1'
-        text:
-          type: string
-          description: Option text
-          example: Extremely low risk taker
-        selected:
-          type: boolean
-          description: True if the option is selected by the client, false otherwise
-          example: true
     CalculateSuitabilityScoreResponse_2:
       type: object
       title: CalculateSuitabilityScoreResponse
@@ -2501,105 +2535,6 @@ components:
           type: string
           example: Investor's knowledge is unknown.
           description: Text when the knowledge value is unknown.
-    DifferencePayload_2:
-      type: object
-      title: DifferencePayload
-      properties:
-        group:
-          type: string
-          description: Question risk group column by key difference map. (VERY_LOW, LOW, AVERAGE, HIGH, VERY_HIGH)
-          example: VERY_LOW
-        type:
-          type: string
-          description: Difference type. (STANDARD, RISKIER, LESS_RISKY)
-          example: STANDARD
-        value:
-          type: integer
-          description: Difference value from key difference map.
-          example: '-1'
-        text:
-          type: string
-          description: Text that describe if the question is riskier or less risky than the Very High/Very Low risk group.
-          example: Your answer was actually riskier than the most risky typically given by those in risk group.
-        category:
-          type: string
-          description: Category of the question. (FINANCIAL_DECISIONS, EMPLOYMENT, FINANCIAL_DISAPPOINTMENTS, FINANCIAL_PAST, INVESTMENT, GOVERNMENT_BENEFITS_TAXES)
-          example: FINANCIAL_DECISIONS
-    HistoryPayload_2:
-      type: object
-      title: HistoryPayload
-      properties:
-        completedDate:
-          type: string
-          example: '2020-08-04'
-          description: Questionnaire response completed date (yyyy-mm-dd)
-        createdAt:
-          type: string
-          example: 2020-08-04T20:07:36+0000
-          description: Questionnaire response datetime UTC
-        id:
-          type: string
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-          description: Questionnaire response unique identifier
-        person:
-          type: string
-          example: Jhon Wiss
-          description: User name
-        type:
-          type: string
-          example: FM10S30
-          description: Questionnaire type
-    ExperienceRequest:
-      type: object
-      title: ExperienceRequest
-      properties:
-        clientId:
-          type: string
-          description: Client unique identifier
-          example: 3168dab3-4445-40c5-8295-5a816c6cd5de
-        advisorId:
-          type: string
-          description: Advisor identifier
-          example: aa68dab3-4445-40c5-8295-5a816c6cd5de
-        questionnaire:
-          type: string
-          description: Questionnaire unique identifier
-          example: FM10S30
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/QuestionRequest'
-          example:
-          - id: FM10-1
-            answers:
-            - FM10-1-1
-          - id: FM10-2
-            answers:
-            - FM10-2-4
-          - id: FM10-3
-            answers:
-            - FM10-3-1
-          - id: FM10-4
-            answers:
-            - FM10-4-4
-          - id: FM10-5
-            answers:
-            - FM10-5-1
-          - id: FM10-6
-            answers:
-            - FM10-6-5
-          - id: FM10-7
-            answers:
-            - FM10-7-1
-          - id: FM10-8
-            answers:
-            - FM10-8-7
-          - id: FM10-9
-            answers:
-            - FM10-9-1
-          - id: FM10-10
-            answers:
-            - FM10-10-6
     RiskFullPayload_2:
       type: object
       title: RiskFullPayload
@@ -2728,18 +2663,119 @@ components:
           description: List of categories with their labels
           items:
             $ref: '#/components/schemas/CategoryLabel'
-    Ranges:
+    DifferencePayload_2:
       type: object
-      title: Range
+      title: DifferencePayload
       properties:
-        low:
+        group:
+          type: string
+          description: Question risk group column by key difference map. (VERY_LOW, LOW, AVERAGE, HIGH, VERY_HIGH)
+          example: VERY_LOW
+        type:
+          type: string
+          description: Difference type. (STANDARD, RISKIER, LESS_RISKY)
+          example: STANDARD
+        value:
           type: integer
-          description: Low range
-          example: 10
-        high:
+          description: Difference value from key difference map.
+          example: '-1'
+        text:
+          type: string
+          description: Text that describe if the question is riskier or less risky than the Very High/Very Low risk group.
+          example: Your answer was actually riskier than the most risky typically given by those in risk group.
+        category:
+          type: string
+          description: Category of the question. (FINANCIAL_DECISIONS, EMPLOYMENT, FINANCIAL_DISAPPOINTMENTS, FINANCIAL_PAST, INVESTMENT, GOVERNMENT_BENEFITS_TAXES)
+          example: FINANCIAL_DECISIONS
+    OptionPayload_2:
+      type: object
+      title: OptionPayload
+      properties:
+        displayOrder:
           type: integer
-          description: High range
-          example: 30
+          example: 1
+          description: Option display order
+        id:
+          type: string
+          example: 1
+          description: Option unique identifier
+        text:
+          type: string
+          example: Extremely low risk taker
+          description: Option text
+        selected:
+          type: boolean
+          example: true
+          description: True if the option is selected by the client, false otherwise
+    HistoryPayload_2:
+      type: object
+      title: HistoryPayload
+      properties:
+        completedDate:
+          type: string
+          example: '2020-08-04'
+          description: Questionnaire response completed date (yyyy-mm-dd)
+        createdAt:
+          type: string
+          example: 2020-08-04T20:07:36+0000
+          description: Questionnaire response datetime UTC
+        id:
+          type: string
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+          description: Questionnaire response unique identifier
+        person:
+          type: string
+          example: Jhon Wiss
+          description: User name
+        type:
+          type: string
+          example: FM10S30
+          description: Questionnaire type
+    ComfortRangesPayloadResponse:
+      type: object
+      title: ComfortRangesPayload
+      properties:
+        tooMuchRisk:
+          $ref: '#/components/schemas/Ranges'
+        marginalUpper:
+          $ref: '#/components/schemas/Ranges'
+        okRisk:
+          $ref: '#/components/schemas/Ranges'
+        marginalLower:
+          $ref: '#/components/schemas/Ranges'
+        tooLittleRisk:
+          $ref: '#/components/schemas/Ranges'
+    QuestionDifferencePayload_2:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Question unique identifier
+          example: FM10-1
+        title:
+          type: string
+          example: Willingness to take financial risk
+          description: Question title
+        text:
+          type: string
+          example: Compared to others, how do you rate your willingness to take financial risks?
+          description: Question text
+        displayOrder:
+          type: integer
+          description: Question display order
+          example: 1
+        multipleSelect:
+          type: boolean
+          example: false
+          description: Multiple selections for the question, if this is true the question allows multiple answers
+        options:
+          type: array
+          description: List of options for question
+          items:
+            $ref: '#/components/schemas/OptionPayload_2'
+        difference:
+          $ref: '#/components/schemas/DifferencePayload_2'
+      title: QuestionDifferencePayload
     GenerateIdRequest_2:
       type: object
       title: GenerateIdRequest
@@ -2788,6 +2824,69 @@ components:
           type: string
           description: Record creation dateTime UTC
           example: 2020-08-04T20:07:36+0000
+    CategoryLabel:
+      type: object
+      title: CategoryLabel
+      properties:
+        code:
+          type: string
+          description: Category of the question. (FINANCIAL_DECISIONS, EMPLOYMENT, FINANCIAL_DISAPPOINTMENTS, FINANCIAL_PAST, INVESTMENT, GOVERNMENT_BENEFITS_TAXES)
+          example: FINANCIAL_DECISIONS
+        label:
+          type: string
+          description: Category description
+          example: Making Financial Decisions
+    ExperienceRequest:
+      type: object
+      title: ExperienceRequest
+      properties:
+        clientId:
+          type: string
+          description: Client unique identifier
+          example: 3168dab3-4445-40c5-8295-5a816c6cd5de
+        advisorId:
+          type: string
+          description: Advisor identifier
+          example: aa68dab3-4445-40c5-8295-5a816c6cd5de
+        questionnaire:
+          type: string
+          description: Questionnaire unique identifier
+          example: FM10S30
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/QuestionRequest'
+          example:
+          - id: FM10-1
+            answers:
+            - FM10-1-1
+          - id: FM10-2
+            answers:
+            - FM10-2-4
+          - id: FM10-3
+            answers:
+            - FM10-3-1
+          - id: FM10-4
+            answers:
+            - FM10-4-4
+          - id: FM10-5
+            answers:
+            - FM10-5-1
+          - id: FM10-6
+            answers:
+            - FM10-6-5
+          - id: FM10-7
+            answers:
+            - FM10-7-1
+          - id: FM10-8
+            answers:
+            - FM10-8-7
+          - id: FM10-9
+            answers:
+            - FM10-9-1
+          - id: FM10-10
+            answers:
+            - FM10-10-6
     QuestionnaireResponsePayload_2:
       type: object
       title: QuestionnaireResponsePayload
@@ -2804,32 +2903,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/QuestionDifferencePayload_2'
-    ComfortRangesPayloadResponse:
-      type: object
-      title: ComfortRangesPayload
-      properties:
-        tooMuchRisk:
-          $ref: '#/components/schemas/Ranges'
-        marginalUpper:
-          $ref: '#/components/schemas/Ranges'
-        okRisk:
-          $ref: '#/components/schemas/Ranges'
-        marginalLower:
-          $ref: '#/components/schemas/Ranges'
-        tooLittleRisk:
-          $ref: '#/components/schemas/Ranges'
-    CategoryLabel:
-      type: object
-      title: CategoryLabel
-      properties:
-        code:
-          type: string
-          description: Category of the question. (FINANCIAL_DECISIONS, EMPLOYMENT, FINANCIAL_DISAPPOINTMENTS, FINANCIAL_PAST, INVESTMENT, GOVERNMENT_BENEFITS_TAXES)
-          example: FINANCIAL_DECISIONS
-        label:
-          type: string
-          description: Category description
-          example: Making Financial Decisions
     KYCRequest:
       type: object
       title: KYCRequest
@@ -2881,57 +2954,6 @@ components:
           - id: FM10-10
             answers:
             - FM10-10-6
-    QuestionDifferencePayload_2:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Question unique identifier
-          example: FM10-1
-        title:
-          type: string
-          example: Willingness to take financial risk
-          description: Question title
-        text:
-          type: string
-          example: Compared to others, how do you rate your willingness to take financial risks?
-          description: Question text
-        displayOrder:
-          type: integer
-          description: Question display order
-          example: 1
-        multipleSelect:
-          type: boolean
-          example: false
-          description: Multiple selections for the question, if this is true the question allows multiple answers
-        options:
-          type: array
-          description: List of options for question
-          items:
-            $ref: '#/components/schemas/OptionPayload_2'
-        difference:
-          $ref: '#/components/schemas/DifferencePayload_2'
-      title: QuestionDifferencePayload
-    OptionPayload_2:
-      type: object
-      title: OptionPayload
-      properties:
-        displayOrder:
-          type: integer
-          example: 1
-          description: Option display order
-        id:
-          type: string
-          example: 1
-          description: Option unique identifier
-        text:
-          type: string
-          example: Extremely low risk taker
-          description: Option text
-        selected:
-          type: boolean
-          example: true
-          description: True if the option is selected by the client, false otherwise
 x-refined-from:
 - morningstar-dws-risk-profiler-openapi.json
 - morningstar-risk-profiler-us-openapi.json

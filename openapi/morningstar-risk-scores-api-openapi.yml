@@ -68,14 +68,44 @@ paths:
           description: Internal Server Error
 components:
   schemas:
-    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreStyle:
+    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings:
       type: object
       properties:
-        Name:
+        Portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
+        RiskScoreTAIConfig:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig'
+      example:
+        Portfolios:
+        - Name: TestPortfolio1
+          TotalValue: 10000
+          Holdings:
+          - SecurityId: F00000VCTT
+            Weight: 20
+          - SecurityId: 0P00002NW8
+            Weight: 10
+          - TradingSymbol: AAPL
+            Weight: 15
+          - ISIN: US09251T1034
+            Weight: 35
+          - CUSIP: '256219106'
+            Weight: 20
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
+      type: object
+      properties:
+        Type:
+          enum:
+          - Standard
+          - AutoAsset
+          - AutoCategory
+          - Custom
           type: string
-        Value:
-          format: double
-          type: number
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
     Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreConfig:
       type: object
       properties:
@@ -93,69 +123,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreStyle'
-    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
-      type: object
-      properties:
-        Type:
-          enum:
-          - Standard
-          - AutoAsset
-          - AutoCategory
-          - Custom
-          type: string
-        Holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
-    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
-      required:
-      - Name
-      - Currency
-      - Holdings
-      type: object
-      properties:
-        Name:
-          type: string
-        TotalValue:
-          format: double
-          type: number
-        Currency:
-          enum:
-          - AUD
-          - CAD
-          - CNY
-          - EUR
-          - GBP
-          - INR
-          - JPY
-          - USD
-          type: string
-        Holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
-        Benchmark:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
-        IrrFees:
-          format: double
-          type: number
-        RiskFreeProxyId:
-          description: Default is set in the Configuration. This is a portfolio level override.
-          type: string
-    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreGroupConfig:
-      type: object
-      properties:
-        Id:
-          type: string
-        RiskFreeAssetClassId:
-          type: string
-        AnnualizationFactor:
-          format: int32
-          type: integer
-        RiskScoreConfig:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreConfig'
     Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding:
       description: 'TODO: Implement same way as PortfolioInput'
       required:
@@ -175,24 +142,6 @@ components:
         Weight:
           format: double
           type: number
-    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig:
-      type: object
-      properties:
-        Id:
-          type: string
-        MonthlyReturnsRequired:
-          format: int32
-          type: integer
-        TAIReturnsStartDate:
-          format: date-time
-          type: string
-        ReturnsThresholdValue:
-          format: double
-          type: number
-        RiskScoreGroupConfig:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreGroupConfig'
     Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding:
       type: object
       properties:
@@ -275,30 +224,81 @@ components:
           type: string
         FundCode:
           type: string
-    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreInputSettings:
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
+      required:
+      - Name
+      - Currency
+      - Holdings
       type: object
       properties:
-        Portfolios:
+        Name:
+          type: string
+        TotalValue:
+          format: double
+          type: number
+        Currency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        Holdings:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
-        RiskScoreTAIConfig:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig'
-      example:
-        Portfolios:
-        - Name: TestPortfolio1
-          TotalValue: 10000
-          Holdings:
-          - SecurityId: F00000VCTT
-            Weight: 20
-          - SecurityId: 0P00002NW8
-            Weight: 10
-          - TradingSymbol: AAPL
-            Weight: 15
-          - ISIN: US09251T1034
-            Weight: 35
-          - CUSIP: '256219106'
-            Weight: 20
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
+        IrrFees:
+          format: double
+          type: number
+        RiskFreeProxyId:
+          description: Default is set in the Configuration. This is a portfolio level override.
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreStyle:
+      type: object
+      properties:
+        Name:
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreGroupConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        RiskFreeAssetClassId:
+          type: string
+        AnnualizationFactor:
+          format: int32
+          type: integer
+        RiskScoreConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreConfig'
+    Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreTAIConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        MonthlyReturnsRequired:
+          format: int32
+          type: integer
+        TAIReturnsStartDate:
+          format: date-time
+          type: string
+        ReturnsThresholdValue:
+          format: double
+          type: number
+        RiskScoreGroupConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.RiskScore.RiskScoreGroupConfig'
   securitySchemes:
     bearerAuth:
       type: http

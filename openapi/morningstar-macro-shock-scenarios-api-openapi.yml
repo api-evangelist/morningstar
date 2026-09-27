@@ -118,6 +118,13 @@ paths:
       - macro shock scenarios
 components:
   schemas:
+    idType:
+      properties:
+        id:
+          type: string
+        type:
+          type: string
+      type: object
     holding:
       properties:
         identifier:
@@ -125,11 +132,15 @@ components:
         weight:
           type: number
       type: object
-    idType:
+    Holdings:
+      required:
+      - id
       properties:
+        holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/holding'
         id:
-          type: string
-        type:
           type: string
       type: object
     ForecastReturnModel:
@@ -161,17 +172,6 @@ components:
               weight: 40
           items:
             $ref: '#/components/schemas/Holdings'
-      type: object
-    Holdings:
-      required:
-      - id
-      properties:
-        holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/holding'
-        id:
-          type: string
       type: object
   requestBodies:
     ForecastReturnModel:

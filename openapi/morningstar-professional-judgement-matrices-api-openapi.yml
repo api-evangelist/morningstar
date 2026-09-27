@@ -180,6 +180,116 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse500'
 components:
   schemas:
+    ExperiencePayload:
+      type: object
+      title: ExperiencePayload
+      description: Configurable to cap the max score based on the 2 possible responses
+      properties:
+        noPrior:
+          type: integer
+          description: No prior equity investment experience
+          example: 68
+        prior:
+          type: integer
+          description: Prior equity investment experience
+          example: 90
+        unknown:
+          type: integer
+          description: Unknown
+          example: 100
+    PjmWithHistoryResponsePayload:
+      type: object
+      title: PjmWithHistoryResponsePayload
+      properties:
+        pjmId:
+          type: string
+          description: Record unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        createdAt:
+          type: string
+          description: Record creation dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        updatedAt:
+          type: string
+          description: Record Update dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        timeHorizon:
+          $ref: '#/components/schemas/TimeHorizonPayload'
+        knowledge:
+          $ref: '#/components/schemas/KnowledgePayload'
+        experience:
+          $ref: '#/components/schemas/ExperiencePayload'
+        composure:
+          $ref: '#/components/schemas/ComposurePayload'
+        history:
+          type: array
+          description: List of PJM history configurations
+          items:
+            $ref: '#/components/schemas/PjmHistoryPayload'
+    PjmResponsePayload:
+      type: object
+      title: PjmResponsePayload
+      properties:
+        pjmId:
+          type: string
+          description: Record unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        createdAt:
+          type: string
+          description: Record creation dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        updatedAt:
+          type: string
+          description: Record Update dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        timeHorizon:
+          $ref: '#/components/schemas/TimeHorizonPayload'
+        knowledge:
+          $ref: '#/components/schemas/KnowledgePayload'
+        experience:
+          $ref: '#/components/schemas/ExperiencePayload'
+        composure:
+          $ref: '#/components/schemas/ComposurePayload'
+    ErrorResponse502:
+      type: object
+      title: ErrorResponse
+      properties:
+        message:
+          type: string
+          example: Received an invalid response from the upstream server
+          description: Error Message
+        status:
+          type: string
+          example: BAD_GATEWAY
+          description: Error Status
+        timestamp:
+          type: string
+          example: 2020-08-05T13:40:25+0000
+          description: Error Timestamp
+    PjmUpdateResponsePayload:
+      type: object
+      title: PjmUpdateResponsePayload
+      properties:
+        pjmId:
+          type: string
+          description: Record unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        createdAt:
+          type: string
+          description: Record creation dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        updatedAt:
+          type: string
+          description: Record update dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        timeHorizon:
+          $ref: '#/components/schemas/TimeHorizonPayload'
+        knowledge:
+          $ref: '#/components/schemas/KnowledgePayload'
+        experience:
+          $ref: '#/components/schemas/ExperiencePayload'
+        composure:
+          $ref: '#/components/schemas/ComposurePayload'
     PjmHistoryPayload:
       type: object
       title: PjmHistoryPayload
@@ -196,6 +306,22 @@ components:
           type: string
           description: Record creation dateTime UTC
           example: 2020-08-04T20:07:36+0000
+    ErrorResponse500:
+      type: object
+      title: ErrorResponse
+      properties:
+        message:
+          type: string
+          example: Internal Server Error
+          description: Error Message
+        status:
+          type: string
+          example: INTERNAL_SERVER_ERROR
+          description: Error Status
+        timestamp:
+          type: string
+          example: 2020-08-05T13:40:25+0000
+          description: Error Timestamp
     ErrorResponse404:
       type: object
       title: ErrorResponse
@@ -237,35 +363,6 @@ components:
           type: integer
           description: Unknown
           example: 100
-    PjmWithHistoryResponsePayload:
-      type: object
-      title: PjmWithHistoryResponsePayload
-      properties:
-        pjmId:
-          type: string
-          description: Record unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        createdAt:
-          type: string
-          description: Record creation dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        updatedAt:
-          type: string
-          description: Record Update dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        timeHorizon:
-          $ref: '#/components/schemas/TimeHorizonPayload'
-        knowledge:
-          $ref: '#/components/schemas/KnowledgePayload'
-        experience:
-          $ref: '#/components/schemas/ExperiencePayload'
-        composure:
-          $ref: '#/components/schemas/ComposurePayload'
-        history:
-          type: array
-          description: List of PJM history configurations
-          items:
-            $ref: '#/components/schemas/PjmHistoryPayload'
     ErrorResponse400:
       type: object
       title: ErrorResponse
@@ -277,136 +374,6 @@ components:
         status:
           type: string
           example: BAD_REQUEST
-          description: Error Status
-        timestamp:
-          type: string
-          example: 2020-08-05T13:40:25+0000
-          description: Error Timestamp
-    PjmUpdateResponsePayload:
-      type: object
-      title: PjmUpdateResponsePayload
-      properties:
-        pjmId:
-          type: string
-          description: Record unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        createdAt:
-          type: string
-          description: Record creation dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        updatedAt:
-          type: string
-          description: Record update dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        timeHorizon:
-          $ref: '#/components/schemas/TimeHorizonPayload'
-        knowledge:
-          $ref: '#/components/schemas/KnowledgePayload'
-        experience:
-          $ref: '#/components/schemas/ExperiencePayload'
-        composure:
-          $ref: '#/components/schemas/ComposurePayload'
-    ErrorResponse502:
-      type: object
-      title: ErrorResponse
-      properties:
-        message:
-          type: string
-          example: Received an invalid response from the upstream server
-          description: Error Message
-        status:
-          type: string
-          example: BAD_GATEWAY
-          description: Error Status
-        timestamp:
-          type: string
-          example: 2020-08-05T13:40:25+0000
-          description: Error Timestamp
-    PjmResponsePayload:
-      type: object
-      title: PjmResponsePayload
-      properties:
-        pjmId:
-          type: string
-          description: Record unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        createdAt:
-          type: string
-          description: Record creation dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        updatedAt:
-          type: string
-          description: Record Update dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        timeHorizon:
-          $ref: '#/components/schemas/TimeHorizonPayload'
-        knowledge:
-          $ref: '#/components/schemas/KnowledgePayload'
-        experience:
-          $ref: '#/components/schemas/ExperiencePayload'
-        composure:
-          $ref: '#/components/schemas/ComposurePayload'
-    KnowledgePayload:
-      type: object
-      title: KnowledgePayload
-      description: Configurable to cap the max score based on the 3 possible responses
-      properties:
-        basicKnowledge:
-          type: integer
-          description: Don't have or very little knowledge about investing
-          example: 50
-        moderateKnowledge:
-          type: integer
-          description: Have basic to moderate knowledge about investing
-          example: 60
-        veryKnowledge:
-          type: integer
-          description: Very knowledgeable about investing
-          example: 90
-        unknown:
-          type: integer
-          description: Unknown
-          example: 100
-    ExperiencePayload:
-      type: object
-      title: ExperiencePayload
-      description: Configurable to cap the max score based on the 2 possible responses
-      properties:
-        noPrior:
-          type: integer
-          description: No prior equity investment experience
-          example: 68
-        prior:
-          type: integer
-          description: Prior equity investment experience
-          example: 90
-        unknown:
-          type: integer
-          description: Unknown
-          example: 100
-    PjmRequestPayload:
-      type: object
-      title: PjmRequestPayload
-      properties:
-        timeHorizon:
-          $ref: '#/components/schemas/TimeHorizonPayload'
-        knowledge:
-          $ref: '#/components/schemas/KnowledgePayload'
-        experience:
-          $ref: '#/components/schemas/ExperiencePayload'
-        composure:
-          $ref: '#/components/schemas/ComposurePayload'
-    ErrorResponse500:
-      type: object
-      title: ErrorResponse
-      properties:
-        message:
-          type: string
-          example: Internal Server Error
-          description: Error Message
-        status:
-          type: string
-          example: INTERNAL_SERVER_ERROR
           description: Error Status
         timestamp:
           type: string
@@ -505,3 +472,36 @@ components:
           type: integer
           description: More than 20 years
           example: 50
+    PjmRequestPayload:
+      type: object
+      title: PjmRequestPayload
+      properties:
+        timeHorizon:
+          $ref: '#/components/schemas/TimeHorizonPayload'
+        knowledge:
+          $ref: '#/components/schemas/KnowledgePayload'
+        experience:
+          $ref: '#/components/schemas/ExperiencePayload'
+        composure:
+          $ref: '#/components/schemas/ComposurePayload'
+    KnowledgePayload:
+      type: object
+      title: KnowledgePayload
+      description: Configurable to cap the max score based on the 3 possible responses
+      properties:
+        basicKnowledge:
+          type: integer
+          description: Don't have or very little knowledge about investing
+          example: 50
+        moderateKnowledge:
+          type: integer
+          description: Have basic to moderate knowledge about investing
+          example: 60
+        veryKnowledge:
+          type: integer
+          description: Very knowledgeable about investing
+          example: 90
+        unknown:
+          type: integer
+          description: Unknown
+          example: 100

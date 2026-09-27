@@ -183,6 +183,30 @@ paths:
       x-cpqId: 17
 components:
   schemas:
+    OutputCusip:
+      type: object
+      properties:
+        custodian:
+          type: string
+          description: ''
+          nullable: true
+        underlyingFundCusip:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputCusip
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
     OutputShareClassInformation:
       type: object
       properties:
@@ -303,70 +327,28 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputShareClassInformation
-    OutputIdentifiers:
+    OutputErrorDetails:
       type: object
       properties:
-        performanceId:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
           type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
-    OutputCusip:
-      type: object
-      properties:
-        custodian:
-          type: string
-          description: ''
-          nullable: true
-        underlyingFundCusip:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputCusip
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+          description: Custom error code
           nullable: true
         message:
           type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
+      description: Error details
+      title: OutputErrorDetails
     OutputInvalidInvestments:
       type: object
       properties:
@@ -413,17 +395,38 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    CodeMappingBoolean:
+    OutputIdentifiers:
       type: object
       properties:
-        value:
+        performanceId:
           type: string
           nullable: true
-        code:
-          type: boolean
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
           nullable: true
       additionalProperties: false
-      title: CodeMappingBoolean
+      title: OutputIdentifiers
     OutputMetadata:
       type: object
       properties:
@@ -447,46 +450,37 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
-    OutputErrorDetails:
+    OutputMetadataMessages:
       type: object
       properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
+        type:
           type: string
-          description: Custom error code
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
         message:
           type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
           nullable: true
       additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    CodeMappingString:
+      title: OutputMetadataMessages
+    CodeMappingBoolean:
       type: object
       properties:
         value:
           type: string
           nullable: true
         code:
-          type: string
+          type: boolean
           nullable: true
       additionalProperties: false
-      title: CodeMappingString
+      title: CodeMappingBoolean
   responses:
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseCusip:
       description: OK
       content:
@@ -504,6 +498,12 @@ components:
                 $ref: '#/components/schemas/OutputMetadata'
     ResponseBadRequest:
       description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
       content:
         application/json:
           schema:
