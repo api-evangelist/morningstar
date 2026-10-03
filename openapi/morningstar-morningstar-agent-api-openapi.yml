@@ -139,41 +139,6 @@ paths:
       - BearerAuth: []
 components:
   schemas:
-    RunResponse:
-      properties:
-        response:
-          type: string
-          title: Response
-        token_usage:
-          anyOf:
-          - $ref: '#/components/schemas/TokenUsage'
-          - type: 'null'
-      type: object
-      required:
-      - response
-      title: RunResponse
-    TokenUsage:
-      properties:
-        input_tokens:
-          type: integer
-          title: Input Tokens
-          default: 0
-        output_tokens:
-          type: integer
-          title: Output Tokens
-          default: 0
-        total_tokens:
-          type: integer
-          title: Total Tokens
-          default: 0
-        tools_called:
-          items:
-            type: string
-          type: array
-          title: Tools Called
-          default: []
-      type: object
-      title: TokenUsage
     RunRequest:
       properties:
         message:
@@ -193,6 +158,28 @@ components:
       - standard
       - deep
       title: ThinkingMode
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
+    RunResponse:
+      properties:
+        response:
+          type: string
+          title: Response
+        token_usage:
+          anyOf:
+          - $ref: '#/components/schemas/TokenUsage'
+          - type: 'null'
+      type: object
+      required:
+      - response
+      title: RunResponse
     ValidationError:
       properties:
         loc:
@@ -219,15 +206,28 @@ components:
       - msg
       - type
       title: ValidationError
-    HTTPValidationError:
+    TokenUsage:
       properties:
-        detail:
+        input_tokens:
+          type: integer
+          title: Input Tokens
+          default: 0
+        output_tokens:
+          type: integer
+          title: Output Tokens
+          default: 0
+        total_tokens:
+          type: integer
+          title: Total Tokens
+          default: 0
+        tools_called:
           items:
-            $ref: '#/components/schemas/ValidationError'
+            type: string
           type: array
-          title: Detail
+          title: Tools Called
+          default: []
       type: object
-      title: HTTPValidationError
+      title: TokenUsage
   securitySchemes:
     BearerAuth:
       type: http

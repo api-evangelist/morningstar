@@ -29545,139 +29545,47 @@ paths:
       description: PROD
 components:
   schemas:
-    OutputPerformanceDate:
-      description: Key performance date reference points for the portfolio.
+    OutputErrorResponse:
       type: object
       properties:
-        EarliestCommonDate:
-          description: The earliest date for which all holdings in the portfolio have return data.
+        Message:
           type: string
-          format: date-time
-        EarliestAvailableDate:
-          description: The earliest date for which any holding in the portfolio has return data.
-          type: string
-          format: date-time
-        EarliestCommonExtendedDate:
-          description: The earliest common date calculated using extended return history where available.
-          type: string
-          format: date-time
-        EarliestCommonExtended10YearDate:
-          description: The earliest common date within a 10-year window, calculated using extended return history where available.
-          type: string
-          format: date-time
-        EarliestInceptionDate:
-          description: The inception date of the most recently launched holding in the portfolio.
-          type: string
-          format: date-time
-    OutputPerformanceSecurityReturns.NonStdLoadAdjustedReturns:
-      type: object
-      properties:
-        AsOfDate:
-          type: string
-          format: date-time
-          description: End date of the analysis.
-        Security:
+          example: The request is invalid.
+        SpecificErrorStatus:
           type: array
           items:
-            $ref: '#/components/schemas/OutputPerformanceNonStdLoadAdjustedReturnsSecurity'
-          description: Array of per-security non-standardised load-adjusted return records.
-      description: Non-standardised load-adjusted return data for each security in the portfolio.
-    OutputRiskRiskStatisticsPortfolioItem:
-      type: object
-      properties:
-        Mean:
-          type: number
-          format: double
-          description: Average return over the trailing period.
-        GrossMean:
-          description: Gross mean return. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-        SharpeRatio:
-          type: number
-          format: double
-          description: Return in excess of the risk-free rate per unit of standard deviation. A higher value indicates better risk-adjusted performance.
-        GrossSharpeRatio:
-          description: Gross Sharpe ratio. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-        StandardDeviation:
-          type: number
-          format: double
-          description: Statistical dispersion of returns around the mean. Higher values indicate greater return volatility.
-        GrossStandardDeviation:
-          description: Gross standard deviation. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-        InformationRatio:
-          type: number
-          format: double
-          description: Active return relative to a benchmark per unit of tracking error. A variant of the Sharpe ratio that uses the benchmark rather than the risk-free rate.
-        GrossInformationRatio:
-          description: Gross information ratio. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-        TrackingError:
-          type: number
-          format: double
-          description: Standard deviation of the portfolio's excess returns relative to the benchmark.
-        GrossTrackingError:
-          description: Gross tracking error. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-        SortinoRatio:
-          type: number
-          format: double
-          description: Return per unit of downside deviation. A variant of the Sharpe ratio that penalises only negative return volatility.
-        GrossSortinoRatio:
-          description: Gross Sortino ratio. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-        ExcessReturn:
-          type: number
-          format: double
-          description: Portfolio return minus the 91-day government treasury bill return over the same period.
-        GrossExcessReturn:
-          description: Gross excess return. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-      description: Risk statistics for the portfolio over a single trailing time period. Year2 is not supported at security level.
-    OutputRiskCorrelatedItemKey:
-      type: object
-      properties:
-        CorrelatedItemKeyId:
-          type: integer
-          format: int32
-        Type:
-          type: string
-          enum:
-          - Portfolio
-          - Security
-        Value:
-          type: number
-          format: double
-      description: Correlation value between this item and one other item in the matrix.
-    OutputDataItemBenchmarkTrailingTimePeriod:
-      type: object
-      properties:
-        Id:
-          type: string
-          enum:
-          - YearToDate
-          - Month3
-          - Month6
-          - Year1
-          - Year2
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
-          description: Trailing time period identifier.
-        Value:
-          type: number
-          format: double
-          description: Return value for the time period.
-      description: Benchmark return value for a single trailing time period.
+            type: object
+            properties:
+              ErrorCode:
+                type: string
+                example: '40059'
+              ErrorMessage:
+                type: string
+                example: There are holdings present in portfolio which are invalid.
+              Metadata:
+                type: object
+                properties:
+                  InvalidPortfolios:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        Name:
+                          type: string
+                          example: Test Portfolio
+                        InvalidHoldings:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              SecurityId:
+                                type: string
+                                example: FX000015JA3
+                              Status:
+                                type: string
+                                enum:
+                                - Invalid
+                                - Unentitled
     OutputPerformanceInvestmentActivityItem:
       type: object
       properties:
@@ -29710,6 +29618,108 @@ components:
           type: number
           format: double
       description: Investment activity for a single period.
+    OutputPerformanceDate:
+      description: Key performance date reference points for the portfolio.
+      type: object
+      properties:
+        EarliestCommonDate:
+          description: The earliest date for which all holdings in the portfolio have return data.
+          type: string
+          format: date-time
+        EarliestAvailableDate:
+          description: The earliest date for which any holding in the portfolio has return data.
+          type: string
+          format: date-time
+        EarliestCommonExtendedDate:
+          description: The earliest common date calculated using extended return history where available.
+          type: string
+          format: date-time
+        EarliestCommonExtended10YearDate:
+          description: The earliest common date within a 10-year window, calculated using extended return history where available.
+          type: string
+          format: date-time
+        EarliestInceptionDate:
+          description: The inception date of the most recently launched holding in the portfolio.
+          type: string
+          format: date-time
+    OutputPerformanceStandardizedReturns.TimePeriodItem:
+      type: object
+      properties:
+        Id:
+          type: string
+          enum:
+          - YearToDate
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          description: Trailing time period identifier.
+        Market:
+          type: number
+          format: double
+          description: Market-price total return for the period. For ETFs and closed-end funds, based on market price change plus reinvested distributions. For equities, dividends are treated as a cash payout at period end rather than reinvested.
+        Nav:
+          type: number
+          format: double
+          description: NAV-based total return for the period.
+      description: Standardised return values for a single trailing time period.
+    OutputRiskRiskStatisticsItem:
+      type: object
+      properties:
+        Mean:
+          type: number
+          format: double
+          description: Average return over the trailing period.
+        SharpeRatio:
+          type: number
+          format: double
+          description: Return in excess of the risk-free rate per unit of standard deviation.
+        StandardDeviation:
+          type: number
+          format: double
+          description: Statistical dispersion of returns around the mean.
+        InformationRatio:
+          type: number
+          format: double
+          description: Active return relative to a benchmark per unit of tracking error.
+        TrackingError:
+          type: number
+          format: double
+          description: Standard deviation of excess returns relative to the benchmark.
+        SortinoRatio:
+          type: number
+          format: double
+          description: Return per unit of downside deviation.
+        ExcessReturn:
+          type: number
+          format: double
+          description: Return minus the 91-day government treasury bill return over the same period.
+      description: Risk statistics for the benchmark over a single trailing time period.
+    OutputDataItemTrailingTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: string
+          enum:
+          - YearToDate
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          description: Trailing time period identifier.
+        Value:
+          type: number
+          format: double
+          description: Return value for the time period.
+        GrossValue:
+          description: Gross return value for the period. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
     OutputPerformanceBestWorstTimePeriods:
       type: object
       properties:
@@ -29728,178 +29738,47 @@ components:
             $ref: '#/components/schemas/OutputPerformanceBestWorstTimePeriod'
           description: Array of worst return values for each time period.
       description: Best and worst return values across a set of standard trailing time periods.
-    OutputPerformanceStandardizedReturns:
-      type: object
-      properties:
-        GrossExpenseRatio:
-          type: number
-          format: double
-          description: Total gross expenses divided by average net assets. Reflects the fund's expenses before any fee waivers or reimbursements are applied.
-        InceptionDate:
-          type: string
-          format: date-time
-          description: Inception date of the security.
-        MaxBackLoad:
-          type: number
-          format: double
-          description: Maximum deferred (back-end) sales charge, expressed as a percentage of the lesser of the initial or final share value.
-        MaxFrontLoad:
-          type: number
-          format: double
-          description: Maximum front-end sales charge applied at purchase, as a percentage of the investment amount.
-        NetExpenseRatio:
-          type: number
-          format: double
-          description: Total net expenses divided by average net assets, after any fee waivers or reimbursements. Includes management, 12b-1, administrative, and auditor fees, but excludes brokerage costs.
-        ManagementExpenseRatio:
-          type: number
-          format: double
-          description: Annual fixed costs of managing the fund as a percentage of average net assets. Specific to the Canadian market.
-        TurnoverRatio:
-          type: number
-          format: double
-          description: Annual portfolio rotation rate. A high turnover ratio may indicate higher transaction costs.
-        TurnoverRatioDate:
-          type: string
-          format: date-time
-          description: Date as of which the turnover ratio is reported.
-        Day7YieldUnsubsized:
-          type: number
-          format: double
-          description: 7-day unsubsidised yield, calculated using gross (pre-subsidy) expenses per the SEC Form N-1A formula.
-        Day7YieldSubsidized:
-          type: number
-          format: double
-          description: 7-day subsidised yield, calculated using net (post-subsidy) expenses per the SEC Form N-1A formula.
-        Month12Yield:
-          type: number
-          format: double
-          description: Trailing 12-month distributions (dividends, interest, and capital gains, excluding return of capital) expressed as a percentage of the previous month-end price.
-        TimePeriod:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPerformanceStandardizedReturns.TimePeriodItem'
-          description: Array of standardised return values for each trailing time period.
-      description: Standardised return data for a security including expense ratios, yields, and time-period returns.
-    InputPortfolioInputHolding:
-      description: 'Each holding requires a security identifier and a position size. For the identifier, pass one of: `SecurityId`, `CUSIP`, `FundCode`, `ISIN`, `PerformanceId`, or `TradingSymbol`. If multiple identifiers are provided for a single security, `SecurityId` takes priority; if `SecurityId` is absent, the last identifier listed in the object is used. For the position size, pass one of: `Weight` or `Value`.'
-      type: object
-      properties:
-        SecurityId:
-          description: Morningstar unique identifier of a security. Use `CASH%0.000` for cash positions.
-          type: string
-          example: FOUSA00DFS,CASH%0.000
-        Weight:
-          description: Holding weight as a percentage of portfolio total. All holding weights must sum to 100. Requires `TotalValue` to be set on the portfolio.
-          minimum: 1
-          maximum: 100
-          example: 60
-          type: number
-          format: double
-        Value:
-          description: Market value of the holding in the portfolio currency.
-          minimum: 1
-          example: 25000
-          type: number
-          format: double
-        AnnualFeePercent:
-          description: Holding-level annual fee as a percentage of holding value (e.g. `1.15` = 1.15%). Defaults to `0` (no fee).
-          minimum: 0
-          default: 0
-          example: 1.15
-          type: number
-          format: double
-        AnnualFeeFrequency:
-          description: How often the holding-level annual fee is deducted.
-          default: Monthly
-          type: string
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-        PerformanceId:
-          description: Morningstar performance identifier of a security.
-          type: string
-          example: 0P00002QN3
-        CUSIP:
-          description: CUSIP identifier of a security.
-          type: string
-          example: 09251T103
-        ISIN:
-          description: ISIN identifier of a security.
-          type: string
-          example: US0378331005
-        TradingSymbol:
-          description: Trading symbol (ticker) of a security.
-          type: string
-          example: MDLOX
-        FundCode:
-          description: Fund code identifier of a security. Specific to Thai markets.
-          type: string
-          example: ABG
-    OutputPerformanceNonStdLoadAdjustedReturnsPortfolio:
+    OutputPerformanceTrailingReturnsItem:
       type: object
       properties:
         TimePeriod:
           type: array
           items:
-            $ref: '#/components/schemas/OutputDataItemTimePeriod'
+            $ref: '#/components/schemas/OutputDataItemTrailingTimePeriod'
           description: Array of return values for each trailing time period.
-      description: Portfolio non-standardised load-adjusted return values.
-    OutputRiskMPTStatistics:
+      description: Trailing return values across standard time periods.
+    OutputRiskCalenderYearItem:
       type: object
       properties:
-        AsOfDate:
+        id:
           type: string
-          format: date-time
-          description: End date of the analysis.
-        TrailingTimePeriod:
-          type: string
-          enum:
-          - Year1
-          - Year2
-          - Year3
-          - Year5
-          - Year10
-          description: Trailing time period over which MPT statistics are calculated.
-        DataFrequency:
-          type: string
-          enum:
-          - Monthly
-          description: Frequency of the return data used in the calculation.
-        Portfolio:
-          $ref: '#/components/schemas/OutputRiskMPTStatisticsItem'
-          description: MPT statistics for the portfolio.
-      description: Modern Portfolio Theory (MPT) statistics for the portfolio for a single trailing time period.
-    OutputPerformancePerformanceHistorys:
+          description: Calendar year identifier (e.g. `2023`).
+        CalenderYearDrawdownItem:
+          $ref: '#/components/schemas/OutputRiskDrawdownItem'
+          description: Drawdown statistics for the calendar year.
+      description: Drawdown statistics for a single calendar year.
+    OutputPerformancePerformance:
+      description: Performance result for a single portfolio.
       type: object
       properties:
-        PerformanceHistory:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPerformancePerformanceHistory'
-          description: Array of performance history series.
-      description: Performance history data across one or more return series.
-    OutputPerformanceBestWorstTimePeriod:
-      type: object
-      properties:
-        TimePeriod:
+        PortfolioName:
+          description: Name of the portfolio.
+          type: string
+        PerformanceDate:
+          description: Key performance date reference points for this portfolio.
+          $ref: '#/components/schemas/OutputPerformanceDate'
+        ReturnMethodology:
+          description: Return methodology used in the calculation.
           type: string
           enum:
-          - Month3
-          - Year1
-          - Year3
-          description: Time period identifier.
-        Value:
-          type: number
-          format: double
-          description: Return value for the time period.
-        StartDate:
-          type: string
-          format: date-time
-          description: Start date of the time period.
-      description: Best or worst return value for a single trailing time period.
+          - QuickPortfolio
+          - Hypothetical
+        Returns:
+          description: Return data for the portfolio including trailing, calendar year, and investment activity.
+          $ref: '#/components/schemas/OutputPerformanceReturns'
+        Risks:
+          description: Risk statistics for the portfolio including MPT statistics, correlation matrix, and drawdown.
+          $ref: '#/components/schemas/OutputRiskRisks'
     RequestPerformance:
       description: Calculate performance for up to 2 portfolios. Maximum of 250 holdings per portfolio.
       required:
@@ -29921,39 +29800,288 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/InputPortfolioInput'
-    OutputRiskRiskStatistics:
+    OutputPerformanceStdLoadAdjustedReturnsPortfolio:
+      type: object
+      properties:
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceStandardizedReturnsTimePeriodItem'
+          description: Array of standardised return values for each trailing time period.
+      description: Portfolio standardised load-adjusted return values.
+    OutputPerformanceNonStdLoadAdjustedReturnsPortfolio:
+      type: object
+      properties:
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemTimePeriod'
+          description: Array of return values for each trailing time period.
+      description: Portfolio non-standardised load-adjusted return values.
+    ResponsePerformance:
+      description: Top-level response object containing one result per portfolio analysed.
+      type: object
+      properties:
+        PerformanceDate:
+          description: Key performance date reference points across all portfolios in the request.
+          $ref: '#/components/schemas/OutputPerformanceDate'
+        Performance:
+          description: Array of performance results, one per portfolio.
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformancePerformance'
+        CrossPortfolioCorrelationMatrix:
+          description: Cross-portfolio correlation matrix data. Only returned when `View.Id` is `CrossPortfolioCorrelation`.
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskCrossPortfolioCorrelationMatrix'
+        SecurityReference:
+          description: Reference data for all securities appearing in the response.
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputSecurityItem'
+    OutputPerformanceNonStdLoadAdjustedReturnsSecurity:
+      type: object
+      properties:
+        Sequence:
+          type: integer
+          format: int32
+          description: Position of the security in the holdings array (1-based).
+        SecurityId:
+          type: string
+          description: Morningstar unique identifier of the security.
+        HoldingDate:
+          type: string
+          format: date-time
+          description: Date as of which the holding data is reported.
+        HoldingValue:
+          type: number
+          format: double
+          description: Value of the holding as of `HoldingDate`.
+        Day7Yield:
+          type: number
+          format: double
+          description: 7-day annualised yield. Applicable to money market funds.
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemTimePeriod'
+          description: Array of return values for each trailing time period.
+      description: Non-standardised load-adjusted return data for a single security.
+    OutputPerformanceTrailingReturns:
       type: object
       properties:
         AsOfDate:
           type: string
           format: date-time
           description: End date of the analysis.
-        TrailingTimePeriod:
-          type: string
-          enum:
-          - Year1
-          - Year2
-          - Year3
-          - Year5
-          - Year10
-          description: Trailing time period over which risk statistics are calculated.
-        DataFrequency:
-          type: string
-          enum:
-          - Monthly
-          description: Frequency of the return data used in the calculation.
         Portfolio:
-          $ref: '#/components/schemas/OutputRiskRiskStatisticsPortfolioItem'
-          description: Risk statistics for the portfolio.
+          $ref: '#/components/schemas/OutputPerformanceTrailingReturnsItem'
+          description: Portfolio trailing return values. If a benchmark is included, the same time periods are returned for the benchmark.
         Benchmark:
-          $ref: '#/components/schemas/OutputRiskRiskStatisticsItem'
-          description: Risk statistics for the benchmark.
+          $ref: '#/components/schemas/OutputPerformanceBenchmark.TrailingReturnsItem'
+          description: Benchmark trailing return values.
+      description: Trailing return data for the portfolio and benchmark.
+    OutputPerformanceStandardizedAndTaxAdjustedReturns:
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of the analysis.
         Security:
           type: array
           items:
-            $ref: '#/components/schemas/OutputRiskRiskStatisticsSecurityItem'
-          description: Array of risk statistics for individual securities in the portfolio.
-      description: Risk statistics for the portfolio, benchmark, and individual securities for a single trailing time period.
+            $ref: '#/components/schemas/OutputPerformanceStandardizedAndTaxAdjustedReturnsSecurity'
+          description: Array of per-security standardised and after-tax return records.
+      description: Standardised and tax-adjusted return data for each security in the portfolio.
+    OutputRiskCorrelationItemKey:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+        SecurityId:
+          type: string
+        UseExtendedReturns:
+          type: boolean
+        Type:
+          type: string
+          enum:
+          - Portfolio
+          - Security
+        CorrelatedItemKey:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskCorrelatedItemKey'
+      description: Correlation data for a single security or portfolio against all others in the matrix.
+    OutputPerformanceStdLoadAdjustedReturns:
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of the analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputPerformanceStdLoadAdjustedReturnsPortfolio'
+          description: Portfolio standardised load-adjusted return values.
+      description: Standardised load-adjusted return data for the portfolio.
+    OutputPerformanceBenchmark.TrailingReturnsItem:
+      type: object
+      properties:
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemBenchmarkTrailingTimePeriod'
+    OutputPerformancePerformanceHistory:
+      type: object
+      properties:
+        Type:
+          type: string
+          enum:
+          - Difference
+          - Portfolio
+          - Benchmark
+          description: 'Return series type: `Portfolio`, `Benchmark`, or `Difference` (portfolio minus benchmark).'
+        Frequency:
+          type: string
+          enum:
+          - Monthly
+          - Quarterly
+          description: Frequency of the return data points.
+        StartDate:
+          type: string
+          format: date-time
+          description: Start date of the performance history series.
+        Portfolio:
+          $ref: '#/components/schemas/OutputPerformancePerformanceHistoryItem'
+          description: Performance history data for the portfolio. If a benchmark is included, the same structure is returned for the benchmark.
+      description: A single performance history series (portfolio, benchmark, or difference).
+    OutputPerformancePerformanceHistorys:
+      type: object
+      properties:
+        PerformanceHistory:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformancePerformanceHistory'
+          description: Array of performance history series.
+      description: Performance history data across one or more return series.
+    OutputDataItemCalendarYearReturnTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+          description: Calendar year sequence (1 = most recent year, up to 10).
+        Value:
+          type: number
+          format: double
+          description: Return value for the calendar year.
+        GrossValue:
+          description: Gross return value for the calendar year. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
+      description: Return value for a single calendar year.
+    OutputRiskDrawdown:
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of the analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputRiskPortfolio'
+          description: Drawdown data for the portfolio.
+      description: Drawdown analysis for the portfolio across trailing time periods and calendar years.
+    OutputPerformanceNonStdLoadAdjustedReturns:
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of the analysis.
+        Portfolio:
+          $ref: '#/components/schemas/OutputPerformanceNonStdLoadAdjustedReturnsPortfolio'
+          description: Portfolio non-standardised load-adjusted return values.
+      description: Non-standardised load-adjusted return data for the portfolio.
+    OutputDataItemTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: string
+          enum:
+          - YearToDate
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          description: Trailing time period identifier.
+        Value:
+          type: number
+          format: double
+          description: Return value for the time period.
+    OutputRiskCorrelatedItemKey:
+      type: object
+      properties:
+        CorrelatedItemKeyId:
+          type: integer
+          format: int32
+        Type:
+          type: string
+          enum:
+          - Portfolio
+          - Security
+        Value:
+          type: number
+          format: double
+      description: Correlation value between this item and one other item in the matrix.
+    OutputRiskDrawdownItem:
+      type: object
+      properties:
+        MaxDrawdown:
+          type: number
+          format: double
+          description: Peak-to-trough decline over the period, expressed as a percentage.
+        NoOfPeriods:
+          type: integer
+          format: int32
+          description: Number of periods (months) between the peak and the recovery.
+        PeakDate:
+          type: string
+          format: date-time
+          description: Date of the return peak preceding the maximum drawdown.
+        ValleyDate:
+          type: string
+          format: date-time
+          description: Date of the lowest point of the maximum drawdown.
+        UpPercent:
+          type: number
+          format: double
+          description: Percentage of periods in which the portfolio posted a positive return.
+        DownPercent:
+          type: number
+          format: double
+          description: Percentage of periods in which the portfolio posted a negative return.
+      description: Drawdown statistics for a single period.
+    OutputPerformanceStandardizedReturnsTimePeriodItem:
+      type: object
+      properties:
+        Id:
+          type: string
+          enum:
+          - YearToDate
+          - Month3
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          description: Trailing time period identifier.
+        Nav:
+          type: number
+          format: double
+          description: NAV-based standardised return for the period.
+      description: Standardised return value for a single trailing time period.
     InputPortfolioInput:
       description: Object representing a portfolio to be analysed. Each holding must specify a security identifier and one of `Weight` or `Value`to define its allocation. `TotalValue` is required when holdings use `Weight`. Maximum of 250 holdings per portfolio.
       required:
@@ -30031,401 +30159,144 @@ components:
           format: double
           minimum: 1
           example: 1000
-    OutputPerformanceStandardizedReturnsTimePeriodItem:
+    InputPerformancePerformanceConfig:
+      description: Account-specific configuration preset.
       type: object
       properties:
         Id:
           type: string
+          description: Account-specific configuration preset. Settings can be overridden directly in the request. `Hypothetical` is only supported when `View.Id` is `CrossPortfolioCorrelation`.
+          default: QuickPortfolio
           enum:
-          - YearToDate
-          - Month3
-          - Year1
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
-          description: Trailing time period identifier.
-        Nav:
-          type: number
-          format: double
-          description: NAV-based standardised return for the period.
-      description: Standardised return value for a single trailing time period.
-    OutputRiskCorrelationMatrix:
+          - Hypothetical
+          - QuickPortfolio
+    OutputPerformanceReturns:
       type: object
       properties:
-        TrailingTimePeriod:
+        BestWorstTimePeriods:
+          $ref: '#/components/schemas/OutputPerformanceBestWorstTimePeriods'
+          description: Best and worst return periods data.
+        TrailingReturns:
+          $ref: '#/components/schemas/OutputPerformanceTrailingReturns'
+          description: Trailing returns data.
+        CalendarYearReturn:
+          $ref: '#/components/schemas/OutputPerformanceCalendarYearReturns'
+          description: Calendar year return data.
+        PerformanceHistorys:
+          $ref: '#/components/schemas/OutputPerformancePerformanceHistorys'
+          description: Performance history data.
+        InvestmentActivity:
+          $ref: '#/components/schemas/OutputPerformanceInvestmentActivity'
+          description: Investment activity data.
+        SecurityReturns:
+          $ref: '#/components/schemas/OutputPerformanceSecurityReturns'
+          description: Security-level return data.
+        NonStdLoadAdjustedReturns:
+          $ref: '#/components/schemas/OutputPerformanceNonStdLoadAdjustedReturns'
+          description: Non-standardised load-adjusted returns data.
+        StdLoadAdjustedReturns:
+          $ref: '#/components/schemas/OutputPerformanceStdLoadAdjustedReturns'
+          description: Standardised load-adjusted returns data.
+      description: Return data for the portfolio including trailing returns, calendar year returns, investment activity, and security-level returns.
+    OutputPerformanceStandardizedReturns:
+      type: object
+      properties:
+        GrossExpenseRatio:
+          type: number
+          format: double
+          description: Total gross expenses divided by average net assets. Reflects the fund's expenses before any fee waivers or reimbursements are applied.
+        InceptionDate:
           type: string
-          enum:
-          - Year3
-          - Year5
-          - Year10
-        DataFrequency:
+          format: date-time
+          description: Inception date of the security.
+        MaxBackLoad:
+          type: number
+          format: double
+          description: Maximum deferred (back-end) sales charge, expressed as a percentage of the lesser of the initial or final share value.
+        MaxFrontLoad:
+          type: number
+          format: double
+          description: Maximum front-end sales charge applied at purchase, as a percentage of the investment amount.
+        NetExpenseRatio:
+          type: number
+          format: double
+          description: Total net expenses divided by average net assets, after any fee waivers or reimbursements. Includes management, 12b-1, administrative, and auditor fees, but excludes brokerage costs.
+        ManagementExpenseRatio:
+          type: number
+          format: double
+          description: Annual fixed costs of managing the fund as a percentage of average net assets. Specific to the Canadian market.
+        TurnoverRatio:
+          type: number
+          format: double
+          description: Annual portfolio rotation rate. A high turnover ratio may indicate higher transaction costs.
+        TurnoverRatioDate:
           type: string
-          enum:
-          - Monthly
+          format: date-time
+          description: Date as of which the turnover ratio is reported.
+        Day7YieldUnsubsized:
+          type: number
+          format: double
+          description: 7-day unsubsidised yield, calculated using gross (pre-subsidy) expenses per the SEC Form N-1A formula.
+        Day7YieldSubsidized:
+          type: number
+          format: double
+          description: 7-day subsidised yield, calculated using net (post-subsidy) expenses per the SEC Form N-1A formula.
+        Month12Yield:
+          type: number
+          format: double
+          description: Trailing 12-month distributions (dividends, interest, and capital gains, excluding return of capital) expressed as a percentage of the previous month-end price.
+        TimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceStandardizedReturns.TimePeriodItem'
+          description: Array of standardised return values for each trailing time period.
+      description: Standardised return data for a security including expense ratios, yields, and time-period returns.
+    OutputPerformanceBenchmark.InvestmentActivityItem:
+      type: object
+      properties:
+        Sequence:
+          type: integer
+          format: int32
+          description: Sequential index of the period (1-based).
         StartDate:
           type: string
           format: date-time
+          description: Start date of the period.
         EndDate:
           type: string
           format: date-time
-        Correlations:
+          description: End date of the period.
+        BeginningBalance:
+          type: number
+          format: double
+          description: Benchmark value at the start of the period.
+        MarketValue:
+          type: number
+          format: double
+          description: Benchmark market value at the end of the period.
+      description: Benchmark investment activity for a single period.
+    OutputRiskRisks:
+      type: object
+      properties:
+        RiskStatistics:
           type: array
           items:
-            $ref: '#/components/schemas/OutputRiskCorrelationItemKey'
-      description: Intra-portfolio correlation matrix for a single trailing time period.
-    OutputPerformanceTrailingReturns:
-      type: object
-      properties:
-        AsOfDate:
-          type: string
-          format: date-time
-          description: End date of the analysis.
-        Portfolio:
-          $ref: '#/components/schemas/OutputPerformanceTrailingReturnsItem'
-          description: Portfolio trailing return values. If a benchmark is included, the same time periods are returned for the benchmark.
-        Benchmark:
-          $ref: '#/components/schemas/OutputPerformanceBenchmark.TrailingReturnsItem'
-          description: Benchmark trailing return values.
-      description: Trailing return data for the portfolio and benchmark.
-    InputPerformancePerformanceView:
-      description: Predefined set of data points to return in the response.
-      type: object
-      properties:
-        Id:
-          type: string
-          description: Identifier of a predefined set of data points to return in the response.
-          default: All
-          enum:
-          - All
-          - CorrelationMatrix
-          - CrossPortfolioCorrelation
-          - Default
-          - Snapshot
-    OutputPerformancePerformanceHistoryItem:
-      type: object
-      properties:
-        StartYear:
-          type: integer
-          format: int32
-          description: Year in which the performance history series begins.
-        StartQuarter:
-          maximum: 4
-          minimum: 1
-          type: integer
-          format: int32
-          description: Quarter in which the performance history series begins (1–4).
-        StartMonth:
-          maximum: 12
-          minimum: 1
-          type: integer
-          format: int32
-          description: Month in which the performance history series begins (1–12).
-        Data:
+            $ref: '#/components/schemas/OutputRiskRiskStatistics'
+          description: Array of risk statistics records, one per trailing time period.
+        MPTStatistics:
           type: array
           items:
-            $ref: '#/components/schemas/OutputDataItemPerformanceHistoryTimePeriod'
-          description: Array of sequential return data points.
-      description: Performance history data for a portfolio or benchmark series.
-    InputPortfolioFees:
-      description: Portfolio-level annual fee configuration.
-      type: object
-      properties:
-        AnnualFeePercent:
-          description: Annual fee as a percentage of portfolio value (e.g. `1.15` = 1.15%). Defaults to `0` (no fee).
-          minimum: 0
-          default: 0
-          example: 1.15
-          type: number
-          format: double
-        AnnualFeeFrequency:
-          description: How often the annual fee is deducted from the portfolio.
-          default: Monthly
-          type: string
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-    OutputPerformanceBenchmark.TrailingReturnsItem:
-      type: object
-      properties:
-        TimePeriod:
+            $ref: '#/components/schemas/OutputRiskMPTStatistics'
+          description: Array of MPT statistics records, one per trailing time period.
+        CorrelationMatrix:
           type: array
           items:
-            $ref: '#/components/schemas/OutputDataItemBenchmarkTrailingTimePeriod'
-    OutputErrorResponse:
-      type: object
-      properties:
-        Message:
-          type: string
-          example: The request is invalid.
-        SpecificErrorStatus:
-          type: array
-          items:
-            type: object
-            properties:
-              ErrorCode:
-                type: string
-                example: '40059'
-              ErrorMessage:
-                type: string
-                example: There are holdings present in portfolio which are invalid.
-              Metadata:
-                type: object
-                properties:
-                  InvalidPortfolios:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        Name:
-                          type: string
-                          example: Test Portfolio
-                        InvalidHoldings:
-                          type: array
-                          items:
-                            type: object
-                            properties:
-                              SecurityId:
-                                type: string
-                                example: FX000015JA3
-                              Status:
-                                type: string
-                                enum:
-                                - Invalid
-                                - Unentitled
-    OutputPerformanceStandardizedAndTaxAdjustedReturnsSecurity:
-      type: object
-      properties:
-        Sequence:
-          type: integer
-          format: int32
-          description: Position of the security in the holdings array (1-based).
-        SecurityId:
-          type: string
-          description: Morningstar unique identifier of the security.
-        StandardizedReturns:
-          $ref: '#/components/schemas/OutputPerformanceStandardizedReturns'
-          description: Standardised return data for the security.
-        AfterTaxReturns:
-          $ref: '#/components/schemas/OutputPerformanceAfterTaxReturns'
-          description: After-tax return data for the security.
-      description: Standardised and after-tax return data for a single security.
-    OutputRiskDrawdown:
-      type: object
-      properties:
-        AsOfDate:
-          type: string
-          format: date-time
-          description: End date of the analysis.
-        Portfolio:
-          $ref: '#/components/schemas/OutputRiskPortfolio'
-          description: Drawdown data for the portfolio.
-      description: Drawdown analysis for the portfolio across trailing time periods and calendar years.
-    OutputDataItemInt32:
-      type: object
-      properties:
-        Id:
-          type: integer
-          format: int32
-          description: Integer identifier for the data point.
-        Value:
-          type: number
-          format: double
-          description: Value for the data point.
-      description: A data point with an integer identifier and a numeric value.
-    OutputRiskDrawdownItem:
-      type: object
-      properties:
-        MaxDrawdown:
-          type: number
-          format: double
-          description: Peak-to-trough decline over the period, expressed as a percentage.
-        NoOfPeriods:
-          type: integer
-          format: int32
-          description: Number of periods (months) between the peak and the recovery.
-        PeakDate:
-          type: string
-          format: date-time
-          description: Date of the return peak preceding the maximum drawdown.
-        ValleyDate:
-          type: string
-          format: date-time
-          description: Date of the lowest point of the maximum drawdown.
-        UpPercent:
-          type: number
-          format: double
-          description: Percentage of periods in which the portfolio posted a positive return.
-        DownPercent:
-          type: number
-          format: double
-          description: Percentage of periods in which the portfolio posted a negative return.
-      description: Drawdown statistics for a single period.
-    OutputPerformancePerformance:
-      description: Performance result for a single portfolio.
-      type: object
-      properties:
-        PortfolioName:
-          description: Name of the portfolio.
-          type: string
-        PerformanceDate:
-          description: Key performance date reference points for this portfolio.
-          $ref: '#/components/schemas/OutputPerformanceDate'
-        ReturnMethodology:
-          description: Return methodology used in the calculation.
-          type: string
-          enum:
-          - QuickPortfolio
-          - Hypothetical
-        Returns:
-          description: Return data for the portfolio including trailing, calendar year, and investment activity.
-          $ref: '#/components/schemas/OutputPerformanceReturns'
-        Risks:
-          description: Risk statistics for the portfolio including MPT statistics, correlation matrix, and drawdown.
-          $ref: '#/components/schemas/OutputRiskRisks'
-    OutputRiskSecurity.RiskStatisticsItem:
-      type: object
-      properties:
-        Mean:
-          type: number
-          format: double
-          description: Average return over the trailing period.
-        SharpeRatio:
-          type: number
-          format: double
-          description: Return in excess of the risk-free rate per unit of standard deviation.
-        StandardDeviation:
-          type: number
-          format: double
-          description: Statistical dispersion of returns around the mean.
-      description: Risk statistics for an individual security. Year2 is not supported.
-    OutputRiskCrossPortfolioCorrelatedItemKey:
-      type: object
-      properties:
-        CorrelatedItemKeyId:
-          type: integer
-          format: int32
-        Type:
-          type: string
-          enum:
-          - Portfolio
-        Value:
-          type: number
-          format: double
-      description: Correlation value between this portfolio and one other portfolio.
-    OutputPerformanceStdLoadAdjustedReturnsPortfolio:
-      type: object
-      properties:
-        TimePeriod:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPerformanceStandardizedReturnsTimePeriodItem'
-          description: Array of standardised return values for each trailing time period.
-      description: Portfolio standardised load-adjusted return values.
-    InputAssetClassGroupConfig:
-      type: object
-      properties:
-        Id:
-          description: Asset class group identifier.
-          type: string
-          enum:
-          - ACG-AUDETAILED
-          - ACG-BROAD-INDIA2
-          - ACG-BROAD-JAPAN
-          - ACG-CABROAD
-          - ACG-CANBROAD4
-          - ACG-EUBROAD
-          - ACG-GLOBBROAD
-          - ACG-NZDETAILED
-          - ACG-UKBROAD
-          - ACG-UK-GBR
-          - ACG-USBROAD
-          default: ACG-USBROAD
-    OutputPerformanceNonStdLoadAdjustedReturnsSecurity:
-      type: object
-      properties:
-        Sequence:
-          type: integer
-          format: int32
-          description: Position of the security in the holdings array (1-based).
-        SecurityId:
-          type: string
-          description: Morningstar unique identifier of the security.
-        HoldingDate:
-          type: string
-          format: date-time
-          description: Date as of which the holding data is reported.
-        HoldingValue:
-          type: number
-          format: double
-          description: Value of the holding as of `HoldingDate`.
-        Day7Yield:
-          type: number
-          format: double
-          description: 7-day annualised yield. Applicable to money market funds.
-        TimePeriod:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputDataItemTimePeriod'
-          description: Array of return values for each trailing time period.
-      description: Non-standardised load-adjusted return data for a single security.
-    OutputRiskCalenderYearItem:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Calendar year identifier (e.g. `2023`).
-        CalenderYearDrawdownItem:
-          $ref: '#/components/schemas/OutputRiskDrawdownItem'
-          description: Drawdown statistics for the calendar year.
-      description: Drawdown statistics for a single calendar year.
-    OutputDataItemCalendarYearReturnTimePeriod:
-      type: object
-      properties:
-        Id:
-          type: integer
-          format: int32
-          description: Calendar year sequence (1 = most recent year, up to 10).
-        Value:
-          type: number
-          format: double
-          description: Return value for the calendar year.
-        GrossValue:
-          description: Gross return value for the calendar year. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-      description: Return value for a single calendar year.
-    OutputDataItemTimePeriod:
-      type: object
-      properties:
-        Id:
-          type: string
-          enum:
-          - YearToDate
-          - Year1
-          - Year3
-          - Year5
-          - Year10
-          description: Trailing time period identifier.
-        Value:
-          type: number
-          format: double
-          description: Return value for the time period.
-    OutputPerformanceStandardizedAndTaxAdjustedReturns:
-      type: object
-      properties:
-        AsOfDate:
-          type: string
-          format: date-time
-          description: End date of the analysis.
-        Security:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPerformanceStandardizedAndTaxAdjustedReturnsSecurity'
-          description: Array of per-security standardised and after-tax return records.
-      description: Standardised and tax-adjusted return data for each security in the portfolio.
+            $ref: '#/components/schemas/OutputRiskCorrelationMatrix'
+          description: Intra-portfolio correlation matrix data.
+        Drawdown:
+          $ref: '#/components/schemas/OutputRiskDrawdown'
+          description: Portfolio drawdown data.
+      description: Risk data for the portfolio including risk statistics, MPT statistics, correlation matrix, and drawdown.
     OutputRiskMPTStatisticsItem:
       type: object
       properties:
@@ -30486,17 +30357,159 @@ components:
           type: number
           format: double
       description: Modern Portfolio Theory (MPT) statistics for the portfolio over a single trailing time period.
-    InputPerformancePerformanceConfig:
-      description: Account-specific configuration preset.
+    OutputPerformanceSecurityReturns.NonStdLoadAdjustedReturns:
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of the analysis.
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceNonStdLoadAdjustedReturnsSecurity'
+          description: Array of per-security non-standardised load-adjusted return records.
+      description: Non-standardised load-adjusted return data for each security in the portfolio.
+    OutputPerformanceInvestmentActivity:
+      type: object
+      properties:
+        DataFrequency:
+          type: string
+          enum:
+          - Monthly
+          description: Frequency of the investment activity data.
+        Portfolio:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceInvestmentActivityItem'
+          description: Portfolio investment activity records.
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPerformanceBenchmark.InvestmentActivityItem'
+          description: Benchmark investment activity records.
+      description: Period-by-period investment activity for the portfolio and benchmark.
+    OutputRiskCrossPortfolioCorrelationItemKey:
       type: object
       properties:
         Id:
+          type: integer
+          format: int32
+        Type:
           type: string
-          description: Account-specific configuration preset. Settings can be overridden directly in the request. `Hypothetical` is only supported when `View.Id` is `CrossPortfolioCorrelation`.
-          default: QuickPortfolio
           enum:
-          - Hypothetical
-          - QuickPortfolio
+          - Portfolio
+        CorrelatedItemKey:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskCrossPortfolioCorrelatedItemKey'
+      description: Correlation data for a single portfolio against all other portfolios in the request.
+    OutputPerformancePerformanceHistoryItem:
+      type: object
+      properties:
+        StartYear:
+          type: integer
+          format: int32
+          description: Year in which the performance history series begins.
+        StartQuarter:
+          maximum: 4
+          minimum: 1
+          type: integer
+          format: int32
+          description: Quarter in which the performance history series begins (1–4).
+        StartMonth:
+          maximum: 12
+          minimum: 1
+          type: integer
+          format: int32
+          description: Month in which the performance history series begins (1–12).
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemPerformanceHistoryTimePeriod'
+          description: Array of sequential return data points.
+      description: Performance history data for a portfolio or benchmark series.
+    OutputPerformanceCalendarYearReturn:
+      type: object
+      properties:
+        CalendarYear:
+          type: array
+          description: 1-10 to represent 10 most recent calendar years
+          items:
+            $ref: '#/components/schemas/OutputDataItemCalendarYearReturnTimePeriod'
+      description: Portfolio calendar year return values.
+    OutputRiskMPTStatistics:
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of the analysis.
+        TrailingTimePeriod:
+          type: string
+          enum:
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          description: Trailing time period over which MPT statistics are calculated.
+        DataFrequency:
+          type: string
+          enum:
+          - Monthly
+          description: Frequency of the return data used in the calculation.
+        Portfolio:
+          $ref: '#/components/schemas/OutputRiskMPTStatisticsItem'
+          description: MPT statistics for the portfolio.
+      description: Modern Portfolio Theory (MPT) statistics for the portfolio for a single trailing time period.
+    OutputPerformanceSecurityReturns:
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of the analysis.
+        NonStdLoadAdjustedReturns:
+          $ref: '#/components/schemas/OutputPerformanceSecurityReturns.NonStdLoadAdjustedReturns'
+          description: Non-standardised load-adjusted return data for each security.
+        StandardizedAndTaxAdjustedReturns:
+          $ref: '#/components/schemas/OutputPerformanceStandardizedAndTaxAdjustedReturns'
+          description: Standardised and tax-adjusted return data for each security.
+      description: Security-level return data including non-standardised and standardised returns.
+    OutputRiskRiskStatistics:
+      type: object
+      properties:
+        AsOfDate:
+          type: string
+          format: date-time
+          description: End date of the analysis.
+        TrailingTimePeriod:
+          type: string
+          enum:
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          description: Trailing time period over which risk statistics are calculated.
+        DataFrequency:
+          type: string
+          enum:
+          - Monthly
+          description: Frequency of the return data used in the calculation.
+        Portfolio:
+          $ref: '#/components/schemas/OutputRiskRiskStatisticsPortfolioItem'
+          description: Risk statistics for the portfolio.
+        Benchmark:
+          $ref: '#/components/schemas/OutputRiskRiskStatisticsItem'
+          description: Risk statistics for the benchmark.
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskRiskStatisticsSecurityItem'
+          description: Array of risk statistics for individual securities in the portfolio.
+      description: Risk statistics for the portfolio, benchmark, and individual securities for a single trailing time period.
     OutputRiskRiskStatisticsSecurityItem:
       type: object
       properties:
@@ -30511,6 +30524,156 @@ components:
           $ref: '#/components/schemas/OutputRiskSecurity.RiskStatisticsItem'
           description: Risk statistics for the security.
       description: Risk statistics for a single security in the portfolio.
+    InputAssetClassGroupConfigs:
+      description: Asset class group to query.
+      type: object
+      properties:
+        AssetClassGroupConfig:
+          type: array
+          description: Asset class group identifier. Maximum of one value can be passed in a request.
+          items:
+            $ref: '#/components/schemas/InputAssetClassGroupConfig'
+    InputPerformancePerformanceView:
+      description: Predefined set of data points to return in the response.
+      type: object
+      properties:
+        Id:
+          type: string
+          description: Identifier of a predefined set of data points to return in the response.
+          default: All
+          enum:
+          - All
+          - CorrelationMatrix
+          - CrossPortfolioCorrelation
+          - Default
+          - Snapshot
+    OutputPerformanceStandardizedAndTaxAdjustedReturnsSecurity:
+      type: object
+      properties:
+        Sequence:
+          type: integer
+          format: int32
+          description: Position of the security in the holdings array (1-based).
+        SecurityId:
+          type: string
+          description: Morningstar unique identifier of the security.
+        StandardizedReturns:
+          $ref: '#/components/schemas/OutputPerformanceStandardizedReturns'
+          description: Standardised return data for the security.
+        AfterTaxReturns:
+          $ref: '#/components/schemas/OutputPerformanceAfterTaxReturns'
+          description: After-tax return data for the security.
+      description: Standardised and after-tax return data for a single security.
+    OutputRiskSecurity.RiskStatisticsItem:
+      type: object
+      properties:
+        Mean:
+          type: number
+          format: double
+          description: Average return over the trailing period.
+        SharpeRatio:
+          type: number
+          format: double
+          description: Return in excess of the risk-free rate per unit of standard deviation.
+        StandardDeviation:
+          type: number
+          format: double
+          description: Statistical dispersion of returns around the mean.
+      description: Risk statistics for an individual security. Year2 is not supported.
+    OutputRiskCrossPortfolioCorrelatedItemKey:
+      type: object
+      properties:
+        CorrelatedItemKeyId:
+          type: integer
+          format: int32
+        Type:
+          type: string
+          enum:
+          - Portfolio
+        Value:
+          type: number
+          format: double
+      description: Correlation value between this portfolio and one other portfolio.
+    InputPortfolioFees:
+      description: Portfolio-level annual fee configuration.
+      type: object
+      properties:
+        AnnualFeePercent:
+          description: Annual fee as a percentage of portfolio value (e.g. `1.15` = 1.15%). Defaults to `0` (no fee).
+          minimum: 0
+          default: 0
+          example: 1.15
+          type: number
+          format: double
+        AnnualFeeFrequency:
+          description: How often the annual fee is deducted from the portfolio.
+          default: Monthly
+          type: string
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+    OutputRiskRiskStatisticsPortfolioItem:
+      type: object
+      properties:
+        Mean:
+          type: number
+          format: double
+          description: Average return over the trailing period.
+        GrossMean:
+          description: Gross mean return. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
+        SharpeRatio:
+          type: number
+          format: double
+          description: Return in excess of the risk-free rate per unit of standard deviation. A higher value indicates better risk-adjusted performance.
+        GrossSharpeRatio:
+          description: Gross Sharpe ratio. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
+        StandardDeviation:
+          type: number
+          format: double
+          description: Statistical dispersion of returns around the mean. Higher values indicate greater return volatility.
+        GrossStandardDeviation:
+          description: Gross standard deviation. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
+        InformationRatio:
+          type: number
+          format: double
+          description: Active return relative to a benchmark per unit of tracking error. A variant of the Sharpe ratio that uses the benchmark rather than the risk-free rate.
+        GrossInformationRatio:
+          description: Gross information ratio. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
+        TrackingError:
+          type: number
+          format: double
+          description: Standard deviation of the portfolio's excess returns relative to the benchmark.
+        GrossTrackingError:
+          description: Gross tracking error. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
+        SortinoRatio:
+          type: number
+          format: double
+          description: Return per unit of downside deviation. A variant of the Sharpe ratio that penalises only negative return volatility.
+        GrossSortinoRatio:
+          description: Gross Sortino ratio. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
+        ExcessReturn:
+          type: number
+          format: double
+          description: Portfolio return minus the 91-day government treasury bill return over the same period.
+        GrossExcessReturn:
+          description: Gross excess return. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
+      description: Risk statistics for the portfolio over a single trailing time period. Year2 is not supported at security level.
     OutputSecurityItem:
       description: Reference data for a security appearing in the response.
       type: object
@@ -30789,7 +30952,181 @@ components:
           description: Weight of the security as a percentage of the portfolio.
           type: number
           format: double
-    OutputPerformanceNonStdLoadAdjustedReturns:
+    OutputDataItemBenchmarkTrailingTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: string
+          enum:
+          - YearToDate
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          description: Trailing time period identifier.
+        Value:
+          type: number
+          format: double
+          description: Return value for the time period.
+      description: Benchmark return value for a single trailing time period.
+    InputPortfolioInputHolding:
+      description: 'Each holding requires a security identifier and a position size. For the identifier, pass one of: `SecurityId`, `CUSIP`, `FundCode`, `ISIN`, `PerformanceId`, or `TradingSymbol`. If multiple identifiers are provided for a single security, `SecurityId` takes priority; if `SecurityId` is absent, the last identifier listed in the object is used. For the position size, pass one of: `Weight` or `Value`.'
+      type: object
+      properties:
+        SecurityId:
+          description: Morningstar unique identifier of a security. Use `CASH%0.000` for cash positions.
+          type: string
+          example: FOUSA00DFS,CASH%0.000
+        Weight:
+          description: Holding weight as a percentage of portfolio total. All holding weights must sum to 100. Requires `TotalValue` to be set on the portfolio.
+          minimum: 1
+          maximum: 100
+          example: 60
+          type: number
+          format: double
+        Value:
+          description: Market value of the holding in the portfolio currency.
+          minimum: 1
+          example: 25000
+          type: number
+          format: double
+        AnnualFeePercent:
+          description: Holding-level annual fee as a percentage of holding value (e.g. `1.15` = 1.15%). Defaults to `0` (no fee).
+          minimum: 0
+          default: 0
+          example: 1.15
+          type: number
+          format: double
+        AnnualFeeFrequency:
+          description: How often the holding-level annual fee is deducted.
+          default: Monthly
+          type: string
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+        PerformanceId:
+          description: Morningstar performance identifier of a security.
+          type: string
+          example: 0P00002QN3
+        CUSIP:
+          description: CUSIP identifier of a security.
+          type: string
+          example: 09251T103
+        ISIN:
+          description: ISIN identifier of a security.
+          type: string
+          example: US0378331005
+        TradingSymbol:
+          description: Trading symbol (ticker) of a security.
+          type: string
+          example: MDLOX
+        FundCode:
+          description: Fund code identifier of a security. Specific to Thai markets.
+          type: string
+          example: ABG
+    OutputRiskCorrelationMatrix:
+      type: object
+      properties:
+        TrailingTimePeriod:
+          type: string
+          enum:
+          - Year3
+          - Year5
+          - Year10
+        DataFrequency:
+          type: string
+          enum:
+          - Monthly
+        StartDate:
+          type: string
+          format: date-time
+        EndDate:
+          type: string
+          format: date-time
+        Correlations:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskCorrelationItemKey'
+      description: Intra-portfolio correlation matrix for a single trailing time period.
+    InputAssetClassGroupConfig:
+      type: object
+      properties:
+        Id:
+          description: Asset class group identifier.
+          type: string
+          enum:
+          - ACG-AUDETAILED
+          - ACG-BROAD-INDIA2
+          - ACG-BROAD-JAPAN
+          - ACG-CABROAD
+          - ACG-CANBROAD4
+          - ACG-EUBROAD
+          - ACG-GLOBBROAD
+          - ACG-NZDETAILED
+          - ACG-UKBROAD
+          - ACG-UK-GBR
+          - ACG-USBROAD
+          default: ACG-USBROAD
+    OutputPerformanceBenchmark.CalendarYearReturn:
+      type: object
+      properties:
+        CalendarYear:
+          type: array
+          description: 1-10 to represent 10 most recent calendar years
+          items:
+            $ref: '#/components/schemas/OutputDataItemInt32'
+      description: Benchmark calendar year return values.
+    OutputDataItemInt32:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+          description: Integer identifier for the data point.
+        Value:
+          type: number
+          format: double
+          description: Value for the data point.
+      description: A data point with an integer identifier and a numeric value.
+    OutputDataItemPerformanceHistoryTimePeriod:
+      type: object
+      properties:
+        Id:
+          type: integer
+          format: int32
+          description: Sequential period identifier (1-based).
+        Value:
+          type: number
+          format: double
+          description: Return value for the period.
+        GrossValue:
+          description: Gross value for the period. Only returned when `IncludeGrossNetReturns` is `true`.
+          type: number
+          format: double
+    OutputRiskPortfolio:
+      type: object
+      properties:
+        PortfolioDrawdownItem:
+          $ref: '#/components/schemas/OutputRiskDrawdownItem'
+          description: Maximum drawdown statistics over the full analysis period.
+        TimePeriods:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskTimePeriods'
+          description: Drawdown statistics for each standard trailing time period.
+        CalendarYear:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputRiskCalenderYearItem'
+          description: Drawdown statistics for each calendar year.
+      description: Portfolio drawdown data across the full period, standard trailing time periods, and calendar years.
+    OutputPerformanceCalendarYearReturns:
       type: object
       properties:
         AsOfDate:
@@ -30797,68 +31134,31 @@ components:
           format: date-time
           description: End date of the analysis.
         Portfolio:
-          $ref: '#/components/schemas/OutputPerformanceNonStdLoadAdjustedReturnsPortfolio'
-          description: Portfolio non-standardised load-adjusted return values.
-      description: Non-standardised load-adjusted return data for the portfolio.
-    OutputRiskCorrelationItemKey:
+          $ref: '#/components/schemas/OutputPerformanceCalendarYearReturn'
+          description: Portfolio calendar year return values.
+        Benchmark:
+          $ref: '#/components/schemas/OutputPerformanceBenchmark.CalendarYearReturn'
+          description: Benchmark calendar year return values.
+      description: Calendar year return data for the portfolio and benchmark.
+    OutputPerformanceBestWorstTimePeriod:
       type: object
       properties:
-        Id:
-          type: integer
-          format: int32
-        SecurityId:
-          type: string
-        UseExtendedReturns:
-          type: boolean
-        Type:
+        TimePeriod:
           type: string
           enum:
-          - Portfolio
-          - Security
-        CorrelatedItemKey:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputRiskCorrelatedItemKey'
-      description: Correlation data for a single security or portfolio against all others in the matrix.
-    OutputPerformancePerformanceHistory:
-      type: object
-      properties:
-        Type:
-          type: string
-          enum:
-          - Difference
-          - Portfolio
-          - Benchmark
-          description: 'Return series type: `Portfolio`, `Benchmark`, or `Difference` (portfolio minus benchmark).'
-        Frequency:
-          type: string
-          enum:
-          - Monthly
-          - Quarterly
-          description: Frequency of the return data points.
+          - Month3
+          - Year1
+          - Year3
+          description: Time period identifier.
+        Value:
+          type: number
+          format: double
+          description: Return value for the time period.
         StartDate:
           type: string
           format: date-time
-          description: Start date of the performance history series.
-        Portfolio:
-          $ref: '#/components/schemas/OutputPerformancePerformanceHistoryItem'
-          description: Performance history data for the portfolio. If a benchmark is included, the same structure is returned for the benchmark.
-      description: A single performance history series (portfolio, benchmark, or difference).
-    OutputRiskCrossPortfolioCorrelationItemKey:
-      type: object
-      properties:
-        Id:
-          type: integer
-          format: int32
-        Type:
-          type: string
-          enum:
-          - Portfolio
-        CorrelatedItemKey:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputRiskCrossPortfolioCorrelatedItemKey'
-      description: Correlation data for a single portfolio against all other portfolios in the request.
+          description: Start date of the time period.
+      description: Best or worst return value for a single trailing time period.
     OutputRiskCrossPortfolioCorrelationMatrix:
       type: object
       properties:
@@ -30888,91 +31188,12 @@ components:
             $ref: '#/components/schemas/OutputRiskCrossPortfolioCorrelationItemKey'
           description: Array of correlation values between portfolios.
       description: Cross-portfolio correlation matrix for a single trailing time period.
-    InputAssetClassGroupConfigs:
-      description: Asset class group to query.
+    OutputRiskTimePeriods:
       type: object
       properties:
-        AssetClassGroupConfig:
-          type: array
-          description: Asset class group identifier. Maximum of one value can be passed in a request.
-          items:
-            $ref: '#/components/schemas/InputAssetClassGroupConfig'
-    OutputRiskRiskStatisticsItem:
-      type: object
-      properties:
-        Mean:
-          type: number
-          format: double
-          description: Average return over the trailing period.
-        SharpeRatio:
-          type: number
-          format: double
-          description: Return in excess of the risk-free rate per unit of standard deviation.
-        StandardDeviation:
-          type: number
-          format: double
-          description: Statistical dispersion of returns around the mean.
-        InformationRatio:
-          type: number
-          format: double
-          description: Active return relative to a benchmark per unit of tracking error.
-        TrackingError:
-          type: number
-          format: double
-          description: Standard deviation of excess returns relative to the benchmark.
-        SortinoRatio:
-          type: number
-          format: double
-          description: Return per unit of downside deviation.
-        ExcessReturn:
-          type: number
-          format: double
-          description: Return minus the 91-day government treasury bill return over the same period.
-      description: Risk statistics for the benchmark over a single trailing time period.
-    OutputPerformanceBenchmark.CalendarYearReturn:
-      type: object
-      properties:
-        CalendarYear:
-          type: array
-          description: 1-10 to represent 10 most recent calendar years
-          items:
-            $ref: '#/components/schemas/OutputDataItemInt32'
-      description: Benchmark calendar year return values.
-    OutputPerformanceStdLoadAdjustedReturns:
-      type: object
-      properties:
-        AsOfDate:
-          type: string
-          format: date-time
-          description: End date of the analysis.
-        Portfolio:
-          $ref: '#/components/schemas/OutputPerformanceStdLoadAdjustedReturnsPortfolio'
-          description: Portfolio standardised load-adjusted return values.
-      description: Standardised load-adjusted return data for the portfolio.
-    OutputRiskPortfolio:
-      type: object
-      properties:
-        PortfolioDrawdownItem:
-          $ref: '#/components/schemas/OutputRiskDrawdownItem'
-          description: Maximum drawdown statistics over the full analysis period.
-        TimePeriods:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputRiskTimePeriods'
-          description: Drawdown statistics for each standard trailing time period.
-        CalendarYear:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputRiskCalenderYearItem'
-          description: Drawdown statistics for each calendar year.
-      description: Portfolio drawdown data across the full period, standard trailing time periods, and calendar years.
-    OutputDataItemTrailingTimePeriod:
-      type: object
-      properties:
-        Id:
+        id:
           type: string
           enum:
-          - YearToDate
           - Month3
           - Month6
           - Year1
@@ -30980,136 +31201,11 @@ components:
           - Year3
           - Year5
           - Year10
-          - SinceInception
           description: Trailing time period identifier.
-        Value:
-          type: number
-          format: double
-          description: Return value for the time period.
-        GrossValue:
-          description: Gross return value for the period. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-    OutputPerformanceTrailingReturnsItem:
-      type: object
-      properties:
-        TimePeriod:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputDataItemTrailingTimePeriod'
-          description: Array of return values for each trailing time period.
-      description: Trailing return values across standard time periods.
-    OutputPerformanceBenchmark.InvestmentActivityItem:
-      type: object
-      properties:
-        Sequence:
-          type: integer
-          format: int32
-          description: Sequential index of the period (1-based).
-        StartDate:
-          type: string
-          format: date-time
-          description: Start date of the period.
-        EndDate:
-          type: string
-          format: date-time
-          description: End date of the period.
-        BeginningBalance:
-          type: number
-          format: double
-          description: Benchmark value at the start of the period.
-        MarketValue:
-          type: number
-          format: double
-          description: Benchmark market value at the end of the period.
-      description: Benchmark investment activity for a single period.
-    OutputPerformanceReturns:
-      type: object
-      properties:
-        BestWorstTimePeriods:
-          $ref: '#/components/schemas/OutputPerformanceBestWorstTimePeriods'
-          description: Best and worst return periods data.
-        TrailingReturns:
-          $ref: '#/components/schemas/OutputPerformanceTrailingReturns'
-          description: Trailing returns data.
-        CalendarYearReturn:
-          $ref: '#/components/schemas/OutputPerformanceCalendarYearReturns'
-          description: Calendar year return data.
-        PerformanceHistorys:
-          $ref: '#/components/schemas/OutputPerformancePerformanceHistorys'
-          description: Performance history data.
-        InvestmentActivity:
-          $ref: '#/components/schemas/OutputPerformanceInvestmentActivity'
-          description: Investment activity data.
-        SecurityReturns:
-          $ref: '#/components/schemas/OutputPerformanceSecurityReturns'
-          description: Security-level return data.
-        NonStdLoadAdjustedReturns:
-          $ref: '#/components/schemas/OutputPerformanceNonStdLoadAdjustedReturns'
-          description: Non-standardised load-adjusted returns data.
-        StdLoadAdjustedReturns:
-          $ref: '#/components/schemas/OutputPerformanceStdLoadAdjustedReturns'
-          description: Standardised load-adjusted returns data.
-      description: Return data for the portfolio including trailing returns, calendar year returns, investment activity, and security-level returns.
-    OutputPerformanceCalendarYearReturn:
-      type: object
-      properties:
-        CalendarYear:
-          type: array
-          description: 1-10 to represent 10 most recent calendar years
-          items:
-            $ref: '#/components/schemas/OutputDataItemCalendarYearReturnTimePeriod'
-      description: Portfolio calendar year return values.
-    OutputPerformanceAfterTaxReturns:
-      type: object
-      properties:
-        OnDistributionAndSalesOfShares:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputDataItemTimePeriod'
-          description: After-tax returns assuming distributions are taxed and shares are sold at the end of the period.
-        OnDistributionReturn:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputDataItemTimePeriod'
-          description: After-tax returns on distributions only, assuming shares are held.
-      description: After-tax return data for the security.
-    OutputPerformanceStandardizedReturns.TimePeriodItem:
-      type: object
-      properties:
-        Id:
-          type: string
-          enum:
-          - YearToDate
-          - Year1
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
-          description: Trailing time period identifier.
-        Market:
-          type: number
-          format: double
-          description: Market-price total return for the period. For ETFs and closed-end funds, based on market price change plus reinvested distributions. For equities, dividends are treated as a cash payout at period end rather than reinvested.
-        Nav:
-          type: number
-          format: double
-          description: NAV-based total return for the period.
-      description: Standardised return values for a single trailing time period.
-    OutputPerformanceCalendarYearReturns:
-      type: object
-      properties:
-        AsOfDate:
-          type: string
-          format: date-time
-          description: End date of the analysis.
-        Portfolio:
-          $ref: '#/components/schemas/OutputPerformanceCalendarYearReturn'
-          description: Portfolio calendar year return values.
-        Benchmark:
-          $ref: '#/components/schemas/OutputPerformanceBenchmark.CalendarYearReturn'
-          description: Benchmark calendar year return values.
-      description: Calendar year return data for the portfolio and benchmark.
+        DrawdownItem:
+          $ref: '#/components/schemas/OutputRiskDrawdownItem'
+          description: Drawdown statistics for the time period.
+      description: Drawdown statistics for a single trailing time period.
     InputPerformancePerformanceRequestSettings:
       description: Analysis settings including output currency, date range, and performance frequency.
       type: object
@@ -31229,116 +31325,64 @@ components:
           description: When `true`, the latest common start date across all portfolios is used as the analysis start date for all portfolios.
           type: boolean
           default: false
-    OutputRiskTimePeriods:
+    OutputPerformanceAfterTaxReturns:
       type: object
       properties:
-        id:
+        OnDistributionAndSalesOfShares:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemTimePeriod'
+          description: After-tax returns assuming distributions are taxed and shares are sold at the end of the period.
+        OnDistributionReturn:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataItemTimePeriod'
+          description: After-tax returns on distributions only, assuming shares are held.
+      description: After-tax return data for the security.
+    OutputMetadata:
+      description: Metadata returned in response. Includes information about identifiers for which no results were found.
+      title: OutputMetadata
+      type: object
+      properties:
+        messages:
+          $ref: '#/components/schemas/OutputMetadataMessages'
+        requestId:
+          description: Indicates the request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
           type: string
-          enum:
-          - Month3
-          - Month6
-          - Year1
-          - Year2
-          - Year3
-          - Year5
-          - Year10
-          description: Trailing time period identifier.
-        DrawdownItem:
-          $ref: '#/components/schemas/OutputRiskDrawdownItem'
-          description: Drawdown statistics for the time period.
-      description: Drawdown statistics for a single trailing time period.
-    OutputPerformanceSecurityReturns:
-      type: object
-      properties:
-        AsOfDate:
+          readOnly: true
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
           type: string
           format: date-time
-          description: End date of the analysis.
-        NonStdLoadAdjustedReturns:
-          $ref: '#/components/schemas/OutputPerformanceSecurityReturns.NonStdLoadAdjustedReturns'
-          description: Non-standardised load-adjusted return data for each security.
-        StandardizedAndTaxAdjustedReturns:
-          $ref: '#/components/schemas/OutputPerformanceStandardizedAndTaxAdjustedReturns'
-          description: Standardised and tax-adjusted return data for each security.
-      description: Security-level return data including non-standardised and standardised returns.
-    OutputDataItemPerformanceHistoryTimePeriod:
+          readOnly: true
+      additionalProperties: false
+    DataModelSingleObservation:
+      title: DataModelSingleObservation
+      description: Represents a time series of single observations, where each entry contains a date and its corresponding value.
       type: object
       properties:
-        Id:
-          type: integer
-          format: int32
-          description: Sequential period identifier (1-based).
-        Value:
-          type: number
-          format: double
-          description: Return value for the period.
-        GrossValue:
-          description: Gross value for the period. Only returned when `IncludeGrossNetReturns` is `true`.
-          type: number
-          format: double
-    ResponsePerformance:
-      description: Top-level response object containing one result per portfolio analysed.
-      type: object
-      properties:
-        PerformanceDate:
-          description: Key performance date reference points across all portfolios in the request.
-          $ref: '#/components/schemas/OutputPerformanceDate'
-        Performance:
-          description: Array of performance results, one per portfolio.
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPerformancePerformance'
-        CrossPortfolioCorrelationMatrix:
-          description: Cross-portfolio correlation matrix data. Only returned when `View.Id` is `CrossPortfolioCorrelation`.
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputRiskCrossPortfolioCorrelationMatrix'
-        SecurityReference:
-          description: Reference data for all securities appearing in the response.
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputSecurityItem'
-    OutputRiskRisks:
-      type: object
-      properties:
-        RiskStatistics:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputRiskRiskStatistics'
-          description: Array of risk statistics records, one per trailing time period.
-        MPTStatistics:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputRiskMPTStatistics'
-          description: Array of MPT statistics records, one per trailing time period.
-        CorrelationMatrix:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputRiskCorrelationMatrix'
-          description: Intra-portfolio correlation matrix data.
-        Drawdown:
-          $ref: '#/components/schemas/OutputRiskDrawdown'
-          description: Portfolio drawdown data.
-      description: Risk data for the portfolio including risk statistics, MPT statistics, correlation matrix, and drawdown.
-    OutputPerformanceInvestmentActivity:
-      type: object
-      properties:
-        DataFrequency:
+        date:
           type: string
-          enum:
-          - Monthly
-          description: Frequency of the investment activity data.
-        Portfolio:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPerformanceInvestmentActivityItem'
-          description: Portfolio investment activity records.
-        Benchmark:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPerformanceBenchmark.InvestmentActivityItem'
-          description: Benchmark investment activity records.
-      description: Period-by-period investment activity for the portfolio and benchmark.
+          format: date
+          example: '2025-09-06'
+        value:
+          type: number
+          example: 1.108
+    OutputCategory:
+      title: OutputCategory
+      type: string
+      description: Identifies the thematic category or functional area a data point belongs to within the Time Series API.
+      enum:
+      - fees-expenses
+      - corporate-actions
+      - fund-sustainability
+      - fund-research
+      - performance
+      - portfolio-analytics
+      - portfolio-holdings
+      - reference
     DataModelDailyOhlcv:
       title: DataModelDailyOhlcv
       type: object
@@ -31363,95 +31407,6 @@ components:
           type: string
           format: date
           example: '2025-09-06'
-    ResponseTimeSeriesDailyOhlcv:
-      title: ResponseTimeSeriesDailyOhlcv
-      readOnly: true
-      description: List of investments for which time series data was returned.
-      type: object
-      additionalProperties: false
-      properties:
-        investments:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/OutputInvestmentDailyOhlcv'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-    OutputInvestmentSingleObservation:
-      title: OutputInvestmentSingleObservation
-      type: object
-      additionalProperties: false
-      properties:
-        identifiers:
-          $ref: '#/components/schemas/OutputIdentifiers'
-        timeSeries:
-          $ref: '#/components/schemas/OutputTimeSeriesSingleObservation'
-        metadata:
-          $ref: '#/components/schemas/OutputInvestmentsMetadata'
-    ResponseTimeSeriesSingleObservation:
-      title: ResponseTimeSeriesSingleObservation
-      readOnly: true
-      description: List of investments for which time series data was returned.
-      type: object
-      additionalProperties: false
-      properties:
-        investments:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/OutputInvestmentSingleObservation'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-    OutputIdentifiers:
-      title: OutputIdentifiers
-      description: Specifies the identifier type used to specify the target investment in the request.
-      additionalProperties: false
-      properties:
-        performanceId:
-          type: string
-          example: 0P00002CI5
-        isin:
-          type: string
-          example: US2562191062
-        securityId:
-          type: string
-          example: FCUSA0000P
-        cusip:
-          type: string
-          example: 459200101
-        sedol:
-          type: string
-          example: B4TT7L5
-        tradingSymbol:
-          type: string
-          example: MDLOX
-    OutputMetadataMessages:
-      description: Provides information about identifiers for which no results were returned.
-      title: OutputMetadataMessages
-      type: object
-      additionalProperties: false
-      properties:
-        investments:
-          description: Indicates identifiers for which no results were returned.
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessageInvestment'
-        type:
-          type: string
-          description: Indicates the message type.
-          example: Warning
-          readOnly: true
-          const: Warning
-        message:
-          type: string
-          description: Description of the issue encountered.
-          example: 'Lookup : Invalid investments.'
-          readOnly: true
-        code:
-          type: string
-          description: Code associated with the message.
-          example: 404.common.125
-          readOnly: true
     OutputInvestmentsMetadata:
       title: OutputInvestmentsMetadata
       description: Provides the identifier look up details passed in request.
@@ -31479,15 +31434,42 @@ components:
           description: Indicates base currency used to look up investment. Represented by  3-character ISO 4217 currency codes.
           minLength: 3
           maxLength: 3
-    OutputInvestmentDailyOhlcv:
-      title: OutputInvestmentDailyOhlcv
+    OutputMetadataMessages:
+      description: Provides information about identifiers for which no results were returned.
+      title: OutputMetadataMessages
+      type: object
+      additionalProperties: false
+      properties:
+        investments:
+          description: Indicates identifiers for which no results were returned.
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessageInvestment'
+        type:
+          type: string
+          description: Indicates the message type.
+          example: Warning
+          readOnly: true
+          const: Warning
+        message:
+          type: string
+          description: Description of the issue encountered.
+          example: 'Lookup : Invalid investments.'
+          readOnly: true
+        code:
+          type: string
+          description: Code associated with the message.
+          example: 404.common.125
+          readOnly: true
+    OutputInvestmentSingleObservation:
+      title: OutputInvestmentSingleObservation
       type: object
       additionalProperties: false
       properties:
         identifiers:
           $ref: '#/components/schemas/OutputIdentifiers'
         timeSeries:
-          $ref: '#/components/schemas/OutputTimeSeriesDailyOhlcv'
+          $ref: '#/components/schemas/OutputTimeSeriesSingleObservation'
         metadata:
           $ref: '#/components/schemas/OutputInvestmentsMetadata'
     OutputMetadataMessageInvestment:
@@ -31505,24 +31487,17 @@ components:
           description: Indicates the identifier type passed in request.
           example: performanceId
           readOnly: true
-    OutputTimeSeriesDailyOhlcv:
-      title: OutputTimeSeriesDailyOhlcv
+    OutputInvestmentDailyOhlcv:
+      title: OutputInvestmentDailyOhlcv
       type: object
-      description: A named time series with dated data points.
       additionalProperties: false
       properties:
-        categories:
-          type: array
-          description: Semantic tags/labels for this series.
-          items:
-            $ref: '#/components/schemas/OutputCategory'
-        dataPoint:
-          type: string
-          const: daily-ohlcv
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/DataModelDailyOhlcv'
+        identifiers:
+          $ref: '#/components/schemas/OutputIdentifiers'
+        timeSeries:
+          $ref: '#/components/schemas/OutputTimeSeriesDailyOhlcv'
+        metadata:
+          $ref: '#/components/schemas/OutputInvestmentsMetadata'
     ErrorResponse:
       title: ErrorResponse
       description: Defines the structure of an error response returned when a bad or invalid request is submitted. Includes the HTTP status code, descriptive message, and request identifier for traceability.
@@ -31817,116 +31792,95 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DataModelSingleObservation'
-    OutputMetadata:
-      description: Metadata returned in response. Includes information about identifiers for which no results were found.
-      title: OutputMetadata
+    ResponseTimeSeriesDailyOhlcv:
+      title: ResponseTimeSeriesDailyOhlcv
+      readOnly: true
+      description: List of investments for which time series data was returned.
       type: object
-      properties:
-        messages:
-          $ref: '#/components/schemas/OutputMetadataMessages'
-        requestId:
-          description: Indicates the request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          type: string
-          readOnly: true
-        time:
-          description: Indicates time response was returned.
-          example: '2025-10-02T10:54:36.9161062Z'
-          type: string
-          format: date-time
-          readOnly: true
       additionalProperties: false
-    OutputCategory:
-      title: OutputCategory
-      type: string
-      description: Identifies the thematic category or functional area a data point belongs to within the Time Series API.
-      enum:
-      - fees-expenses
-      - corporate-actions
-      - fund-sustainability
-      - fund-research
-      - performance
-      - portfolio-analytics
-      - portfolio-holdings
-      - reference
-    DataModelSingleObservation:
-      title: DataModelSingleObservation
-      description: Represents a time series of single observations, where each entry contains a date and its corresponding value.
-      type: object
       properties:
-        date:
-          type: string
-          format: date
-          example: '2025-09-06'
-        value:
-          type: number
-          example: 1.108
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelationMatrix:
+        investments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OutputInvestmentDailyOhlcv'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+    OutputTimeSeriesDailyOhlcv:
+      title: OutputTimeSeriesDailyOhlcv
       type: object
+      description: A named time series with dated data points.
+      additionalProperties: false
       properties:
-        TrailingTimePeriod:
-          description: Only Year1, Year3, Year5, Year10 supported
-          enum:
-          - QuarterToDate
-          - YearToDate
-          - Month1
-          - Month3
-          - Month6
-          - Year1
-          - Year2
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
+        categories:
+          type: array
+          description: Semantic tags/labels for this series.
+          items:
+            $ref: '#/components/schemas/OutputCategory'
+        dataPoint:
           type: string
-        DataFrequency:
-          description: Only Monthly, Quarterly  supported
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          - None
-          type: string
-        StartDate:
-          format: date-time
-          type: string
-        EndDate:
-          format: date-time
-          type: string
-        Correlations:
+          const: daily-ohlcv
+        data:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelationItemKey'
-    Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceRequestSettings:
+            $ref: '#/components/schemas/DataModelDailyOhlcv'
+    ResponseTimeSeriesSingleObservation:
+      title: ResponseTimeSeriesSingleObservation
+      readOnly: true
+      description: List of investments for which time series data was returned.
+      type: object
+      additionalProperties: false
+      properties:
+        investments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OutputInvestmentSingleObservation'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+    OutputIdentifiers:
+      title: OutputIdentifiers
+      description: Specifies the identifier type used to specify the target investment in the request.
+      additionalProperties: false
+      properties:
+        performanceId:
+          type: string
+          example: 0P00002CI5
+        isin:
+          type: string
+          example: US2562191062
+        securityId:
+          type: string
+          example: FCUSA0000P
+        cusip:
+          type: string
+          example: 459200101
+        sedol:
+          type: string
+          example: B4TT7L5
+        tradingSymbol:
+          type: string
+          example: MDLOX
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistoryItem:
       type: object
       properties:
-        OutputCurrency:
-          enum:
-          - AUD
-          - CAD
-          - CNY
-          - EUR
-          - GBP
-          - INR
-          - JPY
-          - USD
-          type: string
-        RollingReturnFrequency:
-          enum:
-          - Month3
-          - Month6
-          - Year1
-          - Year3
-          - Year5
-          - Year10
-          type: string
-        IncludePortfolioInCorrelationMatrix:
-          type: boolean
-        AssetClassGroupConfigs:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfigs'
-        HypoCalculationSettings:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoCalculationSettings'
+        StartYear:
+          format: int32
+          type: integer
+        StartQuarter:
+          format: int32
+          maximum: 4
+          minimum: 1
+          type: integer
+        StartMonth:
+          format: int32
+          maximum: 12
+          minimum: 1
+          type: integer
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.Int32_'
     Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistorys:
       type: object
       properties:
@@ -31934,170 +31888,27 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistory'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturnsSecurity:
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturns:
       type: object
       properties:
-        Sequence:
-          format: int32
-          type: integer
-        SecurityId:
+        AsOfDate:
+          format: date-time
           type: string
-        StandardizedReturns:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturns'
-        AfterTaxReturns:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.AfterTaxReturns'
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelatedItemKey:
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturnsSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelatedItemKey:
       type: object
       properties:
         CorrelatedItemKeyId:
           format: int32
           type: integer
         Type:
+          description: 'TODO: we don''t want to manage names. Should this just be called CorrelationItemType?'
           enum:
           - Portfolio
-          type: string
-        Value:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding:
-      type: object
-      properties:
-        SecurityId:
-          type: string
-        Type:
-          description: 'TODO: is this required? If not, is there a default?'
-          enum:
-          - BD
-          - CT
-          - CA
-          - CASH
-          - EI
-          - FC
-          - FE
-          - FM
-          - FO
-          - FI
-          - FV
-          - SA
-          - ST
-          - VA
-          - V1
-          - XI
-          - SP
-          type: string
-        ExchangeID:
-          type: string
-        Weight:
-          format: double
-          type: number
-        Value:
-          format: double
-          type: number
-        AnnualFeePercent:
-          format: double
-          type: number
-        AnnualFeeFrequency:
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          type: string
-        SalesFeesAmountType:
-          enum:
-          - Amount
-          - Percentage
-          type: string
-        SalesFeesAmount:
-          format: double
-          type: number
-        SalesFeesType:
-          enum:
-          - Standard
-          - Custom
-          type: string
-        SalesFeesROAAmount:
-          format: double
-          type: number
-        SalesFeesLOIAmount:
-          format: double
-          type: number
-        OtherFeeAmount:
-          format: double
-          type: number
-        OtherFeeAmountType:
-          enum:
-          - Amount
-          - Percentage
-          type: string
-        OtherFeeType:
-          enum:
-          - TradingCommissions
-          - ShortTermTradingFee
-          type: string
-        CUSIP:
-          type: string
-        TradingSymbol:
-          type: string
-        FundCode:
-          type: string
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.Risks:
-      type: object
-      properties:
-        RiskStatistics:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatistics'
-        MPTStatistics:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatistics'
-        CorrelationMatrix:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelationMatrix'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturnsItem:
-      type: object
-      properties:
-        TimePeriod:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TrailingTimePeriod_'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivity:
-      type: object
-      properties:
-        DataFrequency:
-          enum:
-          - Monthly
-          - Quarterly
-          type: string
-        Portfolio:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivityItem'
-        Benchmark:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivityItem'
-        MaxSequence:
-          format: int32
-          type: integer
-    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TrailingTimePeriod_:
-      type: object
-      properties:
-        Id:
-          enum:
-          - QuarterToDate
-          - YearToDate
-          - Month1
-          - Month3
-          - Month6
-          - Year1
-          - Year2
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
+          - Security
           type: string
         Value:
           format: double
@@ -32111,59 +31922,6 @@ components:
         Value:
           format: double
           type: number
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivityItem:
-      description: 'TODO: check all the types and possible values for properties in this class'
-      type: object
-      properties:
-        Sequence:
-          format: int32
-          type: integer
-        StartDate:
-          format: date-time
-          type: string
-        EndDate:
-          format: date-time
-          type: string
-        BeginningBalance:
-          format: double
-          type: number
-        ChargesFees:
-          format: double
-          type: number
-        DistributionWithdrawal:
-          format: double
-          type: number
-        MarketValue:
-          format: double
-          type: number
-        NewInvestment:
-          type: boolean
-        TaxesDue:
-          format: double
-          type: number
-        TotalReinvest:
-          format: double
-          type: number
-        TotalReturnPercent:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturn:
-      type: object
-      properties:
-        RollingPeriod:
-          enum:
-          - Month3
-          - Month6
-          - Month12
-          - Month24
-          - Month36
-          - Month60
-          - Month120
-          type: string
-        Portfolio:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturnsItem'
-        Benchmark:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturnsItem'
     Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturns:
       type: object
       properties:
@@ -32205,26 +31963,125 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturnsTimePeriodItem'
-    Morningstar.PortfolioAnalysis.Models.Output.PerformanceDate:
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturns:
       type: object
       properties:
-        EarliestCommonDate:
+        AsOfDate:
           format: date-time
           type: string
-        EarliestAvailableDate:
-          format: date-time
-          type: string
-        EarliestInceptionDate:
-          format: date-time
-          type: string
-    Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfigs:
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturn'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturn'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistory:
       type: object
       properties:
-        AssetClassGroupConfig:
+        Type:
+          enum:
+          - Difference
+          type: string
+        Frequency:
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          type: string
+        StartDate:
+          format: date-time
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistoryItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistoryItem'
+    Morningstar.PortfolioAnalysis.Models.Input.AssetClassConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        Name:
+          type: string
+        Color:
+          type: string
+        BorderColor:
+          type: string
+        Index:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceInputSettings:
+      type: object
+      properties:
+        View:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceView'
+        Config:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceConfig'
+        RequestSettings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceRequestSettings'
+        Portfolios:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfig'
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatistics:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
+      example:
+        View:
+          Id: Default
+        Config:
+          Id: QuickPortfolio
+        RequestSettings:
+          OutputCurrency: USD
+          RollingReturnFrequency: Month3
+          AssetClassGroupConfigs:
+            AssetClassGroupConfig:
+            - Id: ACG-USBROAD
+        Portfolios:
+        - Name: TestPortfolio1
+          TotalValue: 10000
+          Currency: USD
+          Holdings:
+          - SecurityId: FOUSA05H5F
+            Type: FO
+            Weight: 50
+          - SecurityId: FOUSA04BCR
+            Type: FO
+            Weight: 50
+          Benchmark:
+            Type: Standard
+            Holdings:
+            - SecurityId: XIUSA04G92
+              Type: XI
+              Weight: 100
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.Performance:
+      type: object
+      properties:
+        PortfolioName:
+          type: string
+        PerformanceDate:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.PerformanceDate'
+        ReturnMethodology:
+          enum:
+          - QuickPortfolio
+          - Hypothetical
+          type: string
+        Returns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.Returns'
+        Risks:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.Risks'
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.IllustrationReturnTimePeriod_:
+      type: object
+      properties:
+        Id:
+          enum:
+          - Days7Yield
+          - Days7YieldUnsubsidized
+          - Days7YieldSubsidized
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatistics:
       type: object
       properties:
         AsOfDate:
@@ -32255,170 +32112,270 @@ components:
           - None
           type: string
         Portfolio:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsItem'
-        Benchmark:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsItem'
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsItem'
         Security:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsSecurityItem'
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelationItemKey:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsSecurityItem'
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TrailingTimePeriod_:
       type: object
       properties:
         Id:
+          enum:
+          - QuarterToDate
+          - YearToDate
+          - Month1
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturnsTimePeriodItem:
+      type: object
+      properties:
+        Id:
+          enum:
+          - QuarterToDate
+          - YearToDate
+          - Month1
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        Market:
+          format: double
+          type: number
+        Nav:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturnsItem:
+      type: object
+      properties:
+        StartYear:
+          format: int32
+          type: integer
+        StartMonth:
+          format: int32
+          maximum: 12
+          minimum: 1
+          type: integer
+        Data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsSecurityItem:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        MPTStatisticsItem:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelationMatrix:
+      type: object
+      properties:
+        TrailingTimePeriod:
+          description: Only Year1, Year3, Year5, Year10 supported
+          enum:
+          - QuarterToDate
+          - YearToDate
+          - Month1
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        DataFrequency:
+          description: Only Monthly, Quarterly  supported
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        StartDate:
+          format: date-time
+          type: string
+        EndDate:
+          format: date-time
+          type: string
+        Correlations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelationItemKey'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivityItem:
+      description: 'TODO: check all the types and possible values for properties in this class'
+      type: object
+      properties:
+        Sequence:
+          format: int32
+          type: integer
+        StartDate:
+          format: date-time
+          type: string
+        EndDate:
+          format: date-time
+          type: string
+        BeginningBalance:
+          format: double
+          type: number
+        ChargesFees:
+          format: double
+          type: number
+        DistributionWithdrawal:
+          format: double
+          type: number
+        MarketValue:
+          format: double
+          type: number
+        NewInvestment:
+          type: boolean
+        TaxesDue:
+          format: double
+          type: number
+        TotalReinvest:
+          format: double
+          type: number
+        TotalReturnPercent:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.Returns:
+      type: object
+      properties:
+        BestWorstTimePeriods:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriods'
+        TrailingReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturns'
+        CalendarYearReturn:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturns'
+        RollingReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturns'
+        IllustrationReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturns'
+        PerformanceHistorys:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistorys'
+        InvestmentActivity:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivity'
+        SecurityReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.SecurityReturns'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturnsSecurity:
+      type: object
+      properties:
+        Sequence:
           format: int32
           type: integer
         SecurityId:
           type: string
-        PortfolioName:
+        HoldingDate:
+          format: date-time
           type: string
-        UseExtendedReturns:
-          type: boolean
-        Type:
-          enum:
-          - Portfolio
-          - Security
-          type: string
-        CorrelatedItemKey:
+        HoldingValue:
+          format: double
+          type: number
+        Day7Yield:
+          format: double
+          type: number
+        TimePeriod:
+          description: Year1,Year3,Year5,Year10 only supported
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelatedItemKey'
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelationItemKey:
-      type: object
-      properties:
-        Id:
-          format: int32
-          type: integer
-        PortfolioName:
-          type: string
-        UseExtendedReturns:
-          type: boolean
-        Type:
-          enum:
-          - Portfolio
-          type: string
-        CorrelatedItemKey:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelatedItemKey'
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelatedItemKey:
-      type: object
-      properties:
-        CorrelatedItemKeyId:
-          format: int32
-          type: integer
-        Type:
-          description: 'TODO: we don''t want to manage names. Should this just be called CorrelationItemType?'
-          enum:
-          - Portfolio
-          - Security
-          type: string
-        Value:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_:
-      type: object
-      properties:
-        Id:
-          type: string
-        Value:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
-      required:
-      - Name
-      - Currency
-      - Holdings
-      type: object
-      properties:
-        Name:
-          type: string
-        TotalValue:
-          format: double
-          type: number
-        Currency:
-          enum:
-          - AUD
-          - CAD
-          - CNY
-          - EUR
-          - GBP
-          - INR
-          - JPY
-          - USD
-          type: string
-        Holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
-        Benchmark:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
-        IrrFees:
-          format: double
-          type: number
-        RiskFreeProxyId:
-          description: Default is set in the Configuration. This is a portfolio level override.
-          type: string
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturns:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturns:
       type: object
       properties:
         AsOfDate:
           format: date-time
           type: string
         Portfolio:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturn'
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturnsItem'
         Benchmark:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturn'
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsItem:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturnsItem'
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding:
+      description: 'TODO: Implement same way as PortfolioInput'
+      required:
+      - SecurityId
+      - Weight
       type: object
       properties:
-        Mean:
+        SecurityId:
+          type: string
+        Type:
+          enum:
+          - XI
+          - CA
+          - EI
+          - CASH
+          type: string
+        Weight:
           format: double
           type: number
-        SharpeRatio:
-          format: double
-          type: number
-        StandardDeviation:
-          format: double
-          type: number
-        InformationRatio:
-          format: double
-          type: number
-        TrackingError:
-          format: double
-          type: number
-        SortinoRatio:
-          format: double
-          type: number
-        ExcessReturn:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsItem:
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.Risks:
       type: object
       properties:
-        Alpha:
-          format: double
-          type: number
-        Beta:
-          format: double
-          type: number
-        RSquared:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriods:
+        RiskStatistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatistics'
+        MPTStatistics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatistics'
+        CorrelationMatrix:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelationMatrix'
+    Morningstar.PortfolioAnalysis.Models.Output.PerformanceDate:
+      type: object
+      properties:
+        EarliestCommonDate:
+          format: date-time
+          type: string
+        EarliestAvailableDate:
+          format: date-time
+          type: string
+        EarliestInceptionDate:
+          format: date-time
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
+      type: object
+      properties:
+        Type:
+          enum:
+          - Standard
+          - AutoAsset
+          - AutoCategory
+          - Custom
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.SecurityReturns:
       type: object
       properties:
         AsOfDate:
           format: date-time
           type: string
-        BestTimePeriod:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriod'
-        WorstTimePeriod:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriod'
+        NonStdLoadAdjustedReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturns'
+        StandardizedAndTaxAdjustedReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturns'
     Morningstar.PortfolioAnalysis.Models.Output.SecurityItem:
       type: object
       properties:
@@ -32646,36 +32603,95 @@ components:
             - StockIntersection
             - InvalidSecurity
             type: string
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistoryItem:
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsItem:
       type: object
       properties:
-        StartYear:
+        Alpha:
+          format: double
+          type: number
+        Beta:
+          format: double
+          type: number
+        RSquared:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelatedItemKey:
+      type: object
+      properties:
+        CorrelatedItemKeyId:
           format: int32
           type: integer
-        StartQuarter:
-          format: int32
-          maximum: 4
-          minimum: 1
-          type: integer
-        StartMonth:
-          format: int32
-          maximum: 12
-          minimum: 1
-          type: integer
-        Data:
+        Type:
+          enum:
+          - Portfolio
+          type: string
+        Value:
+          format: double
+          type: number
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
+      required:
+      - Name
+      - Currency
+      - Holdings
+      type: object
+      properties:
+        Name:
+          type: string
+        TotalValue:
+          format: double
+          type: number
+        Currency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        Holdings:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.Int32_'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.SecurityReturns:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
+        IrrFees:
+          format: double
+          type: number
+        RiskFreeProxyId:
+          description: Default is set in the Configuration. This is a portfolio level override.
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceRequestSettings:
       type: object
       properties:
-        AsOfDate:
-          format: date-time
+        OutputCurrency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
           type: string
-        NonStdLoadAdjustedReturns:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturns'
-        StandardizedAndTaxAdjustedReturns:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturns'
+        RollingReturnFrequency:
+          enum:
+          - Month3
+          - Month6
+          - Year1
+          - Year3
+          - Year5
+          - Year10
+          type: string
+        IncludePortfolioInCorrelationMatrix:
+          type: boolean
+        AssetClassGroupConfigs:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfigs'
+        HypoCalculationSettings:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoCalculationSettings'
     Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceView:
       type: object
       properties:
@@ -32684,20 +32700,13 @@ components:
           type: string
         Performances:
           $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.Performances'
-    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturnsItem:
       type: object
       properties:
-        Type:
-          enum:
-          - Standard
-          - AutoAsset
-          - AutoCategory
-          - Custom
-          type: string
-        Holdings:
+        TimePeriod:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TrailingTimePeriod_'
     Morningstar.PortfolioAnalysis.Models.Output.Performance.Performances:
       type: object
       properties:
@@ -32715,6 +32724,30 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.SecurityItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsItem:
+      type: object
+      properties:
+        Mean:
+          format: double
+          type: number
+        SharpeRatio:
+          format: double
+          type: number
+        StandardDeviation:
+          format: double
+          type: number
+        InformationRatio:
+          format: double
+          type: number
+        TrackingError:
+          format: double
+          type: number
+        SortinoRatio:
+          format: double
+          type: number
+        ExcessReturn:
+          format: double
+          type: number
     Morningstar.PortfolioAnalysis.Models.Input.Hypo.HypoCalculationSettings:
       description: Contains input parameters and their values used in the hypothetical calculations.
       type: object
@@ -32905,25 +32938,39 @@ components:
         ReinvestCapitalGains:
           description: "Set it to true to reinvest capital gains distributions, or set it to false to not reinvest capital gains distributions.\n            For Australian Hypo,either set both ReinvestDividends and ReinvestCapitalGains to true, or both to false.\n            Note: If you choose not to reinvest, you may notice the Total Reinvestment, Taxes Paid, and Final Market Value of your portfolio decrease because you own fewer shares."
           type: boolean
-    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding:
-      description: 'TODO: Implement same way as PortfolioInput'
-      required:
-      - SecurityId
-      - Weight
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.AfterTaxReturns:
       type: object
       properties:
-        SecurityId:
+        OnDistributionAndSalesOfShares:
+          description: Year1,Year3,Year5,Year10,SinceInception only supported
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_'
+        OnDistributionReturn:
+          description: Year1,Year3,Year5,Year10,SinceInception only supported
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_'
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_:
+      type: object
+      properties:
+        Id:
           type: string
-        Type:
-          enum:
-          - XI
-          - CA
-          - EI
-          - CASH
-          type: string
-        Weight:
+        Value:
           format: double
           type: number
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturnsSecurity:
+      type: object
+      properties:
+        Sequence:
+          format: int32
+          type: integer
+        SecurityId:
+          type: string
+        StandardizedReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturns'
+        AfterTaxReturns:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.AfterTaxReturns'
     Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturn:
       type: object
       properties:
@@ -32932,22 +32979,134 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.Int32_'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.Performance:
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturns:
       type: object
       properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturnsSecurity'
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelationItemKey:
+      type: object
+      properties:
+        Id:
+          format: int32
+          type: integer
+        SecurityId:
+          type: string
         PortfolioName:
           type: string
-        PerformanceDate:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.PerformanceDate'
-        ReturnMethodology:
+        UseExtendedReturns:
+          type: boolean
+        Type:
           enum:
-          - QuickPortfolio
-          - Hypothetical
+          - Portfolio
+          - Security
           type: string
-        Returns:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.Returns'
-        Risks:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.Risks'
+        CorrelatedItemKey:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelatedItemKey'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriod:
+      type: object
+      properties:
+        TimePeriod:
+          description: Only support Month1, Month3, Year1, Year3
+          enum:
+          - QuarterToDate
+          - YearToDate
+          - Month1
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        Value:
+          format: double
+          type: number
+        StartDate:
+          format: date-time
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatistics:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        TrailingTimePeriod:
+          description: Only Year1, Year3, Year5, Year10 supported
+          enum:
+          - QuarterToDate
+          - YearToDate
+          - Month1
+          - Month3
+          - Month6
+          - Year1
+          - Year2
+          - Year3
+          - Year5
+          - Year10
+          - SinceInception
+          type: string
+        DataFrequency:
+          description: Only Monthly, Quarterly  supported
+          enum:
+          - Monthly
+          - Quarterly
+          - SemiAnnually
+          - Annually
+          - None
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsItem'
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsSecurityItem'
+    Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfigs:
+      type: object
+      properties:
+        AssetClassGroupConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfig'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriods:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        BestTimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriod'
+        WorstTimePeriod:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriod'
+    Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfig:
+      type: object
+      properties:
+        Id:
+          type: string
+        Type:
+          enum:
+          - Broad
+          - Detailed
+          type: string
+        AssetClassConfig:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassConfig'
     Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturns:
       type: object
       properties:
@@ -32955,49 +33114,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturn'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturns:
-      type: object
-      properties:
-        AsOfDate:
-          format: date-time
-          type: string
-        Portfolio:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturnsItem'
-        Benchmark:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturnsItem'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturnsSecurity:
-      type: object
-      properties:
-        Sequence:
-          format: int32
-          type: integer
-        SecurityId:
-          type: string
-        HoldingDate:
-          format: date-time
-          type: string
-        HoldingValue:
-          format: double
-          type: number
-        Day7Yield:
-          format: double
-          type: number
-        TimePeriod:
-          description: Year1,Year3,Year5,Year10 only supported
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_'
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsSecurityItem:
-      type: object
-      properties:
-        SecurityId:
-          type: string
-        Weight:
-          format: double
-          type: number
-        RiskStatisticsItem:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsItem'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedReturnsTimePeriodItem:
+    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_:
       type: object
       properties:
         Id:
@@ -33014,87 +33131,9 @@ components:
           - Year10
           - SinceInception
           type: string
-        Market:
+        Value:
           format: double
           type: number
-        Nav:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceInputSettings:
-      type: object
-      properties:
-        View:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceView'
-        Config:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceConfig'
-        RequestSettings:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceRequestSettings'
-        Portfolios:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput'
-      example:
-        View:
-          Id: Default
-        Config:
-          Id: QuickPortfolio
-        RequestSettings:
-          OutputCurrency: USD
-          RollingReturnFrequency: Month3
-          AssetClassGroupConfigs:
-            AssetClassGroupConfig:
-            - Id: ACG-USBROAD
-        Portfolios:
-        - Name: TestPortfolio1
-          TotalValue: 10000
-          Currency: USD
-          Holdings:
-          - SecurityId: FOUSA05H5F
-            Type: FO
-            Weight: 50
-          - SecurityId: FOUSA04BCR
-            Type: FO
-            Weight: 50
-          Benchmark:
-            Type: Standard
-            Holdings:
-            - SecurityId: XIUSA04G92
-              Type: XI
-              Weight: 100
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturnsItem:
-      type: object
-      properties:
-        StartYear:
-          format: int32
-          type: integer
-        StartMonth:
-          format: int32
-          maximum: 12
-          minimum: 1
-          type: integer
-        Data:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_System.String_'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.Returns:
-      type: object
-      properties:
-        BestWorstTimePeriods:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriods'
-        TrailingReturns:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.TrailingReturns'
-        CalendarYearReturn:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.CalendarYearReturns'
-        RollingReturns:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturns'
-        IllustrationReturns:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturns'
-        PerformanceHistorys:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistorys'
-        InvestmentActivity:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivity'
-        SecurityReturns:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.SecurityReturns'
     Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturnSecurityItem:
       type: object
       properties:
@@ -33122,106 +33161,153 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.IllustrationReturnTimePeriod_'
-    Morningstar.PortfolioAnalysis.Models.Input.AssetClassGroupConfig:
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsSecurityItem:
       type: object
       properties:
-        Id:
+        SecurityId:
           type: string
-        Type:
+        Weight:
+          format: double
+          type: number
+        RiskStatisticsItem:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.RiskStatisticsItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivity:
+      type: object
+      properties:
+        DataFrequency:
           enum:
-          - Broad
-          - Detailed
+          - Monthly
+          - Quarterly
           type: string
-        AssetClassConfig:
+        Portfolio:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.AssetClassConfig'
-    Morningstar.PortfolioAnalysis.Models.Input.AssetClassConfig:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivityItem'
+        Benchmark:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.InvestmentActivityItem'
+        MaxSequence:
+          format: int32
+          type: integer
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturn:
+      type: object
+      properties:
+        RollingPeriod:
+          enum:
+          - Month3
+          - Month6
+          - Month12
+          - Month24
+          - Month36
+          - Month60
+          - Month120
+          type: string
+        Portfolio:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturnsItem'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.RollingReturnsItem'
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelationItemKey:
       type: object
       properties:
         Id:
+          format: int32
+          type: integer
+        PortfolioName:
           type: string
-        Name:
-          type: string
-        Color:
-          type: string
-        BorderColor:
-          type: string
-        Index:
-          type: string
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistory:
-      type: object
-      properties:
+        UseExtendedReturns:
+          type: boolean
         Type:
           enum:
-          - Difference
+          - Portfolio
           type: string
-        Frequency:
+        CorrelatedItemKey:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelatedItemKey'
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding:
+      type: object
+      properties:
+        SecurityId:
+          type: string
+        Type:
+          description: 'TODO: is this required? If not, is there a default?'
+          enum:
+          - BD
+          - CT
+          - CA
+          - CASH
+          - EI
+          - FC
+          - FE
+          - FM
+          - FO
+          - FI
+          - FV
+          - SA
+          - ST
+          - VA
+          - V1
+          - XI
+          - SP
+          type: string
+        ExchangeID:
+          type: string
+        Weight:
+          format: double
+          type: number
+        Value:
+          format: double
+          type: number
+        AnnualFeePercent:
+          format: double
+          type: number
+        AnnualFeeFrequency:
           enum:
           - Monthly
           - Quarterly
           - SemiAnnually
           - Annually
           type: string
-        StartDate:
-          format: date-time
-          type: string
-        Portfolio:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistoryItem'
-        Benchmark:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.PerformanceHistoryItem'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.BestWorstTimePeriod:
-      type: object
-      properties:
-        TimePeriod:
-          description: Only support Month1, Month3, Year1, Year3
+        SalesFeesAmountType:
           enum:
-          - QuarterToDate
-          - YearToDate
-          - Month1
-          - Month3
-          - Month6
-          - Year1
-          - Year2
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
+          - Amount
+          - Percentage
           type: string
-        Value:
+        SalesFeesAmount:
           format: double
           type: number
-        StartDate:
-          format: date-time
+        SalesFeesType:
+          enum:
+          - Standard
+          - Custom
           type: string
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturns:
-      type: object
-      properties:
-        AsOfDate:
-          format: date-time
+        SalesFeesROAAmount:
+          format: double
+          type: number
+        SalesFeesLOIAmount:
+          format: double
+          type: number
+        OtherFeeAmount:
+          format: double
+          type: number
+        OtherFeeAmountType:
+          enum:
+          - Amount
+          - Percentage
           type: string
-        Security:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.StandardizedAndTaxAdjustedReturnsSecurity'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturns:
-      type: object
-      properties:
-        AsOfDate:
-          format: date-time
+        OtherFeeType:
+          enum:
+          - TradingCommissions
+          - ShortTermTradingFee
           type: string
-        Security:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturnSecurityItem'
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsSecurityItem:
-      type: object
-      properties:
-        SecurityId:
+        CUSIP:
           type: string
-        MPTStatisticsItem:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsItem'
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelationMatrix:
+        TradingSymbol:
+          type: string
+        FundCode:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelationMatrix:
       type: object
       properties:
         TrailingTimePeriod:
@@ -33257,7 +33343,17 @@ components:
         Correlations:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CrossPortfolioCorrelationItemKey'
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.CorrelationItemKey'
+    Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturns:
+      type: object
+      properties:
+        AsOfDate:
+          format: date-time
+          type: string
+        Security:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.IllustrationReturnSecurityItem'
     Morningstar.PortfolioAnalysis.Models.Input.Performance.PerformanceConfig:
       type: object
       properties:
@@ -33269,113 +33365,68 @@ components:
           - QuickPortfolio
           - Hypothetical
           type: string
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.AfterTaxReturns:
-      type: object
-      properties:
-        OnDistributionAndSalesOfShares:
-          description: Year1,Year3,Year5,Year10,SinceInception only supported
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_'
-        OnDistributionReturn:
-          description: Year1,Year3,Year5,Year10,SinceInception only supported
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_'
-    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.TimePeriod_:
-      type: object
-      properties:
-        Id:
-          enum:
-          - QuarterToDate
-          - YearToDate
-          - Month1
-          - Month3
-          - Month6
-          - Year1
-          - Year2
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
-          type: string
-        Value:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Output.DataItem_Morningstar.PortfolioAnalysis.Models.IllustrationReturnTimePeriod_:
-      type: object
-      properties:
-        Id:
-          enum:
-          - Days7Yield
-          - Days7YieldUnsubsidized
-          - Days7YieldSubsidized
-          - Year1
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
-          type: string
-        Value:
-          format: double
-          type: number
-    Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatistics:
-      type: object
-      properties:
-        AsOfDate:
-          format: date-time
-          type: string
-        TrailingTimePeriod:
-          description: Only Year1, Year3, Year5, Year10 supported
-          enum:
-          - QuarterToDate
-          - YearToDate
-          - Month1
-          - Month3
-          - Month6
-          - Year1
-          - Year2
-          - Year3
-          - Year5
-          - Year10
-          - SinceInception
-          type: string
-        DataFrequency:
-          description: Only Monthly, Quarterly  supported
-          enum:
-          - Monthly
-          - Quarterly
-          - SemiAnnually
-          - Annually
-          - None
-          type: string
-        Portfolio:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsItem'
-        Security:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Risk.MPTStatisticsSecurityItem'
-    Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturns:
-      type: object
-      properties:
-        AsOfDate:
-          format: date-time
-          type: string
-        Security:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Output.Performance.NonStdLoadAdjustedReturnsSecurity'
-  requestBodies:
-    RequestPerformance:
-      required: true
+  responses:
+    ResponsePerformance:
+      description: '200: OK'
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/RequestPerformance'
+            $ref: '#/components/schemas/ResponsePerformance'
           examples:
-            PerformanceRequestExample1:
-              $ref: '#/components/examples/PerformanceRequestExample1'
+            PerformanceResponseExample1:
+              $ref: '#/components/examples/PerformanceResponseExample1'
+    ResponseStatus400:
+      description: '400'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            ResponseStatus400Example1:
+              $ref: '#/components/examples/ResponseStatus400Example1'
+    ResponseTimeSeriesDailyOhlcv:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseTimeSeriesDailyOhlcv'
+    ResponseStatus500:
+      description: '500'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            ResponseStatus500Example1:
+              $ref: '#/components/examples/ResponseStatus500Example1'
+    ResponseTimeSeriesSingleObservation:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseTimeSeriesSingleObservation'
   examples:
+    PerformanceRequestExample1:
+      summary: Portfolio Performance Example Input
+      value:
+        View:
+          Id: Default
+        Config:
+          Id: QuickPortfolio
+        RequestSettings:
+          OutputCurrency: USD
+          AssetClassGroupConfigs:
+            AssetClassGroupConfig:
+            - Id: ACG-USBROAD
+        Portfolios:
+        - Name: TestPortfolio1
+          TotalValue: 10000
+          Currency: USD
+          Holdings:
+          - SecurityId: FOUSA05H5F
+            Weight: 50
+          - SecurityId: FOUSA04BCR
+            Weight: 50
     PerformanceResponseExample1:
       summary: Portfolio Performance Example Output
       value:
@@ -33953,34 +34004,6 @@ components:
           Type: XI
           SecurityReferenceTypes:
           - DisclosureIndex
-    PerformanceRequestExample1:
-      summary: Portfolio Performance Example Input
-      value:
-        View:
-          Id: Default
-        Config:
-          Id: QuickPortfolio
-        RequestSettings:
-          OutputCurrency: USD
-          AssetClassGroupConfigs:
-            AssetClassGroupConfig:
-            - Id: ACG-USBROAD
-        Portfolios:
-        - Name: TestPortfolio1
-          TotalValue: 10000
-          Currency: USD
-          Holdings:
-          - SecurityId: FOUSA05H5F
-            Weight: 50
-          - SecurityId: FOUSA04BCR
-            Weight: 50
-    ResponseStatus400Example1:
-      summary: 400 -  Bad Request
-      value:
-        statusCode: 400
-        errorCode: 400.investmentDetails.002
-        message: Invalid date format. Expected format is yyyy-MM-d
-        requestId: 539d62a5-3586-4070-965e-0f7f64712d79
     ResponseStatus500Example1:
       summary: 500 - Internal Server Error
       value:
@@ -33988,46 +34011,23 @@ components:
         errorCode: 500.investmentDetails.003
         message: Error calling Investment API.
         requestId: 539d62a5-3586-4070-965e-0f7f64712d79
-  responses:
-    ResponsePerformance:
-      description: '200: OK'
+    ResponseStatus400Example1:
+      summary: 400 -  Bad Request
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetails.002
+        message: Invalid date format. Expected format is yyyy-MM-d
+        requestId: 539d62a5-3586-4070-965e-0f7f64712d79
+  requestBodies:
+    RequestPerformance:
+      required: true
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/ResponsePerformance'
+            $ref: '#/components/schemas/RequestPerformance'
           examples:
-            PerformanceResponseExample1:
-              $ref: '#/components/examples/PerformanceResponseExample1'
-    ResponseStatus500:
-      description: '500'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            ResponseStatus500Example1:
-              $ref: '#/components/examples/ResponseStatus500Example1'
-    ResponseTimeSeriesDailyOhlcv:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseTimeSeriesDailyOhlcv'
-    ResponseStatus400:
-      description: '400'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            ResponseStatus400Example1:
-              $ref: '#/components/examples/ResponseStatus400Example1'
-    ResponseTimeSeriesSingleObservation:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseTimeSeriesSingleObservation'
+            PerformanceRequestExample1:
+              $ref: '#/components/examples/PerformanceRequestExample1'
   securitySchemes:
     Bearer:
       type: http

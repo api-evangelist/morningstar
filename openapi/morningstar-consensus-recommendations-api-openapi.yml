@@ -164,33 +164,78 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 919
 components:
-  responses:
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityConsensusRecommendations:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              consensusRawRecommendations:
-                $ref: '#/components/schemas/OutputConsensusRawRecommendations'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
   schemas:
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputConsensusRawRecommendations:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: Consensus date in numeric format
+          nullable: true
+        buy:
+          type: integer
+          description: Number of brokers providing buy recommendation
+          format: int32
+          nullable: true
+        hold:
+          type: integer
+          description: Number of brokers providing hold recommendation
+          format: int32
+          nullable: true
+        meanLabel:
+          type: string
+          description: The possible values are NoOpinion - if mean_rating is equal to (=) 0; Sell - if mean_rating is less than equal to (<=) 1.5; Underperform - if mean_rating is less than equal to (<=) 2.5; Hold - if mean_rating is less than equal to (<=) 3.5; Outperform -  if mean_rating is less than equal to (<=) 4.5; Buy -  if mean_rating is greater than (>) 4.5; NoOpinion - if the before conditions is not satisfied
+          nullable: true
+        meanRating:
+          type: number
+          description: The is mean rating is considered on the basis of 5 fields; each filed is assigned a default value that is buy(5); out_perform(4); hold(3); under_perform(2); sell(1); each of these default value is multiplied with brokers recommendation and the mean is calculated of the multipied result
+          format: double
+          nullable: true
+        noOpinion:
+          type: integer
+          description: Number of brokers providing no opinion recommendation
+          format: int32
+          nullable: true
+        outPerform:
+          type: integer
+          description: Number of brokers providing  outperform recommendation
+          format: int32
+          nullable: true
+        sell:
+          type: integer
+          description: Number of brokers providing sell recommendation
+          format: int32
+          nullable: true
+        underPerform:
+          type: integer
+          description: Number of brokers providing under perform recommendation
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: OutputConsensusRawRecommendations
     OutputErrorDetails:
       type: object
       properties:
@@ -213,6 +258,25 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -291,96 +355,32 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputConsensusRawRecommendations:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: Consensus date in numeric format
-          nullable: true
-        buy:
-          type: integer
-          description: Number of brokers providing buy recommendation
-          format: int32
-          nullable: true
-        hold:
-          type: integer
-          description: Number of brokers providing hold recommendation
-          format: int32
-          nullable: true
-        meanLabel:
-          type: string
-          description: The possible values are NoOpinion - if mean_rating is equal to (=) 0; Sell - if mean_rating is less than equal to (<=) 1.5; Underperform - if mean_rating is less than equal to (<=) 2.5; Hold - if mean_rating is less than equal to (<=) 3.5; Outperform -  if mean_rating is less than equal to (<=) 4.5; Buy -  if mean_rating is greater than (>) 4.5; NoOpinion - if the before conditions is not satisfied
-          nullable: true
-        meanRating:
-          type: number
-          description: The is mean rating is considered on the basis of 5 fields; each filed is assigned a default value that is buy(5); out_perform(4); hold(3); under_perform(2); sell(1); each of these default value is multiplied with brokers recommendation and the mean is calculated of the multipied result
-          format: double
-          nullable: true
-        noOpinion:
-          type: integer
-          description: Number of brokers providing no opinion recommendation
-          format: int32
-          nullable: true
-        outPerform:
-          type: integer
-          description: Number of brokers providing  outperform recommendation
-          format: int32
-          nullable: true
-        sell:
-          type: integer
-          description: Number of brokers providing sell recommendation
-          format: int32
-          nullable: true
-        underPerform:
-          type: integer
-          description: Number of brokers providing under perform recommendation
-          format: int32
-          nullable: true
-      additionalProperties: false
-      title: OutputConsensusRawRecommendations
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
+  responses:
+    ResponseEquityConsensusRecommendations:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              consensusRawRecommendations:
+                $ref: '#/components/schemas/OutputConsensusRawRecommendations'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

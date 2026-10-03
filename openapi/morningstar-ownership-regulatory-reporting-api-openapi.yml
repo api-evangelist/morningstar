@@ -678,119 +678,82 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 928
 components:
-  responses:
-    ResponseEquityOwnershipDetailSecAndSedar:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ownershipDataSecAndSedar:
-                $ref: '#/components/schemas/OutputOwnershipDataSecAndSedar'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityUkMajorShareholderTransactions:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ukStakeholderOwnership:
-                $ref: '#/components/schemas/OutputUkStakeholderOwnership'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityOwnershipDetailUkSignificantShareholders:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ukStakeholderOwnership:
-                $ref: '#/components/schemas/OutputUkStakeholderOwnership'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityOwnershipRegulatoryReporting:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ownershipDataSecAndSedar:
-                $ref: '#/components/schemas/OutputOwnershipDataSecAndSedar'
-              ukStakeholderOwnership:
-                $ref: '#/components/schemas/OutputUkStakeholderOwnership'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
   schemas:
-    OutputOwnershipDataSecAndSedar:
+    OutputMetadata:
       type: object
       properties:
-        asOfDate:
+        requestId:
           type: string
-          description: ''
           nullable: true
-        accessionNumberForm13f:
+        time:
           type: string
-          description: ''
-          nullable: true
-        filerCik:
-          type: string
-          description: ''
-          nullable: true
-        filingDateForm13f:
-          type: string
-          description: ''
-          nullable: true
-        numberOfShares:
-          type: string
-          description: ''
-          nullable: true
-        ownerId:
-          type: string
-          description: ''
-          nullable: true
-        ownerName:
-          type: string
-          description: ''
-          nullable: true
-        ownerType:
-          type: string
-          description: ''
-          nullable: true
-        percentageOwnership:
-          type: string
-          description: ''
-          nullable: true
+          format: date-time
+          readOnly: true
         portfolioDate:
           type: string
-          description: ''
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputOwnershipDataSecAndSedar
+      title: OutputMetadata
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -837,60 +800,51 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputErrorDetails:
+    OutputOwnershipDataSecAndSedar:
       type: object
       properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
+        asOfDate:
           type: string
-          description: Custom error code
+          description: ''
           nullable: true
-        message:
+        accessionNumberForm13f:
           type: string
-          description: Message
+          description: ''
           nullable: true
-        requestId:
+        filerCik:
           type: string
-          description: RequestId
+          description: ''
           nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
+        filingDateForm13f:
           type: string
+          description: ''
           nullable: true
-        securityId:
+        numberOfShares:
           type: string
+          description: ''
           nullable: true
-        cusip:
+        ownerId:
           type: string
+          description: ''
           nullable: true
-        isin:
+        ownerName:
           type: string
+          description: ''
           nullable: true
-        sedol:
+        ownerType:
           type: string
+          description: ''
           nullable: true
-        tradingSymbol:
+        percentageOwnership:
           type: string
+          description: ''
           nullable: true
-        fundCode:
+        portfolioDate:
           type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
+          description: ''
           nullable: true
       additionalProperties: false
-      title: OutputIdentifiers
+      title: OutputOwnershipDataSecAndSedar
     OutputUkStakeholderOwnership:
       type: object
       properties:
@@ -1015,59 +969,105 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputUkStakeholderOwnership
-    OutputMetadata:
+    OutputIdentifiers:
       type: object
       properties:
-        requestId:
+        performanceId:
           type: string
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
+        securityId:
           type: string
           nullable: true
-        portfolioCurrency:
+        cusip:
           type: string
           nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
+        isin:
           type: string
           nullable: true
-        code:
+        sedol:
           type: string
           nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+        tradingSymbol:
+          type: string
           nullable: true
-        message:
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    CodeMappingBoolean:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: boolean
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingBoolean
+      title: OutputIdentifiers
+  responses:
+    ResponseEquityUkMajorShareholderTransactions:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ukStakeholderOwnership:
+                $ref: '#/components/schemas/OutputUkStakeholderOwnership'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipDetailUkSignificantShareholders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ukStakeholderOwnership:
+                $ref: '#/components/schemas/OutputUkStakeholderOwnership'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityOwnershipDetailSecAndSedar:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownershipDataSecAndSedar:
+                $ref: '#/components/schemas/OutputOwnershipDataSecAndSedar'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipRegulatoryReporting:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownershipDataSecAndSedar:
+                $ref: '#/components/schemas/OutputOwnershipDataSecAndSedar'
+              ukStakeholderOwnership:
+                $ref: '#/components/schemas/OutputUkStakeholderOwnership'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
     Bearer:
       type: http

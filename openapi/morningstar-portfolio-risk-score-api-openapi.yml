@@ -85,19 +85,21 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    ResponsePortfolioRiskScore:
+    OutputMetadata:
       type: object
+      description: Metadata model.
       properties:
-        riskScores:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputPortfolioRiskScore'
-          description: An array that displays the risk scores of scored portfolios.
+        requestId:
+          type: string
+          description: Unique identifier of the request, useful for support and debugging.
           nullable: true
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-      additionalProperties: false
-      description: RiskScore response
+          example: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
+        time:
+          type: string
+          format: date-time
+          description: ISO 8601 timestamp indicating when the response was generated.
+          readOnly: true
+          example: '2024-05-14T16:41:24.4418482Z'
     InputPortfolioHolding:
       description: 'Each holding requires a security identifier and a position size. For the identifier, pass one of: `SecurityId`, `CUSIP`, `FundCode`, `ISIN`, `PerformanceId`, or `TradingSymbol`. If multiple identifiers are provided for a single security, `SecurityId` takes priority; if `SecurityId` is absent, the last identifier listed in the object is used. For the position size, pass one of: `Weight` or `Value`.'
       type: object
@@ -139,13 +141,29 @@ components:
           description: Fund code identifier of a security. Specific to Thai markets.
           type: string
           example: ABG
-    OutputPortfolioRiskScore:
+    ResponsePortfolioRiskScore:
       type: object
       properties:
-        portfolio:
-          $ref: '#/components/schemas/OutputPortfolio'
+        riskScores:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputPortfolioRiskScore'
+          description: An array that displays the risk scores of scored portfolios.
+          nullable: true
         metadata:
           $ref: '#/components/schemas/OutputMetadata'
+      additionalProperties: false
+      description: RiskScore response
+    RequestPortfolioRiskScore:
+      type: object
+      properties:
+        Portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/InputPortfolio'
+          description: List of portfolios with holdings. A maximum of two portfolios can be passed in the request.
+          maxItems: 2
+          nullable: true
       additionalProperties: false
     InputPortfolio:
       description: Object representing a portfolio to be analysed. Each holding must specify a security identifier and one of `Weight` or `Value`to define its allocation. `TotalValue` is required when holdings use `Weight`. Maximum of 250 holdings per portfolio.
@@ -193,26 +211,14 @@ components:
           minItems: 1
           items:
             $ref: '#/components/schemas/InputPortfolioHolding'
-    ResponseError:
+    OutputPortfolioRiskScore:
       type: object
       properties:
-        statusCode:
-          type: integer
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
+        portfolio:
+          $ref: '#/components/schemas/OutputPortfolio'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
       additionalProperties: false
-      description: Error details
     OutputPortfolio:
       type: object
       properties:
@@ -249,47 +255,62 @@ components:
           description: Date the portfolio was queried.
           nullable: true
       additionalProperties: false
-    RequestPortfolioRiskScore:
+    ResponseError:
       type: object
       properties:
-        Portfolios:
-          type: array
-          items:
-            $ref: '#/components/schemas/InputPortfolio'
-          description: List of portfolios with holdings. A maximum of two portfolios can be passed in the request.
-          maxItems: 2
+        statusCode:
+          type: integer
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
           nullable: true
-      additionalProperties: false
-    OutputMetadata:
-      type: object
-      description: Metadata model.
-      properties:
+        message:
+          type: string
+          description: Message
+          nullable: true
         requestId:
           type: string
-          description: Unique identifier of the request, useful for support and debugging.
+          description: RequestId
           nullable: true
-          example: 33f0a7e0-8088-4ea9-b26e-d356b888e7de
-        time:
-          type: string
-          format: date-time
-          description: ISO 8601 timestamp indicating when the response was generated.
-          readOnly: true
-          example: '2024-05-14T16:41:24.4418482Z'
+      additionalProperties: false
+      description: Error details
   examples:
-    ErrorResponse403Example2:
-      summary: Forbidden - Not Authorized for Default CountryId
-      value:
-        statusCode: 403
-        errorCode: 403.riskScore.006
-        message: The user is not authorized for the default countryId-USA.
-        requestId: c784bacf-37dd-4d02-83e2-9001ab5fcf39
-    ErrorResponse400Example10:
-      summary: Bad Request - Portfolio Total Value or Weight is 0
+    ErrorResponse400Example3:
+      summary: Bad Request - Mix of Weight and Value Passed in Request
       value:
         statusCode: 400
-        errorCode: 400.riskScore.109
-        message: The total weight or value of a portfolio's valid holdings must be greater than 0.
-        requestId: 1311dfa8-5e02-416f-a747-07d4675ad073
+        errorCode: 400.riskScore.100
+        message: 'Holdings must use either Weight or Value. UK demo portfolio. Holdings allocated by weight: 3, holdings allocated by value: 1'
+        requestId: 34b98999-a882-42ce-96b1-0b216601d9e9
+    ErrorResponse403Example1:
+      summary: Forbidden - Not Authorized for Specific CountryId
+      value:
+        statusCode: 403
+        errorCode: 403.riskScore.005
+        message: The user is not authorized for the countryId-USA.
+        requestId: e922fdf6-d1ef-421b-aa21-6e9ced90d920
+    ErrorResponse400Example7:
+      summary: Bad Request - No Portfolios in Request
+      value:
+        statusCode: 400
+        errorCode: 400.riskScore.105
+        message: No portfolios present in request
+        requestId: 037f8480-e6dd-4d69-900d-506fe28355db
+    ErrorResponse400Example9:
+      summary: Bad Request - Multiple Input Currencies Provided
+      value:
+        statusCode: 400
+        errorCode: 400.riskScore.108
+        message: Only one input currency per request is supported.
+        requestId: ce2889e2-151d-4360-9834-2cab1514c95c
+    ErrorResponse400Example6:
+      summary: Bad Request - No Holdings in Portfolio
+      value:
+        statusCode: 400
+        errorCode: 400.riskScore.104
+        message: 'No holdings present in portfolio. Invalid portfolio name: ''UK demo portfolio'''
+        requestId: 754f49b8-6415-4b98-8e49-289f280100f7
     PortfolioRiskScoreRequestExample1:
       summary: Portfolio Risk Score Input
       value:
@@ -302,27 +323,6 @@ components:
             Weight: 60
           - SecurityId: FOUSA04BCR
             Weight: 40
-    ErrorResponse400Example9:
-      summary: Bad Request - Multiple Input Currencies Provided
-      value:
-        statusCode: 400
-        errorCode: 400.riskScore.108
-        message: Only one input currency per request is supported.
-        requestId: ce2889e2-151d-4360-9834-2cab1514c95c
-    ErrorResponse400Example4:
-      summary: Bad Request - Portfolio TotalWeight Not Equal to 100
-      value:
-        statusCode: 400
-        errorCode: 400.riskScore.101
-        message: 'The total weight of the portfolio''s holdings does not add up to 100. Invalid portfolio name: ''UK demo portfolio'''
-        requestId: 85e32d15-eb14-47ab-a224-320f03c2a5a9
-    ErrorResponse400Example6:
-      summary: Bad Request - No Holdings in Portfolio
-      value:
-        statusCode: 400
-        errorCode: 400.riskScore.104
-        message: 'No holdings present in portfolio. Invalid portfolio name: ''UK demo portfolio'''
-        requestId: 754f49b8-6415-4b98-8e49-289f280100f7
     ErrorResponse413Example2:
       summary: Request Entity Too Large - Max. Number of Holdings Exceeded
       value:
@@ -330,6 +330,27 @@ components:
         errorCode: 413.riskScore.102
         message: The total number of holdings in a portfolio exceeds the maximum limit of 250.
         requestId: 85e32d15-eb14-47ab-a224-320f03c2a5a9
+    ErrorResponse400Example4:
+      summary: Bad Request - Portfolio TotalWeight Not Equal to 100
+      value:
+        statusCode: 400
+        errorCode: 400.riskScore.101
+        message: 'The total weight of the portfolio''s holdings does not add up to 100. Invalid portfolio name: ''UK demo portfolio'''
+        requestId: 85e32d15-eb14-47ab-a224-320f03c2a5a9
+    ErrorResponse403Example2:
+      summary: Forbidden - Not Authorized for Default CountryId
+      value:
+        statusCode: 403
+        errorCode: 403.riskScore.006
+        message: The user is not authorized for the default countryId-USA.
+        requestId: c784bacf-37dd-4d02-83e2-9001ab5fcf39
+    ErrorResponse403Example3:
+      summary: Forbidden - Not Authorized for Any CountryId
+      value:
+        statusCode: 403
+        errorCode: 403.riskScore.007
+        message: The user is not authorized for any countryId.
+        requestId: 42b8be14-0ff7-440e-8ec6-e9f5a10e64d9
     ErrorResponse400Example5:
       summary: Bad Request - Missing Holdings Identifiers
       value:
@@ -352,13 +373,6 @@ components:
         metadata:
           requestId: f87f72c2-9a76-40f6-9118-a7be027eff9d
           time: '2024-02-26T15:29:16.8685342Z'
-    ErrorResponse403Example3:
-      summary: Forbidden - Not Authorized for Any CountryId
-      value:
-        statusCode: 403
-        errorCode: 403.riskScore.007
-        message: The user is not authorized for any countryId.
-        requestId: 42b8be14-0ff7-440e-8ec6-e9f5a10e64d9
     ErrorResponse413Example1:
       summary: Request Entity Too Large - Max. Number of Portfolios Exceeded
       value:
@@ -373,41 +387,6 @@ components:
         errorCode: 500.riskScore.008
         message: Internal Server Error
         requestId: 6bc61555-c0f1-4d7c-b912-ec56a94cc620
-    ErrorResponse400Example3:
-      summary: Bad Request - Mix of Weight and Value Passed in Request
-      value:
-        statusCode: 400
-        errorCode: 400.riskScore.100
-        message: 'Holdings must use either Weight or Value. UK demo portfolio. Holdings allocated by weight: 3, holdings allocated by value: 1'
-        requestId: 34b98999-a882-42ce-96b1-0b216601d9e9
-    ErrorResponse400Example1:
-      summary: Bad Request - Unsupported langcult Value
-      value:
-        statusCode: 400
-        errorCode: 400.riskScore.001
-        message: LangCult fr-FR is not currently supported. Please contact your administrator.
-        requestId: 6bc61555-c0f1-4d7c-b912-ec56a94cc628
-    ErrorResponse403Example1:
-      summary: Forbidden - Not Authorized for Specific CountryId
-      value:
-        statusCode: 403
-        errorCode: 403.riskScore.005
-        message: The user is not authorized for the countryId-USA.
-        requestId: e922fdf6-d1ef-421b-aa21-6e9ced90d920
-    ErrorResponse400Example2:
-      summary: Bad Request - Unsupported countryId Value
-      value:
-        statusCode: 400
-        errorCode: 400.riskScore.004
-        message: CountryId USA is not currently supported. Please contact your administrator.
-        requestId: b2370e75-27d1-4492-9e38-1c82bbf33165
-    ErrorResponse400Example7:
-      summary: Bad Request - No Portfolios in Request
-      value:
-        statusCode: 400
-        errorCode: 400.riskScore.105
-        message: No portfolios present in request
-        requestId: 037f8480-e6dd-4d69-900d-506fe28355db
     ErrorResponse400Example8:
       summary: Bad Request - TotalValue Required
       value:
@@ -415,6 +394,27 @@ components:
         errorCode: 400.riskScore.106
         message: 'TotalValue is required when holdings are allocated by Weight. Invalid portfolio name: ''UK demo portfolio'''
         requestId: b646504b-f701-4c73-befa-f3cbbc0571e1
+    ErrorResponse400Example1:
+      summary: Bad Request - Unsupported langcult Value
+      value:
+        statusCode: 400
+        errorCode: 400.riskScore.001
+        message: LangCult fr-FR is not currently supported. Please contact your administrator.
+        requestId: 6bc61555-c0f1-4d7c-b912-ec56a94cc628
+    ErrorResponse400Example10:
+      summary: Bad Request - Portfolio Total Value or Weight is 0
+      value:
+        statusCode: 400
+        errorCode: 400.riskScore.109
+        message: The total weight or value of a portfolio's valid holdings must be greater than 0.
+        requestId: 1311dfa8-5e02-416f-a747-07d4675ad073
+    ErrorResponse400Example2:
+      summary: Bad Request - Unsupported countryId Value
+      value:
+        statusCode: 400
+        errorCode: 400.riskScore.004
+        message: CountryId USA is not currently supported. Please contact your administrator.
+        requestId: b2370e75-27d1-4492-9e38-1c82bbf33165
   responses:
     ErrorResponse500:
       description: '500: Internal Server Error'

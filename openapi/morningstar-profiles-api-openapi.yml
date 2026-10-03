@@ -69,6 +69,26 @@ paths:
       description: UAT
 components:
   schemas:
+    APIMetaStatusResponse:
+      type: object
+      properties:
+        hint:
+          type: string
+        response_status:
+          type: string
+      title: APIMetaStatusResponse
+    ApiHouseholdResponseForProfiles:
+      type: object
+      properties:
+        _meta:
+          $ref: '#/components/schemas/APIMetaStatusResponse'
+        households:
+          type: array
+          items:
+            $ref: '#/components/schemas/Household'
+        pagination:
+          $ref: '#/components/schemas/APIPaginationResponse'
+      title: ApiHouseholdResponseForProfiles
     Household:
       type: object
       properties:
@@ -109,23 +129,6 @@ components:
         name:
           type: string
       title: Permission
-    ClientType:
-      type: object
-      properties:
-        code:
-          type: integer
-          format: int32
-        name:
-          type: string
-      title: ClientType
-    APIMetaStatusResponse:
-      type: object
-      properties:
-        hint:
-          type: string
-        response_status:
-          type: string
-      title: APIMetaStatusResponse
     APIPaginationResponse:
       type: object
       properties:
@@ -139,18 +142,15 @@ components:
           type: integer
           format: int32
       title: APIPaginationResponse
-    ApiHouseholdResponseForProfiles:
+    ClientType:
       type: object
       properties:
-        _meta:
-          $ref: '#/components/schemas/APIMetaStatusResponse'
-        households:
-          type: array
-          items:
-            $ref: '#/components/schemas/Household'
-        pagination:
-          $ref: '#/components/schemas/APIPaginationResponse'
-      title: ApiHouseholdResponseForProfiles
+        code:
+          type: integer
+          format: int32
+        name:
+          type: string
+      title: ClientType
     ApiPortfolioResponse:
       type: object
       properties:

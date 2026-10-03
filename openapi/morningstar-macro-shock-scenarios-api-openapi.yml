@@ -117,14 +117,14 @@ paths:
       tags:
       - macro shock scenarios
 components:
+  requestBodies:
+    ForecastReturnModel:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForecastReturnModel'
+      required: true
   schemas:
-    idType:
-      properties:
-        id:
-          type: string
-        type:
-          type: string
-      type: object
     holding:
       properties:
         identifier:
@@ -141,6 +141,13 @@ components:
           items:
             $ref: '#/components/schemas/holding'
         id:
+          type: string
+      type: object
+    idType:
+      properties:
+        id:
+          type: string
+        type:
           type: string
       type: object
     ForecastReturnModel:
@@ -173,13 +180,6 @@ components:
           items:
             $ref: '#/components/schemas/Holdings'
       type: object
-  requestBodies:
-    ForecastReturnModel:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ForecastReturnModel'
-      required: true
   securitySchemes:
     bearerAuth:
       type: http

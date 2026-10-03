@@ -1264,6 +1264,163 @@ paths:
       x-cpqId: 905
 components:
   schemas:
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputCompanyLevelTotalSharesOutstanding:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        companyLevelTotalSharesOutstandings:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputCompanyLevelTotalSharesOutstanding
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputTotalSharesOutstandingRawTreasury:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        documentFormType:
+          type: string
+          description: ''
+          nullable: true
+        preSplitTreasuryShares:
+          type: string
+          description: ''
+          nullable: true
+        treasurySharesAsReported:
+          type: string
+          description: ''
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputTotalSharesOutstandingRawTreasury
+    OutputPerformanceLevelTotalSharesOutstanding:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        fileDate:
+          type: string
+          description: ''
+          nullable: true
+        fivePercentFloat:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        floatDate:
+          type: string
+          description: ''
+          nullable: true
+        floatPercentShare:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        floatShare:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        quotedValue:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        reasonOfShareChange:
+          type: string
+          description: ''
+          nullable: true
+        totalSharesOutstanding:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        unquotedValue:
+          type: string
+          description: ''
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputPerformanceLevelTotalSharesOutstanding
+    OutputPerformanceLevelTotalSharesOutstandingTreasury:
+      type: object
+      properties:
+        totalSharesOutstandingDate:
+          type: string
+          description: ''
+          nullable: true
+        treasuryShares:
+          type: integer
+          description: ''
+          format: int64
+          nullable: true
+        shareType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputPerformanceLevelTotalSharesOutstandingTreasury
     OutputTotalSharesOutstandingRaw:
       type: object
       properties:
@@ -1326,75 +1483,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputTotalSharesOutstandingRaw
-    OutputCompanyLevelTotalSharesOutstanding:
-      type: object
-      properties:
-        totalSharesOutstandingDate:
-          type: string
-          description: ''
-          nullable: true
-        companyLevelTotalSharesOutstandings:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        shareType:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputCompanyLevelTotalSharesOutstanding
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
     CodeMappingBoolean:
       type: object
       properties:
@@ -1406,31 +1494,28 @@ components:
           nullable: true
       additionalProperties: false
       title: CodeMappingBoolean
-    OutputTotalSharesOutstandingRawTreasury:
+    OutputErrorDetails:
       type: object
       properties:
-        totalSharesOutstandingDate:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
           type: string
-          description: ''
+          description: Custom error code
           nullable: true
-        documentFormType:
+        message:
           type: string
-          description: ''
+          description: Message
           nullable: true
-        preSplitTreasuryShares:
+        requestId:
           type: string
-          description: ''
-          nullable: true
-        treasurySharesAsReported:
-          type: string
-          description: ''
-          nullable: true
-        shareType:
-          type: string
-          description: ''
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputTotalSharesOutstandingRawTreasury
+      description: Error details
+      title: OutputErrorDetails
     OutputInvalidInvestments:
       type: object
       properties:
@@ -1477,156 +1562,58 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputPerformanceLevelTotalSharesOutstandingTreasury:
+    OutputIdentifiers:
       type: object
       properties:
-        totalSharesOutstandingDate:
+        performanceId:
           type: string
-          description: ''
           nullable: true
-        treasuryShares:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        shareType:
+        securityId:
           type: string
-          description: ''
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
           nullable: true
       additionalProperties: false
-      title: OutputPerformanceLevelTotalSharesOutstandingTreasury
-    OutputPerformanceLevelTotalSharesOutstanding:
-      type: object
-      properties:
-        totalSharesOutstandingDate:
-          type: string
-          description: ''
-          nullable: true
-        fileDate:
-          type: string
-          description: ''
-          nullable: true
-        fivePercentFloat:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        floatDate:
-          type: string
-          description: ''
-          nullable: true
-        floatPercentShare:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        floatShare:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        quotedValue:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        reasonOfShareChange:
-          type: string
-          description: ''
-          nullable: true
-        totalSharesOutstanding:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        unquotedValue:
-          type: string
-          description: ''
-          nullable: true
-        shareType:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputPerformanceLevelTotalSharesOutstanding
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
+      title: OutputIdentifiers
   responses:
-    ResponseEquityTotalSharesOutstandingCompanyLevel:
+    ResponseEquityTotalSharesOutstandingUnadjusted:
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              companyLevelTotalSharesOutstanding:
-                $ref: '#/components/schemas/OutputCompanyLevelTotalSharesOutstanding'
+              totalSharesOutstandingRaw:
+                $ref: '#/components/schemas/OutputTotalSharesOutstandingRaw'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityTotalSharesOutstandingShareLevel:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              performanceLevelTotalSharesOutstanding:
-                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstanding'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityTotalSharesOutstandingTreasury:
       description: OK
       content:
@@ -1640,15 +1627,28 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityTotalSharesOutstandingUnadjusted:
+    ResponseEquityTotalSharesOutstandingCompanyLevel:
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              totalSharesOutstandingRaw:
-                $ref: '#/components/schemas/OutputTotalSharesOutstandingRaw'
+              companyLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputCompanyLevelTotalSharesOutstanding'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTotalSharesOutstandingShareLevel:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              performanceLevelTotalSharesOutstanding:
+                $ref: '#/components/schemas/OutputPerformanceLevelTotalSharesOutstanding'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
@@ -1674,6 +1674,12 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityTotalSharesOutstandingUnadjustedTreasury:
       description: OK
       content:
@@ -1687,12 +1693,6 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

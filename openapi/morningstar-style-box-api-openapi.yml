@@ -528,25 +528,68 @@ paths:
       x-cpqId: 902
 components:
   schemas:
-    OutputCompanyGrade:
+    OutputMetadata:
       type: object
       properties:
-        asOfDate:
+        requestId:
           type: string
-          description: The calendar date when the company grade is calculated.
           nullable: true
-        growthGrade:
+        time:
           type: string
-          description: A Morningstar proprietary descriptor; determined by an algorithm that assigns a stock a grade - A; B; C; D or F - based on the firm's trend in revenue per share. Grades are generated monthly for firms in the U.S. and Canadian markets using revenue data from the past three to five years. (Companies that do not have enough data to assign a grade are labeled N/A.) In calculating the revenue per share growth rate; the slope of the regression line will be divided by the arithmetic average of historical revenue per share figures. The result of the regression is a normalized historical increase or decrease in the rate of growth for revenue per share.
-          nullable: true
-        profitabilityGrade:
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
-          description: 'A Morningstar proprietary descriptor; determined by an algorithm that assigns a stock a grade - A; B; C; D or F -  based on the valuation of  the firm''s return on shareholders'' equity (ROE).  Grades are generated monthly for firms in the U.S. and Canadian markets using ROE values from the past three to five years.  (There are some companies that do not have enough data to assign a grade and these are labeled N/A.) The profitability grade is based on the valuation of the following three components; which are assigned different weights: the historical growth rate of ROE; the average value of historical ROE; and the level of ROE in the latest fiscal year of the company.'
           nullable: true
-        stockType:
-          $ref: '#/components/schemas/CodeMappingInt'
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
       additionalProperties: false
-      title: OutputCompanyGrade
+      title: OutputMetadata
+    OutputMarketCapitalBreakpoint:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The calendar date when the market capital breakpoints datapoints are calculated
+          nullable: true
+        marketCapitalLevel:
+          type: string
+          description: Indicates the cumulative market capitalization value for stock style (size) breakpoints
+          nullable: true
+        marketCapitalSizeLevel:
+          type: string
+          description: 'Indicates the stock style (size) based on market capital breakpoints for each region: Giant-cap (G); Large-cap (L); Mid-cap (M); and Small-cap (S)'
+          nullable: true
+      additionalProperties: false
+      title: OutputMarketCapitalBreakpoint
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
     CodeMappingDecimal:
       type: object
       properties:
@@ -559,6 +602,83 @@ components:
           nullable: true
       additionalProperties: false
       title: CodeMappingDecimal
+    CodeMappingLong:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: integer
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingLong
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
     OutputStockStyle:
       type: object
       properties:
@@ -627,74 +747,25 @@ components:
           nullable: true
       additionalProperties: false
       title: CodeMappingInt
-    OutputInvalidInvestments:
+    OutputCompanyGrade:
       type: object
       properties:
-        id:
+        asOfDate:
           type: string
+          description: The calendar date when the company grade is calculated.
           nullable: true
-        idType:
+        growthGrade:
           type: string
+          description: A Morningstar proprietary descriptor; determined by an algorithm that assigns a stock a grade - A; B; C; D or F - based on the firm's trend in revenue per share. Grades are generated monthly for firms in the U.S. and Canadian markets using revenue data from the past three to five years. (Companies that do not have enough data to assign a grade are labeled N/A.) In calculating the revenue per share growth rate; the slope of the regression line will be divided by the arithmetic average of historical revenue per share figures. The result of the regression is a normalized historical increase or decrease in the rate of growth for revenue per share.
           nullable: true
-        status:
+        profitabilityGrade:
           type: string
+          description: 'A Morningstar proprietary descriptor; determined by an algorithm that assigns a stock a grade - A; B; C; D or F -  based on the valuation of  the firm''s return on shareholders'' equity (ROE).  Grades are generated monthly for firms in the U.S. and Canadian markets using ROE values from the past three to five years.  (There are some companies that do not have enough data to assign a grade and these are labeled N/A.) The profitability grade is based on the valuation of the following three components; which are assigned different weights: the historical growth rate of ROE; the average value of historical ROE; and the level of ROE in the latest fiscal year of the company.'
           nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
+        stockType:
+          $ref: '#/components/schemas/CodeMappingInt'
       additionalProperties: false
-      title: OutputInvalidInvestments
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
+      title: OutputCompanyGrade
     OutputIdentifiers:
       type: object
       properties:
@@ -727,84 +798,7 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    CodeMappingLong:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: integer
-          format: int64
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingLong
-    OutputMarketCapitalBreakpoint:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The calendar date when the market capital breakpoints datapoints are calculated
-          nullable: true
-        marketCapitalLevel:
-          type: string
-          description: Indicates the cumulative market capitalization value for stock style (size) breakpoints
-          nullable: true
-        marketCapitalSizeLevel:
-          type: string
-          description: 'Indicates the stock style (size) based on market capital breakpoints for each region: Giant-cap (G); Large-cap (L); Mid-cap (M); and Small-cap (S)'
-          nullable: true
-      additionalProperties: false
-      title: OutputMarketCapitalBreakpoint
   responses:
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityStyleBoxBreakpoints:
       description: OK
       content:
@@ -818,12 +812,31 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseInternalServerError:
       description: Internal Server
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityStyleBox:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              stockStyle:
+                $ref: '#/components/schemas/OutputStockStyle'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityStockGrades:
       description: OK
       content:
@@ -835,19 +848,6 @@ components:
                 $ref: '#/components/schemas/OutputCompanyGrade'
               financialHealthGrade:
                 $ref: '#/components/schemas/OutputFinancialHealthGrade'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityStyleBox:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              stockStyle:
-                $ref: '#/components/schemas/OutputStockStyle'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:

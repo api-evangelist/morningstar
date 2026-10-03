@@ -464,6 +464,70 @@ paths:
       variables: {}
 components:
   schemas:
+    ErrorResponse400:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    Paragraph:
+      title: Paragraph
+      type: object
+      properties:
+        text:
+          type: string
+          description: Paragraph text
+          example: Compared to others, how do you rate your willingness to take financial risks?
+        htmlMarkup:
+          type: boolean
+          description: True if the text field is an HTML markup, otherwise text field is plain text
+          example: false
+        image:
+          type: boolean
+          description: True if the paragraph is an image, otherwise is text
+          example: true
+        imageHref:
+          type: string
+          description: Image URL
+          example: https://www.morningstart.com/finametrica/images/risk.png
+    Option:
+      title: Option
+      type: object
+      properties:
+        id:
+          type: string
+          description: Option unique identifier
+          example: FM10-1-1
+        text:
+          type: string
+          description: Option text
+          example: Extremely low risk taker.
+        displayOrder:
+          type: integer
+          description: Question display order
+          example: 1
+        htmlMarkup:
+          type: boolean
+          description: True if the text field is an HTML markup, otherwise text field is plain text
+          example: false
+        image:
+          type: boolean
+          description: True if the option is an image, otherwise is text
+          example: false
+        imageHref:
+          type: string
+          description: Image URL
+          example: https://www.morningstart.com/finametrica/images/risk.png
     Question:
       type: object
       properties:
@@ -491,42 +555,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Option'
-    Questionnaire:
-      title: Questionnaire
-      type: object
-      properties:
-        title:
-          type: string
-          description: Questionnaire title
-          example: FinaMetrica 10
-        id:
-          type: string
-          description: Questionnaire unique identifier
-          example: FM10S30
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
-    Paragraph:
-      title: Paragraph
-      type: object
-      properties:
-        text:
-          type: string
-          description: Paragraph text
-          example: Compared to others, how do you rate your willingness to take financial risks?
-        htmlMarkup:
-          type: boolean
-          description: True if the text field is an HTML markup, otherwise text field is plain text
-          example: false
-        image:
-          type: boolean
-          description: True if the paragraph is an image, otherwise is text
-          example: true
-        imageHref:
-          type: string
-          description: Image URL
-          example: https://www.morningstart.com/finametrica/images/risk.png
     ErrorResponse502:
       title: ErrorResponse
       type: object
@@ -575,77 +603,22 @@ components:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    ErrorResponse400:
-      title: ErrorResponse
+    Questionnaire:
+      title: Questionnaire
       type: object
       properties:
-        message:
+        title:
           type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    Option:
-      title: Option
-      type: object
-      properties:
+          description: Questionnaire title
+          example: FinaMetrica 10
         id:
           type: string
-          description: Option unique identifier
-          example: FM10-1-1
-        text:
-          type: string
-          description: Option text
-          example: Extremely low risk taker.
-        displayOrder:
-          type: integer
-          description: Question display order
-          example: 1
-        htmlMarkup:
-          type: boolean
-          description: True if the text field is an HTML markup, otherwise text field is plain text
-          example: false
-        image:
-          type: boolean
-          description: True if the option is an image, otherwise is text
-          example: false
-        imageHref:
-          type: string
-          description: Image URL
-          example: https://www.morningstart.com/finametrica/images/risk.png
-    Question_2:
-      type: object
-      properties:
-        id:
-          type: string
-          example: FM10-1
-          description: Question unique identifier
-        titleText:
-          type: string
-          description: Question title text
-          example: Self-Rating
-        multipleSelect:
-          type: boolean
-          description: Multiple selections for the question, if this is true the question allows multiple answers
-          example: false
-        displayOrder:
-          type: integer
-          description: Question display order
-          example: '1'
-        paragraphs:
+          description: Questionnaire unique identifier
+          example: FM10S30
+        questions:
           type: array
           items:
-            $ref: '#/components/schemas/Paragraph'
-        options:
-          type: array
-          items:
-            $ref: '#/components/schemas/Option_2'
+            $ref: '#/components/schemas/Question'
     Option_2:
       type: object
       title: Option
@@ -674,6 +647,33 @@ components:
           type: string
           example: https://www.morningstart.com/finametrica/images/risk.png
           description: Image URL
+    Question_2:
+      type: object
+      properties:
+        id:
+          type: string
+          example: FM10-1
+          description: Question unique identifier
+        titleText:
+          type: string
+          description: Question title text
+          example: Self-Rating
+        multipleSelect:
+          type: boolean
+          description: Multiple selections for the question, if this is true the question allows multiple answers
+          example: false
+        displayOrder:
+          type: integer
+          description: Question display order
+          example: '1'
+        paragraphs:
+          type: array
+          items:
+            $ref: '#/components/schemas/Paragraph'
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/Option_2'
 x-refined-from:
 - morningstar-dws-risk-profiler-openapi.json
 - morningstar-risk-profiler-us-openapi.json

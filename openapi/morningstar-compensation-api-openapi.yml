@@ -1002,104 +1002,117 @@ paths:
       x-cpqId: 921
 components:
   schemas:
-    CodeMappingString:
+    OutputMetadata:
       type: object
       properties:
-        value:
+        requestId:
           type: string
           nullable: true
-        code:
+        time:
           type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: CodeMappingString
-    OutputExecutiveOptionsExercisedAndStockVested:
+      title: OutputMetadata
+    OutputExecutiveOfficersCompensation:
       type: object
       properties:
-        fiscalYearEndDate:
-          type: string
-          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its annual financial statements.
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        grantDate:
-          type: string
-          description: The date an option or stock was granted.
-          nullable: true
-        numberOfSharesAcquiredOnOptionExercise:
+        compensationYear:
           type: integer
-          description: Shares acquired by exercising an option.
-          format: int64
-          nullable: true
-        numberOfSharesAcquiredOnStockVesting:
-          type: integer
-          description: Represents the number of shares that have been acquired on vesting by the employee.
+          description: ''
           format: int64
           nullable: true
         personId:
           type: string
-          description: A unique identifier assigned to each director/officer.
+          description: ''
+          nullable: true
+        reportedYear:
+          type: integer
+          description: ''
+          format: int32
           nullable: true
         reportDate:
           type: string
-          description: The date the company publishes the document from which the data is sourced.
+          description: ''
           nullable: true
         reportSource:
           type: string
-          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          description: ''
+          nullable: true
+        currencyCode:
+          type: string
+          description: ''
+          nullable: true
+        reportedTitle:
+          type: string
+          description: ''
+          nullable: true
+        bonus:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        restrictedStockAward:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        optionAwards:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        nonEquityIncentiveCompensation:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        changeInPensionValue:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        allOtherCompensation:
+          type: string
+          description: ''
+          nullable: true
+        totalCompensation:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+        maximumPerformanceSharePotential:
+          type: string
+          description: ''
+          nullable: true
+        isRestated:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        salary:
+          type: number
+          description: ''
+          format: double
           nullable: true
         transactionId:
           type: string
-          description: A unique identifier assigned to each transaction.
+          description: ''
           nullable: true
-        typeOfAward:
+        fiscalYearEndDate:
           type: string
-          description: This denotes the type of option award. Types of grants of plan-based awards received by an employee as part of compensation (e.g. Option; RSU; PSU) as reported in the filings.
-          nullable: true
-        valueRealizedOnOptionExercise:
-          type: number
-          description: Value realized on exercise of an option. These amounts represent the difference between the option exercise price and the closing market price of the common stock on the date of exercise; multiplied by the number of shares of common stock covered by the options exercised. These are amounts actually realized by named executive officers during the most recently completed fiscal year as a result of option exercises.
-          format: double
-          nullable: true
-        valueRealizedOnStockVesting:
-          type: number
-          description: Amounts actually realized by named executive officers on equity compensation during the most recently completed fiscal year as a result of the vesting of stock awards.
-          format: double
+          description: ''
           nullable: true
       additionalProperties: false
-      title: OutputExecutiveOptionsExercisedAndStockVested
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
+      title: OutputExecutiveOfficersCompensation
     OutputMetadataMessages:
       type: object
       properties:
@@ -1119,17 +1132,17 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadataMessages
-    CodeMappingBoolean:
+    CodeMappingString:
       type: object
       properties:
         value:
           type: string
           nullable: true
         code:
-          type: boolean
+          type: string
           nullable: true
       additionalProperties: false
-      title: CodeMappingBoolean
+      title: CodeMappingString
     OutputExecutiveCompensationBoardOfDirectors:
       type: object
       properties:
@@ -1200,6 +1213,183 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputExecutiveCompensationBoardOfDirectors
+    OutputExecutiveOptionsExercisedAndStockVested:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its annual financial statements.
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        grantDate:
+          type: string
+          description: The date an option or stock was granted.
+          nullable: true
+        numberOfSharesAcquiredOnOptionExercise:
+          type: integer
+          description: Shares acquired by exercising an option.
+          format: int64
+          nullable: true
+        numberOfSharesAcquiredOnStockVesting:
+          type: integer
+          description: Represents the number of shares that have been acquired on vesting by the employee.
+          format: int64
+          nullable: true
+        personId:
+          type: string
+          description: A unique identifier assigned to each director/officer.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        transactionId:
+          type: string
+          description: A unique identifier assigned to each transaction.
+          nullable: true
+        typeOfAward:
+          type: string
+          description: This denotes the type of option award. Types of grants of plan-based awards received by an employee as part of compensation (e.g. Option; RSU; PSU) as reported in the filings.
+          nullable: true
+        valueRealizedOnOptionExercise:
+          type: number
+          description: Value realized on exercise of an option. These amounts represent the difference between the option exercise price and the closing market price of the common stock on the date of exercise; multiplied by the number of shares of common stock covered by the options exercised. These are amounts actually realized by named executive officers during the most recently completed fiscal year as a result of option exercises.
+          format: double
+          nullable: true
+        valueRealizedOnStockVesting:
+          type: number
+          description: Amounts actually realized by named executive officers on equity compensation during the most recently completed fiscal year as a result of the vesting of stock awards.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputExecutiveOptionsExercisedAndStockVested
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputExecutivePayRatioInformation:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its annual financial statements.
+          nullable: true
+        additionalDescription:
+          type: string
+          description: 'Additional details related to the company''s calculation of the pay ratio. This could include: 1. Full time employees only 2. All employees 3. Excluded part time/temporary employees 4. Excluded one-time equity awards/grants 5. Annual realized compensation and/or 6. Other.'
+          nullable: true
+        ceoPay:
+          type: number
+          description: Total annual compensation of the CEO for the most recent fiscal year; as reported by the company.
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        fiftyPercentile:
+          type: number
+          description: Ratio of the CEO's total remuneration to the representative employee in the median; 50th percentile of UK employees' pay.
+          format: double
+          nullable: true
+        fiftyPercentileAmount:
+          type: number
+          description: Amount of the CEO's total remuneration to the representative employee in the median/50th percentile of UK employees' pay.
+          format: double
+          nullable: true
+        medianEmployeePay:
+          type: number
+          description: The total annual compensation value that lies at the midpoint or middle of all company employees; as reported by the company. Half of all total annual compensation values for employees at the company should lie above this value; and the other half should lie below it.
+          format: double
+          nullable: true
+        otherMethod:
+          type: string
+          description: Represents any other method used to calculate the Pay Ratio.
+          nullable: true
+        payRatio:
+          type: number
+          description: The ratio of the CEO's total compensation to the median employee's pay; as reported by the company. Public companies are required to publish this ratio in their annual reports.
+          format: double
+          nullable: true
+        payRatioCompensationMethod:
+          type: string
+          description: 'The method used by the company to determine the medial employee compensation. The possible methods used include: 1. Annual Total Compensation 2. Consistently Applied Compensation Measure or 3. Other Reasonable Method/Estimate.'
+          nullable: true
+        payRatioEmployeeCountMethod:
+          type: string
+          description: 'The method used to determine the number of employees included in calculation. The possible methods used include: 1. Statistical Sampling or 2. Other Reasonable Method/Estimate.'
+          nullable: true
+        personId:
+          type: string
+          description: A unique identifier assigned to each director/officer.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        seventyFivePercentile:
+          type: number
+          description: Ratio of the CEO's total remuneration to the representative employee in the 75th percentile (upper quartile).
+          format: double
+          nullable: true
+        seventyFivePercentileAmount:
+          type: number
+          description: Amount of the CEO's total remuneration to the representative employee in the 75th percentile (upper quartile) of employees' pay.
+          format: double
+          nullable: true
+        twentyFivePercentile:
+          type: number
+          description: Salary and total remuneration details for the UK employee at the 25th percentile. UK listed companies with more than 250 employees disclose annually the ratio of their CEO's pay to the median; lower quartile and upper quartile pay of their UK employees.
+          format: double
+          nullable: true
+        twentyFivePercentileAmount:
+          type: number
+          description: Amount of the CEO's total remuneration to the representative employee in the 25th percentile (lower quartile) of employees' pay.
+          format: double
+          nullable: true
+        payRatioId:
+          type: integer
+          description: A unique identifier assigned to each pay ratio.
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: OutputExecutivePayRatioInformation
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
     OutputInvalidInvestments:
       type: object
       properties:
@@ -1421,261 +1611,39 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputExecutiveOutstandingStockAndOptionAwards
-    OutputExecutivePayRatioInformation:
+    OutputIdentifiers:
       type: object
       properties:
-        fiscalYearEndDate:
+        performanceId:
           type: string
-          description: The ending date for the twelve month period that the company uses as the fiscal year; in reporting its annual financial statements.
           nullable: true
-        additionalDescription:
+        securityId:
           type: string
-          description: 'Additional details related to the company''s calculation of the pay ratio. This could include: 1. Full time employees only 2. All employees 3. Excluded part time/temporary employees 4. Excluded one-time equity awards/grants 5. Annual realized compensation and/or 6. Other.'
           nullable: true
-        ceoPay:
-          type: number
-          description: Total annual compensation of the CEO for the most recent fiscal year; as reported by the company.
-          format: double
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        fiftyPercentile:
-          type: number
-          description: Ratio of the CEO's total remuneration to the representative employee in the median; 50th percentile of UK employees' pay.
-          format: double
-          nullable: true
-        fiftyPercentileAmount:
-          type: number
-          description: Amount of the CEO's total remuneration to the representative employee in the median/50th percentile of UK employees' pay.
-          format: double
-          nullable: true
-        medianEmployeePay:
-          type: number
-          description: The total annual compensation value that lies at the midpoint or middle of all company employees; as reported by the company. Half of all total annual compensation values for employees at the company should lie above this value; and the other half should lie below it.
-          format: double
-          nullable: true
-        otherMethod:
+        cusip:
           type: string
-          description: Represents any other method used to calculate the Pay Ratio.
           nullable: true
-        payRatio:
-          type: number
-          description: The ratio of the CEO's total compensation to the median employee's pay; as reported by the company. Public companies are required to publish this ratio in their annual reports.
-          format: double
-          nullable: true
-        payRatioCompensationMethod:
+        isin:
           type: string
-          description: 'The method used by the company to determine the medial employee compensation. The possible methods used include: 1. Annual Total Compensation 2. Consistently Applied Compensation Measure or 3. Other Reasonable Method/Estimate.'
           nullable: true
-        payRatioEmployeeCountMethod:
+        sedol:
           type: string
-          description: 'The method used to determine the number of employees included in calculation. The possible methods used include: 1. Statistical Sampling or 2. Other Reasonable Method/Estimate.'
           nullable: true
-        personId:
+        tradingSymbol:
           type: string
-          description: A unique identifier assigned to each director/officer.
           nullable: true
-        reportDate:
+        fundCode:
           type: string
-          description: The date the company publishes the document from which the data is sourced.
           nullable: true
-        reportSource:
+        msid:
           type: string
-          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
           nullable: true
-        seventyFivePercentile:
-          type: number
-          description: Ratio of the CEO's total remuneration to the representative employee in the 75th percentile (upper quartile).
-          format: double
-          nullable: true
-        seventyFivePercentileAmount:
-          type: number
-          description: Amount of the CEO's total remuneration to the representative employee in the 75th percentile (upper quartile) of employees' pay.
-          format: double
-          nullable: true
-        twentyFivePercentile:
-          type: number
-          description: Salary and total remuneration details for the UK employee at the 25th percentile. UK listed companies with more than 250 employees disclose annually the ratio of their CEO's pay to the median; lower quartile and upper quartile pay of their UK employees.
-          format: double
-          nullable: true
-        twentyFivePercentileAmount:
-          type: number
-          description: Amount of the CEO's total remuneration to the representative employee in the 25th percentile (lower quartile) of employees' pay.
-          format: double
-          nullable: true
-        payRatioId:
-          type: integer
-          description: A unique identifier assigned to each pay ratio.
-          format: int32
+        ticker:
+          type: string
           nullable: true
       additionalProperties: false
-      title: OutputExecutivePayRatioInformation
-    OutputExecutiveOfficersCompensation:
-      type: object
-      properties:
-        compensationYear:
-          type: integer
-          description: ''
-          format: int64
-          nullable: true
-        personId:
-          type: string
-          description: ''
-          nullable: true
-        reportedYear:
-          type: integer
-          description: ''
-          format: int32
-          nullable: true
-        reportDate:
-          type: string
-          description: ''
-          nullable: true
-        reportSource:
-          type: string
-          description: ''
-          nullable: true
-        currencyCode:
-          type: string
-          description: ''
-          nullable: true
-        reportedTitle:
-          type: string
-          description: ''
-          nullable: true
-        bonus:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        restrictedStockAward:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        optionAwards:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        nonEquityIncentiveCompensation:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        changeInPensionValue:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        allOtherCompensation:
-          type: string
-          description: ''
-          nullable: true
-        totalCompensation:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        maximumPerformanceSharePotential:
-          type: string
-          description: ''
-          nullable: true
-        isRestated:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        salary:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-        transactionId:
-          type: string
-          description: ''
-          nullable: true
-        fiscalYearEndDate:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputExecutiveOfficersCompensation
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
+      title: OutputIdentifiers
   responses:
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityOutstandingAwards:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              executiveOutstandingStockAndOptionAwards:
-                $ref: '#/components/schemas/OutputExecutiveOutstandingStockAndOptionAwards'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityExecutiveOfficersCompensation:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              executiveOfficersCompensation:
-                $ref: '#/components/schemas/OutputExecutiveOfficersCompensation'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityBoardOfDirectorsCompensation:
       description: OK
       content:
@@ -1712,6 +1680,19 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityStockOptionGrants:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executiveStockAndOptionGrants:
+                $ref: '#/components/schemas/OutputExecutiveStockAndOptionGrants'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityOptionsExercised:
       description: OK
       content:
@@ -1738,25 +1719,44 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityStockOptionGrants:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              executiveStockAndOptionGrants:
-                $ref: '#/components/schemas/OutputExecutiveStockAndOptionGrants'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
     ResponseBadRequest:
       description: Bad Request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityExecutiveOfficersCompensation:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executiveOfficersCompensation:
+                $ref: '#/components/schemas/OutputExecutiveOfficersCompensation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOutstandingAwards:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              executiveOutstandingStockAndOptionAwards:
+                $ref: '#/components/schemas/OutputExecutiveOutstandingStockAndOptionAwards'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
     Bearer:
       type: http

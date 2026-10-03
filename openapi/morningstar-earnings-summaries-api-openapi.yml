@@ -246,130 +246,28 @@ paths:
                 $ref: '#/components/schemas/ErrorDetails'
 components:
   schemas:
-    EarningsSummaryCompany:
-      description: A single company's earnings summary result.
+    ResponseMetadataWithMessages:
+      description: Standard response metadata, extended with an optional list of warnings or informational messages about the request.
       type: object
-      required:
-      - identifiers
-      - summary
-      - metadata
       properties:
-        identifiers:
-          type: object
-          description: Map of identifier types to their resolved values for this company. Typically contains `companyId`.
-          additionalProperties:
-            type: string
-          example:
-            companyId: 0C00000378
-        summary:
+        messages:
+          type:
+          - array
+          - 'null'
+          description: Warnings or informational messages relating to specific investments in the request — for example, unmatched identifiers, duplicate submissions, or missing data coverage.
+          items:
+            $ref: '#/components/schemas/ResponseMessage'
+        requestId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Unique identifier for the API request, useful for tracing and support.
+        time:
           type: string
-          description: AI-generated summary of the company's most recent earnings release.
-          example: Apple Inc. reported strong quarterly earnings with revenue beating analyst expectations. iPhone sales drove growth in the quarter.
-        metadata:
-          $ref: '#/components/schemas/EarningsSummaryItemMetadata'
-    ResponseMessage:
-      description: A warning or informational message relating to one or more investments.
-      type: object
-      properties:
-        investments:
-          type:
-          - array
-          - 'null'
-          description: The investments this message applies to.
-          items:
-            $ref: '#/components/schemas/InvestmentLookupInputDetails'
-        type:
-          $ref: '#/components/schemas/MessageType'
-        message:
-          type:
-          - string
-          - 'null'
-          description: Human-readable description of the warning or issue.
-        code:
-          type:
-          - string
-          - 'null'
-          description: Machine-readable error or warning code.
-      additionalProperties: false
-    MessageType:
-      type: string
-      description: Indicates whether the message is an informational warning or a hard error.
-      enum:
-      - Warning
-      - Error
-    InvestmentLookupInputDetails:
-      description: Describes an investment referenced in a response message, including its resolved identifiers.
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The identifier value as supplied in the original request.
-        idType:
-          type:
-          - string
-          - 'null'
-          description: The identifier type as supplied in the original request.
-        companyId:
-          type:
-          - string
-          - 'null'
-          description: Resolved Morningstar company ID, if available.
-        performanceId:
-          type:
-          - string
-          - 'null'
-          description: Resolved Morningstar performance ID, if available.
-        baseCurrency:
-          type:
-          - string
-          - 'null'
-          description: Base currency filter applied during lookup.
-        domicile:
-          type:
-          - string
-          - 'null'
-          description: Domicile filter applied during lookup.
-        exchangeCountry:
-          type:
-          - string
-          - 'null'
-          description: Exchange country filter applied during lookup.
-      additionalProperties: false
-    EarningsSummariesRequestInput:
-      description: Request body for the Earnings Summaries endpoint.
-      required:
-      - investments
-      type: object
-      properties:
-        investments:
-          type: array
-          description: List of up to 20 company investments to query.
-          minItems: 1
-          maxItems: 20
-          items:
-            $ref: '#/components/schemas/EarningsSummaryInvestmentInput'
-        sortBy:
-          type:
-          - array
-          - 'null'
-          description: One or more fields to sort results by. When multiple fields are provided, results are sorted in the order the fields are listed.
-          items:
-            type: string
-            enum:
-            - companyId
-            - filingUpdatedAt
-            - earningsReleaseSummaryPublishedAt
-        orderBy:
-          type:
-          - string
-          - 'null'
-          description: Determines the sort direction applied to all `sortBy` fields.
-          enum:
-          - asc
-          - desc
-          default: desc
+          format: date-time
+          description: UTC datetime at which the response was generated.
+          readOnly: true
       additionalProperties: false
     EarningsSummaryInvestmentInput:
       description: A single investment identifier submitted in an Earnings Summaries request.
@@ -416,29 +314,141 @@ components:
           - 'null'
           description: Exchange identifier. Used to disambiguate non-unique identifiers.
       additionalProperties: false
-    ResponseMetadataWithMessages:
-      description: Standard response metadata, extended with an optional list of warnings or informational messages about the request.
+    EarningsSummariesRequestInput:
+      description: Request body for the Earnings Summaries endpoint.
+      required:
+      - investments
       type: object
       properties:
-        messages:
+        investments:
+          type: array
+          description: List of up to 20 company investments to query.
+          minItems: 1
+          maxItems: 20
+          items:
+            $ref: '#/components/schemas/EarningsSummaryInvestmentInput'
+        sortBy:
           type:
           - array
           - 'null'
-          description: Warnings or informational messages relating to specific investments in the request — for example, unmatched identifiers, duplicate submissions, or missing data coverage.
+          description: One or more fields to sort results by. When multiple fields are provided, results are sorted in the order the fields are listed.
           items:
-            $ref: '#/components/schemas/ResponseMessage'
-        requestId:
+            type: string
+            enum:
+            - companyId
+            - filingUpdatedAt
+            - earningsReleaseSummaryPublishedAt
+        orderBy:
           type:
           - string
           - 'null'
-          format: uuid
-          description: Unique identifier for the API request, useful for tracing and support.
-        time:
+          description: Determines the sort direction applied to all `sortBy` fields.
+          enum:
+          - asc
+          - desc
+          default: desc
+      additionalProperties: false
+    InvestmentLookupInputDetails:
+      description: Describes an investment referenced in a response message, including its resolved identifiers.
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The identifier value as supplied in the original request.
+        idType:
+          type:
+          - string
+          - 'null'
+          description: The identifier type as supplied in the original request.
+        companyId:
+          type:
+          - string
+          - 'null'
+          description: Resolved Morningstar company ID, if available.
+        performanceId:
+          type:
+          - string
+          - 'null'
+          description: Resolved Morningstar performance ID, if available.
+        baseCurrency:
+          type:
+          - string
+          - 'null'
+          description: Base currency filter applied during lookup.
+        domicile:
+          type:
+          - string
+          - 'null'
+          description: Domicile filter applied during lookup.
+        exchangeCountry:
+          type:
+          - string
+          - 'null'
+          description: Exchange country filter applied during lookup.
+      additionalProperties: false
+    ResponseMessage:
+      description: A warning or informational message relating to one or more investments.
+      type: object
+      properties:
+        investments:
+          type:
+          - array
+          - 'null'
+          description: The investments this message applies to.
+          items:
+            $ref: '#/components/schemas/InvestmentLookupInputDetails'
+        type:
+          $ref: '#/components/schemas/MessageType'
+        message:
+          type:
+          - string
+          - 'null'
+          description: Human-readable description of the warning or issue.
+        code:
+          type:
+          - string
+          - 'null'
+          description: Machine-readable error or warning code.
+      additionalProperties: false
+    MessageType:
+      type: string
+      description: Indicates whether the message is an informational warning or a hard error.
+      enum:
+      - Warning
+      - Error
+    EarningsSummaryItemMetadata:
+      description: Filing and publication metadata associated with an earnings summary result.
+      type: object
+      required:
+      - companyName
+      - filingType
+      - filingUpdatedAt
+      - earningsReleaseSummaryPublishedAt
+      properties:
+        companyName:
+          type: string
+          description: Full legal name of the company.
+          example: Apple Inc.
+        filingType:
+          type: string
+          description: The SEC filing type associated with the earnings release.
+          enum:
+          - 8-K
+          - 10-Q
+          - 10-K
+          example: 8-K
+        filingUpdatedAt:
+          type: string
+          format: date
+          description: The date on which the filing was last updated (YYYY-MM-DD).
+          example: '2025-05-21'
+        earningsReleaseSummaryPublishedAt:
           type: string
           format: date-time
-          description: UTC datetime at which the response was generated.
-          readOnly: true
-      additionalProperties: false
+          description: ISO 8601 datetime at which the earnings release summary was published.
+          example: '2025-05-28T08:11:48.095000'
     EarningsSummariesResponse:
       description: Response body returned by the Earnings Summaries endpoint.
       type: object
@@ -478,37 +488,27 @@ components:
           format: uuid
           description: Request identifier to include when contacting support.
       additionalProperties: false
-    EarningsSummaryItemMetadata:
-      description: Filing and publication metadata associated with an earnings summary result.
+    EarningsSummaryCompany:
+      description: A single company's earnings summary result.
       type: object
       required:
-      - companyName
-      - filingType
-      - filingUpdatedAt
-      - earningsReleaseSummaryPublishedAt
+      - identifiers
+      - summary
+      - metadata
       properties:
-        companyName:
+        identifiers:
+          type: object
+          description: Map of identifier types to their resolved values for this company. Typically contains `companyId`.
+          additionalProperties:
+            type: string
+          example:
+            companyId: 0C00000378
+        summary:
           type: string
-          description: Full legal name of the company.
-          example: Apple Inc.
-        filingType:
-          type: string
-          description: The SEC filing type associated with the earnings release.
-          enum:
-          - 8-K
-          - 10-Q
-          - 10-K
-          example: 8-K
-        filingUpdatedAt:
-          type: string
-          format: date
-          description: The date on which the filing was last updated (YYYY-MM-DD).
-          example: '2025-05-21'
-        earningsReleaseSummaryPublishedAt:
-          type: string
-          format: date-time
-          description: ISO 8601 datetime at which the earnings release summary was published.
-          example: '2025-05-28T08:11:48.095000'
+          description: AI-generated summary of the company's most recent earnings release.
+          example: Apple Inc. reported strong quarterly earnings with revenue beating analyst expectations. iPhone sales drove growth in the quarter.
+        metadata:
+          $ref: '#/components/schemas/EarningsSummaryItemMetadata'
   securitySchemes:
     Bearer:
       type: http

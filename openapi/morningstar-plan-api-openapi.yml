@@ -100,6 +100,48 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
+    Vendor:
+      type: object
+      properties:
+        vendorId:
+          type: integer
+          description: vendorId
+          format: int64
+        vendorCodeMap:
+          $ref: '#/components/schemas/VendorCodeMap'
+        name:
+          type:
+          - string
+          - 'null'
+          description: name
+        fixedName:
+          type:
+          - string
+          - 'null'
+          description: fixedName
+        ein:
+          type: integer
+          description: ein
+          format: int32
+        fixedEin:
+          type: integer
+          description: fixedEin
+          format: int32
+        value:
+          type: number
+          description: value
+          format: double
+        stability:
+          type:
+          - string
+          - 'null'
+          description: stability
+        planDetailsid:
+          type: integer
+          description: planDetailsid
+          format: int64
+      additionalProperties: false
+      description: Vendor
     YearValue:
       type: object
       properties:
@@ -115,6 +157,95 @@ components:
           description: value
       additionalProperties: false
       description: YearValue
+    Investment:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          description: name
+        vendorName:
+          type:
+          - string
+          - 'null'
+          description: vendorName
+        type:
+          type:
+          - string
+          - 'null'
+          description: type
+        typeDescription:
+          type:
+          - string
+          - 'null'
+          description: typeDescription
+        secId:
+          type:
+          - string
+          - 'null'
+          description: Morningstar unique security identifier
+        yearValuesV1:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/YearValue'
+          description: yearValuesV1
+        cusip:
+          type:
+          - string
+          - 'null'
+          description: CUSIP
+        securityName:
+          type:
+          - string
+          - 'null'
+          description: Name of the security
+        ticker:
+          type:
+          - string
+          - 'null'
+          description: Security's ticker symbol
+        category:
+          type:
+          - string
+          - 'null'
+          description: Morningstar category the security is assigned to
+        securityType:
+          type:
+          - string
+          - 'null'
+          description: securityType
+        starRating:
+          type:
+          - string
+          - 'null'
+          description: Morningstar proprietary star rating
+        analystRating:
+          type:
+          - string
+          - 'null'
+          description: Morningstar analyst rating. Gold (7), Silver (6), Bronze (5), Neutral (4), Negative (3), Under Review (2), Not Ratable (1)
+        styleBox:
+          type:
+          - string
+          - 'null'
+          description: styleBox
+        netExpRatio:
+          type:
+          - string
+          - 'null'
+          description: Prospectus net expense ratio
+        investmentStatus:
+          type: integer
+          description: InvestmentStatus
+          format: int32
+        isRemoved:
+          type: boolean
+          description: IsRemoved
+      additionalProperties: false
+      description: Investment
     VendorCodeMap:
       type: object
       properties:
@@ -145,6 +276,17 @@ components:
           description: description
       additionalProperties: false
       description: BusinessCode
+    ErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     PlanDetailModel:
       type: object
       properties:
@@ -359,148 +501,6 @@ components:
           description: benchmarkAvgNumberOfInvestments
       additionalProperties: false
       description: PlanDetailModel
-    Investment:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          description: name
-        vendorName:
-          type:
-          - string
-          - 'null'
-          description: vendorName
-        type:
-          type:
-          - string
-          - 'null'
-          description: type
-        typeDescription:
-          type:
-          - string
-          - 'null'
-          description: typeDescription
-        secId:
-          type:
-          - string
-          - 'null'
-          description: Morningstar unique security identifier
-        yearValuesV1:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/YearValue'
-          description: yearValuesV1
-        cusip:
-          type:
-          - string
-          - 'null'
-          description: CUSIP
-        securityName:
-          type:
-          - string
-          - 'null'
-          description: Name of the security
-        ticker:
-          type:
-          - string
-          - 'null'
-          description: Security's ticker symbol
-        category:
-          type:
-          - string
-          - 'null'
-          description: Morningstar category the security is assigned to
-        securityType:
-          type:
-          - string
-          - 'null'
-          description: securityType
-        starRating:
-          type:
-          - string
-          - 'null'
-          description: Morningstar proprietary star rating
-        analystRating:
-          type:
-          - string
-          - 'null'
-          description: Morningstar analyst rating. Gold (7), Silver (6), Bronze (5), Neutral (4), Negative (3), Under Review (2), Not Ratable (1)
-        styleBox:
-          type:
-          - string
-          - 'null'
-          description: styleBox
-        netExpRatio:
-          type:
-          - string
-          - 'null'
-          description: Prospectus net expense ratio
-        investmentStatus:
-          type: integer
-          description: InvestmentStatus
-          format: int32
-        isRemoved:
-          type: boolean
-          description: IsRemoved
-      additionalProperties: false
-      description: Investment
-    ErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          format: int32
-        message:
-          type:
-          - string
-          - 'null'
-      additionalProperties: false
-    Vendor:
-      type: object
-      properties:
-        vendorId:
-          type: integer
-          description: vendorId
-          format: int64
-        vendorCodeMap:
-          $ref: '#/components/schemas/VendorCodeMap'
-        name:
-          type:
-          - string
-          - 'null'
-          description: name
-        fixedName:
-          type:
-          - string
-          - 'null'
-          description: fixedName
-        ein:
-          type: integer
-          description: ein
-          format: int32
-        fixedEin:
-          type: integer
-          description: fixedEin
-          format: int32
-        value:
-          type: number
-          description: value
-          format: double
-        stability:
-          type:
-          - string
-          - 'null'
-          description: stability
-        planDetailsid:
-          type: integer
-          description: planDetailsid
-          format: int64
-      additionalProperties: false
-      description: Vendor
   securitySchemes:
     bearerAuth:
       type: http

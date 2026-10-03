@@ -1091,76 +1091,30 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 944
 components:
-  responses:
-    ResponseEquityAnalystNormalizedFinancialStatementsPerShare:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              profitabilityPerShare:
-                $ref: '#/components/schemas/OutputProfitabilityPerShare'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityAnalystNormalizedValuationRatios:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              enterpriseValueCalculations:
-                $ref: '#/components/schemas/OutputEnterpriseValueCalculations'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityAnalystNormalizedFinancialStatements:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              profitability:
-                $ref: '#/components/schemas/OutputProfitability'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityAnalystNormalizedFinancials:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              profitability:
-                $ref: '#/components/schemas/OutputProfitability'
-              profitabilityPerShare:
-                $ref: '#/components/schemas/OutputProfitabilityPerShare'
-              enterpriseValueCalculations:
-                $ref: '#/components/schemas/OutputEnterpriseValueCalculations'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
   schemas:
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     CodeMappingString:
       type: object
       properties:
@@ -1236,87 +1190,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputProfitabilityPerShare
-    OutputEnterpriseValueCalculations:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date when enterprise value data points are calculated
-          nullable: true
-        analystNormalizedEnterpriseValueToEbitdaRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its Normalized EBITDA.  The ratio can be used to measure a company's fair value.  This is calculated using Enterprise Value divided by Normalized EBITDA which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
-          format: double
-          nullable: true
-        analystNormalizedEnterpriseValueToEbitRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its Normalized EBIT.  The ratio can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT; which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
-          format: double
-          nullable: true
-        cashReturn:
-          type: number
-          description: This ratio represents a company's free cash flow relative to its enterprise value. This can be used to measure how efficiently the company is using its capital; both equity and debt; to generate free cash flow. In other words; cash return shows how much free cash flow a company generates as a percentage of how much it would cost an investor to buy out the entire business. This is calculated using Free Cash Flow to Firm divided by Enterprise Value.
-          format: double
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        enterpriseValue:
-          type: number
-          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Cap + Preferred Stock/Units + Non-Controlling/Minority Interests in Equity + Net Debt.
-          format: double
-          nullable: true
-        enterpriseValueIncludingCash:
-          type: number
-          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Capital + Total Preferred Stock/Units/Securities + Non-Controlling/Minority Interests in Equity + Total Debt
-          format: double
-          nullable: true
-        enterpriseValueToAssetsRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its total assets. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Assets.
-          format: double
-          nullable: true
-        enterpriseValueToEbitdaRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBITDA (TTM).
-          format: double
-          nullable: true
-        enterpriseValueToEbitRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBIT (TTM).
-          format: double
-          nullable: true
-        enterpriseValueToFreeCashFlowRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its free cash flow. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Free Cash Flow (TTM).
-          format: double
-          nullable: true
-        enterpriseValueToPretaxIncomeRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its pre-tax income. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Pre-Tax Income (TTM).
-          format: double
-          nullable: true
-        enterpriseValueToRevenueRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to revenue. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Revenue (TTM).
-          format: double
-          nullable: true
-        normalizedEnterpriseValueToEbitdaRatio:
-          type: number
-          description: This ratio represents the value of a company's enterprise value relative to its Normalized EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBITDA (TTM).
-          format: double
-          nullable: true
-        normalizedEnterpriseValueToEbitRatio:
-          type: number
-          description: This ratio represents a company's enterprise value relative to its Normalized EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT (TTM).
-          format: double
-          nullable: true
-        totalDebtToEnterpriseValue:
-          type: number
-          description: This ratio represents the value of a company's total debt relative to its enterprise value. This can be used to measure the company's financial leverage. This is calculated using Total Debt divided by Enterprise Value.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputEnterpriseValueCalculations
     OutputProfitability:
       type: object
       properties:
@@ -1486,6 +1359,128 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputProfitability
+    OutputEnterpriseValueCalculations:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when enterprise value data points are calculated
+          nullable: true
+        analystNormalizedEnterpriseValueToEbitdaRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its Normalized EBITDA.  The ratio can be used to measure a company's fair value.  This is calculated using Enterprise Value divided by Normalized EBITDA which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
+          format: double
+          nullable: true
+        analystNormalizedEnterpriseValueToEbitRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its Normalized EBIT.  The ratio can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT; which is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
+          format: double
+          nullable: true
+        cashReturn:
+          type: number
+          description: This ratio represents a company's free cash flow relative to its enterprise value. This can be used to measure how efficiently the company is using its capital; both equity and debt; to generate free cash flow. In other words; cash return shows how much free cash flow a company generates as a percentage of how much it would cost an investor to buy out the entire business. This is calculated using Free Cash Flow to Firm divided by Enterprise Value.
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        enterpriseValue:
+          type: number
+          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Cap + Preferred Stock/Units + Non-Controlling/Minority Interests in Equity + Net Debt.
+          format: double
+          nullable: true
+        enterpriseValueIncludingCash:
+          type: number
+          description: This calculations represents the entire value of a company. This can be used to measure a company's theoretical purchase price. This is calculated using Market Capital + Total Preferred Stock/Units/Securities + Non-Controlling/Minority Interests in Equity + Total Debt
+          format: double
+          nullable: true
+        enterpriseValueToAssetsRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its total assets. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Assets.
+          format: double
+          nullable: true
+        enterpriseValueToEbitdaRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBITDA (TTM).
+          format: double
+          nullable: true
+        enterpriseValueToEbitRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by EBIT (TTM).
+          format: double
+          nullable: true
+        enterpriseValueToFreeCashFlowRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its free cash flow. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Free Cash Flow (TTM).
+          format: double
+          nullable: true
+        enterpriseValueToPretaxIncomeRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its pre-tax income. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Pre-Tax Income (TTM).
+          format: double
+          nullable: true
+        enterpriseValueToRevenueRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to revenue. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Total Revenue (TTM).
+          format: double
+          nullable: true
+        normalizedEnterpriseValueToEbitdaRatio:
+          type: number
+          description: This ratio represents the value of a company's enterprise value relative to its Normalized EBITDA. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBITDA (TTM).
+          format: double
+          nullable: true
+        normalizedEnterpriseValueToEbitRatio:
+          type: number
+          description: This ratio represents a company's enterprise value relative to its Normalized EBIT. This can be used to measure a company's fair value. This is calculated using Enterprise Value divided by Normalized EBIT (TTM).
+          format: double
+          nullable: true
+        totalDebtToEnterpriseValue:
+          type: number
+          description: This ratio represents the value of a company's total debt relative to its enterprise value. This can be used to measure the company's financial leverage. This is calculated using Total Debt divided by Enterprise Value.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputEnterpriseValueCalculations
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -1532,70 +1527,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
     OutputIdentifiers:
       type: object
       properties:
@@ -1628,6 +1559,75 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+  responses:
+    ResponseEquityAnalystNormalizedValuationRatios:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              enterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputEnterpriseValueCalculations'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityAnalystNormalizedFinancialStatements:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              profitability:
+                $ref: '#/components/schemas/OutputProfitability'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityAnalystNormalizedFinancials:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              profitability:
+                $ref: '#/components/schemas/OutputProfitability'
+              profitabilityPerShare:
+                $ref: '#/components/schemas/OutputProfitabilityPerShare'
+              enterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputEnterpriseValueCalculations'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityAnalystNormalizedFinancialStatementsPerShare:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              profitabilityPerShare:
+                $ref: '#/components/schemas/OutputProfitabilityPerShare'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

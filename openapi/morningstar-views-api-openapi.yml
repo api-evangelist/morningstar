@@ -66,148 +66,6 @@ paths:
       description: EMEA
 components:
   schemas:
-    OutputDataPointId:
-      title: OutputDataPointId
-      type: string
-      description: Fully-qualified datapoint identifier.
-      minLength: 1
-      example: shortInterest.daysToCover
-    OutputViewDefinition:
-      title: OutputViewDefinition
-      type: object
-      description: Definition of a view, including the datapoints it contains.
-      required:
-      - id
-      - dataPoints
-      properties:
-        id:
-          $ref: '#/components/schemas/OutputViewId'
-        dataPoints:
-          type: array
-          description: List of data points included in the view.
-          items:
-            $ref: '#/components/schemas/OutputViewDefinitionDataPoint'
-      additionalProperties: false
-    ResponseListViews:
-      title: ResponseListViews
-      type: object
-      description: 'Response containing entitled view packages and their associated dataset viewIds.
-
-        '
-      required:
-      - views
-      - metadata
-      properties:
-        views:
-          type: array
-          description: List of entitled view packages and their datasets.
-          items:
-            $ref: '#/components/schemas/OutputViewDetails'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-      additionalProperties: false
-    ResponseGetView:
-      title: ResponseGetView
-      type: object
-      description: Response containing a view definition and the datapoints included in the view.
-      required:
-      - viewDefinition
-      - metadata
-      properties:
-        viewDefinition:
-          $ref: '#/components/schemas/OutputViewDefinition'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-      additionalProperties: false
-    OutputViewId:
-      title: OutputViewId
-      type: string
-      description: 'Identifier of an entitled view or dataset. Use this value as `viewId` in investment detail requests.
-
-        '
-      minLength: 1
-      example: equity-short-interest
-    OutputViewDetails:
-      title: OutputViewDetails
-      type: object
-      description: A view package and the dataset viewIds it contains.
-      required:
-      - package
-      - datasets
-      properties:
-        package:
-          $ref: '#/components/schemas/OutputViewPackage'
-        datasets:
-          type: array
-          description: Dataset viewIds included in this package.
-          items:
-            $ref: '#/components/schemas/OutputViewDataset'
-          minItems: 0
-      additionalProperties: false
-    OutputViewPackage:
-      title: OutputViewPackage
-      type: object
-      description: Identifies the entitled package-level view.
-      required:
-      - viewId
-      properties:
-        viewId:
-          $ref: '#/components/schemas/OutputViewId'
-      additionalProperties: false
-    OutputViewDataset:
-      title: OutputViewDataset
-      type: object
-      description: Identifies a dataset viewId associated with a package.
-      required:
-      - viewId
-      properties:
-        viewId:
-          $ref: '#/components/schemas/OutputViewId'
-      additionalProperties: false
-    OutputViewDefinitionDataPoint:
-      title: OutputViewDefinitionDataPoint
-      type: object
-      description: Datapoint included in the view and its dependency flags
-      required:
-      - id
-      - isLanguageDependent
-      - isCountryDependent
-      - isCurrencyDependent
-      properties:
-        id:
-          $ref: '#/components/schemas/OutputDataPointId'
-        isLanguageDependent:
-          type: boolean
-          description: Indicates whether the datapoint varies by language.
-        isCountryDependent:
-          type: boolean
-          description: Indicates whether the datapoint varies by country.
-        isCurrencyDependent:
-          type: boolean
-          description: Indicates whether the datapoint varies by currency.
-      additionalProperties: false
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
     OutputMetadata:
       type: object
       properties:
@@ -231,6 +89,91 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
+    ResponseListViews:
+      title: ResponseListViews
+      type: object
+      description: 'Response containing entitled view packages and their associated dataset viewIds.
+
+        '
+      required:
+      - views
+      - metadata
+      properties:
+        views:
+          type: array
+          description: List of entitled view packages and their datasets.
+          items:
+            $ref: '#/components/schemas/OutputViewDetails'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+      additionalProperties: false
+    OutputViewId:
+      title: OutputViewId
+      type: string
+      description: 'Identifier of an entitled view or dataset. Use this value as `viewId` in investment detail requests.
+
+        '
+      minLength: 1
+      example: equity-short-interest
+    OutputViewPackage:
+      title: OutputViewPackage
+      type: object
+      description: Identifies the entitled package-level view.
+      required:
+      - viewId
+      properties:
+        viewId:
+          $ref: '#/components/schemas/OutputViewId'
+      additionalProperties: false
+    OutputViewDataset:
+      title: OutputViewDataset
+      type: object
+      description: Identifies a dataset viewId associated with a package.
+      required:
+      - viewId
+      properties:
+        viewId:
+          $ref: '#/components/schemas/OutputViewId'
+      additionalProperties: false
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputViewDetails:
+      title: OutputViewDetails
+      type: object
+      description: A view package and the dataset viewIds it contains.
+      required:
+      - package
+      - datasets
+      properties:
+        package:
+          $ref: '#/components/schemas/OutputViewPackage'
+        datasets:
+          type: array
+          description: Dataset viewIds included in this package.
+          items:
+            $ref: '#/components/schemas/OutputViewDataset'
+          minItems: 0
+      additionalProperties: false
     OutputMetadataMessages:
       type: object
       properties:
@@ -296,6 +239,87 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+    OutputViewDefinition:
+      title: OutputViewDefinition
+      type: object
+      description: Definition of a view, including the datapoints it contains.
+      required:
+      - id
+      - dataPoints
+      properties:
+        id:
+          $ref: '#/components/schemas/OutputViewId'
+        dataPoints:
+          type: array
+          description: List of data points included in the view.
+          items:
+            $ref: '#/components/schemas/OutputViewDefinitionDataPoint'
+      additionalProperties: false
+    OutputViewDefinitionDataPoint:
+      title: OutputViewDefinitionDataPoint
+      type: object
+      description: Datapoint included in the view and its dependency flags
+      required:
+      - id
+      - isLanguageDependent
+      - isCountryDependent
+      - isCurrencyDependent
+      properties:
+        id:
+          $ref: '#/components/schemas/OutputDataPointId'
+        isLanguageDependent:
+          type: boolean
+          description: Indicates whether the datapoint varies by language.
+        isCountryDependent:
+          type: boolean
+          description: Indicates whether the datapoint varies by country.
+        isCurrencyDependent:
+          type: boolean
+          description: Indicates whether the datapoint varies by currency.
+      additionalProperties: false
+    ResponseGetView:
+      title: ResponseGetView
+      type: object
+      description: Response containing a view definition and the datapoints included in the view.
+      required:
+      - viewDefinition
+      - metadata
+      properties:
+        viewDefinition:
+          $ref: '#/components/schemas/OutputViewDefinition'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+      additionalProperties: false
+    OutputDataPointId:
+      title: OutputDataPointId
+      type: string
+      description: Fully-qualified datapoint identifier.
+      minLength: 1
+      example: shortInterest.daysToCover
+    OutputMetadata_2:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages_2'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+      description: All fields are nullable. Empty or `null` value fields are not returned.
     OutputMetadataMessages_2:
       type: object
       properties:
@@ -316,6 +340,29 @@ components:
       additionalProperties: false
       title: OutputMetadataMessages
       description: All fields are nullable. Empty or `null` value fields are not returned.
+    OutputViewId_2:
+      title: OutputViewId
+      type: string
+      description: 'Identifier of an entitled view or dataset. Use this value as `viewId` in investment detail requests.
+
+        '
+      minLength: 1
+      example: active-share
+    ResponseGetView_2:
+      title: ResponseGetView
+      type: object
+      description: 'Response containing a view definition and the datapoints included in the
+
+        view.'
+      required:
+      - viewDefinition
+      - metadata
+      properties:
+        viewDefinition:
+          $ref: '#/components/schemas/OutputViewDefinition'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata_2'
+      additionalProperties: false
     OutputInvalidInvestments_2:
       type: object
       properties:
@@ -363,15 +410,7 @@ components:
       additionalProperties: false
       title: OutputInvalidInvestments
       description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputViewId_2:
-      title: OutputViewId
-      type: string
-      description: 'Identifier of an entitled view or dataset. Use this value as `viewId` in investment detail requests.
-
-        '
-      minLength: 1
-      example: active-share
-    OutputMetadata_2:
+    OutputMetadata_3:
       type: object
       properties:
         requestId:
@@ -390,26 +429,11 @@ components:
         messages:
           type: array
           items:
-            $ref: '#/components/schemas/OutputMetadataMessages_2'
+            $ref: '#/components/schemas/OutputMetadataMessages_3'
           nullable: true
       additionalProperties: false
       title: OutputMetadata
       description: All fields are nullable. Empty or `null` value fields are not returned.
-    ResponseGetView_2:
-      title: ResponseGetView
-      type: object
-      description: 'Response containing a view definition and the datapoints included in the
-
-        view.'
-      required:
-      - viewDefinition
-      - metadata
-      properties:
-        viewDefinition:
-          $ref: '#/components/schemas/OutputViewDefinition'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata_2'
-      additionalProperties: false
     OutputMetadataMessages_3:
       type: object
       properties:
@@ -430,6 +454,29 @@ components:
       additionalProperties: false
       title: OutputMetadataMessages
       description: All fields are nullable. Empty or `null` value fields are not returned.
+    OutputViewId_3:
+      title: OutputViewId
+      type: string
+      description: 'Identifier of an entitled view or dataset. Use this value as `viewId` in investment detail requests.
+
+        '
+      minLength: 1
+      example: active-share
+    ResponseGetView_3:
+      title: ResponseGetView
+      type: object
+      description: 'Response containing a view definition and the datapoints included in the
+
+        view.'
+      required:
+      - viewDefinition
+      - metadata
+      properties:
+        viewDefinition:
+          $ref: '#/components/schemas/OutputViewDefinition'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata_3'
+      additionalProperties: false
     OutputInvalidInvestments_3:
       type: object
       properties:
@@ -477,80 +524,27 @@ components:
       additionalProperties: false
       title: OutputInvalidInvestments
       description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputViewId_3:
-      title: OutputViewId
-      type: string
-      description: 'Identifier of an entitled view or dataset. Use this value as `viewId` in investment detail requests.
-
-        '
-      minLength: 1
-      example: active-share
-    OutputMetadata_3:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages_3'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-      description: All fields are nullable. Empty or `null` value fields are not returned.
-    ResponseGetView_3:
-      title: ResponseGetView
-      type: object
-      description: 'Response containing a view definition and the datapoints included in the
-
-        view.'
-      required:
-      - viewDefinition
-      - metadata
-      properties:
-        viewDefinition:
-          $ref: '#/components/schemas/OutputViewDefinition'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata_3'
-      additionalProperties: false
   responses:
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseGetView:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseGetView'
     ResponseListViews:
       description: OK
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ResponseListViews'
-    ResponseInternalServerError:
-      description: Internal Server
+    ResponseGetView:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseGetView'
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError_2:
-      description: Internal Server Error
+    ResponseInternalServerError:
+      description: Internal Server
       content:
         application/json:
           schema:
@@ -581,6 +575,12 @@ components:
               $ref: '#/components/examples/ResponseBadRequestExample4'
             ResponseBadRequestExample5:
               $ref: '#/components/examples/ResponseBadRequestExample5'
+    ResponseInternalServerError_2:
+      description: Internal Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseListViews_2:
       description: OK
       content:
@@ -590,12 +590,6 @@ components:
           examples:
             ResponseListViewsExample1:
               $ref: '#/components/examples/ResponseListViewsExample1'
-    ResponseInternalServerError_3:
-      description: '500'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseGetView_3:
       description: OK
       content:
@@ -611,6 +605,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError_3:
+      description: '500'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseListViews_3:
       description: OK
       content:
@@ -621,13 +621,42 @@ components:
             ResponseListViewsExample1:
               $ref: '#/components/examples/ResponseListViewsExample1'
   examples:
-    ResponseBadRequestExample4:
-      summary: Invalid Date Format
+    ResponseBadRequestExample5:
+      summary: Portfolio Holdings - Maximum Number of Views Exceeded
       value:
         statusCode: 400
-        errorCode: 400.investmentDetailsAsync.010
-        message: Invalid date format. Dates must be formatted as YYYY-MM-DD.
-        requestId: 9d4a2e6f-1b8c-4d3a-b7e5-2c0f9a1d6b84
+        errorCode: 400.investmentDetailsAsync.019
+        message: 'The following view:
+
+          [full-portfolio-holdings-month-end-or-quarter-end-most-recent,
+
+          full-look-through-portfolio-holdings] must be submitted individually and
+
+          cannot be combined with other views in the request.'
+        requestId: d0da262e-2819-4a57-9729-cc77f27bc184
+    ResponseBadRequestExample3:
+      summary: Unrecognized idType
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetailsAsync.003
+        message: The input idType is not recognized. Please input a valid value.
+        requestId: c3e9b7a4-2d18-4f6c-8a3b-5e9d1c0f7a26
+    ResponseListViewsExample1:
+      summary: List Entitled Views Response
+      value:
+        views:
+        - package:
+            viewId: active-share
+          datasets:
+          - viewId: active-share
+        - package:
+            viewId: asset-allocation-breakdown
+          datasets:
+          - viewId: asset-allocation-breakdown
+        - package:
+            viewId: market-capital-breakdown
+          datasets:
+          - viewId: market-capital-breakdown
     ResponseBadRequestExample2:
       summary: Input ID Does Not Match idType
       value:
@@ -635,6 +664,20 @@ components:
         errorCode: 400.investmentDetailsAsync.003
         message: The input id does not match the specified idType.
         requestId: 8a2d6f1b-3c4e-4a7d-9b2f-1e6c8d0a5b73
+    ResponseBadRequestExample4:
+      summary: Invalid Date Format
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetailsAsync.010
+        message: Invalid date format. Dates must be formatted as YYYY-MM-DD.
+        requestId: 9d4a2e6f-1b8c-4d3a-b7e5-2c0f9a1d6b84
+    ResponseBadRequestExample1:
+      summary: Missing Prefer Header
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetails.013
+        message: The Prefer header is required.
+        requestId: 1f4c8e2a-7b3d-4e91-a6c2-9d5f0b8e3a14
     ResponseGetViewExample1:
       summary: Get View Definition Response
       value:
@@ -660,49 +703,6 @@ components:
         metadata:
           requestId: 27d7fee8-3cb1-4d26-8594-30a3912f7967
           time: '2026-06-15T14:23:12.8224237Z'
-    ResponseListViewsExample1:
-      summary: List Entitled Views Response
-      value:
-        views:
-        - package:
-            viewId: active-share
-          datasets:
-          - viewId: active-share
-        - package:
-            viewId: asset-allocation-breakdown
-          datasets:
-          - viewId: asset-allocation-breakdown
-        - package:
-            viewId: market-capital-breakdown
-          datasets:
-          - viewId: market-capital-breakdown
-    ResponseBadRequestExample3:
-      summary: Unrecognized idType
-      value:
-        statusCode: 400
-        errorCode: 400.investmentDetailsAsync.003
-        message: The input idType is not recognized. Please input a valid value.
-        requestId: c3e9b7a4-2d18-4f6c-8a3b-5e9d1c0f7a26
-    ResponseBadRequestExample1:
-      summary: Missing Prefer Header
-      value:
-        statusCode: 400
-        errorCode: 400.investmentDetails.013
-        message: The Prefer header is required.
-        requestId: 1f4c8e2a-7b3d-4e91-a6c2-9d5f0b8e3a14
-    ResponseBadRequestExample5:
-      summary: Portfolio Holdings - Maximum Number of Views Exceeded
-      value:
-        statusCode: 400
-        errorCode: 400.investmentDetailsAsync.019
-        message: 'The following view:
-
-          [full-portfolio-holdings-month-end-or-quarter-end-most-recent,
-
-          full-look-through-portfolio-holdings] must be submitted individually and
-
-          cannot be combined with other views in the request.'
-        requestId: d0da262e-2819-4a57-9729-cc77f27bc184
   securitySchemes:
     Bearer:
       type: http

@@ -246,46 +246,30 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 928
 components:
-  responses:
-    ResponseEquityOwnershipManagedInvestments:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ownershipDataMutualFund:
-                $ref: '#/components/schemas/OutputOwnershipDataMutualFund'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityOwnershipDetailMutualFund:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ownershipDataMutualFund:
-                $ref: '#/components/schemas/OutputOwnershipDataMutualFund'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
   schemas:
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputErrorDetails:
       type: object
       properties:
@@ -308,6 +292,25 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -354,38 +357,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
     OutputOwnershipDataMutualFund:
       type: object
       properties:
@@ -452,48 +423,77 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputOwnershipDataMutualFund
-    OutputMetadata:
+    OutputIdentifiers:
       type: object
       properties:
-        requestId:
+        performanceId:
           type: string
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
+        securityId:
           type: string
           nullable: true
-        portfolioCurrency:
+        cusip:
           type: string
           nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
+        isin:
           type: string
           nullable: true
-        code:
+        sedol:
           type: string
           nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
+        tradingSymbol:
+          type: string
           nullable: true
-        message:
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
+      title: OutputIdentifiers
+  responses:
+    ResponseEquityOwnershipDetailMutualFund:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownershipDataMutualFund:
+                $ref: '#/components/schemas/OutputOwnershipDataMutualFund'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityOwnershipManagedInvestments:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownershipDataMutualFund:
+                $ref: '#/components/schemas/OutputOwnershipDataMutualFund'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
     Bearer:
       type: http

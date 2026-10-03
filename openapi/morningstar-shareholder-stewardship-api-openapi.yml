@@ -435,131 +435,82 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 952
 components:
-  responses:
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityShareholderStewardship:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              sayOnPay:
-                $ref: '#/components/schemas/OutputSayOnPay'
-              votingReport:
-                $ref: '#/components/schemas/OutputVotingReport'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquitySayOnPay:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              sayOnPay:
-                $ref: '#/components/schemas/OutputSayOnPay'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityVotingReport:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              votingReport:
-                $ref: '#/components/schemas/OutputVotingReport'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
   schemas:
-    OutputSayOnPay:
+    OutputMetadata:
       type: object
       properties:
-        fiscalYearEndDate:
+        requestId:
           type: string
-          description: The company's fiscal year that it uses to report its financial results.
           nullable: true
-        transactionId:
+        time:
           type: string
-          description: ''
-          nullable: true
-        accessionNumber:
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
-          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
           nullable: true
-        reportDate:
+        portfolioCurrency:
           type: string
-          description: The date the company publishes the document from which the data is sourced.
           nullable: true
-        reportSource:
-          type: string
-          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
-          nullable: true
-        sayOnFrequencyAbstention:
-          type: number
-          description: Represents the number of shareholder votes that abstain for frequency of approval for executive compensation.
-          format: double
-          nullable: true
-        sayOnFrequencyAnnual:
-          type: number
-          description: Represents the number of shareholder votes in favor of one-year say-on-pay frequency. Public companies are required to provide their shareholders with an advisory vote on how often they would like to be presented with the say-on-pay votes - every year; every second year; or every third year.
-          format: double
-          nullable: true
-        sayOnFrequencyBiennial:
-          type: number
-          description: Represents the number of shareholder votes in favor of two-year say-on-pay frequency. Public companies are required to provide their shareholders with an advisory vote on how often they would like to be presented with the say-on-pay votes - every year; every second year; or every third year.
-          format: double
-          nullable: true
-        sayOnFrequencyBrokerNonVotes:
-          type: number
-          description: Represents the number of broker non-votes for frequency of approval for executive compensation.
-          format: double
-          nullable: true
-        sayOnFrequencyTriennial:
-          type: number
-          description: Represents the number of shareholder votes in favor of three-year say-on-pay frequency. Public companies are required to provide their shareholders with an advisory vote on how often they would like to be presented with the say-on-pay votes - every year; every second year; or every third year.
-          format: double
-          nullable: true
-        sayOnPayAbstention:
-          type: number
-          description: Represents the number of shareholder votes that abstain for executive compensation/pay package. Public companies are subject to proxy rules to provide their shareholders with an advisory vote on the compensation of the most highly compensated executives.
-          format: double
-          nullable: true
-        sayOnPayAgainst:
-          type: number
-          description: Represents the number of shareholder votes against pay package/executive compensation. Public companies are subject to proxy rules to provide their shareholders with an advisory vote on the compensation of the most highly compensated executives.
-          format: double
-          nullable: true
-        sayOnPayBrokerNonVotes:
-          type: number
-          description: Represents the number of broker non-votes for executive compensation.
-          format: double
-          nullable: true
-        sayOnPayFor:
-          type: number
-          description: Represents the number of shareholder votes in favor of pay package/executive compensation. Public companies are subject to proxy rules to provide their shareholders with an advisory vote on the compensation of the most highly compensated executives.
-          format: double
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputSayOnPay
+      title: OutputMetadata
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -658,6 +609,76 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputVotingReport
+    OutputSayOnPay:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The company's fiscal year that it uses to report its financial results.
+          nullable: true
+        transactionId:
+          type: string
+          description: ''
+          nullable: true
+        accessionNumber:
+          type: string
+          description: The US Securities And Exchange Commission (SEC) 18-digit unique identifier assigned automatically to an accepted submission by its filer system. The first 10 digits comprise the Central Index Key (CIK) of the entity submitting the filing. The next 2 digits represent the year. The last series of digits comprise a sequential count of submitted filings from that CIK. The count is usually; but not always; reset to 0 at the start of each calendar year.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        sayOnFrequencyAbstention:
+          type: number
+          description: Represents the number of shareholder votes that abstain for frequency of approval for executive compensation.
+          format: double
+          nullable: true
+        sayOnFrequencyAnnual:
+          type: number
+          description: Represents the number of shareholder votes in favor of one-year say-on-pay frequency. Public companies are required to provide their shareholders with an advisory vote on how often they would like to be presented with the say-on-pay votes - every year; every second year; or every third year.
+          format: double
+          nullable: true
+        sayOnFrequencyBiennial:
+          type: number
+          description: Represents the number of shareholder votes in favor of two-year say-on-pay frequency. Public companies are required to provide their shareholders with an advisory vote on how often they would like to be presented with the say-on-pay votes - every year; every second year; or every third year.
+          format: double
+          nullable: true
+        sayOnFrequencyBrokerNonVotes:
+          type: number
+          description: Represents the number of broker non-votes for frequency of approval for executive compensation.
+          format: double
+          nullable: true
+        sayOnFrequencyTriennial:
+          type: number
+          description: Represents the number of shareholder votes in favor of three-year say-on-pay frequency. Public companies are required to provide their shareholders with an advisory vote on how often they would like to be presented with the say-on-pay votes - every year; every second year; or every third year.
+          format: double
+          nullable: true
+        sayOnPayAbstention:
+          type: number
+          description: Represents the number of shareholder votes that abstain for executive compensation/pay package. Public companies are subject to proxy rules to provide their shareholders with an advisory vote on the compensation of the most highly compensated executives.
+          format: double
+          nullable: true
+        sayOnPayAgainst:
+          type: number
+          description: Represents the number of shareholder votes against pay package/executive compensation. Public companies are subject to proxy rules to provide their shareholders with an advisory vote on the compensation of the most highly compensated executives.
+          format: double
+          nullable: true
+        sayOnPayBrokerNonVotes:
+          type: number
+          description: Represents the number of broker non-votes for executive compensation.
+          format: double
+          nullable: true
+        sayOnPayFor:
+          type: number
+          description: Represents the number of shareholder votes in favor of pay package/executive compensation. Public companies are subject to proxy rules to provide their shareholders with an advisory vote on the compensation of the most highly compensated executives.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputSayOnPay
     OutputIdentifiers:
       type: object
       properties:
@@ -690,81 +711,60 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    CodeMappingBoolean:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: boolean
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingBoolean
+  responses:
+    ResponseEquityShareholderStewardship:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sayOnPay:
+                $ref: '#/components/schemas/OutputSayOnPay'
+              votingReport:
+                $ref: '#/components/schemas/OutputVotingReport'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquitySayOnPay:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sayOnPay:
+                $ref: '#/components/schemas/OutputSayOnPay'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityVotingReport:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              votingReport:
+                $ref: '#/components/schemas/OutputVotingReport'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
     Bearer:
       type: http

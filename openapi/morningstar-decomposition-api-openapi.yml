@@ -80,6 +80,79 @@ paths:
       - decomposition
 components:
   schemas:
+    CalculateByHoldings:
+      required:
+      - benchmark
+      - endDate
+      - investment
+      - startDate
+      properties:
+        startDate:
+          type: string
+          description: The start date of the time period to perform the attribution analysis.
+          example: '2018-01-01T00:00:00.000Z'
+        endDate:
+          type: string
+          description: The end date of the time period to perform the attribution analysis.
+          example: '2018-06-30T00:00:00.000Z'
+        currency:
+          type: string
+          description: Currency of holdings
+          example: USD
+        investment:
+          description: ''
+          example:
+            id: model-portfolio1
+            type: portfolio
+          allOf:
+          - $ref: '#/components/schemas/idType'
+        benchmark:
+          description: ''
+          example:
+            id: model-portfolio2
+            type: portfolio
+          allOf:
+          - $ref: '#/components/schemas/idType'
+        portfolios:
+          type: array
+          example:
+          - id: model-portfolio1
+            holdings:
+            - identifier: 0P0000058R
+              identifierType: PerformanceId
+              weight: 60
+            - identifier: 0P000001RB
+              identifierType: PerformanceId
+              weight: 40
+          - id: model-portfolio2
+            holdings:
+            - identifier: 0P0000058R
+              identifierType: PerformanceId
+              weight: 50
+            - identifier: 0P000001RB
+              identifierType: PerformanceId
+              weight: 50
+          items:
+            $ref: '#/components/schemas/Holdings'
+      type: object
+    holding:
+      properties:
+        identifier:
+          type: string
+        weight:
+          type: number
+      type: object
+    Holdings:
+      required:
+      - id
+      properties:
+        holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/holding'
+        id:
+          type: string
+      type: object
     idType:
       properties:
         id:
@@ -145,79 +218,6 @@ components:
               weight: 50
           items:
             $ref: '#/components/schemas/Holdings'
-      type: object
-    holding:
-      properties:
-        identifier:
-          type: string
-        weight:
-          type: number
-      type: object
-    CalculateByHoldings:
-      required:
-      - benchmark
-      - endDate
-      - investment
-      - startDate
-      properties:
-        startDate:
-          type: string
-          description: The start date of the time period to perform the attribution analysis.
-          example: '2018-01-01T00:00:00.000Z'
-        endDate:
-          type: string
-          description: The end date of the time period to perform the attribution analysis.
-          example: '2018-06-30T00:00:00.000Z'
-        currency:
-          type: string
-          description: Currency of holdings
-          example: USD
-        investment:
-          description: ''
-          example:
-            id: model-portfolio1
-            type: portfolio
-          allOf:
-          - $ref: '#/components/schemas/idType'
-        benchmark:
-          description: ''
-          example:
-            id: model-portfolio2
-            type: portfolio
-          allOf:
-          - $ref: '#/components/schemas/idType'
-        portfolios:
-          type: array
-          example:
-          - id: model-portfolio1
-            holdings:
-            - identifier: 0P0000058R
-              identifierType: PerformanceId
-              weight: 60
-            - identifier: 0P000001RB
-              identifierType: PerformanceId
-              weight: 40
-          - id: model-portfolio2
-            holdings:
-            - identifier: 0P0000058R
-              identifierType: PerformanceId
-              weight: 50
-            - identifier: 0P000001RB
-              identifierType: PerformanceId
-              weight: 50
-          items:
-            $ref: '#/components/schemas/Holdings'
-      type: object
-    Holdings:
-      required:
-      - id
-      properties:
-        holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/holding'
-        id:
-          type: string
       type: object
   securitySchemes:
     bearerAuth:

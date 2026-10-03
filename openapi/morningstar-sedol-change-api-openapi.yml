@@ -161,50 +161,30 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 950
 components:
-  responses:
-    ResponseSedolChange:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              sedolChangeLog:
-                $ref: '#/components/schemas/OutputSedolChangeLog'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   schemas:
-    OutputSedolChangeLog:
+    OutputMetadata:
       type: object
       properties:
-        effectiveDate:
+        requestId:
           type: string
-          description: The effective date when the SEDOL for the share class was changed
           nullable: true
-        changeFrom:
+        time:
           type: string
-          description: The SEDOL that the share class changes from
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
           nullable: true
-        changeTo:
+        portfolioCurrency:
           type: string
-          description: The SEDOL that the share class changes to
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputSedolChangeLog
+      title: OutputMetadata
     OutputErrorDetails:
       type: object
       properties:
@@ -227,6 +207,42 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
+    OutputSedolChangeLog:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The effective date when the SEDOL for the share class was changed
+          nullable: true
+        changeFrom:
+          type: string
+          description: The SEDOL that the share class changes from
+          nullable: true
+        changeTo:
+          type: string
+          description: The SEDOL that the share class changes to
+          nullable: true
+      additionalProperties: false
+      title: OutputSedolChangeLog
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -273,48 +289,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
     OutputIdentifiers:
       type: object
       properties:
@@ -347,6 +321,32 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+  responses:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseSedolChange:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              sedolChangeLog:
+                $ref: '#/components/schemas/OutputSedolChangeLog'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

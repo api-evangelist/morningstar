@@ -254,88 +254,40 @@ paths:
                     example: An error occurred
 components:
   schemas:
-    DataModelDailyOhlcv:
-      title: DataModelDailyOhlcv
-      description: Represents a time series of daily trading data, including open, high, low, close, and volume values for each date.
+    OutputMetadata:
+      description: Metadata returned in response. Includes information about identifiers for which no results were found.
+      title: OutputMetadata
       type: object
       properties:
-        date:
-          type: string
-          format: date
-          example: '2025-09-06'
-        dailyLowPrice:
-          type: number
-          example: 72.52
-        dailyOpenPrice:
-          type: number
-          example: 72.81
-        dailyHighPrice:
-          type: number
-          example: 73.02
-        dailyClosingPrice:
-          type: number
-          example: 72.79
-        dailyVolume:
-          type: number
-          example: 179267
-    Response202Metadata:
-      description: Provides metadata related to the asynchronous request, including a unique request identifier and the timestamp when the response was generated.
-      title: Response202Metadata
-      type: object
-      readOnly: true
-      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvestmentsMessages'
         requestId:
-          description: Indicates unique request identifier.
+          description: Indicates the request identifier.
           example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          type: string
           readOnly: true
-          oneOf:
-          - type: 'null'
-          - type: string
         time:
           description: Indicates time response was returned.
           example: '2025-10-02T10:54:36.9161062Z'
+          type: string
           format: date-time
           readOnly: true
-          oneOf:
-          - type: 'null'
-          - type: string
-    OutputIdentifiers:
-      title: OutputIdentifiers
-      description: Specifies the identifier type used to specify the target investment in the request.
       additionalProperties: false
-      properties:
-        performanceId:
-          type: string
-          example: 0P00002CI5
-        isin:
-          type: string
-          example: US2562191062
-        securityId:
-          type: string
-          example: FCUSA0000P
-        cusip:
-          type: string
-          example: 459200101
-        sedol:
-          type: string
-          example: B4TT7L5
-        tradingSymbol:
-          type: string
-          example: MDLOX
-    OutputInvestments:
-      title: OutputInvestments
+    ResponseAsyncTimeSeries:
+      title: ResponseAsyncTimeSeries
+      description: Defines the HTTP 202 Accepted response returned when a time series data request is accepted for asynchronous processing. Includes the job identifier, metadata, and links to retrieve the job status or results.
       type: object
-      description: Represents the time series data and related metadata for a single investment returned in the response.
-      additionalProperties: false
       properties:
-        identifiers:
-          $ref: '#/components/schemas/OutputIdentifiers'
-        timeSeries:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputTimeSeries'
+        jobId:
+          type: string
+          description: A unique identifier for the asynchronous job. This ID is used to track processing progress or retrieve completed results.
+          example: 16bf1a7a-c883-4424-8810-2f4e9d244d40
+        _links:
+          $ref: '#/components/schemas/OutputResponseLink'
         metadata:
-          $ref: '#/components/schemas/OutputInvestmentsMetadata'
+          $ref: '#/components/schemas/Response202Metadata'
     OutputInvestmentsMessages:
       description: Provides information about identifiers for which no results were returned.
       title: OutputInvestmentsMessages
@@ -376,53 +328,105 @@ components:
           example: 404.common.125
           readOnly: true
       additionalProperties: false
-    OutputInvestmentsMetadata:
-      title: OutputInvestmentsMetadata
-      description: Provides the identifier look up details passed in request.
+    DataModelUnivariateObservation:
+      title: DataModelUnivariateObservation
+      description: Represents a time series of univariate observations, where each entry contains a date and its corresponding value.
       type: object
-      additionalProperties: false
       properties:
-        baseCurrency:
+        date:
           type: string
-          example: GBP
-          default: USD
-          description: Indicates base currency used to look up investment. Represented by  3-character ISO 4217 currency codes.
-          minLength: 3
-          maxLength: 3
-        exchangeCountry:
-          type: string
-          example: GBR
-          default: USA
-          description: Indicates exchange country used to look up investment. Represented by 3-character ISO 3166-1 country codes.
-          minLength: 3
-          maxLength: 3
-        exchangeId:
-          type: string
-          example: EX$$$$XNAS
-          description: Indicates exchange ID used to look up investment.
-        domicile:
-          type: string
-          example: GBR
-          default: USA
-          description: Indicates domicile used to look up investment. Represented by  3-character ISO 3166-1 country codes.
-    OutputResponseLink:
+          format: date
+          example: '2025-09-06'
+        value:
+          type: number
+          example: 1.108
+    InputDataPointParameters:
+      title: InputDataPointParameters
       type: object
-      title: OutputResponseLink
-      description: A set of hypermedia links providing URLs for polling job status or accessing results when available.
+      description: Parameters that are applied at data point level.
       properties:
-        href:
+        frequency:
           type: string
-          description: The fully qualified URL to the related resource or endpoint. Used to poll job status or retrieve results.
-          example: https://www.us-api.morningstar.com/dynamic-services-apis/jobs/16bf1a7a-c883-4424-8810-2f4e9d244d40
-        rel:
+          description: Specifies the time interval between data points.
+          enum:
+          - daily
+          - weekly
+          - monthly
+          - quarterly
+          - annual
+          example: monthly
+        annualized:
+          type: boolean
+          description: Specifies whether the computed results should be annualized. Used with computed data points only.
+          example: true
+        annualDays:
+          type: number
+          description: Specifies the number of days in a year for annualized calculations. Used with computed data points only.
+          default: 365.25
+          example: 365
+        performanceType:
+          description: 'Specifies the type of performance calculation to apply. Accepts up to two values. The first value is considered the preferred or primary performance type. The second value is considered the secondary performance type and serves as a fallback if the preferred type returns no data. If only one value is provided, no fallback is attempted. Used with computed data points only.
+
+            '
+          type: array
+          maxItems: 2
+          items:
+            type: string
+            enum:
+            - total
+            - market
+            - gross
+        preCurrency:
           type: string
-          description: Describes the relationship between the current resource and the linked resource.
-          example: status
-        method:
-          type: string
-          description: The HTTP method to use when invoking the `href` endpoint.
-          example: GET
-      additionalProperties: false
+          description: Specifies the currency to use before currency conversion. Accepts 3-character ISO 4217 currency codes. Used with computed data points only.
+          example: EUR
+        requireContinueData:
+          type: boolean
+          description: Specifies whether continuous data is required for calculations. Used with computed data points only.
+          example: true
+        stepSize:
+          type: integer
+          description: Specifies the step size for rolling or iterative time series. Used with 'rolling-return' data point only. For example, when `stepSize=12` and `frequency=monthly` 12-month rolling values are computed.
+          example: 12
+        windowSize:
+          type: integer
+          description: Specifies the length of the rolling window for rolling return calculations.
+          example: 6
+          maximum: 2147483647
+    OutputCategory:
+      title: OutputCategory
+      type: string
+      description: Identifies the thematic category or functional area a data point belongs to within the Time Series API.
+      enum:
+      - fees-expenses
+      - corporate-actions
+      - fund-sustainability
+      - fund-research
+      - performance
+      - portfolio-analytics
+      - portfolio-holdings
+      - reference
+    Response202Metadata:
+      description: Provides metadata related to the asynchronous request, including a unique request identifier and the timestamp when the response was generated.
+      title: Response202Metadata
+      type: object
+      readOnly: true
+      properties:
+        requestId:
+          description: Indicates unique request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          readOnly: true
+          oneOf:
+          - type: 'null'
+          - type: string
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          format: date-time
+          readOnly: true
+          oneOf:
+          - type: 'null'
+          - type: string
     InputDataPoints:
       title: InputDataPoints
       type: object
@@ -677,6 +681,310 @@ components:
           - yearly-return
         parameters:
           $ref: '#/components/schemas/InputDataPointParameters'
+    OutputResponseLink:
+      type: object
+      title: OutputResponseLink
+      description: A set of hypermedia links providing URLs for polling job status or accessing results when available.
+      properties:
+        href:
+          type: string
+          description: The fully qualified URL to the related resource or endpoint. Used to poll job status or retrieve results.
+          example: https://www.us-api.morningstar.com/dynamic-services-apis/jobs/16bf1a7a-c883-4424-8810-2f4e9d244d40
+        rel:
+          type: string
+          description: Describes the relationship between the current resource and the linked resource.
+          example: status
+        method:
+          type: string
+          description: The HTTP method to use when invoking the `href` endpoint.
+          example: GET
+      additionalProperties: false
+    ResponseTimeSeries:
+      title: ResponseTimeSeries
+      readOnly: true
+      description: Defines the structure of a successful (HTTP 200) response from the Results endpoint.
+      type: object
+      additionalProperties: false
+      properties:
+        investments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OutputInvestments'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+    RequestTimeSeries:
+      title: RequestTimeSeries
+      description: Defines the structure of a time series data request, including the investments to query, global request parameters, and the data points to retrieve.
+      type: object
+      required:
+      - investments
+      - parameters
+      - dataPoints
+      additionalProperties: false
+      properties:
+        investments:
+          type: array
+          minItems: 1
+          maxItems: 100
+          description: List of investments to query. Maximum 100 investments per request.
+          items:
+            $ref: '#/components/schemas/InputInvestments'
+        parameters:
+          $ref: '#/components/schemas/InputGlobalParameters'
+        dataPoints:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InputDataPoints'
+    OutputIdentifiers:
+      title: OutputIdentifiers
+      description: Specifies the identifier type used to specify the target investment in the request.
+      additionalProperties: false
+      properties:
+        performanceId:
+          type: string
+          example: 0P00002CI5
+        isin:
+          type: string
+          example: US2562191062
+        securityId:
+          type: string
+          example: FCUSA0000P
+        cusip:
+          type: string
+          example: 459200101
+        sedol:
+          type: string
+          example: B4TT7L5
+        tradingSymbol:
+          type: string
+          example: MDLOX
+    OutputInvestmentsMetadata:
+      title: OutputInvestmentsMetadata
+      description: Provides the identifier look up details passed in request.
+      type: object
+      additionalProperties: false
+      properties:
+        baseCurrency:
+          type: string
+          example: GBP
+          default: USD
+          description: Indicates base currency used to look up investment. Represented by  3-character ISO 4217 currency codes.
+          minLength: 3
+          maxLength: 3
+        exchangeCountry:
+          type: string
+          example: GBR
+          default: USA
+          description: Indicates exchange country used to look up investment. Represented by 3-character ISO 3166-1 country codes.
+          minLength: 3
+          maxLength: 3
+        exchangeId:
+          type: string
+          example: EX$$$$XNAS
+          description: Indicates exchange ID used to look up investment.
+        domicile:
+          type: string
+          example: GBR
+          default: USA
+          description: Indicates domicile used to look up investment. Represented by  3-character ISO 3166-1 country codes.
+    DataModelDailyOhlcv:
+      title: DataModelDailyOhlcv
+      description: Represents a time series of daily trading data, including open, high, low, close, and volume values for each date.
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: '2025-09-06'
+        dailyLowPrice:
+          type: number
+          example: 72.52
+        dailyOpenPrice:
+          type: number
+          example: 72.81
+        dailyHighPrice:
+          type: number
+          example: 73.02
+        dailyClosingPrice:
+          type: number
+          example: 72.79
+        dailyVolume:
+          type: number
+          example: 179267
+    InputGlobalParameters:
+      title: InputGlobalParameters
+      description: Defines global parameters that control the scope, period, currency, and calculation logic applied to a time series data request.
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+          description: Specifies the start date of the time series. Accepted format is `yyyy-MM-dd`.
+          example: '2020-12-31'
+        endDate:
+          type: string
+          format: date
+          description: Specifies the end date of the time series. Accepted format is `yyyy-MM-dd`.
+          example: '2024-12-31'
+        timePeriod:
+          type: integer
+          description: Specifies the size of the time window for the requested data range. Used in combination with `timePeriodUnit` to define a relative time range. When both absolute (`startDate` / `endDate`) and relative (`timePeriod` / `timePeriodUnit`) parameters are provided, the API prioritizes the relative range.
+          format: int32
+          example: 12
+        timePeriodUnit:
+          type: string
+          enum:
+          - days
+          - months
+          - years
+          example: months
+          description: Specifies the unit of time used with `timePeriod` to define a relative time range. When both absolute (`startDate` / `endDate`) and relative (`timePeriod` / `timePeriodUnit`) parameters are provided, the API prioritizes the relative range.
+        sinceInception:
+          type: boolean
+          description: Sets the time range from inception (or the maximum supported lookback) to the end date. Overrides any `timePeriod` / `timePeriodUnit` and `startDate` / `endDate`settings.
+          default: false
+        applyEarliestCommonDate:
+          type: boolean
+          description: Specifies whether to apply the earliest common start date across all investments.
+          default: false
+        applyRestructureDate:
+          type: boolean
+          description: Specifies whether to consider the Morningstar or Custom restructure date when determining the start of the performance period. This option is applicable only when `applyEarliestCommonDate` is enabled.
+          default: false
+        applyTrackRecordExtension:
+          type: boolean
+          description: Specifies whether to apply the Track Record Extension logic in order to extend the performance of an investment by copying the historical performance of another qualified older investment.
+          default: false
+        currencyId:
+          type: string
+          description: Specifies the currency in which to return data.
+          example: BASE
+          enum:
+          - BASE
+          - AUD
+          - BND
+          - BRL
+          - CAD
+          - CHF
+          - CLP
+          - CNH
+          - CNY
+          - CZK
+          - DKK
+          - EUR
+          - GBP
+          - HKD
+          - HUF
+          - IDR
+          - ILS
+          - INR
+          - JPY
+          - KRW
+          - MOP
+          - MXN
+          - MYR
+          - NOK
+          - NZD
+          - PLN
+          - RMB
+          - RUB
+          - SEK
+          - SGD
+          - THB
+          - TWD
+          - USD
+          - ZAR
+        initialInvestment:
+          type: number
+          format: double
+          description: Starting value used as the basis for `growth` calculations. Represents the hypothetical amount invested at the beginning of the period.
+          default: 10000
+    InputInvestments:
+      title: InputInvestments
+      description: Investment to query. Investment look up is supported.
+      type: object
+      required:
+      - id
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: 'Specifies the investment identifier to query. Accepts performance IDs, ISINs, security IDs, CUSIPs, trading symbols, category IDs and Morningstar IDs. Note: When a category ID is used, the corresponding `idType` is `performanceId` or `securityId`.'
+        idType:
+          type: string
+          example: performanceId
+          default: performanceId
+          enum:
+          - performanceId
+          - isin
+          - fundCode
+          - securityId
+          - cusip
+          - msid
+          - tradingSymbol
+        baseCurrency:
+          type: string
+          example: USD
+          description: Specifies base currency used to look up investment. Accepts 3-character ISO 4217 currency codes.
+        exchangeCountry:
+          type: string
+          example: USA
+          description: Specifies exchange country used to look up investment. Accepts 3-character ISO 3166-1 country codes.
+        exchangeId:
+          type: string
+          example: EX$$$$XNAS
+          description: Specifies exchange ID used to look up investment.
+        domicile:
+          type: string
+          example: USA
+          description: Specifies domicile used to look up investment. Accepts 3-character ISO 3166-1 country codes.
+    OutputInvestments:
+      title: OutputInvestments
+      type: object
+      description: Represents the time series data and related metadata for a single investment returned in the response.
+      additionalProperties: false
+      properties:
+        identifiers:
+          $ref: '#/components/schemas/OutputIdentifiers'
+        timeSeries:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputTimeSeries'
+        metadata:
+          $ref: '#/components/schemas/OutputInvestmentsMetadata'
+    ErrorResponse:
+      title: ErrorResponse
+      description: Defines the structure of an error response returned when a bad or invalid request is submitted. Includes the HTTP status code, descriptive message, and request identifier for traceability.
+      type: object
+      properties:
+        statusCode:
+          description: Numeric HTTP status code associated with the error.
+          type: integer
+          format: int32
+          example: 400
+          readOnly: true
+        errorCode:
+          description: Identifier for a specific type of error.
+          type: string
+          example: 400.timeSeries.009
+          readOnly: true
+        message:
+          description: Descriptive message providing details about the error or validation failure.
+          example: Invalid frequency 'm' for datapoint 'daily-closing-price'.
+          oneOf:
+          - type: 'null'
+          - type: string
+          readOnly: true
+        requestId:
+          description: Indicates unique request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          readOnly: true
+          oneOf:
+          - type: 'null'
+          - type: string
+      additionalProperties: false
     OutputTimeSeries:
       description: A named time series with dated data points.
       title: OutputTimeSeries
@@ -948,440 +1256,7 @@ components:
             oneOf:
             - $ref: '#/components/schemas/DataModelUnivariateObservation'
             - $ref: '#/components/schemas/DataModelDailyOhlcv'
-    ResponseAsyncTimeSeries:
-      title: ResponseAsyncTimeSeries
-      description: Defines the HTTP 202 Accepted response returned when a time series data request is accepted for asynchronous processing. Includes the job identifier, metadata, and links to retrieve the job status or results.
-      type: object
-      properties:
-        jobId:
-          type: string
-          description: A unique identifier for the asynchronous job. This ID is used to track processing progress or retrieve completed results.
-          example: 16bf1a7a-c883-4424-8810-2f4e9d244d40
-        _links:
-          $ref: '#/components/schemas/OutputResponseLink'
-        metadata:
-          $ref: '#/components/schemas/Response202Metadata'
-    InputGlobalParameters:
-      title: InputGlobalParameters
-      description: Defines global parameters that control the scope, period, currency, and calculation logic applied to a time series data request.
-      type: object
-      properties:
-        startDate:
-          type: string
-          format: date
-          description: Specifies the start date of the time series. Accepted format is `yyyy-MM-dd`.
-          example: '2020-12-31'
-        endDate:
-          type: string
-          format: date
-          description: Specifies the end date of the time series. Accepted format is `yyyy-MM-dd`.
-          example: '2024-12-31'
-        timePeriod:
-          type: integer
-          description: Specifies the size of the time window for the requested data range. Used in combination with `timePeriodUnit` to define a relative time range. When both absolute (`startDate` / `endDate`) and relative (`timePeriod` / `timePeriodUnit`) parameters are provided, the API prioritizes the relative range.
-          format: int32
-          example: 12
-        timePeriodUnit:
-          type: string
-          enum:
-          - days
-          - months
-          - years
-          example: months
-          description: Specifies the unit of time used with `timePeriod` to define a relative time range. When both absolute (`startDate` / `endDate`) and relative (`timePeriod` / `timePeriodUnit`) parameters are provided, the API prioritizes the relative range.
-        sinceInception:
-          type: boolean
-          description: Sets the time range from inception (or the maximum supported lookback) to the end date. Overrides any `timePeriod` / `timePeriodUnit` and `startDate` / `endDate`settings.
-          default: false
-        applyEarliestCommonDate:
-          type: boolean
-          description: Specifies whether to apply the earliest common start date across all investments.
-          default: false
-        applyRestructureDate:
-          type: boolean
-          description: Specifies whether to consider the Morningstar or Custom restructure date when determining the start of the performance period. This option is applicable only when `applyEarliestCommonDate` is enabled.
-          default: false
-        applyTrackRecordExtension:
-          type: boolean
-          description: Specifies whether to apply the Track Record Extension logic in order to extend the performance of an investment by copying the historical performance of another qualified older investment.
-          default: false
-        currencyId:
-          type: string
-          description: Specifies the currency in which to return data.
-          example: BASE
-          enum:
-          - BASE
-          - AUD
-          - BND
-          - BRL
-          - CAD
-          - CHF
-          - CLP
-          - CNH
-          - CNY
-          - CZK
-          - DKK
-          - EUR
-          - GBP
-          - HKD
-          - HUF
-          - IDR
-          - ILS
-          - INR
-          - JPY
-          - KRW
-          - MOP
-          - MXN
-          - MYR
-          - NOK
-          - NZD
-          - PLN
-          - RMB
-          - RUB
-          - SEK
-          - SGD
-          - THB
-          - TWD
-          - USD
-          - ZAR
-        initialInvestment:
-          type: number
-          format: double
-          description: Starting value used as the basis for `growth` calculations. Represents the hypothetical amount invested at the beginning of the period.
-          default: 10000
-    ErrorResponse:
-      title: ErrorResponse
-      description: Defines the structure of an error response returned when a bad or invalid request is submitted. Includes the HTTP status code, descriptive message, and request identifier for traceability.
-      type: object
-      properties:
-        statusCode:
-          description: Numeric HTTP status code associated with the error.
-          type: integer
-          format: int32
-          example: 400
-          readOnly: true
-        errorCode:
-          description: Identifier for a specific type of error.
-          type: string
-          example: 400.timeSeries.009
-          readOnly: true
-        message:
-          description: Descriptive message providing details about the error or validation failure.
-          example: Invalid frequency 'm' for datapoint 'daily-closing-price'.
-          oneOf:
-          - type: 'null'
-          - type: string
-          readOnly: true
-        requestId:
-          description: Indicates unique request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          readOnly: true
-          oneOf:
-          - type: 'null'
-          - type: string
-      additionalProperties: false
-    InputDataPointParameters:
-      title: InputDataPointParameters
-      type: object
-      description: Parameters that are applied at data point level.
-      properties:
-        frequency:
-          type: string
-          description: Specifies the time interval between data points.
-          enum:
-          - daily
-          - weekly
-          - monthly
-          - quarterly
-          - annual
-          example: monthly
-        annualized:
-          type: boolean
-          description: Specifies whether the computed results should be annualized. Used with computed data points only.
-          example: true
-        annualDays:
-          type: number
-          description: Specifies the number of days in a year for annualized calculations. Used with computed data points only.
-          default: 365.25
-          example: 365
-        performanceType:
-          description: 'Specifies the type of performance calculation to apply. Accepts up to two values. The first value is considered the preferred or primary performance type. The second value is considered the secondary performance type and serves as a fallback if the preferred type returns no data. If only one value is provided, no fallback is attempted. Used with computed data points only.
-
-            '
-          type: array
-          maxItems: 2
-          items:
-            type: string
-            enum:
-            - total
-            - market
-            - gross
-        preCurrency:
-          type: string
-          description: Specifies the currency to use before currency conversion. Accepts 3-character ISO 4217 currency codes. Used with computed data points only.
-          example: EUR
-        requireContinueData:
-          type: boolean
-          description: Specifies whether continuous data is required for calculations. Used with computed data points only.
-          example: true
-        stepSize:
-          type: integer
-          description: Specifies the step size for rolling or iterative time series. Used with 'rolling-return' data point only. For example, when `stepSize=12` and `frequency=monthly` 12-month rolling values are computed.
-          example: 12
-        windowSize:
-          type: integer
-          description: Specifies the length of the rolling window for rolling return calculations.
-          example: 6
-          maximum: 2147483647
-    RequestTimeSeries:
-      title: RequestTimeSeries
-      description: Defines the structure of a time series data request, including the investments to query, global request parameters, and the data points to retrieve.
-      type: object
-      required:
-      - investments
-      - parameters
-      - dataPoints
-      additionalProperties: false
-      properties:
-        investments:
-          type: array
-          minItems: 1
-          maxItems: 100
-          description: List of investments to query. Maximum 100 investments per request.
-          items:
-            $ref: '#/components/schemas/InputInvestments'
-        parameters:
-          $ref: '#/components/schemas/InputGlobalParameters'
-        dataPoints:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/InputDataPoints'
-    InputInvestments:
-      title: InputInvestments
-      description: Investment to query. Investment look up is supported.
-      type: object
-      required:
-      - id
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: 'Specifies the investment identifier to query. Accepts performance IDs, ISINs, security IDs, CUSIPs, trading symbols, category IDs and Morningstar IDs. Note: When a category ID is used, the corresponding `idType` is `performanceId` or `securityId`.'
-        idType:
-          type: string
-          example: performanceId
-          default: performanceId
-          enum:
-          - performanceId
-          - isin
-          - fundCode
-          - securityId
-          - cusip
-          - msid
-          - tradingSymbol
-        baseCurrency:
-          type: string
-          example: USD
-          description: Specifies base currency used to look up investment. Accepts 3-character ISO 4217 currency codes.
-        exchangeCountry:
-          type: string
-          example: USA
-          description: Specifies exchange country used to look up investment. Accepts 3-character ISO 3166-1 country codes.
-        exchangeId:
-          type: string
-          example: EX$$$$XNAS
-          description: Specifies exchange ID used to look up investment.
-        domicile:
-          type: string
-          example: USA
-          description: Specifies domicile used to look up investment. Accepts 3-character ISO 3166-1 country codes.
-    OutputMetadata:
-      description: Metadata returned in response. Includes information about identifiers for which no results were found.
-      title: OutputMetadata
-      type: object
-      properties:
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvestmentsMessages'
-        requestId:
-          description: Indicates the request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          type: string
-          readOnly: true
-        time:
-          description: Indicates time response was returned.
-          example: '2025-10-02T10:54:36.9161062Z'
-          type: string
-          format: date-time
-          readOnly: true
-      additionalProperties: false
-    OutputCategory:
-      title: OutputCategory
-      type: string
-      description: Identifies the thematic category or functional area a data point belongs to within the Time Series API.
-      enum:
-      - fees-expenses
-      - corporate-actions
-      - fund-sustainability
-      - fund-research
-      - performance
-      - portfolio-analytics
-      - portfolio-holdings
-      - reference
-    ResponseTimeSeries:
-      title: ResponseTimeSeries
-      readOnly: true
-      description: Defines the structure of a successful (HTTP 200) response from the Results endpoint.
-      type: object
-      additionalProperties: false
-      properties:
-        investments:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/OutputInvestments'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-    DataModelUnivariateObservation:
-      title: DataModelUnivariateObservation
-      description: Represents a time series of univariate observations, where each entry contains a date and its corresponding value.
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-          example: '2025-09-06'
-        value:
-          type: number
-          example: 1.108
   examples:
-    TimeSeriesResponseExample1:
-      summary: 'Standard Data Point: Univariate Observation'
-      value:
-        investments:
-        - identifiers:
-            performanceId: 0P00000CSY
-            securityId: F0GBR04CO9
-          timeSeries:
-          - categories:
-            - performance
-            dataPoint: daily-price
-            data:
-            - date: '2020-06-26'
-              value: 0.67328
-            - date: '2020-06-29'
-              value: 0.66284
-            - date: '2020-06-30'
-              value: 0.66908
-            - date: '2020-07-01'
-              value: 0.66413
-            - date: '2020-07-02'
-              value: 0.67865
-            - date: '2020-07-03'
-              value: 0.67312
-        metadata:
-          requestId: a4dc16bf-1c25-4f21-ad11-7efe37d83bf7
-          time: '2025-10-30T12:32:54.931365Z'
-    TimeSeriesRequestExample2:
-      summary: 'Standard Data Point: Daily OHLCV (Multivariate Observation)'
-      value:
-        investments:
-        - id: FCUSA04AIX
-          idType: securityId
-        parameters:
-          startDate: '2020-06-26'
-          endDate: '2025-06-26'
-          currencyId: USD
-        dataPoints:
-        - dataPoint: daily-ohlcv
-          parameters:
-            frequency: daily
-    TimeSeriesResponseExample2:
-      summary: 'Standard Data Point: Daily OHLCV (Multivariate Observation)'
-      value:
-        investments:
-        - identifiers:
-            performanceId: 0P00002D6U
-            securityId: FCUSA04AIX
-          timeSeries:
-          - categories:
-            - performance
-            dataPoint: daily-ohlcv
-            data:
-            - date: '2024-06-26'
-              dailyVolume: 130918
-              dailyOpenPrice: 5.17
-              dailyHighPrice: 5.18
-              dailyLowPrice: 5.16
-              dailyClosingPrice: 5.16
-            - date: '2024-06-27'
-              dailyVolume: 79973
-              dailyOpenPrice: 5.17
-              dailyHighPrice: 5.185
-              dailyLowPrice: 5.15
-              dailyClosingPrice: 5.17
-            - date: '2024-06-28'
-              dailyVolume: 311016
-              dailyOpenPrice: 5.17
-              dailyHighPrice: 5.19
-              dailyLowPrice: 5.14
-              dailyClosingPrice: 5.14
-            - date: '2024-07-01'
-              dailyVolume: 445308
-              dailyOpenPrice: 5.17
-              dailyHighPrice: 5.17
-              dailyLowPrice: 5.1
-              dailyClosingPrice: 5.1
-        metadata:
-          requestId: a03d3b25-4112-40cb-aa7d-eb6d2da22cb1
-          time: '2025-10-30T12:38:46.222929Z'
-    TimeSeriesRequestExample7:
-      summary: Multiple Data Points in One Request
-      value:
-        investments:
-        - id: F0GBR04CO9
-          idType: securityId
-        parameters:
-          startDate: '2020-06-26'
-          endDate: '2025-06-26'
-          currencyId: USD
-        dataPoints:
-        - dataPoint: daily-price
-          parameters:
-            frequency: daily
-        - dataPoint: monthly-return
-          parameters:
-            frequency: monthly
-        - dataPoint: daily-ohlcv
-          parameters:
-            frequency: daily
-    TimeSeriesRequestExample3:
-      summary: 'Computed Data Point: Rolling Return'
-      value:
-        investments:
-        - id: F0GBR04CO9
-          idType: securityId
-        parameters:
-          startDate: '2020-06-26'
-          endDate: '2025-06-26'
-          currencyId: USD
-        dataPoints:
-        - dataPoint: rolling-return
-          parameters:
-            frequency: monthly
-            windowSize: 12
-            stepSize: 1
-            performanceType:
-            - total
-    TimeSeriesResponseExample6:
-      summary: '400 Bad Request: Invalid Frequency'
-      value:
-        statusCode: 400
-        errorCode: 400.timeSeries.009
-        message: '''d'' is not a valid value for frequency. Valid values are: daily, weekly, monthly, quarterly, annual.'
-        requestId: e82c70a0-5f58-4e76-95b2-5c925678e6ca
     TimeSeriesRequestExample4:
       summary: Multiple Investments
       value:
@@ -1400,123 +1275,6 @@ components:
         - dataPoint: monthly-return
           parameters:
             frequency: monthly
-    TimeSeriesRequestExample6:
-      summary: Since Inception
-      value:
-        investments:
-        - id: F0GBR04CO9
-          idType: securityId
-        parameters:
-          sinceInception: true
-          currencyId: USD
-        dataPoints:
-        - dataPoint: monthly-return
-          parameters:
-            frequency: monthly
-    TimeSeriesRequestExample1:
-      summary: 'Standard Data Point: Univariate Observation'
-      value:
-        investments:
-        - id: F0GBR04CO9
-          idType: securityId
-        parameters:
-          startDate: '2020-06-26'
-          endDate: '2025-06-26'
-          currencyId: USD
-        dataPoints:
-        - dataPoint: daily-price
-          parameters:
-            frequency: daily
-    TimeSeriesResponseExample5:
-      summary: Matched and Unmatched Investments (Metadata Messages)
-      value:
-        investments:
-        - identifiers:
-            performanceId: 0P00000CSY
-            securityId: F0GBR04CO9
-          timeSeries:
-          - categories:
-            - performance
-            dataPoint: daily-price
-            data:
-            - date: '2025-01-02'
-              value: 0.71234
-            - date: '2025-01-03'
-              value: 0.72108
-        metadata:
-          messages:
-          - investments:
-            - id: 0P000PPP6Q
-              idType: performanceId
-            type: Warning
-            message: 'Lookup : Invalid investments.'
-            code: 404.common.125
-          requestId: f1a94c72-3d08-4b61-9e21-2c85da673f10
-          time: '2025-10-30T14:25:47.883412Z'
-    TimeSeriesResponseExample3:
-      summary: 'Computed Data Point: Rolling Return (with performanceType)'
-      value:
-        investments:
-        - identifiers:
-            performanceId: 0P00000CSY
-            securityId: F0GBR04CO9
-          timeSeries:
-          - categories:
-            - performance
-            dataPoint: rolling-return
-            performanceType: total
-            data:
-            - date: '2021-06-30'
-              value: 0.12453
-            - date: '2021-07-31'
-              value: 0.13102
-            - date: '2021-08-31'
-              value: 0.11876
-            - date: '2021-09-30'
-              value: 0.09341
-        metadata:
-          requestId: b7e21c3d-9f44-41de-bc12-8d3e5a901f22
-          time: '2025-10-30T14:12:03.112847Z'
-    TimeSeriesRequestExample5:
-      summary: 'Relative Time Range: Last 12 Months'
-      value:
-        investments:
-        - id: F0GBR04CO9
-          idType: securityId
-        parameters:
-          timePeriod: 12
-          timePeriodUnit: months
-          currencyId: USD
-        dataPoints:
-        - dataPoint: daily-price
-          parameters:
-            frequency: daily
-    TimeSeriesAsyncResponseExample1:
-      summary: Accepted for Async Processing
-      value:
-        jobId: 16bf1a7a-c883-4424-8810-2f4e9d244d40
-        _links:
-          href: https://www.us-api.morningstar.com/dynamic-services-apis/jobs/16bf1a7a-c883-4424-8810-2f4e9d244d40
-          rel: status
-          method: GET
-        metadata:
-          requestId: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          time: '2025-10-02T10:54:36.9161062Z'
-    TimeSeriesRequestExample8:
-      summary: 'Identifier Lookup: ISIN'
-      value:
-        investments:
-        - id: GB0004835483
-          idType: isin
-          baseCurrency: GBP
-        parameters:
-          startDate: '2020-06-26'
-          endDate: '2025-06-26'
-          currencyId: GBP
-        dataPoints:
-        - dataPoint: daily-price
-          parameters:
-            frequency: daily
     TimeSeriesResponseExample4:
       summary: Multiple Investments in Response
       value:
@@ -1566,6 +1324,248 @@ components:
         metadata:
           requestId: d4f83b91-2c17-4e5a-a334-7f92bc104d85
           time: '2025-10-30T14:18:22.445631Z'
+    TimeSeriesRequestExample5:
+      summary: 'Relative Time Range: Last 12 Months'
+      value:
+        investments:
+        - id: F0GBR04CO9
+          idType: securityId
+        parameters:
+          timePeriod: 12
+          timePeriodUnit: months
+          currencyId: USD
+        dataPoints:
+        - dataPoint: daily-price
+          parameters:
+            frequency: daily
+    TimeSeriesRequestExample8:
+      summary: 'Identifier Lookup: ISIN'
+      value:
+        investments:
+        - id: GB0004835483
+          idType: isin
+          baseCurrency: GBP
+        parameters:
+          startDate: '2020-06-26'
+          endDate: '2025-06-26'
+          currencyId: GBP
+        dataPoints:
+        - dataPoint: daily-price
+          parameters:
+            frequency: daily
+    TimeSeriesRequestExample3:
+      summary: 'Computed Data Point: Rolling Return'
+      value:
+        investments:
+        - id: F0GBR04CO9
+          idType: securityId
+        parameters:
+          startDate: '2020-06-26'
+          endDate: '2025-06-26'
+          currencyId: USD
+        dataPoints:
+        - dataPoint: rolling-return
+          parameters:
+            frequency: monthly
+            windowSize: 12
+            stepSize: 1
+            performanceType:
+            - total
+    TimeSeriesAsyncResponseExample1:
+      summary: Accepted for Async Processing
+      value:
+        jobId: 16bf1a7a-c883-4424-8810-2f4e9d244d40
+        _links:
+          href: https://www.us-api.morningstar.com/dynamic-services-apis/jobs/16bf1a7a-c883-4424-8810-2f4e9d244d40
+          rel: status
+          method: GET
+        metadata:
+          requestId: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          time: '2025-10-02T10:54:36.9161062Z'
+    TimeSeriesRequestExample1:
+      summary: 'Standard Data Point: Univariate Observation'
+      value:
+        investments:
+        - id: F0GBR04CO9
+          idType: securityId
+        parameters:
+          startDate: '2020-06-26'
+          endDate: '2025-06-26'
+          currencyId: USD
+        dataPoints:
+        - dataPoint: daily-price
+          parameters:
+            frequency: daily
+    TimeSeriesResponseExample3:
+      summary: 'Computed Data Point: Rolling Return (with performanceType)'
+      value:
+        investments:
+        - identifiers:
+            performanceId: 0P00000CSY
+            securityId: F0GBR04CO9
+          timeSeries:
+          - categories:
+            - performance
+            dataPoint: rolling-return
+            performanceType: total
+            data:
+            - date: '2021-06-30'
+              value: 0.12453
+            - date: '2021-07-31'
+              value: 0.13102
+            - date: '2021-08-31'
+              value: 0.11876
+            - date: '2021-09-30'
+              value: 0.09341
+        metadata:
+          requestId: b7e21c3d-9f44-41de-bc12-8d3e5a901f22
+          time: '2025-10-30T14:12:03.112847Z'
+    TimeSeriesResponseExample6:
+      summary: '400 Bad Request: Invalid Frequency'
+      value:
+        statusCode: 400
+        errorCode: 400.timeSeries.009
+        message: '''d'' is not a valid value for frequency. Valid values are: daily, weekly, monthly, quarterly, annual.'
+        requestId: e82c70a0-5f58-4e76-95b2-5c925678e6ca
+    TimeSeriesRequestExample7:
+      summary: Multiple Data Points in One Request
+      value:
+        investments:
+        - id: F0GBR04CO9
+          idType: securityId
+        parameters:
+          startDate: '2020-06-26'
+          endDate: '2025-06-26'
+          currencyId: USD
+        dataPoints:
+        - dataPoint: daily-price
+          parameters:
+            frequency: daily
+        - dataPoint: monthly-return
+          parameters:
+            frequency: monthly
+        - dataPoint: daily-ohlcv
+          parameters:
+            frequency: daily
+    TimeSeriesResponseExample2:
+      summary: 'Standard Data Point: Daily OHLCV (Multivariate Observation)'
+      value:
+        investments:
+        - identifiers:
+            performanceId: 0P00002D6U
+            securityId: FCUSA04AIX
+          timeSeries:
+          - categories:
+            - performance
+            dataPoint: daily-ohlcv
+            data:
+            - date: '2024-06-26'
+              dailyVolume: 130918
+              dailyOpenPrice: 5.17
+              dailyHighPrice: 5.18
+              dailyLowPrice: 5.16
+              dailyClosingPrice: 5.16
+            - date: '2024-06-27'
+              dailyVolume: 79973
+              dailyOpenPrice: 5.17
+              dailyHighPrice: 5.185
+              dailyLowPrice: 5.15
+              dailyClosingPrice: 5.17
+            - date: '2024-06-28'
+              dailyVolume: 311016
+              dailyOpenPrice: 5.17
+              dailyHighPrice: 5.19
+              dailyLowPrice: 5.14
+              dailyClosingPrice: 5.14
+            - date: '2024-07-01'
+              dailyVolume: 445308
+              dailyOpenPrice: 5.17
+              dailyHighPrice: 5.17
+              dailyLowPrice: 5.1
+              dailyClosingPrice: 5.1
+        metadata:
+          requestId: a03d3b25-4112-40cb-aa7d-eb6d2da22cb1
+          time: '2025-10-30T12:38:46.222929Z'
+    TimeSeriesResponseExample1:
+      summary: 'Standard Data Point: Univariate Observation'
+      value:
+        investments:
+        - identifiers:
+            performanceId: 0P00000CSY
+            securityId: F0GBR04CO9
+          timeSeries:
+          - categories:
+            - performance
+            dataPoint: daily-price
+            data:
+            - date: '2020-06-26'
+              value: 0.67328
+            - date: '2020-06-29'
+              value: 0.66284
+            - date: '2020-06-30'
+              value: 0.66908
+            - date: '2020-07-01'
+              value: 0.66413
+            - date: '2020-07-02'
+              value: 0.67865
+            - date: '2020-07-03'
+              value: 0.67312
+        metadata:
+          requestId: a4dc16bf-1c25-4f21-ad11-7efe37d83bf7
+          time: '2025-10-30T12:32:54.931365Z'
+    TimeSeriesRequestExample2:
+      summary: 'Standard Data Point: Daily OHLCV (Multivariate Observation)'
+      value:
+        investments:
+        - id: FCUSA04AIX
+          idType: securityId
+        parameters:
+          startDate: '2020-06-26'
+          endDate: '2025-06-26'
+          currencyId: USD
+        dataPoints:
+        - dataPoint: daily-ohlcv
+          parameters:
+            frequency: daily
+    TimeSeriesResponseExample5:
+      summary: Matched and Unmatched Investments (Metadata Messages)
+      value:
+        investments:
+        - identifiers:
+            performanceId: 0P00000CSY
+            securityId: F0GBR04CO9
+          timeSeries:
+          - categories:
+            - performance
+            dataPoint: daily-price
+            data:
+            - date: '2025-01-02'
+              value: 0.71234
+            - date: '2025-01-03'
+              value: 0.72108
+        metadata:
+          messages:
+          - investments:
+            - id: 0P000PPP6Q
+              idType: performanceId
+            type: Warning
+            message: 'Lookup : Invalid investments.'
+            code: 404.common.125
+          requestId: f1a94c72-3d08-4b61-9e21-2c85da673f10
+          time: '2025-10-30T14:25:47.883412Z'
+    TimeSeriesRequestExample6:
+      summary: Since Inception
+      value:
+        investments:
+        - id: F0GBR04CO9
+          idType: securityId
+        parameters:
+          sinceInception: true
+          currencyId: USD
+        dataPoints:
+        - dataPoint: monthly-return
+          parameters:
+            frequency: monthly
   responses:
     ResponseAsyncTimeSeries:
       description: '202: Accepted'
@@ -1576,15 +1576,6 @@ components:
           examples:
             Accepted for Async Processing:
               $ref: '#/components/examples/TimeSeriesAsyncResponseExample1'
-    Response400:
-      description: '400: Bad Request'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-          examples:
-            TimeSeriesResponseExample6:
-              $ref: '#/components/examples/TimeSeriesResponseExample6'
     ResponseTimeSeries:
       description: '200: OK'
       content:
@@ -1602,6 +1593,15 @@ components:
               $ref: '#/components/examples/TimeSeriesResponseExample4'
             TimeSeriesResponseExample5:
               $ref: '#/components/examples/TimeSeriesResponseExample5'
+    Response400:
+      description: '400: Bad Request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          examples:
+            TimeSeriesResponseExample6:
+              $ref: '#/components/examples/TimeSeriesResponseExample6'
   requestBodies:
     RequestTimeSeries:
       required: true

@@ -232,226 +232,29 @@ paths:
     servers:
     - url: https://www.us-api.morningstar.com/ec/v1
 components:
-  responses:
-    ResponseStatus400ResponseScreener:
-      description: '400: Bad Request'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputError'
-          examples:
-            Example1:
-              $ref: '#/components/examples/ResponseStatus400ScreenerExample1'
-    ResponseStatus500ResponseScreener:
-      description: '500: Internal Server Error'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputError'
-          examples:
-            Example1:
-              $ref: '#/components/examples/ResponseStatus500ScreenerExample1'
-    ScreenerResponse:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseEquitiesScreener'
-          examples:
-            Basic Query - Equals:
-              $ref: '#/components/examples/ScreenerResponseExample1'
-            Basic Query - In:
-              $ref: '#/components/examples/ScreenerResponseExample2'
-            Basic Query - Date Range:
-              $ref: '#/components/examples/ScreenerResponseExample3'
-            Basic Query - Number Range:
-              $ref: '#/components/examples/ScreenerResponseExample4'
-            Compound Query - AND:
-              $ref: '#/components/examples/ScreenerResponseExample5'
-            Compound Query - OR:
-              $ref: '#/components/examples/ScreenerResponseExample6'
-            Compound Query - NOT:
-              $ref: '#/components/examples/ScreenerResponseExample7'
-            Nested Compound Query - OR then AND:
-              $ref: '#/components/examples/ScreenerResponseExample8'
-            Nested Compound Query - OR then AND Deeply Nested:
-              $ref: '#/components/examples/ScreenerResponseExample9'
-    ResponseStatus400Screener:
-      description: '400: Bad Request'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputError'
-          examples:
-            Example1:
-              $ref: '#/components/examples/ResponseStatus400ScreenerExample1_2'
-    ResponseStatus500Screener:
-      description: '500: Internal Server Error'
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputError'
-    ResponseManagedInvestmentsScreener:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseManagedInvestmentsScreener'
-          examples:
-            Basic Query - Equals:
-              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample1'
-            Basic Query - In:
-              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample2'
-            Basic Query - Date Range:
-              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample3'
-            Basic Query - Number Range:
-              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample4'
-            Compound Query - AND:
-              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample5'
-            Compound Query - OR:
-              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample6'
-            Compound Query - NOT:
-              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample7'
   schemas:
-    OutputError:
-      title: OutputError
-      description: Error message and status code.
+    InputSortOption:
+      title: InputSortOption
+      description: The data point and sort direction. The data point must correspond to a value passed in the `dataPoints` array.
       type: object
       properties:
-        statusCode:
+        dataPoint:
+          description: Data point name.
+          example: shareClassInformation.exchangeCode
+          default: performanceId
           type: string
-          description: Indicates the HTTP status code.
-          example: 400
-        errorCode:
-          type: string
-          description: Indicates the unique error identifier.
-          example: 400.screener.006
-        message:
-          type: string
-          description: Description of the errror.
-          example: Please provide valid sort option.
-        requestId:
-          type: string
-          description: Indicates the unique request identifier.
-          example: 6631c374-2331-4c7e-b6f2-d0c0079f6ee
-      additionalProperties: false
-    InputFieldValueFilter:
-      title: InputFieldValueFilter
-      description: Filters for exact matches to value or a match to a value in a list. Supports string, number, integer, boolean, date and array data types.
-      anyOf:
-      - type: string
-      - type: number
-      - type: integer
-      - type: boolean
-      - type: string
-        format: date
-      - type: array
-        minItems: 1
-        items:
-          anyOf:
-          - type: string
-          - type: number
-          - type: integer
-          - type: boolean
-          - type: string
-            format: date
-    InputFieldValueComparitorFilter:
-      title: InputFieldValueComparitorFilter
-      description: Filters for values within a range or based on a comparator condition. Supports numeric, integer, and date string data types.
-      type: object
-      additionalProperties: false
-      minProperties: 1
-      properties:
-        gt:
-          description: Greater than
-          anyOf:
-          - type: number
-          - type: integer
-          - type: string
-            format: date
-        gte:
-          description: Greater than or equal
-          anyOf:
-          - type: number
-          - type: integer
-          - type: string
-            format: date
-        lt:
-          description: Less than
-          anyOf:
-          - type: number
-          - type: integer
-          - type: string
-            format: date
-        lte:
-          description: Less than or equal
-          anyOf:
-          - type: number
-          - type: integer
-          - type: string
-            format: date
-    InputDataPoints:
-      title: InputDataPoints
-      description: Lists data points to return. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/equities/data-points`, or browse the full reference in the data dictionary.
-      type: array
-      maxItems: 100
-      items:
-        type: string
-      example:
-      - companyInformation.cik
-      - companyInformation.legalName
-      - companyInformation.morningstarSectorCode
-      - balanceSheet.totalAssetsValueFY
-      - basicReference.isin
-      externalDocs:
-        description: Data dictionary (Excel)
-        url: https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx
-    ResponseEquitiesScreener:
-      title: ResponseEquitiesScreener
-      description: Screener response including results and metadata.
-      type: object
-      properties:
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvestment'
           nullable: true
-        metadata:
-          $ref: '#/components/schemas/OutputScreenerMetadata'
-      additionalProperties: false
-    InputFieldValueFilterFuzzy:
-      title: InputFieldValueFilterFuzzy
-      type: object
-      description: Filters text string data type using fuzzy text matching.
-      additionalProperties: false
-      properties:
-        value:
+        orderBy:
+          description: Sort direction.
           type: string
-        fuzzy:
-          type: boolean
-          description: Enable fuzzy text matching. Text string data types only.
-    InputPaginationOptions:
-      title: InputPaginationOptions
-      description: Determines how results are paginated.
-      type: object
-      properties:
-        paginationTokenNext:
-          description: Specifies the target of the next API call.
-          type: string
-          example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
-          nullable: true
-        paginationTokenPrevious:
-          description: Specifies the target of the next API call.
-          type: string
-          example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
-          nullable: true
-        pageSize:
-          description: Specifies the maximum number of results per page. The default value is 50.
-          type: integer
-          format: int32
-          example: 50
-          default: 50
-          maximum: 50
+          enum:
+          - asc
+          - desc
+          x-enumDescriptions:
+          - asc (Ascending)
+          - desc (Descending)
+          default: asc
+          example: desc
       additionalProperties: false
     OutputInvalidInvestment:
       title: OutputInvalidInvestment
@@ -485,75 +288,56 @@ components:
           type: string
           nullable: true
       additionalProperties: false
-    InputSortOption:
-      title: InputSortOption
-      description: The data point and sort direction. The data point must correspond to a value passed in the `dataPoints` array.
+    InputPaginationOptions:
+      title: InputPaginationOptions
+      description: Determines how results are paginated.
       type: object
       properties:
-        dataPoint:
-          description: Data point name.
-          example: shareClassInformation.exchangeCode
-          default: performanceId
+        paginationTokenNext:
+          description: Specifies the target of the next API call.
           type: string
+          example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
           nullable: true
-        orderBy:
-          description: Sort direction.
+        paginationTokenPrevious:
+          description: Specifies the target of the next API call.
           type: string
-          enum:
-          - asc
-          - desc
-          x-enumDescriptions:
-          - asc (Ascending)
-          - desc (Descending)
-          default: asc
-          example: desc
+          example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
+          nullable: true
+        pageSize:
+          description: Specifies the maximum number of results per page. The default value is 50.
+          type: integer
+          format: int32
+          example: 50
+          default: 50
+          maximum: 50
       additionalProperties: false
-    InputQueryOptions:
-      title: InputQueryOptions
-      description: 'Filters investments using `field:value` conditions or compound logic. For example:
-
-        * Basic query - "equals": `{ "shareClassInformation.symbol": "MSES" }`
-
-        * Basic query - "in": `{ "shareClassInformation.symbol": ["MSES", "CA40"] }`
-
-        * Basic query - "range": `{ "marketCapital.asOfDate": { "gt": "2020-01-01", "lt": "2024-01-01" } }`
-
-        * Compound query: `{ "and": [ { "field1": "value1" }, { "field2": "value2" } ] }`
-
-        * Nested compound query: `{ "or": [ { "and": [ ... ] }, { "field": "value" } ] }`'
-      type: object
-      properties:
-        and:
-          description: All conditions must match (logical AND). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.
-          type: array
-          items:
-            $ref: '#/components/schemas/InputQueryOptions'
-        or:
-          description: At least one condition must match (logical OR). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.
-          type: array
-          items:
-            $ref: '#/components/schemas/InputQueryOptions'
-        not:
-          description: All conditions must not match (logical NOT). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.
-          type: array
-          items:
-            $ref: '#/components/schemas/InputQueryOptions'
-      additionalProperties:
-        $ref: '#/components/schemas/InputFilterOptions'
-      propertyNames:
-        description: Data points supported for filtering and sorting in screener queries. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/equities/data-points`, or browse the full reference in the data dictionary.
+    InputDataPoints:
+      title: InputDataPoints
+      description: Lists data points to return. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/equities/data-points`, or browse the full reference in the data dictionary.
+      type: array
+      maxItems: 100
+      items:
         type: string
-        example: companyInformation.domicileCountryCode
-        externalDocs:
-          description: Data dictionary (Excel)
-          url: https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx
-    InputFilterOptions:
-      title: InputFilterOptions
-      description: Supported operators for data point filtering.
-      oneOf:
-      - $ref: '#/components/schemas/InputFieldValueFilter'
-      - $ref: '#/components/schemas/InputFieldValueFilterFuzzy'
-      - $ref: '#/components/schemas/InputFieldValueComparitorFilter'
+      example:
+      - companyInformation.cik
+      - companyInformation.legalName
+      - companyInformation.morningstarSectorCode
+      - balanceSheet.totalAssetsValueFY
+      - basicReference.isin
+      externalDocs:
+        description: Data dictionary (Excel)
+        url: https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx
+    InputFieldValueFilterFuzzy:
+      title: InputFieldValueFilterFuzzy
+      type: object
+      description: Filters text string data type using fuzzy text matching.
+      additionalProperties: false
+      properties:
+        value:
+          type: string
+        fuzzy:
+          type: boolean
+          description: Enable fuzzy text matching. Text string data types only.
     OutputInvestment:
       title: OutputInvestment
       description: Data points and corresponding values returned for each result. Keys are data point names in the format `<dataGroup>.<fieldName>`. Values may be string, number, integer, or boolean depending on the data point. Use the discovery endpoint to determine the type for each data point.
@@ -648,6 +432,107 @@ components:
           default: USD
           nullable: true
       additionalProperties: false
+    ResponseEquitiesScreener:
+      title: ResponseEquitiesScreener
+      description: Screener response including results and metadata.
+      type: object
+      properties:
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvestment'
+          nullable: true
+        metadata:
+          $ref: '#/components/schemas/OutputScreenerMetadata'
+      additionalProperties: false
+    OutputMessage:
+      title: OutputMessage
+      description: Indicates why specific data points were not returned for a result.
+      type: object
+      properties:
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestment'
+        type:
+          description: Indicates the type of the message.
+          example: Warning
+          type: string
+        message:
+          description: Message text.
+          example: Data points are not entitled for 0P0002OW20 security
+          type: string
+        code:
+          description: Indicates the message code.
+          example: 403
+          type: string
+      additionalProperties: false
+    InputFilterOptions:
+      title: InputFilterOptions
+      description: Supported operators for data point filtering.
+      oneOf:
+      - $ref: '#/components/schemas/InputFieldValueFilter'
+      - $ref: '#/components/schemas/InputFieldValueFilterFuzzy'
+      - $ref: '#/components/schemas/InputFieldValueComparitorFilter'
+    InputQueryOptions:
+      title: InputQueryOptions
+      description: 'Filters investments using `field:value` conditions or compound logic. For example:
+
+        * Basic query - "equals": `{ "shareClassInformation.symbol": "MSES" }`
+
+        * Basic query - "in": `{ "shareClassInformation.symbol": ["MSES", "CA40"] }`
+
+        * Basic query - "range": `{ "marketCapital.asOfDate": { "gt": "2020-01-01", "lt": "2024-01-01" } }`
+
+        * Compound query: `{ "and": [ { "field1": "value1" }, { "field2": "value2" } ] }`
+
+        * Nested compound query: `{ "or": [ { "and": [ ... ] }, { "field": "value" } ] }`'
+      type: object
+      properties:
+        and:
+          description: All conditions must match (logical AND). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.
+          type: array
+          items:
+            $ref: '#/components/schemas/InputQueryOptions'
+        or:
+          description: At least one condition must match (logical OR). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.
+          type: array
+          items:
+            $ref: '#/components/schemas/InputQueryOptions'
+        not:
+          description: All conditions must not match (logical NOT). Each element is an `InputQueryOptions` object and may itself contain nested `and`, `or`, or `not` logic.
+          type: array
+          items:
+            $ref: '#/components/schemas/InputQueryOptions'
+      additionalProperties:
+        $ref: '#/components/schemas/InputFilterOptions'
+      propertyNames:
+        description: Data points supported for filtering and sorting in screener queries. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/equities/data-points`, or browse the full reference in the data dictionary.
+        type: string
+        example: companyInformation.domicileCountryCode
+        externalDocs:
+          description: Data dictionary (Excel)
+          url: https://developer.morningstar.com/content/hidden-from-navigation/ScreenerEquitiesDataDictionary.xlsx
+    InputFieldValueFilter:
+      title: InputFieldValueFilter
+      description: Filters for exact matches to value or a match to a value in a list. Supports string, number, integer, boolean, date and array data types.
+      anyOf:
+      - type: string
+      - type: number
+      - type: integer
+      - type: boolean
+      - type: string
+        format: date
+      - type: array
+        minItems: 1
+        items:
+          anyOf:
+          - type: string
+          - type: number
+          - type: integer
+          - type: boolean
+          - type: string
+            format: date
     OutputScreenerMetadata:
       description: Metadata returned in response to requests to `POST /screeners/equities` endpoint. Includes information about data points not returned for results.
       title: OutputScreenerMetadata
@@ -684,27 +569,124 @@ components:
           type: string
           format: date-time
       additionalProperties: false
-    OutputMessage:
-      title: OutputMessage
+    OutputError:
+      title: OutputError
+      description: Error message and status code.
+      type: object
+      properties:
+        statusCode:
+          type: string
+          description: Indicates the HTTP status code.
+          example: 400
+        errorCode:
+          type: string
+          description: Indicates the unique error identifier.
+          example: 400.screener.006
+        message:
+          type: string
+          description: Description of the errror.
+          example: Please provide valid sort option.
+        requestId:
+          type: string
+          description: Indicates the unique request identifier.
+          example: 6631c374-2331-4c7e-b6f2-d0c0079f6ee
+      additionalProperties: false
+    InputFieldValueComparitorFilter:
+      title: InputFieldValueComparitorFilter
+      description: Filters for values within a range or based on a comparator condition. Supports numeric, integer, and date string data types.
+      type: object
+      additionalProperties: false
+      minProperties: 1
+      properties:
+        gt:
+          description: Greater than
+          anyOf:
+          - type: number
+          - type: integer
+          - type: string
+            format: date
+        gte:
+          description: Greater than or equal
+          anyOf:
+          - type: number
+          - type: integer
+          - type: string
+            format: date
+        lt:
+          description: Less than
+          anyOf:
+          - type: number
+          - type: integer
+          - type: string
+            format: date
+        lte:
+          description: Less than or equal
+          anyOf:
+          - type: number
+          - type: integer
+          - type: string
+            format: date
+    ResponseManagedInvestmentsScreenerMetadata:
+      description: Metadata returned in response to screening requests. Includes information about data points not returned for results.
+      title: ResponseManagedInvestmentsScreenerMetadata
+      type: object
+      properties:
+        requestId:
+          description: Indicates request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          type: string
+          nullable: true
+          readOnly: true
+        messages:
+          $ref: '#/components/schemas/ResponseMetadataMessage'
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
+        paginationTokenNext:
+          type: string
+          description: Indicates token to fetch next page of results.
+          example: CNOAQhoJKQBIuTktAQAAGhU6E3RlYW0gcGFydG5lcnMgZ3JvdXAaDDoKMHAwMDAwYTZ6dCIMOgowUDAwMDBBNlpU
+          nullable: true
+          readOnly: true
+        paginationTokenPrevious:
+          type: string
+          description: Indicates token to fetch previous page of results.
+          example: CKDjNhoJKQBIuTktAQAAGg06C2dkZiBzdWV6IHNhGgw6CjBwMDAwMDl3cW8iDDoKMFAwMDAwOVdRTw==
+          nullable: true
+          readOnly: true
+        totalCount:
+          type: integer
+          description: Indicates the total number of results found.
+          example: 2162
+          format: int32
+          nullable: true
+      additionalProperties: false
+    ResponseMetadataMessage:
+      title: ResponseMetadataMessage
       description: Indicates why specific data points were not returned for a result.
       type: object
       properties:
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestment'
-        type:
-          description: Indicates the type of the message.
-          example: Warning
+        status:
+          description: Provides information about investment returned.
+          example: Datapoints are not entitled for 0P0001VK70 security
           type: string
-        message:
-          description: Message text.
-          example: Data points are not entitled for 0P0002OW20 security
-          type: string
-        code:
-          description: Indicates the message code.
+          readOnly: true
+        dataPoints:
+          $ref: '#/components/schemas/InputDataPoints_2'
+        errorCode:
+          description: Indicates error code.
           example: 403
           type: string
+          readOnly: true
+        id:
+          description: Indicates the investment for which no data was returned.
+          example: 0P0001VK70
+          type: string
+          readOnly: true
       additionalProperties: false
     ResponseManagedInvestmentsScreener:
       title: ResponseManagedInvestmentsScreener
@@ -719,45 +701,6 @@ components:
           readOnly: true
         metadata:
           $ref: '#/components/schemas/ResponseManagedInvestmentsScreenerMetadata'
-      additionalProperties: false
-    InputDataPoints_2:
-      title: InputDataPoints
-      description: Lists data points to return. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/managed-investments/data-points`, or browse the full reference in the data dictionary.
-      type: array
-      example:
-      - basicReference.legalName
-      - basicReference.baseCurrency
-      - basicReference.name
-      - basicReference.firmName
-      - basicReference.fundCode
-      - basicReference.investmentType
-      items:
-        type: string
-      externalDocs:
-        description: Data dictionary (Excel)
-        url: https://developer.morningstar.com/content/hidden-from-navigation/ScreenerManagedInvestmentsDataDictionary.xlsx
-    InputPaginationOptions_2:
-      title: InputPaginationOptions
-      description: Determines how results are paginated.
-      type: object
-      properties:
-        paginationTokenNext:
-          description: Specifies the target of the next API call.
-          type: string
-          example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
-          nullable: true
-        paginationTokenPrevious:
-          description: Specifies the target of the next API call.
-          type: string
-          example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
-          nullable: true
-        pageSize:
-          description: Specifies the maximum number of results per page. The default value is 50.
-          type: integer
-          format: int32
-          example: 500
-          default: 50
-          maximum: 50
       additionalProperties: false
     RequestManagedInvestmentsScreener:
       title: RequestManagedInvestmentsScreener
@@ -832,44 +775,67 @@ components:
           default: USD
           nullable: true
       additionalProperties: false
-    ResponseManagedInvestmentsScreenerMetadata:
-      description: Metadata returned in response to screening requests. Includes information about data points not returned for results.
-      title: ResponseManagedInvestmentsScreenerMetadata
+    InputPaginationOptions_2:
+      title: InputPaginationOptions
+      description: Determines how results are paginated.
       type: object
       properties:
-        requestId:
-          description: Indicates request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          type: string
-          nullable: true
-          readOnly: true
-        messages:
-          $ref: '#/components/schemas/ResponseMetadataMessage'
-        time:
-          description: Indicates time response was returned.
-          example: '2025-10-02T10:54:36.9161062Z'
-          type: string
-          format: date-time
-          nullable: true
-          readOnly: true
         paginationTokenNext:
+          description: Specifies the target of the next API call.
           type: string
-          description: Indicates token to fetch next page of results.
-          example: CNOAQhoJKQBIuTktAQAAGhU6E3RlYW0gcGFydG5lcnMgZ3JvdXAaDDoKMHAwMDAwYTZ6dCIMOgowUDAwMDBBNlpU
+          example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
           nullable: true
-          readOnly: true
         paginationTokenPrevious:
+          description: Specifies the target of the next API call.
           type: string
-          description: Indicates token to fetch previous page of results.
-          example: CKDjNhoJKQBIuTktAQAAGg06C2dkZiBzdWV6IHNhGgw6CjBwMDAwMDl3cW8iDDoKMFAwMDAwOVdRTw==
+          example: CJ2aBBoROg81YmFuYyBzcGxpdCBpbmMaDDoKMHAwMDAwbTJkaiIMOgowUDAwMDBNMkRK
           nullable: true
-          readOnly: true
-        totalCount:
+        pageSize:
+          description: Specifies the maximum number of results per page. The default value is 50.
           type: integer
-          description: Indicates the total number of results found.
-          example: 2162
           format: int32
+          example: 500
+          default: 50
+          maximum: 50
+      additionalProperties: false
+    InputDataPoints_2:
+      title: InputDataPoints
+      description: Lists data points to return. Retrieve valid values programmatically via `GET /direct-web-services/v1/screeners/managed-investments/data-points`, or browse the full reference in the data dictionary.
+      type: array
+      example:
+      - basicReference.legalName
+      - basicReference.baseCurrency
+      - basicReference.name
+      - basicReference.firmName
+      - basicReference.fundCode
+      - basicReference.investmentType
+      items:
+        type: string
+      externalDocs:
+        description: Data dictionary (Excel)
+        url: https://developer.morningstar.com/content/hidden-from-navigation/ScreenerManagedInvestmentsDataDictionary.xlsx
+    InputSort:
+      title: InputSort
+      description: Specifies the data points(s) to sort results by and sets the sort direction. If multiple data points are provided, they are applied in the order listed in the array (the first item is the primary sort key, the second is the secondary key, and so on.
+      type: object
+      properties:
+        dataPoint:
+          description: Specifies the data point used to sort results.
+          example: basicReference.investmentType
+          default: instrumentIdentifiers.performanceId
+          type: string
           nullable: true
+        orderBy:
+          description: Sets the sort order.
+          type: string
+          enum:
+          - asc
+          - desc
+          x-enum-description:
+          - asc (Ascending)
+          - desc (Descending)
+          default: asc
+          example: desc
       additionalProperties: false
     InputQueryOptions_2:
       title: InputQueryOptions
@@ -910,52 +876,6 @@ components:
         externalDocs:
           description: Data dictionary (Excel)
           url: https://developer.morningstar.com/content/hidden-from-navigation/ScreenerManagedInvestmentsDataDictionary.xlsx
-    InputSort:
-      title: InputSort
-      description: Specifies the data points(s) to sort results by and sets the sort direction. If multiple data points are provided, they are applied in the order listed in the array (the first item is the primary sort key, the second is the secondary key, and so on.
-      type: object
-      properties:
-        dataPoint:
-          description: Specifies the data point used to sort results.
-          example: basicReference.investmentType
-          default: instrumentIdentifiers.performanceId
-          type: string
-          nullable: true
-        orderBy:
-          description: Sets the sort order.
-          type: string
-          enum:
-          - asc
-          - desc
-          x-enum-description:
-          - asc (Ascending)
-          - desc (Descending)
-          default: asc
-          example: desc
-      additionalProperties: false
-    ResponseMetadataMessage:
-      title: ResponseMetadataMessage
-      description: Indicates why specific data points were not returned for a result.
-      type: object
-      properties:
-        status:
-          description: Provides information about investment returned.
-          example: Datapoints are not entitled for 0P0001VK70 security
-          type: string
-          readOnly: true
-        dataPoints:
-          $ref: '#/components/schemas/InputDataPoints_2'
-        errorCode:
-          description: Indicates error code.
-          example: 403
-          type: string
-          readOnly: true
-        id:
-          description: Indicates the investment for which no data was returned.
-          example: 0P0001VK70
-          type: string
-          readOnly: true
-      additionalProperties: false
     SecuritiesInputModel:
       type: object
       properties:
@@ -981,6 +901,97 @@ components:
         filters:
           type: string
   examples:
+    ScreenerRequestExample9:
+      summary: Nested Compound Query - OR then AND Deeply Nested
+      value:
+        scope:
+          shareclassInformation.exchangeCode: XPAR
+        query:
+          OR:
+          - AND:
+            - instrumentIdentifiers.performanceId:
+              - 0P0000DKX2
+            - shareClassInformation.symbol:
+              - ALMIL
+          - AND:
+            - marketCapital.asOfDate:
+              - '2050-01-06'
+            - trailingReturn.trailing10YearReturn: 0.453506
+        dataPoints:
+        - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
+        - factorProfile.emergingAsiaPacificFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr
+        - indexLevelsPrice.closeAsMovingAvg200DayMoEnd
+        - shortInterest.percentageChanged
+        - companyInformation.sic
+        - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
+        - esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference
+        - esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue
+        - monthlyStandardDeviation.arithmeticMean24Month
+        - esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus
+        - dividendResidualRiskAndReturnSensitivity.beta24Month
+        - esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus
+        - pricesMostRecent.avgVolumeInMil5YrQtrEnd
+        - esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus
+        - esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType
+        - shareClassInformation.symbol
+        - factorProfile.styleFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference
+        - esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType
+        - shareClassInformation.investmentStatus
+        - pricesMostRecent.avgVolumeInMil10YrMoEnd
+        - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
+        - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
+        - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
+        - dividendResidualRiskAndReturnSensitivity.beta120Month
+        - esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType
+        - esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus
+        - trailingReturn.trailing10YearReturn
+        - esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr
+        - pricesMostRecent.avgVolumeInMil9MoDaily
+        - esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus
+        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType
+        - esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType
+        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr
+        - pricesMostRecent.totalVolumeInMil2WkDaily
+        - marketCapital.asOfDate
+        - quantitativeFairValues.quantitativeMoat
+        - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
+        - factorProfile.realEstateFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus
+        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr
+        - dividendResidualRiskAndReturnSensitivity.rSquare60Month
+        - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
+        sort:
+        - datapoint: marketCapital.asOfDate
+    ScreenerResponseExample1:
+      summary: Basic Query - Equals
+      value:
+        investments:
+        - instrumentIdentifiers.performanceId: 0P0001VK71
+          pricesMostRecent.avgVolumeInMil9MoDaily: 0.0013
+          factorProfile.emergingAsiaPacificFactorMultiAssetModel: 0.019826
+          factorProfile.realEstateFactorMultiAssetModel: 0.000357
+          factorProfile.styleFactorMultiAssetModel: 0.110014
+          shareClassInformation.investmentStatus: 1
+          shareClassInformation.symbol: MSES
+        metadata:
+          totalCount: 1
+          messages:
+          - investments:
+            - status: Data points are not entitled for 0P0001VK71 security
+              dataPoints:
+              - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
+              - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
+              - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
+              - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
+              - quantitativeFairValues.quantitativeMoat
+              - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
+              errorCode: '403'
+              id: 0P0001VK71
+            type: Warning
+          requestId: 092fa93b-d63d-4b6e-a53b-d7ace50473ff
+          time: '2025-10-03T17:48:16.0302555Z'
     ScreenerResponseExample4:
       summary: Basic Query - Number Range
       value:
@@ -1360,134 +1371,6 @@ components:
           totalCount: 23
           requestId: e4cd1bc2-89ca-416f-bb6f-2ffe832f4774
           time: '2025-10-03T18:06:53.4543888Z'
-    ScreenerResponseExample1:
-      summary: Basic Query - Equals
-      value:
-        investments:
-        - instrumentIdentifiers.performanceId: 0P0001VK71
-          pricesMostRecent.avgVolumeInMil9MoDaily: 0.0013
-          factorProfile.emergingAsiaPacificFactorMultiAssetModel: 0.019826
-          factorProfile.realEstateFactorMultiAssetModel: 0.000357
-          factorProfile.styleFactorMultiAssetModel: 0.110014
-          shareClassInformation.investmentStatus: 1
-          shareClassInformation.symbol: MSES
-        metadata:
-          totalCount: 1
-          messages:
-          - investments:
-            - status: Data points are not entitled for 0P0001VK71 security
-              dataPoints:
-              - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
-              - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
-              - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
-              - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
-              - quantitativeFairValues.quantitativeMoat
-              - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
-              errorCode: '403'
-              id: 0P0001VK71
-            type: Warning
-          requestId: 092fa93b-d63d-4b6e-a53b-d7ace50473ff
-          time: '2025-10-03T17:48:16.0302555Z'
-    ScreenerResponseExample8:
-      summary: Nested Compound Query - OR then AND
-      value:
-        investments:
-        - instrumentIdentifiers.performanceId: 0P0000DKX2
-          pricesMostRecent.avgVolumeInMil10YrMoEnd: 0.0017
-          pricesMostRecent.avgVolumeInMil5YrQtrEnd: 0.0012
-          pricesMostRecent.totalVolumeInMil2WkDaily: 0
-          indexLevelsPrice.closeAsMovingAvg200DayMoEnd: 0.8863
-          pricesMostRecent.avgVolumeInMil9MoDaily: 0.0022
-          esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate: '2025-09-08'
-          factorProfile.emergingAsiaPacificFactorMultiAssetModel: 1.0e-06
-          factorProfile.realEstateFactorMultiAssetModel: 0.09284
-          factorProfile.styleFactorMultiAssetModel: 0.298316
-          marketCapital.asOfDate: '2025-01-06'
-          dividendResidualRiskAndReturnSensitivity.beta24Month: -0.151184
-          dividendResidualRiskAndReturnSensitivity.beta120Month: 0.491438
-          dividendResidualRiskAndReturnSensitivity.rSquare60Month: 9.643232
-          monthlyStandardDeviation.arithmeticMean24Month: 2.059133
-          trailingReturn.trailing10YearReturn: 0.453506
-          shareClassInformation.investmentStatus: 0
-          shareClassInformation.symbol: ALMIL
-        - instrumentIdentifiers.performanceId: 0P0001DIM8
-          pricesMostRecent.avgVolumeInMil10YrMoEnd: 0.0601
-          pricesMostRecent.avgVolumeInMil5YrQtrEnd: 0.0702
-          pricesMostRecent.totalVolumeInMil2WkDaily: 5.0964
-          indexLevelsPrice.closeAsMovingAvg200DayMoEnd: 0.5581
-          pricesMostRecent.avgVolumeInMil9MoDaily: 0.2261
-          factorProfile.emergingAsiaPacificFactorMultiAssetModel: 0
-          factorProfile.realEstateFactorMultiAssetModel: 0
-          factorProfile.styleFactorMultiAssetModel: -0.458664
-          marketCapital.asOfDate: '2025-10-03'
-          dividendResidualRiskAndReturnSensitivity.beta24Month: 8.286211
-          dividendResidualRiskAndReturnSensitivity.rSquare60Month: 9.604659
-          monthlyStandardDeviation.arithmeticMean24Month: 17.835292
-          quantitativeFairValues.quantitativeMoat: 0.276
-          shareClassInformation.investmentStatus: 1
-          shareClassInformation.symbol: AL2SI
-        metadata:
-          totalCount: 2
-          requestId: ee2ce928-75a6-4a4c-9475-b6f1c74d25a6
-          time: '2025-10-06T15:22:26.0786813Z'
-    ScreenerRequestExample7:
-      summary: Compound Query - NOT
-      value:
-        scope:
-          shareclassInformation.exchangeCode: XPAR
-        query:
-          not:
-          - shareClassInformation.investmentStatus: 1
-          - shareClassInformation.symbol: USSM
-        dataPoints:
-        - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
-        - factorProfile.emergingAsiaPacificFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr
-        - indexLevelsPrice.closeAsMovingAvg200DayMoEnd
-        - shortInterest.percentageChanged
-        - companyInformation.sic
-        - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
-        - esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference
-        - esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue
-        - monthlyStandardDeviation.arithmeticMean24Month
-        - esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus
-        - dividendResidualRiskAndReturnSensitivity.beta24Month
-        - esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus
-        - pricesMostRecent.avgVolumeInMil5YrQtrEnd
-        - esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus
-        - esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType
-        - shareClassInformation.symbol
-        - factorProfile.styleFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference
-        - esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType
-        - shareClassInformation.investmentStatus
-        - pricesMostRecent.avgVolumeInMil10YrMoEnd
-        - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
-        - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
-        - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
-        - dividendResidualRiskAndReturnSensitivity.beta120Month
-        - esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType
-        - esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus
-        - trailingReturn.trailing10YearReturn
-        - esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr
-        - pricesMostRecent.avgVolumeInMil9MoDaily
-        - esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus
-        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType
-        - esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType
-        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr
-        - pricesMostRecent.totalVolumeInMil2WkDaily
-        - marketCapital.asOfDate
-        - quantitativeFairValues.quantitativeMoat
-        - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
-        - factorProfile.realEstateFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus
-        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr
-        - dividendResidualRiskAndReturnSensitivity.rSquare60Month
-        - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
-        pagination:
-          pageSize: 50
-        sort:
-        - datapoint: marketCapital.asOfDate
     ScreenerResponseExample7:
       summary: Compound Query - NOT
       value:
@@ -2203,6 +2086,71 @@ components:
           totalCount: 1213
           requestId: 544e78d8-4974-4e84-9f2a-25a85d59f68b
           time: '2025-10-06T15:15:48.3256389Z'
+    ResponseStatus500ScreenerExample1:
+      summary: 500 - Internal Server Error
+      value:
+        statusCode: 500
+        errorCode: 500.screener.001
+        message: TBC
+        requestId: 5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9
+    ScreenerRequestExample3:
+      summary: Basic Query - Date Range
+      value:
+        scope:
+          shareclassInformation.exchangeCode: XPAR
+        query:
+          marketCapital.asOfDate:
+            gt: '2020-01-01'
+            lt: '2024-03-31'
+        dataPoints:
+        - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
+        - factorProfile.emergingAsiaPacificFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr
+        - indexLevelsPrice.closeAsMovingAvg200DayMoEnd
+        - shortInterest.percentageChanged
+        - companyInformation.sic
+        - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
+        - esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference
+        - esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue
+        - monthlyStandardDeviation.arithmeticMean24Month
+        - esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus
+        - dividendResidualRiskAndReturnSensitivity.beta24Month
+        - esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus
+        - pricesMostRecent.avgVolumeInMil5YrQtrEnd
+        - esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus
+        - esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType
+        - shareClassInformation.symbol
+        - factorProfile.styleFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference
+        - esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType
+        - shareClassInformation.investmentStatus
+        - pricesMostRecent.avgVolumeInMil10YrMoEnd
+        - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
+        - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
+        - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
+        - dividendResidualRiskAndReturnSensitivity.beta120Month
+        - esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType
+        - esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus
+        - trailingReturn.trailing10YearReturn
+        - esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr
+        - pricesMostRecent.avgVolumeInMil9MoDaily
+        - esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus
+        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType
+        - esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType
+        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr
+        - pricesMostRecent.totalVolumeInMil2WkDaily
+        - marketCapital.asOfDate
+        - quantitativeFairValues.quantitativeMoat
+        - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
+        - factorProfile.realEstateFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus
+        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr
+        - dividendResidualRiskAndReturnSensitivity.rSquare60Month
+        - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
+        pagination:
+          pageSize: 10
+        sort:
+        - datapoint: marketCapital.asOfDate
     ScreenerResponseExample6:
       summary: Compound Query - OR
       value:
@@ -2262,29 +2210,27 @@ components:
             type: Warning
           requestId: 3cc96347-7390-469a-8a39-7ed33be0f815
           time: '2025-10-06T15:10:59.3818568Z'
-    ResponseStatus500ScreenerExample1:
-      summary: 500 - Internal Server Error
+    ResponseStatus400ScreenerExample1:
+      summary: 400 - Invalid Data Point Names
       value:
-        statusCode: 500
-        errorCode: 500.screener.001
-        message: TBC
+        statusCode: 400
+        errorCode: 400.screener.005
+        message: Invalid dataPoint names {0}. Provide valid values.
         requestId: 5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9
-    ScreenerRequestExample9:
-      summary: Nested Compound Query - OR then AND Deeply Nested
+    ScreenerRequestExample5:
+      summary: Compound Query - AND
       value:
         scope:
           shareclassInformation.exchangeCode: XPAR
         query:
-          OR:
-          - AND:
-            - instrumentIdentifiers.performanceId:
-              - 0P0000DKX2
-            - shareClassInformation.symbol:
-              - ALMIL
-          - AND:
-            - marketCapital.asOfDate:
-              - '2050-01-06'
-            - trailingReturn.trailing10YearReturn: 0.453506
+          and:
+          - instrumentIdentifiers.performanceId:
+            - 0P0001VK70
+            - 0P0001VK71
+            - 0P0001VK72
+          - shareClassInformation.symbol:
+            - CA40
+            - MSES
         dataPoints:
         - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
         - factorProfile.emergingAsiaPacificFactorMultiAssetModel
@@ -2330,15 +2276,8 @@ components:
         - esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr
         - dividendResidualRiskAndReturnSensitivity.rSquare60Month
         - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
-        sort:
-        - datapoint: marketCapital.asOfDate
-    ResponseStatus400ScreenerExample1:
-      summary: 400 - Invalid Data Point Names
-      value:
-        statusCode: 400
-        errorCode: 400.screener.005
-        message: Invalid dataPoint names {0}. Provide valid values.
-        requestId: 5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9
+        pagination:
+          pageSize: 50
     ScreenerResponseExample3:
       summary: Basic Query - Date Range
       value:
@@ -2532,76 +2471,15 @@ components:
             type: Warning
           requestId: d9e864d7-c97e-4d2a-9988-648dfbec5761
           time: '2025-10-03T17:53:46.8668179Z'
-    ScreenerRequestExample5:
-      summary: Compound Query - AND
+    ScreenerRequestExample2:
+      summary: Basic Query - In
       value:
         scope:
           shareclassInformation.exchangeCode: XPAR
         query:
-          and:
-          - instrumentIdentifiers.performanceId:
-            - 0P0001VK70
-            - 0P0001VK71
-            - 0P0001VK72
-          - shareClassInformation.symbol:
-            - CA40
-            - MSES
-        dataPoints:
-        - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
-        - factorProfile.emergingAsiaPacificFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr
-        - indexLevelsPrice.closeAsMovingAvg200DayMoEnd
-        - shortInterest.percentageChanged
-        - companyInformation.sic
-        - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
-        - esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference
-        - esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue
-        - monthlyStandardDeviation.arithmeticMean24Month
-        - esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus
-        - dividendResidualRiskAndReturnSensitivity.beta24Month
-        - esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus
-        - pricesMostRecent.avgVolumeInMil5YrQtrEnd
-        - esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus
-        - esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType
-        - shareClassInformation.symbol
-        - factorProfile.styleFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference
-        - esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType
-        - shareClassInformation.investmentStatus
-        - pricesMostRecent.avgVolumeInMil10YrMoEnd
-        - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
-        - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
-        - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
-        - dividendResidualRiskAndReturnSensitivity.beta120Month
-        - esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType
-        - esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus
-        - trailingReturn.trailing10YearReturn
-        - esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr
-        - pricesMostRecent.avgVolumeInMil9MoDaily
-        - esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus
-        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType
-        - esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType
-        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr
-        - pricesMostRecent.totalVolumeInMil2WkDaily
-        - marketCapital.asOfDate
-        - quantitativeFairValues.quantitativeMoat
-        - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
-        - factorProfile.realEstateFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus
-        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr
-        - dividendResidualRiskAndReturnSensitivity.rSquare60Month
-        - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
-        pagination:
-          pageSize: 50
-    ScreenerRequestExample3:
-      summary: Basic Query - Date Range
-      value:
-        scope:
-          shareclassInformation.exchangeCode: XPAR
-        query:
-          marketCapital.asOfDate:
-            gt: '2020-01-01'
-            lt: '2024-03-31'
+          shareClassInformation.symbol:
+          - CA40
+          - MSES
         dataPoints:
         - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
         - factorProfile.emergingAsiaPacificFactorMultiAssetModel
@@ -2651,32 +2529,64 @@ components:
           pageSize: 10
         sort:
         - datapoint: marketCapital.asOfDate
-    ScreenerResponseExample9:
-      summary: Nested Compound Query - OR then AND Deeply Nested
+    ScreenerRequestExample7:
+      summary: Compound Query - NOT
       value:
-        investments:
-        - instrumentIdentifiers.performanceId: 0P0000DKX2
-          pricesMostRecent.avgVolumeInMil10YrMoEnd: 0.0017
-          pricesMostRecent.avgVolumeInMil5YrQtrEnd: 0.0012
-          pricesMostRecent.totalVolumeInMil2WkDaily: 0
-          indexLevelsPrice.closeAsMovingAvg200DayMoEnd: 0.8863
-          pricesMostRecent.avgVolumeInMil9MoDaily: 0.0022
-          esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate: '2025-09-08'
-          factorProfile.emergingAsiaPacificFactorMultiAssetModel: 1.0e-06
-          factorProfile.realEstateFactorMultiAssetModel: 0.09284
-          factorProfile.styleFactorMultiAssetModel: 0.298316
-          marketCapital.asOfDate: '2025-01-06'
-          dividendResidualRiskAndReturnSensitivity.beta24Month: -0.151184
-          dividendResidualRiskAndReturnSensitivity.beta120Month: 0.491438
-          dividendResidualRiskAndReturnSensitivity.rSquare60Month: 9.643232
-          monthlyStandardDeviation.arithmeticMean24Month: 2.059133
-          trailingReturn.trailing10YearReturn: 0.453506
-          shareClassInformation.investmentStatus: 0
-          shareClassInformation.symbol: ALMIL
-        metadata:
-          totalCount: 1
-          requestId: 719d36b6-3b73-46ca-8029-7cb8800fb670
-          time: '2025-10-06T15:41:05.9460985Z'
+        scope:
+          shareclassInformation.exchangeCode: XPAR
+        query:
+          not:
+          - shareClassInformation.investmentStatus: 1
+          - shareClassInformation.symbol: USSM
+        dataPoints:
+        - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
+        - factorProfile.emergingAsiaPacificFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr
+        - indexLevelsPrice.closeAsMovingAvg200DayMoEnd
+        - shortInterest.percentageChanged
+        - companyInformation.sic
+        - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
+        - esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference
+        - esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue
+        - monthlyStandardDeviation.arithmeticMean24Month
+        - esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus
+        - dividendResidualRiskAndReturnSensitivity.beta24Month
+        - esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus
+        - pricesMostRecent.avgVolumeInMil5YrQtrEnd
+        - esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus
+        - esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType
+        - shareClassInformation.symbol
+        - factorProfile.styleFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference
+        - esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType
+        - shareClassInformation.investmentStatus
+        - pricesMostRecent.avgVolumeInMil10YrMoEnd
+        - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
+        - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
+        - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
+        - dividendResidualRiskAndReturnSensitivity.beta120Month
+        - esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType
+        - esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus
+        - trailingReturn.trailing10YearReturn
+        - esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr
+        - pricesMostRecent.avgVolumeInMil9MoDaily
+        - esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus
+        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType
+        - esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType
+        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr
+        - pricesMostRecent.totalVolumeInMil2WkDaily
+        - marketCapital.asOfDate
+        - quantitativeFairValues.quantitativeMoat
+        - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
+        - factorProfile.realEstateFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus
+        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr
+        - dividendResidualRiskAndReturnSensitivity.rSquare60Month
+        - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
+        pagination:
+          pageSize: 50
+        sort:
+        - datapoint: marketCapital.asOfDate
     ScreenerRequestExample4:
       summary: Basic Query - Number Range
       value:
@@ -2733,66 +2643,6 @@ components:
         - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
         pagination:
           pageSize: 50
-        sort:
-        - datapoint: marketCapital.asOfDate
-    ScreenerRequestExample6:
-      summary: Compound Query - OR
-      value:
-        scope:
-          shareclassInformation.exchangeCode: XPAR
-        query:
-          or:
-          - instrumentIdentifiers.performanceId: 0P0001VK70
-          - shareClassInformation.symbol:
-            - FM28
-            - MSES
-        dataPoints:
-        - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
-        - factorProfile.emergingAsiaPacificFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr
-        - indexLevelsPrice.closeAsMovingAvg200DayMoEnd
-        - shortInterest.percentageChanged
-        - companyInformation.sic
-        - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
-        - esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference
-        - esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue
-        - monthlyStandardDeviation.arithmeticMean24Month
-        - esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus
-        - dividendResidualRiskAndReturnSensitivity.beta24Month
-        - esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus
-        - pricesMostRecent.avgVolumeInMil5YrQtrEnd
-        - esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus
-        - esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType
-        - shareClassInformation.symbol
-        - factorProfile.styleFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference
-        - esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType
-        - shareClassInformation.investmentStatus
-        - pricesMostRecent.avgVolumeInMil10YrMoEnd
-        - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
-        - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
-        - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
-        - dividendResidualRiskAndReturnSensitivity.beta120Month
-        - esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType
-        - esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus
-        - trailingReturn.trailing10YearReturn
-        - esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr
-        - pricesMostRecent.avgVolumeInMil9MoDaily
-        - esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus
-        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType
-        - esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType
-        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr
-        - pricesMostRecent.totalVolumeInMil2WkDaily
-        - marketCapital.asOfDate
-        - quantitativeFairValues.quantitativeMoat
-        - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
-        - factorProfile.realEstateFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus
-        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr
-        - dividendResidualRiskAndReturnSensitivity.rSquare60Month
-        - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
-        pagination:
-          pageSize: 10
         sort:
         - datapoint: marketCapital.asOfDate
     ScreenerRequestExample8:
@@ -2901,6 +2751,66 @@ components:
             type: Warning
           requestId: 1354c656-2095-4dd6-a07a-4ea386c55b1b
           time: '2025-10-06T15:00:56.3309709Z'
+    ScreenerRequestExample6:
+      summary: Compound Query - OR
+      value:
+        scope:
+          shareclassInformation.exchangeCode: XPAR
+        query:
+          or:
+          - instrumentIdentifiers.performanceId: 0P0001VK70
+          - shareClassInformation.symbol:
+            - FM28
+            - MSES
+        dataPoints:
+        - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
+        - factorProfile.emergingAsiaPacificFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr
+        - indexLevelsPrice.closeAsMovingAvg200DayMoEnd
+        - shortInterest.percentageChanged
+        - companyInformation.sic
+        - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
+        - esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference
+        - esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue
+        - monthlyStandardDeviation.arithmeticMean24Month
+        - esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus
+        - dividendResidualRiskAndReturnSensitivity.beta24Month
+        - esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus
+        - pricesMostRecent.avgVolumeInMil5YrQtrEnd
+        - esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus
+        - esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType
+        - shareClassInformation.symbol
+        - factorProfile.styleFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference
+        - esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType
+        - shareClassInformation.investmentStatus
+        - pricesMostRecent.avgVolumeInMil10YrMoEnd
+        - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
+        - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
+        - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
+        - dividendResidualRiskAndReturnSensitivity.beta120Month
+        - esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType
+        - esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus
+        - trailingReturn.trailing10YearReturn
+        - esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr
+        - pricesMostRecent.avgVolumeInMil9MoDaily
+        - esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus
+        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType
+        - esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType
+        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr
+        - pricesMostRecent.totalVolumeInMil2WkDaily
+        - marketCapital.asOfDate
+        - quantitativeFairValues.quantitativeMoat
+        - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
+        - factorProfile.realEstateFactorMultiAssetModel
+        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus
+        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr
+        - dividendResidualRiskAndReturnSensitivity.rSquare60Month
+        - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
+        pagination:
+          pageSize: 10
+        sort:
+        - datapoint: marketCapital.asOfDate
     ScreenerRequestExample1:
       summary: Basic Query - Equals
       value:
@@ -2957,89 +2867,74 @@ components:
           pageSize: 10
         sort:
         - datapoint: marketCapital.asOfDate
-    ScreenerRequestExample2:
-      summary: Basic Query - In
+    ScreenerResponseExample8:
+      summary: Nested Compound Query - OR then AND
       value:
-        scope:
-          shareclassInformation.exchangeCode: XPAR
-        query:
-          shareClassInformation.symbol:
-          - CA40
-          - MSES
-        dataPoints:
-        - esgCompanyLevel2DataCarbonEmissions.carbonIntensity
-        - factorProfile.emergingAsiaPacificFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.activitiesCausingLandDegradationDesertificationOrSoilSealingSfdr
-        - indexLevelsPrice.closeAsMovingAvg200DayMoEnd
-        - shortInterest.percentageChanged
-        - companyInformation.sic
-        - esgCompanyLevel1DataLowCarbonTransitionRating.lowCarbonTransitionVarValueAtRiskIprFpsOverallRisk2050Usd
-        - esgCompanyLevelDataSfdrPAI.breachOfUnGlobalCompactPrinciplesAndOecdGuidelinesForMultinationalEnterprisesSfdrYearOfReference
-        - esgCompanyLevel2DataImpactMetricsSDGsAndThemes.sdg3PercOfRevenue
-        - monthlyStandardDeviation.arithmeticMean24Month
-        - esgCompanyLevelDataSfdrPAI.energyConsumptionIntensityWholesaleAndRetailTradeAndRepairOfMotorVehiclesAndMotorcyclesSfdrResearchStatus
-        - dividendResidualRiskAndReturnSensitivity.beta24Month
-        - esgCompanyLevelDataSfdrPAI.lackOfAntiCorruptionAndAntiBriberyPolicySfdrResearchStatus
-        - pricesMostRecent.avgVolumeInMil5YrQtrEnd
-        - esgCompanyLevelDataSfdrPAI.lackOfHumanRightsPolicySfdrResearchStatus
-        - esgCompanyLevelDataSfdrPAI.icRuleOfLawScoreSfdrSourceType
-        - shareClassInformation.symbol
-        - factorProfile.styleFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.icPoliticalStabilityScoreSfdrYearOfReference
-        - esgCompanyLevelDataSfdrPAI.carbonEmissionsIntensitySfdrSourceType
-        - shareClassInformation.investmentStatus
-        - pricesMostRecent.avgVolumeInMil10YrMoEnd
-        - esgCompanyLevel2DataProductInvolvement.compProdInvPercGeneticallyModifiedPlantsAndSeedsGrowth
-        - esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate
-        - esgCompanyLevel1DataLowCarbonTransitionRating.reportingSufficiencyCategory
-        - dividendResidualRiskAndReturnSensitivity.beta120Month
-        - esgCompanyLevelDataSfdrPAI.emissionsOfAirPollutantsTotalTonnesSfdrSourceType
-        - esgCompanyLevelDataSfdrPAI.carbonIntensityScope12and3EurSfdrResearchStatus
-        - trailingReturn.trailing10YearReturn
-        - esgCompanyLevelDataSfdrPAI.boardGenderDiversityPercentageOfFemaleBoardMembersSfdr
-        - pricesMostRecent.avgVolumeInMil9MoDaily
-        - esgCompanyLevelDataSfdrPAI.carbonScope2EmissionsSfdrResearchStatus
-        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrSourceType
-        - esgCompanyLevelDataSfdrPAI.lackOfCarbonEmissionReductionInitiativesSfdrSourceType
-        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.lackOfDeforestationPolicySfdr
-        - pricesMostRecent.totalVolumeInMil2WkDaily
-        - marketCapital.asOfDate
-        - quantitativeFairValues.quantitativeMoat
-        - esgCompanyLevel2DataProductInvolvement.compProdInvAbortionOperations
-        - factorProfile.realEstateFactorMultiAssetModel
-        - esgCompanyLevelDataSfdrPAI.waterRecyclingAndReusePercentageOfWaterWithdrawalSfdrResearchStatus
-        - esgCompanyLevel2DataSfdrPAICorporateVoluntary.involvedInFossilFuelsSfdr
-        - dividendResidualRiskAndReturnSensitivity.rSquare60Month
-        - esgCompanyLevelDataSfdrPAI.shareOfNonRenewableEnergyConsumptionPercentageSfdrSourceType
-        pagination:
-          pageSize: 10
-        sort:
-        - datapoint: marketCapital.asOfDate
-    RequestManagedInvestmentsScreenerExample6:
-      summary: Compound Query - OR
+        investments:
+        - instrumentIdentifiers.performanceId: 0P0000DKX2
+          pricesMostRecent.avgVolumeInMil10YrMoEnd: 0.0017
+          pricesMostRecent.avgVolumeInMil5YrQtrEnd: 0.0012
+          pricesMostRecent.totalVolumeInMil2WkDaily: 0
+          indexLevelsPrice.closeAsMovingAvg200DayMoEnd: 0.8863
+          pricesMostRecent.avgVolumeInMil9MoDaily: 0.0022
+          esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate: '2025-09-08'
+          factorProfile.emergingAsiaPacificFactorMultiAssetModel: 1.0e-06
+          factorProfile.realEstateFactorMultiAssetModel: 0.09284
+          factorProfile.styleFactorMultiAssetModel: 0.298316
+          marketCapital.asOfDate: '2025-01-06'
+          dividendResidualRiskAndReturnSensitivity.beta24Month: -0.151184
+          dividendResidualRiskAndReturnSensitivity.beta120Month: 0.491438
+          dividendResidualRiskAndReturnSensitivity.rSquare60Month: 9.643232
+          monthlyStandardDeviation.arithmeticMean24Month: 2.059133
+          trailingReturn.trailing10YearReturn: 0.453506
+          shareClassInformation.investmentStatus: 0
+          shareClassInformation.symbol: ALMIL
+        - instrumentIdentifiers.performanceId: 0P0001DIM8
+          pricesMostRecent.avgVolumeInMil10YrMoEnd: 0.0601
+          pricesMostRecent.avgVolumeInMil5YrQtrEnd: 0.0702
+          pricesMostRecent.totalVolumeInMil2WkDaily: 5.0964
+          indexLevelsPrice.closeAsMovingAvg200DayMoEnd: 0.5581
+          pricesMostRecent.avgVolumeInMil9MoDaily: 0.2261
+          factorProfile.emergingAsiaPacificFactorMultiAssetModel: 0
+          factorProfile.realEstateFactorMultiAssetModel: 0
+          factorProfile.styleFactorMultiAssetModel: -0.458664
+          marketCapital.asOfDate: '2025-10-03'
+          dividendResidualRiskAndReturnSensitivity.beta24Month: 8.286211
+          dividendResidualRiskAndReturnSensitivity.rSquare60Month: 9.604659
+          monthlyStandardDeviation.arithmeticMean24Month: 17.835292
+          quantitativeFairValues.quantitativeMoat: 0.276
+          shareClassInformation.investmentStatus: 1
+          shareClassInformation.symbol: AL2SI
+        metadata:
+          totalCount: 2
+          requestId: ee2ce928-75a6-4a4c-9475-b6f1c74d25a6
+          time: '2025-10-06T15:22:26.0786813Z'
+    ScreenerResponseExample9:
+      summary: Nested Compound Query - OR then AND Deeply Nested
       value:
-        scope:
-          basicReference.countryAvailableForSale: USA
-        query:
-          or:
-          - yieldsHistorical.12MoYield:
-              gt: 1.5
-              lt: 10.55
-          - basicReference.baseCurrency: USD
-        dataPoints:
-        - basicReference.legalName
-        - basicReference.baseCurrency
-        - basicReference.name
-        - basicReference.firmName
-        - basicReference.fundCode
-        - basicReference.investmentType
-        - basicReference.inceptionDate
-        - yieldsHistorical.12MoYield
-        pagination:
-          pageSize: 5
-        sort:
-        - dataPoint: basicReference.legalName
-          orderBy: asc
+        investments:
+        - instrumentIdentifiers.performanceId: 0P0000DKX2
+          pricesMostRecent.avgVolumeInMil10YrMoEnd: 0.0017
+          pricesMostRecent.avgVolumeInMil5YrQtrEnd: 0.0012
+          pricesMostRecent.totalVolumeInMil2WkDaily: 0
+          indexLevelsPrice.closeAsMovingAvg200DayMoEnd: 0.8863
+          pricesMostRecent.avgVolumeInMil9MoDaily: 0.0022
+          esgCompanyLevel2DataEsgRiskRating.sustainalyticsRatingDate: '2025-09-08'
+          factorProfile.emergingAsiaPacificFactorMultiAssetModel: 1.0e-06
+          factorProfile.realEstateFactorMultiAssetModel: 0.09284
+          factorProfile.styleFactorMultiAssetModel: 0.298316
+          marketCapital.asOfDate: '2025-01-06'
+          dividendResidualRiskAndReturnSensitivity.beta24Month: -0.151184
+          dividendResidualRiskAndReturnSensitivity.beta120Month: 0.491438
+          dividendResidualRiskAndReturnSensitivity.rSquare60Month: 9.643232
+          monthlyStandardDeviation.arithmeticMean24Month: 2.059133
+          trailingReturn.trailing10YearReturn: 0.453506
+          shareClassInformation.investmentStatus: 0
+          shareClassInformation.symbol: ALMIL
+        metadata:
+          totalCount: 1
+          requestId: 719d36b6-3b73-46ca-8029-7cb8800fb670
+          time: '2025-10-06T15:41:05.9460985Z'
     ResponseManagedInvestmentsScreenerExample2:
       summary: Basic Query - In
       value:
@@ -3069,56 +2964,62 @@ components:
           totalCount: 10000
           requestId: c4d4af1b-18e3-4827-a3ca-c6a498d962e5
           time: '2025-10-27T09:15:02.9153502Z'
-    ResponseManagedInvestmentsScreenerExample5:
-      summary: Compound Query - AND
+    ResponseManagedInvestmentsScreenerExample4:
+      summary: Basic Query - Number Range
       value:
         investments:
-        - instrumentIdentifiers.performanceId: 0P0001MTWK
-          basicReference.firmName: 1WS Capital Advisors
-          basicReference.inceptionDate: '2021-04-30'
-          basicReference.name: 1WS Credit Income A-2
-          basicReference.legalName: 1WS Credit Income Fund Class A-2 Shares
-          yieldsHistorical.12MoYield: 8.8141
-        - instrumentIdentifiers.performanceId: 0P0001H18L
-          basicReference.firmName: 1WS Capital Advisors
-          basicReference.inceptionDate: '2019-03-04'
-          basicReference.name: 1WS Credit Income I
-          basicReference.legalName: 1WS Credit Income Fund Class I shares
-          yieldsHistorical.12MoYield: 8.52713
-        - instrumentIdentifiers.performanceId: 0P0001QRAZ
-          basicReference.firmName: Volatility Shares Trust
-          basicReference.inceptionDate: '2023-06-27'
-          basicReference.name: 2x Bitcoin Strategy ETF
-          basicReference.legalName: 2x Bitcoin Strategy ETF
-          yieldsHistorical.12MoYield: 10.72546
-        - instrumentIdentifiers.performanceId: 0P0001IC1I
-          basicReference.firmName: AAM
-          basicReference.inceptionDate: '2019-11-19'
-          basicReference.name: AAM Low Duration Pref & Inc Secs ETF
-          basicReference.legalName: AAM Low Duration Preferred and Income Securities ETF
-          yieldsHistorical.12MoYield: 7.00165
-        - instrumentIdentifiers.performanceId: 0P0001BEZ8
-          basicReference.firmName: AAM
-          basicReference.inceptionDate: '2017-11-28'
-          basicReference.name: AAM S&P 500 High Dividend Value ETF
-          basicReference.legalName: AAM S&P 500 High Dividend Value ETF
-          yieldsHistorical.12MoYield: 3.65641
+        - instrumentIdentifiers.performanceId: 0P0001RHZF
+          basicReference.firmName: 10X Investments (Pty) Ltd
+          basicReference.inceptionDate: '2023-05-17'
+          basicReference.name: 10X Income AMETF
+          basicReference.legalName: 10X Income AMETF
+          yieldsHistorical.12MoYield: 7.2118
+        - instrumentIdentifiers.performanceId: 0P0001CROW
+          basicReference.firmName: 10X Investments (Pty) Ltd
+          basicReference.inceptionDate: '2018-02-22'
+          basicReference.name: 10X S&P Global Dividend AristocratsETF
+          basicReference.legalName: 10X S&P Global Dividend Aristocrats ETF
+          yieldsHistorical.12MoYield: 2.00723
+        - instrumentIdentifiers.performanceId: 0P0001996O
+          basicReference.firmName: CoreShares Index Tracker Managers
+          basicReference.inceptionDate: '2016-11-04'
+          basicReference.name: 10X S&P Global Property ETF
+          basicReference.legalName: 10X S&P Global Property ETF
+          yieldsHistorical.12MoYield: 2.27204
+        - instrumentIdentifiers.performanceId: 0P0001QNV9
+          basicReference.firmName: CoreShares Asset Management
+          basicReference.inceptionDate: '2022-12-05'
+          basicReference.name: 10X Wealth Govi Bond ETF
+          basicReference.legalName: 10X Wealth Govi Bond ETF
+          yieldsHistorical.12MoYield: 9.28629
+        - instrumentIdentifiers.performanceId: 0P0001QW2Y
+          basicReference.firmName: 10X Investments (Pty) Ltd
+          basicReference.inceptionDate: '2023-04-24'
+          basicReference.name: 10X Wealth Next40 Equal Weighted ETF
+          basicReference.legalName: 10X Wealth Next40 Equal Weighted ETF
+          yieldsHistorical.12MoYield: 1.82409
         metadata:
-          paginationTokenNext: WyJBQU0gU1x1MDAyNlAgNTAwIEhpZ2ggRGl2aWRlbmQgVmFsdWUgRVRGIixudWxsLCIwUDAwMDFCRVo4Il0=
-          totalCount: 3456
-          requestId: 371f69e2-17cf-484f-b095-61e24e496bff
-          time: '2025-10-27T09:38:57.5567623Z'
-    RequestManagedInvestmentsScreenerExample7:
-      summary: Compound Query - NOT
+          paginationTokenNext: WyIxMFggV2VhbHRoIE5leHQ0MCBFcXVhbCBXZWlnaHRlZCBFVEYiLG51bGwsIjBQMDAwMVFXMlkiXQ==
+          totalCount: 8485
+          requestId: 775ca110-4b08-474b-963c-feac294ffcc2
+          time: '2025-10-27T09:31:23.4406481Z'
+    ResponseStatus400ScreenerExample1_2:
+      summary: 400 - Invalid Data Point Names
+      value:
+        statusCode: 400
+        errorCode: 400.screener.05
+        message: Invalid dataPoint names {0}. Provide valid values.
+        requestId: 5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9
+    RequestManagedInvestmentsScreenerExample2:
+      summary: Basic Query - In
       value:
         scope:
           basicReference.countryAvailableForSale: USA
         query:
-          not:
-          - yieldsHistorical.12MoYield:
-              gt: 1.5
-              lt: 10.55
-          - basicReference.baseCurrency: USD
+          basicReference.baseCurrency:
+          - USD
+          - GBP
+          - EUR
         dataPoints:
         - basicReference.legalName
         - basicReference.baseCurrency
@@ -3126,8 +3027,6 @@ components:
         - basicReference.firmName
         - basicReference.fundCode
         - basicReference.investmentType
-        - basicReference.inceptionDate
-        - yieldsHistorical.12MoYield
         pagination:
           pageSize: 5
         sort:
@@ -3194,40 +3093,6 @@ components:
         sort:
         - dataPoint: basicReference.legalName
           orderBy: asc
-    ResponseManagedInvestmentsScreenerExample3:
-      summary: Basic Query - Date Range
-      value:
-        investments:
-        - instrumentIdentifiers.performanceId: 0P0001UMFK
-          basicReference.firmName: Driftwood Euro Solutions LLC
-          basicReference.inceptionDate: '2023-04-14'
-          basicReference.name: Ser 501TrbtHtlOldSanJuanNtsdue2027$Acc
-          basicReference.legalName: (Series 501) Tribute Hotel Old San Juan Notes Due 2027 USD Accumulation
-        - instrumentIdentifiers.performanceId: 0P0001O9X4
-          basicReference.firmName: VS TRUST
-          basicReference.inceptionDate: '2022-03-28'
-          basicReference.name: -1x Short VIX Futures ETF
-          basicReference.legalName: -1x Short VIX Futures ETF
-        - instrumentIdentifiers.performanceId: 0P0001XGJO
-          basicReference.firmName: Zero Cinco Um Capital Gestão de Recursos Ltda
-          basicReference.inceptionDate: '2025-08-04'
-          basicReference.name: 051 ANGA III Cred Estruturado FIF FIC
-          basicReference.legalName: 051 ANGA III CRÉDITO ESTRUTURADO FUNDO DE INVESTIMENTO FINANCEIRO EM COTAS DE FUNDOS DE INVESTIMENTO
-        - instrumentIdentifiers.performanceId: 0P0001PQPT
-          basicReference.firmName: Zero Cinco Um Capital Gestão de Recursos Ltda
-          basicReference.inceptionDate: '2022-06-28'
-          basicReference.name: Zero 051 Aurora Boreal FIM C Priv IE
-          basicReference.legalName: 051 AURORA BOREAL FUNDO DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO INVESTIMENTO NO EXTERIOR
-        - instrumentIdentifiers.performanceId: 0P0001IACV
-          basicReference.firmName: Zero Cinco Um Capital Gestão de Recursos Ltda
-          basicReference.inceptionDate: '2019-06-04'
-          basicReference.name: 051 Brucutu FIM C Priv IE
-          basicReference.legalName: 051 BRUCUTU FUNDO DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO INVESTIMENTO EXTERIOR
-        metadata:
-          paginationTokenNext: WyIwNTEgQlJVQ1VUVSBGVU5ETyBERSBJTlZFU1RJTUVOVE8gTVVMVElNRVJDQURPIENSXHUwMEM5RElUTyBQUklWQURPIElOVkVTVElNRU5UTyBFWFRFUklPUiIsbnVsbCwiMFAwMDAxSUFDViJd
-          totalCount: 10000
-          requestId: 5dfa5fec-dfc0-43e1-baa2-f1565213adb6
-          time: '2025-10-27T09:24:58.6262904Z'
     ResponseManagedInvestmentsScreenerExample1:
       summary: Basic Query - Equals
       value:
@@ -3257,94 +3122,17 @@ components:
           totalCount: 10000
           requestId: d98e0f36-91b3-4cf3-bd61-15841ce6f9f8
           time: '2025-10-27T09:09:01.3362533Z'
-    ResponseManagedInvestmentsScreenerExample4:
-      summary: Basic Query - Number Range
-      value:
-        investments:
-        - instrumentIdentifiers.performanceId: 0P0001RHZF
-          basicReference.firmName: 10X Investments (Pty) Ltd
-          basicReference.inceptionDate: '2023-05-17'
-          basicReference.name: 10X Income AMETF
-          basicReference.legalName: 10X Income AMETF
-          yieldsHistorical.12MoYield: 7.2118
-        - instrumentIdentifiers.performanceId: 0P0001CROW
-          basicReference.firmName: 10X Investments (Pty) Ltd
-          basicReference.inceptionDate: '2018-02-22'
-          basicReference.name: 10X S&P Global Dividend AristocratsETF
-          basicReference.legalName: 10X S&P Global Dividend Aristocrats ETF
-          yieldsHistorical.12MoYield: 2.00723
-        - instrumentIdentifiers.performanceId: 0P0001996O
-          basicReference.firmName: CoreShares Index Tracker Managers
-          basicReference.inceptionDate: '2016-11-04'
-          basicReference.name: 10X S&P Global Property ETF
-          basicReference.legalName: 10X S&P Global Property ETF
-          yieldsHistorical.12MoYield: 2.27204
-        - instrumentIdentifiers.performanceId: 0P0001QNV9
-          basicReference.firmName: CoreShares Asset Management
-          basicReference.inceptionDate: '2022-12-05'
-          basicReference.name: 10X Wealth Govi Bond ETF
-          basicReference.legalName: 10X Wealth Govi Bond ETF
-          yieldsHistorical.12MoYield: 9.28629
-        - instrumentIdentifiers.performanceId: 0P0001QW2Y
-          basicReference.firmName: 10X Investments (Pty) Ltd
-          basicReference.inceptionDate: '2023-04-24'
-          basicReference.name: 10X Wealth Next40 Equal Weighted ETF
-          basicReference.legalName: 10X Wealth Next40 Equal Weighted ETF
-          yieldsHistorical.12MoYield: 1.82409
-        metadata:
-          paginationTokenNext: WyIxMFggV2VhbHRoIE5leHQ0MCBFcXVhbCBXZWlnaHRlZCBFVEYiLG51bGwsIjBQMDAwMVFXMlkiXQ==
-          totalCount: 8485
-          requestId: 775ca110-4b08-474b-963c-feac294ffcc2
-          time: '2025-10-27T09:31:23.4406481Z'
-    ResponseManagedInvestmentsScreenerExample6:
+    RequestManagedInvestmentsScreenerExample6:
       summary: Compound Query - OR
-      value:
-        investments:
-        - instrumentIdentifiers.performanceId: 0P0001UMFK
-          basicReference.firmName: Driftwood Euro Solutions LLC
-          basicReference.inceptionDate: '2023-04-14'
-          basicReference.name: Ser 501TrbtHtlOldSanJuanNtsdue2027$Acc
-          basicReference.legalName: (Series 501) Tribute Hotel Old San Juan Notes Due 2027 USD Accumulation
-          yieldsHistorical.12MoYield: 0
-        - instrumentIdentifiers.performanceId: 0P0001O9X4
-          basicReference.firmName: VS TRUST
-          basicReference.inceptionDate: '2022-03-28'
-          basicReference.name: -1x Short VIX Futures ETF
-          basicReference.legalName: -1x Short VIX Futures ETF
-          yieldsHistorical.12MoYield: 0
-        - instrumentIdentifiers.performanceId: 0P0001RHZF
-          basicReference.firmName: 10X Investments (Pty) Ltd
-          basicReference.inceptionDate: '2023-05-17'
-          basicReference.name: 10X Income AMETF
-          basicReference.legalName: 10X Income AMETF
-          yieldsHistorical.12MoYield: 7.2118
-        - instrumentIdentifiers.performanceId: 0P0001CROW
-          basicReference.firmName: 10X Investments (Pty) Ltd
-          basicReference.inceptionDate: '2018-02-22'
-          basicReference.name: 10X S&P Global Dividend AristocratsETF
-          basicReference.legalName: 10X S&P Global Dividend Aristocrats ETF
-          yieldsHistorical.12MoYield: 2.00723
-        - instrumentIdentifiers.performanceId: 0P0001996O
-          basicReference.firmName: CoreShares Index Tracker Managers
-          basicReference.inceptionDate: '2016-11-04'
-          basicReference.name: 10X S&P Global Property ETF
-          basicReference.legalName: 10X S&P Global Property ETF
-          yieldsHistorical.12MoYield: 2.27204
-        metadata:
-          paginationTokenNext: WyIxMFggU1x1MDAyNlAgR2xvYmFsIFByb3BlcnR5IEVURiIsbnVsbCwiMFAwMDAxOTk2TyJd
-          totalCount: 10000
-          requestId: 42484ad5-5a9f-4b70-bb49-620d8e1ff375
-          time: '2025-10-27T09:42:15.2012135Z'
-    RequestManagedInvestmentsScreenerExample2:
-      summary: Basic Query - In
       value:
         scope:
           basicReference.countryAvailableForSale: USA
         query:
-          basicReference.baseCurrency:
-          - USD
-          - GBP
-          - EUR
+          or:
+          - yieldsHistorical.12MoYield:
+              gt: 1.5
+              lt: 10.55
+          - basicReference.baseCurrency: USD
         dataPoints:
         - basicReference.legalName
         - basicReference.baseCurrency
@@ -3352,18 +3140,77 @@ components:
         - basicReference.firmName
         - basicReference.fundCode
         - basicReference.investmentType
+        - basicReference.inceptionDate
+        - yieldsHistorical.12MoYield
         pagination:
           pageSize: 5
         sort:
         - dataPoint: basicReference.legalName
           orderBy: asc
-    ResponseStatus400ScreenerExample1_2:
-      summary: 400 - Invalid Data Point Names
+    ResponseManagedInvestmentsScreenerExample5:
+      summary: Compound Query - AND
       value:
-        statusCode: 400
-        errorCode: 400.screener.05
-        message: Invalid dataPoint names {0}. Provide valid values.
-        requestId: 5c2ad24c-964b-4f9b-9d9e-26b7bdb915d9
+        investments:
+        - instrumentIdentifiers.performanceId: 0P0001MTWK
+          basicReference.firmName: 1WS Capital Advisors
+          basicReference.inceptionDate: '2021-04-30'
+          basicReference.name: 1WS Credit Income A-2
+          basicReference.legalName: 1WS Credit Income Fund Class A-2 Shares
+          yieldsHistorical.12MoYield: 8.8141
+        - instrumentIdentifiers.performanceId: 0P0001H18L
+          basicReference.firmName: 1WS Capital Advisors
+          basicReference.inceptionDate: '2019-03-04'
+          basicReference.name: 1WS Credit Income I
+          basicReference.legalName: 1WS Credit Income Fund Class I shares
+          yieldsHistorical.12MoYield: 8.52713
+        - instrumentIdentifiers.performanceId: 0P0001QRAZ
+          basicReference.firmName: Volatility Shares Trust
+          basicReference.inceptionDate: '2023-06-27'
+          basicReference.name: 2x Bitcoin Strategy ETF
+          basicReference.legalName: 2x Bitcoin Strategy ETF
+          yieldsHistorical.12MoYield: 10.72546
+        - instrumentIdentifiers.performanceId: 0P0001IC1I
+          basicReference.firmName: AAM
+          basicReference.inceptionDate: '2019-11-19'
+          basicReference.name: AAM Low Duration Pref & Inc Secs ETF
+          basicReference.legalName: AAM Low Duration Preferred and Income Securities ETF
+          yieldsHistorical.12MoYield: 7.00165
+        - instrumentIdentifiers.performanceId: 0P0001BEZ8
+          basicReference.firmName: AAM
+          basicReference.inceptionDate: '2017-11-28'
+          basicReference.name: AAM S&P 500 High Dividend Value ETF
+          basicReference.legalName: AAM S&P 500 High Dividend Value ETF
+          yieldsHistorical.12MoYield: 3.65641
+        metadata:
+          paginationTokenNext: WyJBQU0gU1x1MDAyNlAgNTAwIEhpZ2ggRGl2aWRlbmQgVmFsdWUgRVRGIixudWxsLCIwUDAwMDFCRVo4Il0=
+          totalCount: 3456
+          requestId: 371f69e2-17cf-484f-b095-61e24e496bff
+          time: '2025-10-27T09:38:57.5567623Z'
+    RequestManagedInvestmentsScreenerExample5:
+      summary: Compound Query - AND
+      value:
+        scope:
+          basicReference.countryAvailableForSale: USA
+        query:
+          and:
+          - yieldsHistorical.12MoYield:
+              gt: 1.5
+              lt: 10.55
+          - basicReference.baseCurrency: USD
+        dataPoints:
+        - basicReference.legalName
+        - basicReference.baseCurrency
+        - basicReference.name
+        - basicReference.firmName
+        - basicReference.fundCode
+        - basicReference.investmentType
+        - basicReference.inceptionDate
+        - yieldsHistorical.12MoYield
+        pagination:
+          pageSize: 5
+        sort:
+        - dataPoint: basicReference.legalName
+          orderBy: asc
     RequestManagedInvestmentsScreenerExample3:
       summary: Basic Query - Date Range
       value:
@@ -3407,13 +3254,52 @@ components:
           orderBy: asc
         - dataPoint: basicReference.firmName
           orderBy: desc
-    RequestManagedInvestmentsScreenerExample5:
-      summary: Compound Query - AND
+    ResponseManagedInvestmentsScreenerExample6:
+      summary: Compound Query - OR
+      value:
+        investments:
+        - instrumentIdentifiers.performanceId: 0P0001UMFK
+          basicReference.firmName: Driftwood Euro Solutions LLC
+          basicReference.inceptionDate: '2023-04-14'
+          basicReference.name: Ser 501TrbtHtlOldSanJuanNtsdue2027$Acc
+          basicReference.legalName: (Series 501) Tribute Hotel Old San Juan Notes Due 2027 USD Accumulation
+          yieldsHistorical.12MoYield: 0
+        - instrumentIdentifiers.performanceId: 0P0001O9X4
+          basicReference.firmName: VS TRUST
+          basicReference.inceptionDate: '2022-03-28'
+          basicReference.name: -1x Short VIX Futures ETF
+          basicReference.legalName: -1x Short VIX Futures ETF
+          yieldsHistorical.12MoYield: 0
+        - instrumentIdentifiers.performanceId: 0P0001RHZF
+          basicReference.firmName: 10X Investments (Pty) Ltd
+          basicReference.inceptionDate: '2023-05-17'
+          basicReference.name: 10X Income AMETF
+          basicReference.legalName: 10X Income AMETF
+          yieldsHistorical.12MoYield: 7.2118
+        - instrumentIdentifiers.performanceId: 0P0001CROW
+          basicReference.firmName: 10X Investments (Pty) Ltd
+          basicReference.inceptionDate: '2018-02-22'
+          basicReference.name: 10X S&P Global Dividend AristocratsETF
+          basicReference.legalName: 10X S&P Global Dividend Aristocrats ETF
+          yieldsHistorical.12MoYield: 2.00723
+        - instrumentIdentifiers.performanceId: 0P0001996O
+          basicReference.firmName: CoreShares Index Tracker Managers
+          basicReference.inceptionDate: '2016-11-04'
+          basicReference.name: 10X S&P Global Property ETF
+          basicReference.legalName: 10X S&P Global Property ETF
+          yieldsHistorical.12MoYield: 2.27204
+        metadata:
+          paginationTokenNext: WyIxMFggU1x1MDAyNlAgR2xvYmFsIFByb3BlcnR5IEVURiIsbnVsbCwiMFAwMDAxOTk2TyJd
+          totalCount: 10000
+          requestId: 42484ad5-5a9f-4b70-bb49-620d8e1ff375
+          time: '2025-10-27T09:42:15.2012135Z'
+    RequestManagedInvestmentsScreenerExample7:
+      summary: Compound Query - NOT
       value:
         scope:
           basicReference.countryAvailableForSale: USA
         query:
-          and:
+          not:
           - yieldsHistorical.12MoYield:
               gt: 1.5
               lt: 10.55
@@ -3432,6 +3318,40 @@ components:
         sort:
         - dataPoint: basicReference.legalName
           orderBy: asc
+    ResponseManagedInvestmentsScreenerExample3:
+      summary: Basic Query - Date Range
+      value:
+        investments:
+        - instrumentIdentifiers.performanceId: 0P0001UMFK
+          basicReference.firmName: Driftwood Euro Solutions LLC
+          basicReference.inceptionDate: '2023-04-14'
+          basicReference.name: Ser 501TrbtHtlOldSanJuanNtsdue2027$Acc
+          basicReference.legalName: (Series 501) Tribute Hotel Old San Juan Notes Due 2027 USD Accumulation
+        - instrumentIdentifiers.performanceId: 0P0001O9X4
+          basicReference.firmName: VS TRUST
+          basicReference.inceptionDate: '2022-03-28'
+          basicReference.name: -1x Short VIX Futures ETF
+          basicReference.legalName: -1x Short VIX Futures ETF
+        - instrumentIdentifiers.performanceId: 0P0001XGJO
+          basicReference.firmName: Zero Cinco Um Capital Gestão de Recursos Ltda
+          basicReference.inceptionDate: '2025-08-04'
+          basicReference.name: 051 ANGA III Cred Estruturado FIF FIC
+          basicReference.legalName: 051 ANGA III CRÉDITO ESTRUTURADO FUNDO DE INVESTIMENTO FINANCEIRO EM COTAS DE FUNDOS DE INVESTIMENTO
+        - instrumentIdentifiers.performanceId: 0P0001PQPT
+          basicReference.firmName: Zero Cinco Um Capital Gestão de Recursos Ltda
+          basicReference.inceptionDate: '2022-06-28'
+          basicReference.name: Zero 051 Aurora Boreal FIM C Priv IE
+          basicReference.legalName: 051 AURORA BOREAL FUNDO DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO INVESTIMENTO NO EXTERIOR
+        - instrumentIdentifiers.performanceId: 0P0001IACV
+          basicReference.firmName: Zero Cinco Um Capital Gestão de Recursos Ltda
+          basicReference.inceptionDate: '2019-06-04'
+          basicReference.name: 051 Brucutu FIM C Priv IE
+          basicReference.legalName: 051 BRUCUTU FUNDO DE INVESTIMENTO MULTIMERCADO CRÉDITO PRIVADO INVESTIMENTO EXTERIOR
+        metadata:
+          paginationTokenNext: WyIwNTEgQlJVQ1VUVSBGVU5ETyBERSBJTlZFU1RJTUVOVE8gTVVMVElNRVJDQURPIENSXHUwMEM5RElUTyBQUklWQURPIElOVkVTVElNRU5UTyBFWFRFUklPUiIsbnVsbCwiMFAwMDAxSUFDViJd
+          totalCount: 10000
+          requestId: 5dfa5fec-dfc0-43e1-baa2-f1565213adb6
+          time: '2025-10-27T09:24:58.6262904Z'
   requestBodies:
     ScreenerRequest:
       required: true
@@ -3479,6 +3399,86 @@ components:
               $ref: '#/components/examples/RequestManagedInvestmentsScreenerExample6'
             Compound Query - NOT:
               $ref: '#/components/examples/RequestManagedInvestmentsScreenerExample7'
+  responses:
+    ResponseStatus500ResponseScreener:
+      description: '500: Internal Server Error'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputError'
+          examples:
+            Example1:
+              $ref: '#/components/examples/ResponseStatus500ScreenerExample1'
+    ResponseStatus400ResponseScreener:
+      description: '400: Bad Request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputError'
+          examples:
+            Example1:
+              $ref: '#/components/examples/ResponseStatus400ScreenerExample1'
+    ScreenerResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseEquitiesScreener'
+          examples:
+            Basic Query - Equals:
+              $ref: '#/components/examples/ScreenerResponseExample1'
+            Basic Query - In:
+              $ref: '#/components/examples/ScreenerResponseExample2'
+            Basic Query - Date Range:
+              $ref: '#/components/examples/ScreenerResponseExample3'
+            Basic Query - Number Range:
+              $ref: '#/components/examples/ScreenerResponseExample4'
+            Compound Query - AND:
+              $ref: '#/components/examples/ScreenerResponseExample5'
+            Compound Query - OR:
+              $ref: '#/components/examples/ScreenerResponseExample6'
+            Compound Query - NOT:
+              $ref: '#/components/examples/ScreenerResponseExample7'
+            Nested Compound Query - OR then AND:
+              $ref: '#/components/examples/ScreenerResponseExample8'
+            Nested Compound Query - OR then AND Deeply Nested:
+              $ref: '#/components/examples/ScreenerResponseExample9'
+    ResponseManagedInvestmentsScreener:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseManagedInvestmentsScreener'
+          examples:
+            Basic Query - Equals:
+              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample1'
+            Basic Query - In:
+              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample2'
+            Basic Query - Date Range:
+              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample3'
+            Basic Query - Number Range:
+              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample4'
+            Compound Query - AND:
+              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample5'
+            Compound Query - OR:
+              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample6'
+            Compound Query - NOT:
+              $ref: '#/components/examples/ResponseManagedInvestmentsScreenerExample7'
+    ResponseStatus400Screener:
+      description: '400: Bad Request'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputError'
+          examples:
+            Example1:
+              $ref: '#/components/examples/ResponseStatus400ScreenerExample1_2'
+    ResponseStatus500Screener:
+      description: '500: Internal Server Error'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputError'
   securitySchemes:
     Bearer:
       type: http

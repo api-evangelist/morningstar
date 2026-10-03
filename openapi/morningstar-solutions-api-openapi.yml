@@ -67,32 +67,22 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse502'
 components:
   schemas:
-    ComfortRangesPayloadResponse:
-      title: ComfortRangesPayload
+    ErrorResponse400:
+      title: ErrorResponse
       type: object
       properties:
-        tooMuchRisk:
-          $ref: '#/components/schemas/Ranges'
-        marginalUpper:
-          $ref: '#/components/schemas/Ranges'
-        okRisk:
-          $ref: '#/components/schemas/Ranges'
-        marginalLower:
-          $ref: '#/components/schemas/Ranges'
-        tooLittleRisk:
-          $ref: '#/components/schemas/Ranges'
-    Ranges:
-      title: Range
-      type: object
-      properties:
-        low:
-          type: integer
-          description: Low range
-          example: 10
-        id:
-          type: integer
-          description: High range
-          example: 30
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
     ErrorResponse502:
       title: ErrorResponse
       type: object
@@ -125,19 +115,29 @@ components:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    ErrorResponse400:
-      title: ErrorResponse
+    ComfortRangesPayloadResponse:
+      title: ComfortRangesPayload
       type: object
       properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
+        tooMuchRisk:
+          $ref: '#/components/schemas/Ranges'
+        marginalUpper:
+          $ref: '#/components/schemas/Ranges'
+        okRisk:
+          $ref: '#/components/schemas/Ranges'
+        marginalLower:
+          $ref: '#/components/schemas/Ranges'
+        tooLittleRisk:
+          $ref: '#/components/schemas/Ranges'
+    Ranges:
+      title: Range
+      type: object
+      properties:
+        low:
+          type: integer
+          description: Low range
+          example: 10
+        id:
+          type: integer
+          description: High range
+          example: 30

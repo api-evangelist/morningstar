@@ -70,7 +70,158 @@ paths:
         '400':
           $ref: '#/components/responses/ResponsePortfolioHoldingsDatesBadRequest'
 components:
+  responses:
+    ResponsePortfolioHoldingsDates:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponsePortfolioHoldingsDates'
+          examples:
+            ResponsePortfolioHoldingsDatesExample1:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample1'
+            ResponsePortfolioHoldingsDatesExample2:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample2'
+    ResponsePortfolioHoldingsDatesBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+          examples:
+            ResponsePortfolioHoldingsDateBadRequestExample1:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesBadRequestExample1'
+  examples:
+    RequestPortfolioHoldingsDatesExample4:
+      summary: 'Date Type: Static Dates'
+      value:
+        holdingsView: '10'
+        type: staticDates
+        dates:
+        - '2024-06-30'
+        - '2024-12-31'
+        - '2023-12-31'
+        - '2023-06-30'
+        - '2016-12-31'
+        - '2018-12-31'
+        - '2019-06-30'
+        - '2013-06-30'
+    ResponsePortfolioHoldingsDatesBadRequestExample1:
+      summary: Required Parameter Missing
+      value:
+        statusCode: 400
+        errorCode: 400.investmentDetails.001
+        message: The EndDate parameter is required.
+        requestId: cd8d3278-a273-4765-87aa-e0beff1f2975
+    ResponsePortfolioHoldingsDatesExample1:
+      summary: Top 10 Most Recent
+      value:
+        portfolioDates:
+        - portfolioDate: '2025-12-31'
+          holdingsView: '10'
+        identifiers:
+          performanceId: 0P00018P7K
+        metadata:
+          requestId: 3a11f005-394f-4f89-a17f-41d2ffe549f3
+          time: '2026-06-17T17:28:34.6382675Z'
+    RequestPortfolioHoldingsDatesExample2:
+      summary: 'Data Type: Time Series'
+      value:
+        holdingsView: '10'
+        type: timeSeries
+        startDate: '2014-06-30'
+        endDate: '2024-06-30'
+    ResponsePortfolioHoldingsDatesExample2:
+      summary: Top 10 Time Series
+      value:
+        portfolioDates:
+        - portfolioDate: '2025-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2024-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2024-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2023-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2023-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2022-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2022-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2021-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2021-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2020-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2020-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2019-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2019-06-30'
+          holdingsView: '10'
+        - portfolioDate: '2018-12-31'
+          holdingsView: '10'
+        - portfolioDate: '2016-12-31'
+          holdingsView: '10'
+        identifiers:
+          performanceId: 0P00018P7K
+        metadata:
+          requestId: d50bc56a-bf63-440e-b6b1-ffc7d14c0ca3
+          time: '2026-06-17T17:36:52.137352Z'
+    RequestPortfolioHoldingsDatesExample3:
+      summary: 'Date Type: Time Series and Frequency'
+      value:
+        holdingsView: '10'
+        type: timeSeries
+        startDate: '2014-06-30'
+        endDate: '2024-06-30'
+        frequency: m
+    RequestPortfolioHoldingsDatesExample1:
+      summary: 'Data Type: Most Recent'
+      value:
+        holdingsView: full
+        type: mostRecent
   schemas:
+    OutputPortfolioHoldingsDates:
+      type: object
+      properties:
+        portfolioDate:
+          type: string
+          description: Portfolio date in YYYY-MM-DD format
+          nullable: true
+        holdingsView:
+          type: string
+          description: Holdings view identifier
+          nullable: true
+      additionalProperties: false
+      description: Portfolio date information
+      title: OutputPortfolioHoldingsDates
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+      description: All fields are nullable. Empty or `null` value fields are not returned.
     OutputErrorDetails:
       type: object
       properties:
@@ -93,6 +244,26 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+      description: All fields are nullable. Empty or `null` value fields are not returned.
     ResponsePortfolioHoldingsDates:
       type: object
       properties:
@@ -156,97 +327,6 @@ components:
       additionalProperties: false
       title: OutputInvalidInvestments
       description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-      description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
-      description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-      description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputPortfolioHoldingsDates:
-      type: object
-      properties:
-        portfolioDate:
-          type: string
-          description: Portfolio date in YYYY-MM-DD format
-          nullable: true
-        holdingsView:
-          type: string
-          description: Holdings view identifier
-          nullable: true
-      additionalProperties: false
-      description: Portfolio date information
-      title: OutputPortfolioHoldingsDates
     RequestPortfolioHoldingsDates:
       type: object
       properties:
@@ -329,98 +409,39 @@ components:
       - holdingsView
       - type
       title: RequestPortfolioHoldingsDates
-  examples:
-    ResponsePortfolioHoldingsDatesExample2:
-      summary: Top 10 Time Series
-      value:
-        portfolioDates:
-        - portfolioDate: '2025-06-30'
-          holdingsView: '10'
-        - portfolioDate: '2024-12-31'
-          holdingsView: '10'
-        - portfolioDate: '2024-06-30'
-          holdingsView: '10'
-        - portfolioDate: '2023-12-31'
-          holdingsView: '10'
-        - portfolioDate: '2023-06-30'
-          holdingsView: '10'
-        - portfolioDate: '2022-12-31'
-          holdingsView: '10'
-        - portfolioDate: '2022-06-30'
-          holdingsView: '10'
-        - portfolioDate: '2021-12-31'
-          holdingsView: '10'
-        - portfolioDate: '2021-06-30'
-          holdingsView: '10'
-        - portfolioDate: '2020-12-31'
-          holdingsView: '10'
-        - portfolioDate: '2020-06-30'
-          holdingsView: '10'
-        - portfolioDate: '2019-12-31'
-          holdingsView: '10'
-        - portfolioDate: '2019-06-30'
-          holdingsView: '10'
-        - portfolioDate: '2018-12-31'
-          holdingsView: '10'
-        - portfolioDate: '2016-12-31'
-          holdingsView: '10'
-        identifiers:
-          performanceId: 0P00018P7K
-        metadata:
-          requestId: d50bc56a-bf63-440e-b6b1-ffc7d14c0ca3
-          time: '2026-06-17T17:36:52.137352Z'
-    RequestPortfolioHoldingsDatesExample1:
-      summary: 'Data Type: Most Recent'
-      value:
-        holdingsView: full
-        type: mostRecent
-    ResponsePortfolioHoldingsDatesExample1:
-      summary: Top 10 Most Recent
-      value:
-        portfolioDates:
-        - portfolioDate: '2025-12-31'
-          holdingsView: '10'
-        identifiers:
-          performanceId: 0P00018P7K
-        metadata:
-          requestId: 3a11f005-394f-4f89-a17f-41d2ffe549f3
-          time: '2026-06-17T17:28:34.6382675Z'
-    RequestPortfolioHoldingsDatesExample4:
-      summary: 'Date Type: Static Dates'
-      value:
-        holdingsView: '10'
-        type: staticDates
-        dates:
-        - '2024-06-30'
-        - '2024-12-31'
-        - '2023-12-31'
-        - '2023-06-30'
-        - '2016-12-31'
-        - '2018-12-31'
-        - '2019-06-30'
-        - '2013-06-30'
-    RequestPortfolioHoldingsDatesExample2:
-      summary: 'Data Type: Time Series'
-      value:
-        holdingsView: '10'
-        type: timeSeries
-        startDate: '2014-06-30'
-        endDate: '2024-06-30'
-    RequestPortfolioHoldingsDatesExample3:
-      summary: 'Date Type: Time Series and Frequency'
-      value:
-        holdingsView: '10'
-        type: timeSeries
-        startDate: '2014-06-30'
-        endDate: '2024-06-30'
-        frequency: m
-    ResponsePortfolioHoldingsDatesBadRequestExample1:
-      summary: Required Parameter Missing
-      value:
-        statusCode: 400
-        errorCode: 400.investmentDetails.001
-        message: The EndDate parameter is required.
-        requestId: cd8d3278-a273-4765-87aa-e0beff1f2975
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
+      description: All fields are nullable. Empty or `null` value fields are not returned.
   requestBodies:
     RequestPortfolioHoldingsDates:
       required: true
@@ -437,27 +458,6 @@ components:
               $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample3'
             RequestPortfolioHoldingsDatesExample4:
               $ref: '#/components/examples/RequestPortfolioHoldingsDatesExample4'
-  responses:
-    ResponsePortfolioHoldingsDatesBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-          examples:
-            ResponsePortfolioHoldingsDateBadRequestExample1:
-              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesBadRequestExample1'
-    ResponsePortfolioHoldingsDates:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponsePortfolioHoldingsDates'
-          examples:
-            ResponsePortfolioHoldingsDatesExample1:
-              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample1'
-            ResponsePortfolioHoldingsDatesExample2:
-              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample2'
   securitySchemes:
     Bearer:
       type: http
