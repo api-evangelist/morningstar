@@ -410,235 +410,174 @@ paths:
       x-cpqId: 912
 components:
   schemas:
-    OutputMetadata:
+    OutputInvalidInvestments:
       type: object
       properties:
-        requestId:
+        id:
           type: string
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
+        idType:
           type: string
           nullable: true
-        portfolioCurrency:
+        status:
           type: string
           nullable: true
-        messages:
+        datapointId:
           type: array
           items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
           nullable: true
       additionalProperties: false
-      title: OutputMetadata
-    OutputDailyDividendResidualRiskAndReturnSensitivity:
+      title: OutputInvalidInvestments
+    OutputNonDividendResidualRiskAndReturnSensitivity:
       type: object
       properties:
         asOfDate:
           type: string
-          description: The calendar date when the daily residual risk and return sensitivity data points are calculated
-          nullable: true
-        alpha1008Day:
-          type: number
-          description: A measure of excess return of a company's security over a 1008-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
-          format: double
-          nullable: true
-        alpha1260Day:
-          type: number
-          description: A measure of excess return of a company's security over a 1260-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
-          format: double
-          nullable: true
-        alpha2520Day:
-          type: number
-          description: A measure of excess return of a company's security over a 2520-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
-          format: double
-          nullable: true
-        alpha252Day:
-          type: number
-          description: A measure of excess return of a company's security over a 252-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
-          format: double
-          nullable: true
-        alpha504Day:
-          type: number
-          description: A measure of excess return of a company's security over a 504-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
-          format: double
-          nullable: true
-        alpha756Day:
-          type: number
-          description: A measure of excess return of a company's security over a 756-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
-          format: double
-          nullable: true
-        beta1008Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 1008-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        beta1260Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 1260-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        beta2520Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 2520-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        beta252Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 252-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        beta504Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 504-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        beta756Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 756-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
+          description: The calendar date when the residual risk and return sensitivity data points are calculated
           nullable: true
         compareIndexId:
           type: string
           description: The Morningstar Index Id that is used as a benchmark for the residual risk and return sensitivity calculation of a company's security. The assigned index for each security is based on the security's trading exchange and/or country.
           nullable: true
-        rSquare1008Day:
+        nonDividendAlpha120Month:
           type: number
-          description: A measure of the relationship between a company's security over a 1008-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          description: A measure of excess return of a company's security over a 120-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
           format: double
           nullable: true
-        rSquare1260Day:
+        nonDividendAlpha12Month:
           type: number
-          description: A measure of the relationship between a company's security over a 1260-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          description: A measure of excess return of a company's security over a 12-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
           format: double
           nullable: true
-        rSquare2520Day:
+        nonDividendAlpha24Month:
           type: number
-          description: A measure of the relationship between a company's security over a 2520-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          description: A measure of excess return of a company's security over a 24-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
           format: double
           nullable: true
-        rSquare252Day:
+        nonDividendAlpha36Month:
           type: number
-          description: A measure of the relationship between a company's security over a 252-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          description: A measure of excess return of a company's security over a 36-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
           format: double
           nullable: true
-        rSquare504Day:
+        nonDividendAlpha48Month:
           type: number
-          description: A measure of the relationship between a company's security over a 504-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          description: A measure of excess return of a company's security over a 48-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
           format: double
           nullable: true
-        rSquare756Day:
+        nonDividendAlpha60Month:
           type: number
-          description: A measure of the relationship between a company's security over a 756-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          description: A measure of excess return of a company's security over a 60-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendBeta120Month:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 120-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta12Month:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 12-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta24Month:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 24-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta36Month:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 36-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta48Month:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 48-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta60Month:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 60-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendRSquare120Month:
+          type: number
+          description: A measure of the relationship between a company's security over a 120-month period to its benchmark index. R-Square; presented as percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare12Month:
+          type: number
+          description: A measure of the relationship between a company's security over a 12-month period to its benchmark index. R-Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare24Month:
+          type: number
+          description: A measure of the relationship between a company's security over a 24-month period to its benchmark index. R-Square; presented as percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare36Month:
+          type: number
+          description: A measure of the relationship between a company's security over a 36-month period to its benchmark index. R-Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare48Month:
+          type: number
+          description: A measure of the relationship between a company's security over a 48-month period to its benchmark index. R-Square; presented as percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare60Month:
+          type: number
+          description: A measure of the relationship between a company's security over a 60-month period to its benchmark index. R-Square; presented as percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
           format: double
           nullable: true
       additionalProperties: false
-      title: OutputDailyDividendResidualRiskAndReturnSensitivity
-    OutputDailyNonDividendResidualRiskAndReturnSensitivity:
+      title: OutputNonDividendResidualRiskAndReturnSensitivity
+    OutputMetadataMessages:
       type: object
       properties:
-        asOfDate:
+        type:
           type: string
-          description: The calendar date when the daily residual risk and return sensitivity data points are calculated
           nullable: true
-        compareIndexId:
+        code:
           type: string
-          description: The Morningstar Index Id that is used as a benchmark for the residual risk and return sensitivity calculation of a company's security. The assigned index for each security is based on the security's trading exchange and/or country.
           nullable: true
-        nonDividendAlpha1008Day:
-          type: number
-          description: A measure of excess return of a company's security over a 1008-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
-        nonDividendAlpha1260Day:
-          type: number
-          description: A measure of excess return of a company's security over a 1260-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendAlpha2520Day:
-          type: number
-          description: A measure of excess return of a company's security over a 2520-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendAlpha252Day:
-          type: number
-          description: A measure of excess return of a company's security over a 252-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendAlpha504Day:
-          type: number
-          description: A measure of excess return of a company's security over a 504-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendAlpha756Day:
-          type: number
-          description: A measure of excess return of a company's security over a 756-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendBeta1008Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 1008-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta1260Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 1260-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta2520Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 2520-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta252Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 252-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta504Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 504-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta756Day:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 756-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendRSquare1008Day:
-          type: number
-          description: A measure of the relationship between a company's security over a 1008-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare1260Day:
-          type: number
-          description: A measure of the relationship between a company's security over a 1260-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare2520Day:
-          type: number
-          description: A measure of the relationship between a company's security over a 2520-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare252Day:
-          type: number
-          description: A measure of the relationship between a company's security over a 252-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare504Day:
-          type: number
-          description: A measure of the relationship between a company's security over a 504-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare756Day:
-          type: number
-          description: A measure of the relationship between a company's security over a 756-day period to its benchmark index. R Square; presented as apercentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
+        message:
+          type: string
           nullable: true
       additionalProperties: false
-      title: OutputDailyNonDividendResidualRiskAndReturnSensitivity
+      title: OutputMetadataMessages
     OutputDividendResidualRiskAndReturnSensitivity:
       type: object
       properties:
@@ -764,174 +703,235 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    OutputNonDividendResidualRiskAndReturnSensitivity:
+    OutputDailyDividendResidualRiskAndReturnSensitivity:
       type: object
       properties:
         asOfDate:
           type: string
-          description: The calendar date when the residual risk and return sensitivity data points are calculated
+          description: The calendar date when the daily residual risk and return sensitivity data points are calculated
+          nullable: true
+        alpha1008Day:
+          type: number
+          description: A measure of excess return of a company's security over a 1008-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          format: double
+          nullable: true
+        alpha1260Day:
+          type: number
+          description: A measure of excess return of a company's security over a 1260-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          format: double
+          nullable: true
+        alpha2520Day:
+          type: number
+          description: A measure of excess return of a company's security over a 2520-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          format: double
+          nullable: true
+        alpha252Day:
+          type: number
+          description: A measure of excess return of a company's security over a 252-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          format: double
+          nullable: true
+        alpha504Day:
+          type: number
+          description: A measure of excess return of a company's security over a 504-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          format: double
+          nullable: true
+        alpha756Day:
+          type: number
+          description: A measure of excess return of a company's security over a 756-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The alpha is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
+          format: double
+          nullable: true
+        beta1008Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 1008-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        beta1260Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 1260-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        beta2520Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 2520-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        beta252Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 252-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        beta504Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 504-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        beta756Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 756-day period in comparison to the market as a whole. The beta is calculated on a daily basis and uses a company''s total return; including dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
           nullable: true
         compareIndexId:
           type: string
           description: The Morningstar Index Id that is used as a benchmark for the residual risk and return sensitivity calculation of a company's security. The assigned index for each security is based on the security's trading exchange and/or country.
           nullable: true
-        nonDividendAlpha120Month:
+        rSquare1008Day:
           type: number
-          description: A measure of excess return of a company's security over a 120-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          description: A measure of the relationship between a company's security over a 1008-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
           format: double
           nullable: true
-        nonDividendAlpha12Month:
+        rSquare1260Day:
           type: number
-          description: A measure of excess return of a company's security over a 12-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          description: A measure of the relationship between a company's security over a 1260-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
           format: double
           nullable: true
-        nonDividendAlpha24Month:
+        rSquare2520Day:
           type: number
-          description: A measure of excess return of a company's security over a 24-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          description: A measure of the relationship between a company's security over a 2520-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
           format: double
           nullable: true
-        nonDividendAlpha36Month:
+        rSquare252Day:
           type: number
-          description: A measure of excess return of a company's security over a 36-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          description: A measure of the relationship between a company's security over a 252-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
           format: double
           nullable: true
-        nonDividendAlpha48Month:
+        rSquare504Day:
           type: number
-          description: A measure of excess return of a company's security over a 48-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          description: A measure of the relationship between a company's security over a 504-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
           format: double
           nullable: true
-        nonDividendAlpha60Month:
+        rSquare756Day:
           type: number
-          description: A measure of excess return of a company's security over a 60-month period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendBeta120Month:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 120-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta12Month:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 12-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta24Month:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 24-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta36Month:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 36-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta48Month:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 48-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendBeta60Month:
-          type: number
-          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 60-month period in comparison to the market as a whole. The non-dividend beta is calculated on a monthly basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
-          format: double
-          nullable: true
-        nonDividendRSquare120Month:
-          type: number
-          description: A measure of the relationship between a company's security over a 120-month period to its benchmark index. R-Square; presented as percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare12Month:
-          type: number
-          description: A measure of the relationship between a company's security over a 12-month period to its benchmark index. R-Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare24Month:
-          type: number
-          description: A measure of the relationship between a company's security over a 24-month period to its benchmark index. R-Square; presented as percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare36Month:
-          type: number
-          description: A measure of the relationship between a company's security over a 36-month period to its benchmark index. R-Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare48Month:
-          type: number
-          description: A measure of the relationship between a company's security over a 48-month period to its benchmark index. R-Square; presented as percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
-          format: double
-          nullable: true
-        nonDividendRSquare60Month:
-          type: number
-          description: A measure of the relationship between a company's security over a 60-month period to its benchmark index. R-Square; presented as percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a monthly basis and uses a company's price return; excluding dividends; as input for the calculation.
+          description: A measure of the relationship between a company's security over a 756-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The R square is calculated on a daily basis and uses a company's total return; including dividends; as input for the calculation.
           format: double
           nullable: true
       additionalProperties: false
-      title: OutputNonDividendResidualRiskAndReturnSensitivity
-    OutputMetadataMessages:
+      title: OutputDailyDividendResidualRiskAndReturnSensitivity
+    OutputMetadata:
       type: object
       properties:
-        type:
+        requestId:
           type: string
           nullable: true
-        code:
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
           nullable: true
-        investments:
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
           type: array
           items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    OutputInvalidInvestments:
+      title: OutputMetadata
+    OutputDailyNonDividendResidualRiskAndReturnSensitivity:
       type: object
       properties:
-        id:
+        asOfDate:
           type: string
+          description: The calendar date when the daily residual risk and return sensitivity data points are calculated
           nullable: true
-        idType:
+        compareIndexId:
           type: string
+          description: The Morningstar Index Id that is used as a benchmark for the residual risk and return sensitivity calculation of a company's security. The assigned index for each security is based on the security's trading exchange and/or country.
           nullable: true
-        status:
-          type: string
+        nonDividendAlpha1008Day:
+          type: number
+          description: A measure of excess return of a company's security over a 1008-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
           nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
+        nonDividendAlpha1260Day:
+          type: number
+          description: A measure of excess return of a company's security over a 1260-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
           nullable: true
-        errorCode:
-          type: string
+        nonDividendAlpha2520Day:
+          type: number
+          description: A measure of excess return of a company's security over a 2520-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
           nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
+        nonDividendAlpha252Day:
+          type: number
+          description: A measure of excess return of a company's security over a 252-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
           nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
+        nonDividendAlpha504Day:
+          type: number
+          description: A measure of excess return of a company's security over a 504-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
           nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
+        nonDividendAlpha756Day:
+          type: number
+          description: A measure of excess return of a company's security over a 756-day period relative to the return of a benchmark index that is considered to represent the market's movement as a whole. The non-dividend alpha is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
           nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
+        nonDividendBeta1008Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 1008-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
           nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
+        nonDividendBeta1260Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 1260-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
           nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
+        nonDividendBeta2520Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 2520-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta252Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 252-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta504Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 504-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendBeta756Day:
+          type: number
+          description: 'A measure of the volatility; or systematic risk; of a company''s security over a 756-day period in comparison to the market as a whole. The non-dividend beta is calculated on a daily basis and uses a company''s price return; excluding dividends; as input for the calculation: A beta of 1 indicates that the security''s price will move with the market;  A beta of less than 1 means that the security will be less volatile than the market; A beta of greater than 1 indicates that the security''s price will be more volatile than the market.'
+          format: double
+          nullable: true
+        nonDividendRSquare1008Day:
+          type: number
+          description: A measure of the relationship between a company's security over a 1008-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare1260Day:
+          type: number
+          description: A measure of the relationship between a company's security over a 1260-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare2520Day:
+          type: number
+          description: A measure of the relationship between a company's security over a 2520-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare252Day:
+          type: number
+          description: A measure of the relationship between a company's security over a 252-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare504Day:
+          type: number
+          description: A measure of the relationship between a company's security over a 504-day period to its benchmark index. R Square; presented as a percentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
+          nullable: true
+        nonDividendRSquare756Day:
+          type: number
+          description: A measure of the relationship between a company's security over a 756-day period to its benchmark index. R Square; presented as apercentage; ranges between 0 - 100 and suggests how much of the movements in the stock can be explained by the movements in the market. The non-dividend r-square is calculated on a daily basis and uses a company's price return; excluding dividends; as input for the calculation.
+          format: double
           nullable: true
       additionalProperties: false
-      title: OutputInvalidInvestments
+      title: OutputDailyNonDividendResidualRiskAndReturnSensitivity
     OutputIdentifiers:
       type: object
       properties:
@@ -965,6 +965,27 @@ components:
       additionalProperties: false
       title: OutputIdentifiers
   responses:
+    ResponseEquityMonthlyResidualRiskAndReturnSensitivity:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputDividendResidualRiskAndReturnSensitivity'
+              nonDividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputNonDividendResidualRiskAndReturnSensitivity'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityResidualRiskAndReturnSensitivity:
       description: OK
       content:
@@ -984,6 +1005,12 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityTrailingResidualRiskAndReturnSensitivity:
       description: OK
       content:
@@ -999,33 +1026,6 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityMonthlyResidualRiskAndReturnSensitivity:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              dividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputDividendResidualRiskAndReturnSensitivity'
-              nonDividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputNonDividendResidualRiskAndReturnSensitivity'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

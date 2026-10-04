@@ -332,94 +332,6 @@ paths:
       x-cpqId: 940
 components:
   schemas:
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputAggregationTrailingReturn:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date of the industry aggregated value
-          nullable: true
-        dailyMarketReturnIndexNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        dailyMarketReturnIndexValue:
-          type: number
-          description: 'The aggregated value of Daily Market Return Index; is derived using all eligible companies who are constituents in the specified Morningstar Index. Daily Market Return Index: The total return calculation representing the value of one share purchased and owned since the stock''s IPO indexed to a starting value of $10; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.'
-          format: double
-          nullable: true
-        numberOfCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
-          format: int32
-          nullable: true
-      additionalProperties: false
-      title: OutputAggregationTrailingReturn
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -466,6 +378,51 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -498,13 +455,63 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputAggregationTrailingReturn:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date of the industry aggregated value
+          nullable: true
+        dailyMarketReturnIndexNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        dailyMarketReturnIndexValue:
+          type: number
+          description: 'The aggregated value of Daily Market Return Index; is derived using all eligible companies who are constituents in the specified Morningstar Index. Daily Market Return Index: The total return calculation representing the value of one share purchased and owned since the stock''s IPO indexed to a starting value of $10; Total return accounts for dividends; splits and spin-off values that occur during the period of calculation.'
+          format: double
+          nullable: true
+        numberOfCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
+          format: int32
+          nullable: true
+      additionalProperties: false
+      title: OutputAggregationTrailingReturn
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
   responses:
-    ResponseBadRequest:
-      description: Bad Request
+    ResponseEquityAggregatesReturns:
+      description: OK
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
+            type: object
+            properties:
+              aggregationTrailingReturn:
+                $ref: '#/components/schemas/OutputAggregationTrailingReturn'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityIndustryAggregatesTrailingReturns:
       description: OK
       content:
@@ -524,19 +531,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityAggregatesReturns:
-      description: OK
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              aggregationTrailingReturn:
-                $ref: '#/components/schemas/OutputAggregationTrailingReturn'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
+            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

@@ -60,51 +60,12 @@ paths:
                 $ref: '#/components/schemas/ApiPortfolioAnalysisEntities'
 components:
   schemas:
-    APIMetaStatusResponse:
+    TopHoldingListEntity:
       type: object
       properties:
-        hint:
-          type: string
-        response_status:
-          type: string
-      title: APIMetaStatusResponse
-    TopHoldingListDateEntity:
-      type: object
-      properties:
-        total:
-          type: string
-        top-holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/Map_string_string'
-        validation-end-date:
-          type: string
-      title: TopHoldingListDateEntity
-    ApiPortfolioAnalysisEntities:
-      type: object
-      properties:
-        _meta:
-          $ref: '#/components/schemas/APIMetaStatusResponse'
-        errMsg:
-          type: string
-        portfolios:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApiPortfolioAnalysisEntity'
-      title: ApiPortfolioAnalysisEntities
-    Map_string_string:
-      type: object
-      additionalProperties:
-        type: string
-    ApiSnapshotEntity:
-      type: object
-      properties:
-        date:
-          type: string
-        topNHoldingsCount:
-          type: integer
-          format: int32
-      title: ApiSnapshotEntity
+        additionalProperties:
+          $ref: '#/components/schemas/TopHoldingListDateEntity'
+      title: TopHoldingListEntity
     ApiPortfolioAnalysisEntity:
       type: object
       properties:
@@ -138,12 +99,51 @@ components:
         topHoldingList:
           $ref: '#/components/schemas/TopHoldingListEntity'
       title: ApiPortfolioAnalysisEntity
-    TopHoldingListEntity:
+    Map_string_string:
+      type: object
+      additionalProperties:
+        type: string
+    ApiPortfolioAnalysisEntities:
       type: object
       properties:
-        additionalProperties:
-          $ref: '#/components/schemas/TopHoldingListDateEntity'
-      title: TopHoldingListEntity
+        _meta:
+          $ref: '#/components/schemas/APIMetaStatusResponse'
+        errMsg:
+          type: string
+        portfolios:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApiPortfolioAnalysisEntity'
+      title: ApiPortfolioAnalysisEntities
+    APIMetaStatusResponse:
+      type: object
+      properties:
+        hint:
+          type: string
+        response_status:
+          type: string
+      title: APIMetaStatusResponse
+    TopHoldingListDateEntity:
+      type: object
+      properties:
+        total:
+          type: string
+        top-holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Map_string_string'
+        validation-end-date:
+          type: string
+      title: TopHoldingListDateEntity
+    ApiSnapshotEntity:
+      type: object
+      properties:
+        date:
+          type: string
+        topNHoldingsCount:
+          type: integer
+          format: int32
+      title: ApiSnapshotEntity
   securitySchemes:
     bearerAuth:
       type: http

@@ -208,28 +208,43 @@ paths:
                 $ref: '#/components/schemas/ErrorDetails'
 components:
   schemas:
-    ResponseMetadataWithMessages:
-      description: Standard response metadata, extended with an optional list of warnings or informational messages about the request.
+    ResponseMessage:
+      description: A warning or informational message relating to one or more investments.
       type: object
       properties:
-        messages:
+        investments:
           type:
           - array
           - 'null'
-          description: Warnings or informational messages relating to specific investments in the request — for example, unmatched identifiers, duplicate submissions, or missing data coverage.
+          description: The investments this message applies to.
           items:
-            $ref: '#/components/schemas/ResponseMessage'
-        requestId:
+            $ref: '#/components/schemas/InvestmentLookupInputDetails'
+        type:
+          $ref: '#/components/schemas/MessageType'
+        message:
           type:
           - string
           - 'null'
-          format: uuid
-          description: Unique identifier for the API request, useful for tracing and support.
-        time:
-          type: string
-          format: date-time
-          description: UTC datetime at which the response was generated.
-          readOnly: true
+          description: Human-readable description of the warning or issue.
+        code:
+          type:
+          - string
+          - 'null'
+          description: Machine-readable error or warning code.
+      additionalProperties: false
+    AiInsightsResponse:
+      description: Response body returned by the Analyst Highlights results endpoint.
+      type: object
+      properties:
+        investments:
+          type:
+          - array
+          - 'null'
+          description: List of investments with AI-generated highlights.
+          items:
+            $ref: '#/components/schemas/AnalystHighlightsInvestment'
+        metadata:
+          $ref: '#/components/schemas/ResponseMetadataWithMessages'
       additionalProperties: false
     AsyncResponse:
       description: Response returned immediately after submitting an async request.
@@ -250,6 +265,156 @@ components:
             $ref: '#/components/schemas/ResponseLink'
         metadata:
           $ref: '#/components/schemas/ResponseMetadata'
+      additionalProperties: false
+    AnalystHighlightsInvestment:
+      description: A single investment with its AI-generated analyst highlight summary.
+      type: object
+      properties:
+        identifiers:
+          type:
+          - object
+          - 'null'
+          description: Map of identifier types to their resolved values for this investment. May include `performanceId`, `securityId`, `isin`, `cusip`, `tradingSymbol`, `fundCode`, `msid`, `baseCurrency`, `domicile`, and `exchangeCountry`.
+          additionalProperties:
+            type:
+            - string
+            - 'null'
+          example:
+            performanceId: 0P00002Y8D
+            isin: US4138386085
+            exchangeCountry: USA
+        summary:
+          type:
+          - string
+          - 'null'
+          description: AI-generated analyst highlight summary for the investment.
+      additionalProperties: false
+    ResponseMetadata:
+      description: Standard metadata included in all responses.
+      type: object
+      properties:
+        requestId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Unique identifier for the API request, useful for tracing and support.
+        time:
+          type: string
+          format: date-time
+          description: UTC datetime at which the response was generated.
+          readOnly: true
+      additionalProperties: false
+    InvestmentLookupInputDetails:
+      description: Describes an investment referenced in a response message, including its resolved identifiers.
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+          description: The identifier value as supplied in the original request.
+        idType:
+          type:
+          - string
+          - 'null'
+          description: The identifier type as supplied in the original request.
+        companyId:
+          type:
+          - string
+          - 'null'
+          description: Resolved Morningstar company ID, if available.
+        performanceId:
+          type:
+          - string
+          - 'null'
+          description: Resolved Morningstar performance ID, if available.
+        baseCurrency:
+          type:
+          - string
+          - 'null'
+          description: Base currency filter applied during lookup.
+        domicile:
+          type:
+          - string
+          - 'null'
+          description: Domicile filter applied during lookup.
+        exchangeCountry:
+          type:
+          - string
+          - 'null'
+          description: Exchange country filter applied during lookup.
+      additionalProperties: false
+    ErrorDetails:
+      description: Standard error response body.
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+          description: HTTP status code.
+        errorCode:
+          type:
+          - string
+          - 'null'
+          description: Morningstar-specific error code (e.g. `400.aiInsights.007`).
+        message:
+          type:
+          - string
+          - 'null'
+          description: Human-readable description of the error.
+        requestId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Request identifier to include when contacting support.
+      additionalProperties: false
+    MessageType:
+      type: string
+      description: Indicates whether the message is an informational warning or a hard error.
+      enum:
+      - Warning
+      - Error
+    InvestmentInput:
+      description: A single investment identifier submitted in a request.
+      required:
+      - id
+      type: object
+      properties:
+        id:
+          type: string
+          minLength: 1
+          description: The identifier value for the investment.
+        idType:
+          type:
+          - string
+          - 'null'
+          description: The type of the identifier supplied in `id`.
+          enum:
+          - isin
+          - cusip
+          - performanceId
+          - securityId
+          - tradingSymbol
+          - fundCode
+          - msid
+          default: performanceId
+        baseCurrency:
+          type:
+          - string
+          - 'null'
+          description: ISO 4217 three-letter currency code. Used to disambiguate non-unique identifiers such as `tradingSymbol`.
+        domicile:
+          type:
+          - string
+          - 'null'
+          description: ISO 3166-1 alpha-3 country code for the investment's domicile. Used to disambiguate non-unique identifiers.
+        exchangeCountry:
+          type:
+          - string
+          - 'null'
+          description: ISO 3166-1 alpha-3 country code for the exchange country. Used to disambiguate non-unique identifiers.
       additionalProperties: false
     AiInsightsRequestInput:
       description: Request body for the Analyst Highlights endpoint.
@@ -293,99 +458,28 @@ components:
           default: 20
           example: 20
       additionalProperties: false
-    InvestmentInput:
-      description: A single investment identifier submitted in a request.
-      required:
-      - id
+    ResponseMetadataWithMessages:
+      description: Standard response metadata, extended with an optional list of warnings or informational messages about the request.
       type: object
       properties:
-        id:
-          type: string
-          minLength: 1
-          description: The identifier value for the investment.
-        idType:
-          type:
-          - string
-          - 'null'
-          description: The type of the identifier supplied in `id`.
-          enum:
-          - isin
-          - cusip
-          - performanceId
-          - securityId
-          - tradingSymbol
-          - fundCode
-          - msid
-          default: performanceId
-        baseCurrency:
-          type:
-          - string
-          - 'null'
-          description: ISO 4217 three-letter currency code. Used to disambiguate non-unique identifiers such as `tradingSymbol`.
-        domicile:
-          type:
-          - string
-          - 'null'
-          description: ISO 3166-1 alpha-3 country code for the investment's domicile. Used to disambiguate non-unique identifiers.
-        exchangeCountry:
-          type:
-          - string
-          - 'null'
-          description: ISO 3166-1 alpha-3 country code for the exchange country. Used to disambiguate non-unique identifiers.
-      additionalProperties: false
-    InvestmentLookupInputDetails:
-      description: Describes an investment referenced in a response message, including its resolved identifiers.
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-          description: The identifier value as supplied in the original request.
-        idType:
-          type:
-          - string
-          - 'null'
-          description: The identifier type as supplied in the original request.
-        companyId:
-          type:
-          - string
-          - 'null'
-          description: Resolved Morningstar company ID, if available.
-        performanceId:
-          type:
-          - string
-          - 'null'
-          description: Resolved Morningstar performance ID, if available.
-        baseCurrency:
-          type:
-          - string
-          - 'null'
-          description: Base currency filter applied during lookup.
-        domicile:
-          type:
-          - string
-          - 'null'
-          description: Domicile filter applied during lookup.
-        exchangeCountry:
-          type:
-          - string
-          - 'null'
-          description: Exchange country filter applied during lookup.
-      additionalProperties: false
-    AiInsightsResponse:
-      description: Response body returned by the Analyst Highlights results endpoint.
-      type: object
-      properties:
-        investments:
+        messages:
           type:
           - array
           - 'null'
-          description: List of investments with AI-generated highlights.
+          description: Warnings or informational messages relating to specific investments in the request — for example, unmatched identifiers, duplicate submissions, or missing data coverage.
           items:
-            $ref: '#/components/schemas/AnalystHighlightsInvestment'
-        metadata:
-          $ref: '#/components/schemas/ResponseMetadataWithMessages'
+            $ref: '#/components/schemas/ResponseMessage'
+        requestId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+          description: Unique identifier for the API request, useful for tracing and support.
+        time:
+          type: string
+          format: date-time
+          description: UTC datetime at which the response was generated.
+          readOnly: true
       additionalProperties: false
     ResponseLink:
       description: A hypermedia link returned in a response.
@@ -413,100 +507,6 @@ components:
           - PUT
           - DELETE
           - PATCH
-      additionalProperties: false
-    ResponseMetadata:
-      description: Standard metadata included in all responses.
-      type: object
-      properties:
-        requestId:
-          type:
-          - string
-          - 'null'
-          format: uuid
-          description: Unique identifier for the API request, useful for tracing and support.
-        time:
-          type: string
-          format: date-time
-          description: UTC datetime at which the response was generated.
-          readOnly: true
-      additionalProperties: false
-    MessageType:
-      type: string
-      description: Indicates whether the message is an informational warning or a hard error.
-      enum:
-      - Warning
-      - Error
-    ResponseMessage:
-      description: A warning or informational message relating to one or more investments.
-      type: object
-      properties:
-        investments:
-          type:
-          - array
-          - 'null'
-          description: The investments this message applies to.
-          items:
-            $ref: '#/components/schemas/InvestmentLookupInputDetails'
-        type:
-          $ref: '#/components/schemas/MessageType'
-        message:
-          type:
-          - string
-          - 'null'
-          description: Human-readable description of the warning or issue.
-        code:
-          type:
-          - string
-          - 'null'
-          description: Machine-readable error or warning code.
-      additionalProperties: false
-    AnalystHighlightsInvestment:
-      description: A single investment with its AI-generated analyst highlight summary.
-      type: object
-      properties:
-        identifiers:
-          type:
-          - object
-          - 'null'
-          description: Map of identifier types to their resolved values for this investment. May include `performanceId`, `securityId`, `isin`, `cusip`, `tradingSymbol`, `fundCode`, `msid`, `baseCurrency`, `domicile`, and `exchangeCountry`.
-          additionalProperties:
-            type:
-            - string
-            - 'null'
-          example:
-            performanceId: 0P00002Y8D
-            isin: US4138386085
-            exchangeCountry: USA
-        summary:
-          type:
-          - string
-          - 'null'
-          description: AI-generated analyst highlight summary for the investment.
-      additionalProperties: false
-    ErrorDetails:
-      description: Standard error response body.
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          format: int32
-          description: HTTP status code.
-        errorCode:
-          type:
-          - string
-          - 'null'
-          description: Morningstar-specific error code (e.g. `400.aiInsights.007`).
-        message:
-          type:
-          - string
-          - 'null'
-          description: Human-readable description of the error.
-        requestId:
-          type:
-          - string
-          - 'null'
-          format: uuid
-          description: Request identifier to include when contacting support.
       additionalProperties: false
   examples:
     AiInsightsResponseExample:

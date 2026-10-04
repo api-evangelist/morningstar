@@ -264,6 +264,88 @@ paths:
       variables: {}
 components:
   schemas:
+    ErrorResponse422:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Unprocessable Entity
+        status:
+          type: string
+          description: Error Status
+          example: UNPROCESSABLE_ENTITY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    InvestmentProfilesPayloadRequest:
+      title: InvestmentProfilesPayloadRequest
+      type: object
+      properties:
+        region:
+          type: string
+          description: Asset class region
+          enum:
+          - en-US
+          - en-CA
+          - en-GB
+          - fr-CA
+        investmentPolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvestmentPolicyPayloadRequest'
+    ComfortRangesPayloadResponse:
+      title: ComfortRangesPayload
+      type: object
+      properties:
+        tooMuchRisk:
+          $ref: '#/components/schemas/Ranges'
+        marginalUpper:
+          $ref: '#/components/schemas/Ranges'
+        okRisk:
+          $ref: '#/components/schemas/Ranges'
+        marginalLower:
+          $ref: '#/components/schemas/Ranges'
+        tooLittleRisk:
+          $ref: '#/components/schemas/Ranges'
+    Ranges:
+      title: Range
+      type: object
+      properties:
+        low:
+          type: integer
+          description: Low range
+          example: 10
+        id:
+          type: integer
+          description: High range
+          example: 30
+    InvestmentProfilesPayloadResponse:
+      title: InvestmentProfilesPayloadResponse
+      type: object
+      properties:
+        id:
+          type: string
+          description: Record unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        createdAt:
+          type: string
+          description: Record creation dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        region:
+          type: string
+          description: Investment profile region
+          enum:
+          - USA
+          - CA
+          - UK
+          - EUR
+        investmentPolicies:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvestmentPolicyPayload'
     InvestmentPolicyPayload:
       title: InvestmentPolicyPayload
       type: object
@@ -314,22 +396,28 @@ components:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    ErrorResponse422:
-      title: ErrorResponse
+    InvestmentPolicyPayloadRequest:
+      title: InvestmentPolicyPayloadRequest
       type: object
       properties:
-        message:
+        title:
           type: string
-          description: Error Message
-          example: Unprocessable Entity
-        status:
+          description: Investment policy title
+          example: Conservative
+        text:
           type: string
-          description: Error Status
-          example: UNPROCESSABLE_ENTITY
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
+          description: Investment policy text
+          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
+        min:
+          type: integer
+          description: Minimum score range
+          example: 10
+        max:
+          type: integer
+          description: Maximum score range
+          example: 30
+        assetClass:
+          $ref: '#/components/schemas/AssetClassPayloadRequest'
     ErrorResponse502:
       title: ErrorResponse
       type: object
@@ -346,52 +434,34 @@ components:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    ErrorResponse500:
+    AssetClassPayload:
+      title: AssetClassPayload
+      type: object
+      properties:
+        label:
+          type: string
+          description: Asset label
+          example: US Stocks
+        count:
+          type: number
+          description: Asset value
+          example: 24
+    ErrorResponse404:
       title: ErrorResponse
       type: object
       properties:
         message:
           type: string
           description: Error Message
-          example: Internal Server Error
+          example: Server can't find the requested resource
         status:
           type: string
           description: Error Status
-          example: INTERNAL_SERVER_ERROR
+          example: NOT_FOUND
         timestamp:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    InvestmentProfilesPayloadRequest:
-      title: InvestmentProfilesPayloadRequest
-      type: object
-      properties:
-        region:
-          type: string
-          description: Asset class region
-          enum:
-          - en-US
-          - en-CA
-          - en-GB
-          - fr-CA
-        investmentPolicies:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvestmentPolicyPayloadRequest'
-    ComfortRangesPayloadResponse:
-      title: ComfortRangesPayload
-      type: object
-      properties:
-        tooMuchRisk:
-          $ref: '#/components/schemas/Ranges'
-        marginalUpper:
-          $ref: '#/components/schemas/Ranges'
-        okRisk:
-          $ref: '#/components/schemas/Ranges'
-        marginalLower:
-          $ref: '#/components/schemas/Ranges'
-        tooLittleRisk:
-          $ref: '#/components/schemas/Ranges'
     AssetClassPayloadRequest:
       title: AssetClassPayloadRequest
       type: object
@@ -424,120 +494,22 @@ components:
           type: number
           description: Cash
           example: 40.9
-    ErrorResponse404:
+    ErrorResponse500:
       title: ErrorResponse
       type: object
       properties:
         message:
           type: string
           description: Error Message
-          example: Server can't find the requested resource
+          example: Internal Server Error
         status:
           type: string
           description: Error Status
-          example: NOT_FOUND
+          example: INTERNAL_SERVER_ERROR
         timestamp:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    InvestmentProfilesPayloadResponse:
-      title: InvestmentProfilesPayloadResponse
-      type: object
-      properties:
-        id:
-          type: string
-          description: Record unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        createdAt:
-          type: string
-          description: Record creation dateTime UTC
-          example: 2020-08-04T20:07:36+0000
-        region:
-          type: string
-          description: Investment profile region
-          enum:
-          - USA
-          - CA
-          - UK
-          - EUR
-        investmentPolicies:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvestmentPolicyPayload'
-    InvestmentPolicyPayloadRequest:
-      title: InvestmentPolicyPayloadRequest
-      type: object
-      properties:
-        title:
-          type: string
-          description: Investment policy title
-          example: Conservative
-        text:
-          type: string
-          description: Investment policy text
-          example: As a conservative investor, your portfolio will be invested in the most risk-averse areas such as cash and fixed-income securities.
-        min:
-          type: integer
-          description: Minimum score range
-          example: 10
-        max:
-          type: integer
-          description: Maximum score range
-          example: 30
-        assetClass:
-          $ref: '#/components/schemas/AssetClassPayloadRequest'
-    AssetClassPayload:
-      title: AssetClassPayload
-      type: object
-      properties:
-        label:
-          type: string
-          description: Asset label
-          example: US Stocks
-        count:
-          type: number
-          description: Asset value
-          example: 24
-    Ranges:
-      title: Range
-      type: object
-      properties:
-        low:
-          type: integer
-          description: Low range
-          example: 10
-        id:
-          type: integer
-          description: High range
-          example: 30
-    InvestmentProfilesPayloadRequest_2:
-      type: object
-      title: InvestmentProfilesPayloadRequest
-      properties:
-        region:
-          type: string
-          description: Asset class region
-          enum:
-          - USA
-          - CA
-          - UK
-          - EUR
-          - IN
-          - AU
-          - IPT
-          - NZ
-        version:
-          type: string
-          description: Version Risk Tolerance files
-          example: v3
-        customAssetClassLabel:
-          $ref: '#/components/schemas/CustomAssetClassLabel'
-        investmentPolicies:
-          type: array
-          minItems: 3
-          maxItems: 7
-          items:
-            $ref: '#/components/schemas/InvestmentPolicyPayloadRequest_2'
     CustomAssetClassLabel:
       type: object
       title: CustomAssetClassLabel
@@ -586,6 +558,46 @@ components:
           type: string
           description: Alternatives custom label
           example: Custom Alternatives
+    InvestmentProfilesPayloadRequest_2:
+      type: object
+      title: InvestmentProfilesPayloadRequest
+      properties:
+        region:
+          type: string
+          description: Asset class region
+          enum:
+          - USA
+          - CA
+          - UK
+          - EUR
+          - IN
+          - AU
+          - IPT
+          - NZ
+        version:
+          type: string
+          description: Version Risk Tolerance files
+          example: v3
+        customAssetClassLabel:
+          $ref: '#/components/schemas/CustomAssetClassLabel'
+        investmentPolicies:
+          type: array
+          minItems: 3
+          maxItems: 7
+          items:
+            $ref: '#/components/schemas/InvestmentPolicyPayloadRequest_2'
+    Ranges_2:
+      type: object
+      title: Range
+      properties:
+        low:
+          type: integer
+          description: Low range
+          example: 10
+        high:
+          type: integer
+          description: High range
+          example: 30
     InvestmentProfilesPayloadResponse_2:
       type: object
       title: InvestmentProfilesPayloadResponse
@@ -648,18 +660,6 @@ components:
           type: string
           description: Asset category
           example: Bond
-    Ranges_2:
-      type: object
-      title: Range
-      properties:
-        low:
-          type: integer
-          description: Low range
-          example: 10
-        high:
-          type: integer
-          description: High range
-          example: 30
 x-refined-from:
 - morningstar-dws-risk-profiler-openapi.json
 - morningstar-risk-profiler-us-openapi.json

@@ -102,13 +102,68 @@ paths:
       deprecated: false
 components:
   schemas:
-    DataRecord:
-      title: DataRecord
+    PersonPost:
+      title: PersonPost
+      required:
+      - emailAddress
+      - firstName
+      - lastName
+      - role
       type: object
       properties:
-        data:
-          type: object
-          properties: {}
+        firstName:
+          type: string
+          description: First name of the Person
+          example: Chris
+        middleName:
+          type: string
+          description: Middle name of the Person
+          example: Pat
+        lastName:
+          type: string
+          description: Last name of the Person
+          example: Smith
+        role:
+          type: string
+          description: Role of the Person. Currently must be the value ""
+          example: investor
+        emailAddress:
+          type: string
+          description: Email address of the Person
+        phoneNumber:
+          type: string
+          description: Phone number of the Person. There are no format requirements
+          example: '6035551212'
+        firmTag1:
+          type: string
+          description: Firm tag 1. If specified, thevalue must be unique within teh Firm to which the new Person is to be added. If not,  HTTP 409 Conflict is returned. Is only required if the Firm configuration requires a value for this field
+          example: BAA-primary-user-identifier
+        firmTag2:
+          type: string
+          description: Firm tag 2. Is only required if the Firm configuration requires a value for this field
+          example: BAA-primary-user-identifier-Marketing
+        firmTag3:
+          type: string
+          description: Firm tag 3. Is only required if the Firm configuration requires a value for this field
+          example: BAA-primary-user-identifier-Sales
+        taxId:
+          type: string
+          description: Social Security Number or Tax ID of the Person. Is only required if the Firm configuration requires a value for this field
+          example: '111111111'
+        firmCode:
+          type: string
+          description: 'Vendor name value for the Firm to which this Investor should be added. The Firm must already exist. </br>At least one of firmCode or advisorId  must be specified in order identify to which firm to add the Person. If firmCode is specified and advisorId is not, then the Person is created without any association to an advisor. If both are specified, then they must not conflict, meaning the Advisor identified by advisorId must exist within the Firm identified by the firmCode. Otherwise, an HTTP  400 Bad Request is returned.  '
+          example: ABC-12345
+        advisorId:
+          type: integer
+          description: 'BAA Person Id for the Advisor to whom this Investor should be assigned after the Investor is created. The Advisor must already exist and be part of the Firm identified in firmCode (if firmCode is specified). </br>At least one of firmCode or advisorId must be specified in order identify to which firm to add the Person. If firmCode is specified and advisorId is not, then the Person is created without any association to an advisor. If both are specified, then they must not conflict, meaning the Advisor identified by advisorId must exist within the Firm identified by the firmCode. Otherwise, an HTTP  400 Bad Request is returned.  '
+          format: int64
+          example: 123
+        uimGuid:
+          type: string
+          description: 'Used in conjunction with Service Admin JWT.  The uimGuid for the user to be created. Must be unique across all Persons in the ByAllAccounts system. If not, HTTP 409 Conflict is returned with the person URI.  Ignored if a valid Service Admin JWT is not provided. </br> Required when a Service Admin JWT is submitted to the endpoint. '
+          example: C5E883D3-8B92-438C-A43B-E70455FA1F06
+      description: Profile data of a person to be added
     PersonDto:
       title: PersonDto
       required:
@@ -175,65 +230,10 @@ components:
           description: UIM Guid for the Person if one was assigned at creation
           example: C5E883D3-8B92-438C-A43B-E70455FA1F06
       description: Profile data of a person
-    PersonPost:
-      title: PersonPost
-      required:
-      - emailAddress
-      - firstName
-      - lastName
-      - role
+    DataRecord:
+      title: DataRecord
       type: object
       properties:
-        firstName:
-          type: string
-          description: First name of the Person
-          example: Chris
-        middleName:
-          type: string
-          description: Middle name of the Person
-          example: Pat
-        lastName:
-          type: string
-          description: Last name of the Person
-          example: Smith
-        role:
-          type: string
-          description: Role of the Person. Currently must be the value ""
-          example: investor
-        emailAddress:
-          type: string
-          description: Email address of the Person
-        phoneNumber:
-          type: string
-          description: Phone number of the Person. There are no format requirements
-          example: '6035551212'
-        firmTag1:
-          type: string
-          description: Firm tag 1. If specified, thevalue must be unique within teh Firm to which the new Person is to be added. If not,  HTTP 409 Conflict is returned. Is only required if the Firm configuration requires a value for this field
-          example: BAA-primary-user-identifier
-        firmTag2:
-          type: string
-          description: Firm tag 2. Is only required if the Firm configuration requires a value for this field
-          example: BAA-primary-user-identifier-Marketing
-        firmTag3:
-          type: string
-          description: Firm tag 3. Is only required if the Firm configuration requires a value for this field
-          example: BAA-primary-user-identifier-Sales
-        taxId:
-          type: string
-          description: Social Security Number or Tax ID of the Person. Is only required if the Firm configuration requires a value for this field
-          example: '111111111'
-        firmCode:
-          type: string
-          description: 'Vendor name value for the Firm to which this Investor should be added. The Firm must already exist. </br>At least one of firmCode or advisorId  must be specified in order identify to which firm to add the Person. If firmCode is specified and advisorId is not, then the Person is created without any association to an advisor. If both are specified, then they must not conflict, meaning the Advisor identified by advisorId must exist within the Firm identified by the firmCode. Otherwise, an HTTP  400 Bad Request is returned.  '
-          example: ABC-12345
-        advisorId:
-          type: integer
-          description: 'BAA Person Id for the Advisor to whom this Investor should be assigned after the Investor is created. The Advisor must already exist and be part of the Firm identified in firmCode (if firmCode is specified). </br>At least one of firmCode or advisorId must be specified in order identify to which firm to add the Person. If firmCode is specified and advisorId is not, then the Person is created without any association to an advisor. If both are specified, then they must not conflict, meaning the Advisor identified by advisorId must exist within the Firm identified by the firmCode. Otherwise, an HTTP  400 Bad Request is returned.  '
-          format: int64
-          example: 123
-        uimGuid:
-          type: string
-          description: 'Used in conjunction with Service Admin JWT.  The uimGuid for the user to be created. Must be unique across all Persons in the ByAllAccounts system. If not, HTTP 409 Conflict is returned with the person URI.  Ignored if a valid Service Admin JWT is not provided. </br> Required when a Service Admin JWT is submitted to the endpoint. '
-          example: C5E883D3-8B92-438C-A43B-E70455FA1F06
-      description: Profile data of a person to be added
+        data:
+          type: object
+          properties: {}

@@ -100,63 +100,6 @@ paths:
       x-operation-id-source: derived
 components:
   schemas:
-    Vendor:
-      type: object
-      properties:
-        vendorId:
-          type: integer
-          description: vendorId
-          format: int64
-        vendorCodeMap:
-          $ref: '#/components/schemas/VendorCodeMap'
-        name:
-          type:
-          - string
-          - 'null'
-          description: name
-        fixedName:
-          type:
-          - string
-          - 'null'
-          description: fixedName
-        ein:
-          type: integer
-          description: ein
-          format: int32
-        fixedEin:
-          type: integer
-          description: fixedEin
-          format: int32
-        value:
-          type: number
-          description: value
-          format: double
-        stability:
-          type:
-          - string
-          - 'null'
-          description: stability
-        planDetailsid:
-          type: integer
-          description: planDetailsid
-          format: int64
-      additionalProperties: false
-      description: Vendor
-    YearValue:
-      type: object
-      properties:
-        year:
-          type:
-          - string
-          - 'null'
-          description: year
-        value:
-          type:
-          - string
-          - 'null'
-          description: value
-      additionalProperties: false
-      description: YearValue
     Investment:
       type: object
       properties:
@@ -246,6 +189,17 @@ components:
           description: IsRemoved
       additionalProperties: false
       description: Investment
+    ErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        message:
+          type:
+          - string
+          - 'null'
+      additionalProperties: false
     VendorCodeMap:
       type: object
       properties:
@@ -256,6 +210,21 @@ components:
           description: noname
       additionalProperties: false
       description: VendorCodeMap
+    YearValue:
+      type: object
+      properties:
+        year:
+          type:
+          - string
+          - 'null'
+          description: year
+        value:
+          type:
+          - string
+          - 'null'
+          description: value
+      additionalProperties: false
+      description: YearValue
     BusinessCode:
       type: object
       properties:
@@ -276,17 +245,48 @@ components:
           description: description
       additionalProperties: false
       description: BusinessCode
-    ErrorDetails:
+    Vendor:
       type: object
       properties:
-        statusCode:
+        vendorId:
           type: integer
-          format: int32
-        message:
+          description: vendorId
+          format: int64
+        vendorCodeMap:
+          $ref: '#/components/schemas/VendorCodeMap'
+        name:
           type:
           - string
           - 'null'
+          description: name
+        fixedName:
+          type:
+          - string
+          - 'null'
+          description: fixedName
+        ein:
+          type: integer
+          description: ein
+          format: int32
+        fixedEin:
+          type: integer
+          description: fixedEin
+          format: int32
+        value:
+          type: number
+          description: value
+          format: double
+        stability:
+          type:
+          - string
+          - 'null'
+          description: stability
+        planDetailsid:
+          type: integer
+          description: planDetailsid
+          format: int64
       additionalProperties: false
+      description: Vendor
     PlanDetailModel:
       type: object
       properties:

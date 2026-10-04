@@ -683,30 +683,350 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 913
 components:
+  responses:
+    ResponseEquityTrailingReturnStatistics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dailyStandardDeviation:
+                $ref: '#/components/schemas/OutputDailyStandardDeviation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityMonthlyReturnStatistics:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              monthEndReturnStatistics:
+                $ref: '#/components/schemas/OutputMonthEndReturnStatistics'
+              monthlyStandardDeviation:
+                $ref: '#/components/schemas/OutputMonthlyStandardDeviation'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityReturnsToDate:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              marketReturn:
+                $ref: '#/components/schemas/OutputMarketReturn'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityReturns:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              monthEndReturnStatistics:
+                $ref: '#/components/schemas/OutputMonthEndReturnStatistics'
+              monthlyStandardDeviation:
+                $ref: '#/components/schemas/OutputMonthlyStandardDeviation'
+              marketReturn:
+                $ref: '#/components/schemas/OutputMarketReturn'
+              dailyStandardDeviation:
+                $ref: '#/components/schemas/OutputDailyStandardDeviation'
+              trailingReturn:
+                $ref: '#/components/schemas/OutputTrailingReturn'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityTrailingReturns:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              trailingReturn:
+                $ref: '#/components/schemas/OutputTrailingReturn'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
   schemas:
-    OutputMetadata:
+    OutputInvalidInvestments:
       type: object
       properties:
-        requestId:
+        id:
           type: string
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
+        idType:
           type: string
           nullable: true
-        portfolioCurrency:
+        status:
           type: string
           nullable: true
-        messages:
+        datapointId:
           type: array
           items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
           nullable: true
       additionalProperties: false
-      title: OutputMetadata
+      title: OutputInvalidInvestments
+    OutputMonthlyStandardDeviation:
+      type: object
+      properties:
+        arithmeticMean120Month:
+          type: number
+          description: The mean or average of the monthly market return over a 120-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean12Month:
+          type: number
+          description: The mean or average of the monthly market return over a 12-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean24Month:
+          type: number
+          description: The mean or average of the monthly market return over a 24-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean36Month:
+          type: number
+          description: The mean or average of the monthly market return over a 36-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean48Month:
+          type: number
+          description: The mean or average of the monthly market return over a 48-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean60Month:
+          type: number
+          description: The mean or average of the monthly market return over a 60-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
+          format: double
+          nullable: true
+        asOfDate:
+          type: string
+          description: The calendar date when the monthly standard deviation data points are calculated
+          nullable: true
+        standardDeviation120Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 120-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation12Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 12-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation24Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 24-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation36Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 36-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation48Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 48-month period and its mean.
+          format: double
+          nullable: true
+        standardDeviation60Month:
+          type: number
+          description: A statistical measurement of the spread between a company's monthly market return over a 60-month period and its mean.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputMonthlyStandardDeviation
+    OutputMonthEndReturnStatistics:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the best and worst 3 months total return datapoints are calculated
+          nullable: true
+        best3MonthTotalReturnOverPast120Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 120 months.
+          format: double
+          nullable: true
+        best3MonthTotalReturnOverPast12Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 12 months.
+          format: double
+          nullable: true
+        best3MonthTotalReturnOverPast36Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 36 months.
+          format: double
+          nullable: true
+        best3MonthTotalReturnOverPast60Months:
+          type: number
+          description: This data point refers to the highest 3 month total return value over the past 60 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast120Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 120 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast12Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 12 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast36Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 36 months.
+          format: double
+          nullable: true
+        worst3MonthTotalReturnOverPast60Months:
+          type: number
+          description: This data point refers to the lowest 3 month total return value over the past 60 months.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputMonthEndReturnStatistics
+    OutputDailyStandardDeviation:
+      type: object
+      properties:
+        dailyStandardDeviationAsOfDate:
+          type: string
+          description: The calendar date when the standard deviation data points are calculated
+          nullable: true
+        arithmeticMean1008Day:
+          type: number
+          description: The mean or average of the daily market return over a 1008-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean1260Day:
+          type: number
+          description: The mean or average of the daily market return over a 1260-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean2520Day:
+          type: number
+          description: The mean or average of the daily market return over a 2520-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean252Day:
+          type: number
+          description: The mean or average of the daily market return over a 252-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean504Day:
+          type: number
+          description: The mean or average of the daily market return over a 504-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        arithmeticMean756Day:
+          type: number
+          description: The mean or average of the daily market return over a 756-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
+          format: double
+          nullable: true
+        standardDeviation1008Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 1008-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation1260Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 1260-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation2520Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 2520-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation252Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 252-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation504Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 504-day period and its mean.
+          format: double
+          nullable: true
+        standardDeviation756Day:
+          type: number
+          description: A statistical measurement of the spread between a company's daily market return over a 756-day period and its mean.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputDailyStandardDeviation
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
     OutputTrailingReturn:
       type: object
       properties:
@@ -911,165 +1231,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputTrailingReturn
-    OutputMonthEndReturnStatistics:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date when the best and worst 3 months total return datapoints are calculated
-          nullable: true
-        best3MonthTotalReturnOverPast120Months:
-          type: number
-          description: This data point refers to the highest 3 month total return value over the past 120 months.
-          format: double
-          nullable: true
-        best3MonthTotalReturnOverPast12Months:
-          type: number
-          description: This data point refers to the highest 3 month total return value over the past 12 months.
-          format: double
-          nullable: true
-        best3MonthTotalReturnOverPast36Months:
-          type: number
-          description: This data point refers to the highest 3 month total return value over the past 36 months.
-          format: double
-          nullable: true
-        best3MonthTotalReturnOverPast60Months:
-          type: number
-          description: This data point refers to the highest 3 month total return value over the past 60 months.
-          format: double
-          nullable: true
-        worst3MonthTotalReturnOverPast120Months:
-          type: number
-          description: This data point refers to the lowest 3 month total return value over the past 120 months.
-          format: double
-          nullable: true
-        worst3MonthTotalReturnOverPast12Months:
-          type: number
-          description: This data point refers to the lowest 3 month total return value over the past 12 months.
-          format: double
-          nullable: true
-        worst3MonthTotalReturnOverPast36Months:
-          type: number
-          description: This data point refers to the lowest 3 month total return value over the past 36 months.
-          format: double
-          nullable: true
-        worst3MonthTotalReturnOverPast60Months:
-          type: number
-          description: This data point refers to the lowest 3 month total return value over the past 60 months.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputMonthEndReturnStatistics
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputDailyStandardDeviation:
-      type: object
-      properties:
-        dailyStandardDeviationAsOfDate:
-          type: string
-          description: The calendar date when the standard deviation data points are calculated
-          nullable: true
-        arithmeticMean1008Day:
-          type: number
-          description: The mean or average of the daily market return over a 1008-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean1260Day:
-          type: number
-          description: The mean or average of the daily market return over a 1260-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean2520Day:
-          type: number
-          description: The mean or average of the daily market return over a 2520-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean252Day:
-          type: number
-          description: The mean or average of the daily market return over a 252-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean504Day:
-          type: number
-          description: The mean or average of the daily market return over a 504-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean756Day:
-          type: number
-          description: The mean or average of the daily market return over a 756-day period. It is calculated by summing up all the daily market returns for a given period; and dividing this sum by the total number of days that market return data is available.
-          format: double
-          nullable: true
-        standardDeviation1008Day:
-          type: number
-          description: A statistical measurement of the spread between a company's daily market return over a 1008-day period and its mean.
-          format: double
-          nullable: true
-        standardDeviation1260Day:
-          type: number
-          description: A statistical measurement of the spread between a company's daily market return over a 1260-day period and its mean.
-          format: double
-          nullable: true
-        standardDeviation2520Day:
-          type: number
-          description: A statistical measurement of the spread between a company's daily market return over a 2520-day period and its mean.
-          format: double
-          nullable: true
-        standardDeviation252Day:
-          type: number
-          description: A statistical measurement of the spread between a company's daily market return over a 252-day period and its mean.
-          format: double
-          nullable: true
-        standardDeviation504Day:
-          type: number
-          description: A statistical measurement of the spread between a company's daily market return over a 504-day period and its mean.
-          format: double
-          nullable: true
-        standardDeviation756Day:
-          type: number
-          description: A statistical measurement of the spread between a company's daily market return over a 756-day period and its mean.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputDailyStandardDeviation
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
     OutputMarketReturn:
       type: object
       properties:
@@ -1139,121 +1300,29 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMarketReturn
-    OutputInvalidInvestments:
+    OutputMetadata:
       type: object
       properties:
-        id:
+        requestId:
           type: string
           nullable: true
-        idType:
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
           nullable: true
-        status:
+        portfolioCurrency:
           type: string
           nullable: true
-        datapointId:
+        messages:
           type: array
           items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputInvalidInvestments
-    OutputMonthlyStandardDeviation:
-      type: object
-      properties:
-        arithmeticMean120Month:
-          type: number
-          description: The mean or average of the monthly market return over a 120-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean12Month:
-          type: number
-          description: The mean or average of the monthly market return over a 12-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean24Month:
-          type: number
-          description: The mean or average of the monthly market return over a 24-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean36Month:
-          type: number
-          description: The mean or average of the monthly market return over a 36-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean48Month:
-          type: number
-          description: The mean or average of the monthly market return over a 48-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
-          format: double
-          nullable: true
-        arithmeticMean60Month:
-          type: number
-          description: The mean or average of the monthly market return over a 60-month period. It is calculated by summing up all the monthly market returns for a given period; and dividing this sum by the total number of months that market return data is available.
-          format: double
-          nullable: true
-        asOfDate:
-          type: string
-          description: The calendar date when the monthly standard deviation data points are calculated
-          nullable: true
-        standardDeviation120Month:
-          type: number
-          description: A statistical measurement of the spread between a company's monthly market return over a 120-month period and its mean.
-          format: double
-          nullable: true
-        standardDeviation12Month:
-          type: number
-          description: A statistical measurement of the spread between a company's monthly market return over a 12-month period and its mean.
-          format: double
-          nullable: true
-        standardDeviation24Month:
-          type: number
-          description: A statistical measurement of the spread between a company's monthly market return over a 24-month period and its mean.
-          format: double
-          nullable: true
-        standardDeviation36Month:
-          type: number
-          description: A statistical measurement of the spread between a company's monthly market return over a 36-month period and its mean.
-          format: double
-          nullable: true
-        standardDeviation48Month:
-          type: number
-          description: A statistical measurement of the spread between a company's monthly market return over a 48-month period and its mean.
-          format: double
-          nullable: true
-        standardDeviation60Month:
-          type: number
-          description: A statistical measurement of the spread between a company's monthly market return over a 60-month period and its mean.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputMonthlyStandardDeviation
+      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -1286,94 +1355,25 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-  responses:
-    ResponseEquityReturns:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              monthEndReturnStatistics:
-                $ref: '#/components/schemas/OutputMonthEndReturnStatistics'
-              monthlyStandardDeviation:
-                $ref: '#/components/schemas/OutputMonthlyStandardDeviation'
-              marketReturn:
-                $ref: '#/components/schemas/OutputMarketReturn'
-              dailyStandardDeviation:
-                $ref: '#/components/schemas/OutputDailyStandardDeviation'
-              trailingReturn:
-                $ref: '#/components/schemas/OutputTrailingReturn'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityTrailingReturns:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              trailingReturn:
-                $ref: '#/components/schemas/OutputTrailingReturn'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityTrailingReturnStatistics:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              dailyStandardDeviation:
-                $ref: '#/components/schemas/OutputDailyStandardDeviation'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityMonthlyReturnStatistics:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              monthEndReturnStatistics:
-                $ref: '#/components/schemas/OutputMonthEndReturnStatistics'
-              monthlyStandardDeviation:
-                $ref: '#/components/schemas/OutputMonthlyStandardDeviation'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityReturnsToDate:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              marketReturn:
-                $ref: '#/components/schemas/OutputMarketReturn'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
   securitySchemes:
     Bearer:
       type: http

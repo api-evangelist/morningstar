@@ -444,29 +444,52 @@ paths:
       x-cpqId: 922
 components:
   schemas:
-    OutputMetadata:
+    OutputInvalidInvestments:
       type: object
       properties:
-        requestId:
+        id:
           type: string
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
+        idType:
           type: string
           nullable: true
-        portfolioCurrency:
+        status:
           type: string
           nullable: true
-        messages:
+        datapointId:
           type: array
           items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
           nullable: true
       additionalProperties: false
-      title: OutputMetadata
+      title: OutputInvalidInvestments
     CodeMappingString:
       type: object
       properties:
@@ -478,6 +501,123 @@ components:
           nullable: true
       additionalProperties: false
       title: CodeMappingString
+    OutputBoardAndCommitteeAttendance:
+      type: object
+      properties:
+        fiscalYearEndDate:
+          type: string
+          description: The company's fiscal year that it uses to report its financial results.
+          nullable: true
+        committeeId:
+          type: string
+          description: A unique identifier assigned to each committee.
+          nullable: true
+        committeeName:
+          type: string
+          description: Represents the name of the committee; a committee is a group of directors; which is formed by the Board of the Company; with the purpose of performing particular functions.
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        exceptionalPayment:
+          type: number
+          description: Any additional amount paid to the director for responsibilities other than the duties performed as part of the committees.
+          format: double
+          nullable: true
+        isCommitteeChairperson:
+          type: boolean
+          description: 'Flag to indicate whether the person is a chairperson of the committee: The chairperson is the presiding officer of an organized group such as a board/committee. The chairperson is responsible for making sure that each meeting is planned effectively; conducted according to the constitution and that matters are dealt with in an orderly; efficient manner. TRUE denotes the person is a chairperson of the committee; otherwise FALSE.'
+          nullable: true
+        isCompensationCommittee:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        isExpensePaid:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        meetingAttendancePercentage:
+          type: number
+          description: Percentage of the board and committee meetings attended during the fiscal year.
+          format: double
+          nullable: true
+        meetingFeeAlternate:
+          type: number
+          description: Fees paid to the directors for attending board/committee alternate meetings (meetings other than the regular meetings).
+          format: double
+          nullable: true
+        meetingFeeChair:
+          type: number
+          description: Fees paid to the chairperson for attending board/committee meetings.
+          format: double
+          nullable: true
+        meetingFeeMember:
+          type: number
+          description: Fees paid to the directors for attending board/committee meetings.
+          format: double
+          nullable: true
+        numberOfMeetingsAlternate:
+          type: integer
+          description: Total number of meetings held other than in-person; e.g. telephonic meeting; written consent; etc...; during the fiscal year for each board and committee member.
+          format: int32
+          nullable: true
+        numberOfMeetingsPerson:
+          type: integer
+          description: Total number of meetings held in-person during the fiscal year for each board and committee.
+          format: int32
+          nullable: true
+        personId:
+          type: string
+          description: A unique identifier assigned to each director/officer.
+          nullable: true
+        reportDate:
+          type: string
+          description: The date the company publishes the document from which the data is sourced.
+          nullable: true
+        reportSource:
+          type: string
+          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
+          nullable: true
+        retainerFeeChair:
+          type: number
+          description: 'Annual retainer fees paid to the Board/Committee chair: Retainer is the cash amount that company pays its non-employee directors for performing their duties and responsibilities on various committees and board. It is paid monthly; quarterly; half yearly or yearly.'
+          format: double
+          nullable: true
+        retainerFeeMember:
+          type: number
+          description: 'Annual retainer fees paid to the board/committee member: Retainer is the cash amount that the company pays its non-employee directors for performing their duties and responsibilities on various committees and boards. It is paid monthly; quarterly; half yearly or yearly.'
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputBoardAndCommitteeAttendance
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
     OutputExecutiveOfficersAndBoardOfDirectors:
       type: object
       properties:
@@ -595,188 +735,29 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputExecutiveOfficersAndBoardOfDirectors
-    CodeMappingBoolean:
+    OutputMetadata:
       type: object
       properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: boolean
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingBoolean
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
         requestId:
           type: string
-          description: RequestId
           nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
           nullable: true
-        code:
+        portfolioCurrency:
           type: string
           nullable: true
-        investments:
+        messages:
           type: array
           items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
-      additionalProperties: false
-      title: OutputInvalidInvestments
-    OutputBoardAndCommitteeAttendance:
-      type: object
-      properties:
-        fiscalYearEndDate:
-          type: string
-          description: The company's fiscal year that it uses to report its financial results.
-          nullable: true
-        committeeId:
-          type: string
-          description: A unique identifier assigned to each committee.
-          nullable: true
-        committeeName:
-          type: string
-          description: Represents the name of the committee; a committee is a group of directors; which is formed by the Board of the Company; with the purpose of performing particular functions.
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        exceptionalPayment:
-          type: number
-          description: Any additional amount paid to the director for responsibilities other than the duties performed as part of the committees.
-          format: double
-          nullable: true
-        isCommitteeChairperson:
-          type: boolean
-          description: 'Flag to indicate whether the person is a chairperson of the committee: The chairperson is the presiding officer of an organized group such as a board/committee. The chairperson is responsible for making sure that each meeting is planned effectively; conducted according to the constitution and that matters are dealt with in an orderly; efficient manner. TRUE denotes the person is a chairperson of the committee; otherwise FALSE.'
-          nullable: true
-        isCompensationCommittee:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        isExpensePaid:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        meetingAttendancePercentage:
-          type: number
-          description: Percentage of the board and committee meetings attended during the fiscal year.
-          format: double
-          nullable: true
-        meetingFeeAlternate:
-          type: number
-          description: Fees paid to the directors for attending board/committee alternate meetings (meetings other than the regular meetings).
-          format: double
-          nullable: true
-        meetingFeeChair:
-          type: number
-          description: Fees paid to the chairperson for attending board/committee meetings.
-          format: double
-          nullable: true
-        meetingFeeMember:
-          type: number
-          description: Fees paid to the directors for attending board/committee meetings.
-          format: double
-          nullable: true
-        numberOfMeetingsAlternate:
-          type: integer
-          description: Total number of meetings held other than in-person; e.g. telephonic meeting; written consent; etc...; during the fiscal year for each board and committee member.
-          format: int32
-          nullable: true
-        numberOfMeetingsPerson:
-          type: integer
-          description: Total number of meetings held in-person during the fiscal year for each board and committee.
-          format: int32
-          nullable: true
-        personId:
-          type: string
-          description: A unique identifier assigned to each director/officer.
-          nullable: true
-        reportDate:
-          type: string
-          description: The date the company publishes the document from which the data is sourced.
-          nullable: true
-        reportSource:
-          type: string
-          description: 'The document where the company discloses the key information and from where the data is collected: Examples include Annual Report; DEF 14A; 10-K; 8-K; etc....'
-          nullable: true
-        retainerFeeChair:
-          type: number
-          description: 'Annual retainer fees paid to the Board/Committee chair: Retainer is the cash amount that company pays its non-employee directors for performing their duties and responsibilities on various committees and board. It is paid monthly; quarterly; half yearly or yearly.'
-          format: double
-          nullable: true
-        retainerFeeMember:
-          type: number
-          description: 'Annual retainer fees paid to the board/committee member: Retainer is the cash amount that the company pays its non-employee directors for performing their duties and responsibilities on various committees and boards. It is paid monthly; quarterly; half yearly or yearly.'
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputBoardAndCommitteeAttendance
+      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -809,6 +790,25 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
   responses:
     ResponseEquityExecutiveOfficersAndBoardOfDirectors:
       description: OK
@@ -823,12 +823,19 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
+    ResponseEquityGovernance:
+      description: OK
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
+            type: object
+            properties:
+              'boardAndCommitteeAttendance:':
+                $ref: '#/components/schemas/OutputBoardAndCommitteeAttendance'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityBoardAndCommitteeAttendance:
       description: OK
       content:
@@ -848,19 +855,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityGovernance:
-      description: OK
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              'boardAndCommitteeAttendance:':
-                $ref: '#/components/schemas/OutputBoardAndCommitteeAttendance'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
+            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

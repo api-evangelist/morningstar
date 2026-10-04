@@ -573,63 +573,6 @@ paths:
       x-cpqId: 920
 components:
   schemas:
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputSymbolChangeLog:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The effective date when the symbol for the share class was changed
-          nullable: true
-        changeFrom:
-          type: string
-          description: The symbol that the share class changes from
-          nullable: true
-        changeTo:
-          type: string
-          description: The symbol that the share class changes to
-          nullable: true
-      additionalProperties: false
-      title: OutputSymbolChangeLog
-    OutputExchangeCodeChangeLog:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The effective date when the exchange code for the share class was changed
-          nullable: true
-        changeFrom:
-          type: string
-          description: The exchange code that the share class changes from
-          nullable: true
-        changeTo:
-          type: string
-          description: The exchange code that the share class changes to
-          nullable: true
-      additionalProperties: false
-      title: OutputExchangeCodeChangeLog
     OutputIsinChangeLog:
       type: object
       properties:
@@ -647,78 +590,23 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIsinChangeLog
-    OutputEntityReferenceEntityNameChange:
+    OutputDomicileCountryChangeLog:
       type: object
       properties:
         effectiveDate:
           type: string
-          description: Effective date is the date on which the company name comes into existence as approved by the firm.
+          description: The effective date when the domicile country for the company was changed
           nullable: true
         changeFrom:
           type: string
-          description: The English translation of the foreign legal name if/when applicable
+          description: The domicile country that the company changes from
           nullable: true
         changeTo:
           type: string
-          description: The English translation of the foreign legal name if/when applicable
+          description: The domicile country that the company changes to
           nullable: true
       additionalProperties: false
-      title: OutputEntityReferenceEntityNameChange
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    OutputLegalNameChangeLog:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The starting date that an associated data point value is applicable to.
-          nullable: true
-        changeFrom:
-          type: string
-          description: Company Legal Name before the change.
-          nullable: true
-        changeTo:
-          type: string
-          description: Compay Legal Name after the change.
-          nullable: true
-      additionalProperties: false
-      title: OutputLegalNameChangeLog
-    OutputDrRatioChangeLog:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The as of date when the change of par ratio became effective.
-          nullable: true
-        changeFrom:
-          type: number
-          description: The conversion ratio value of a security before the change.
-          format: double
-          nullable: true
-        changeTo:
-          type: number
-          description: The conversion ratio value of a security after the change.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputDrRatioChangeLog
+      title: OutputDomicileCountryChangeLog
     OutputConversionRatioChangeLog:
       type: object
       properties:
@@ -755,6 +643,40 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputCentralIndexKeyChangeLog
+    OutputSymbolChangeLog:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The effective date when the symbol for the share class was changed
+          nullable: true
+        changeFrom:
+          type: string
+          description: The symbol that the share class changes from
+          nullable: true
+        changeTo:
+          type: string
+          description: The symbol that the share class changes to
+          nullable: true
+      additionalProperties: false
+      title: OutputSymbolChangeLog
+    OutputExchangeCodeChangeLog:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The effective date when the exchange code for the share class was changed
+          nullable: true
+        changeFrom:
+          type: string
+          description: The exchange code that the share class changes from
+          nullable: true
+        changeTo:
+          type: string
+          description: The exchange code that the share class changes to
+          nullable: true
+      additionalProperties: false
+      title: OutputExchangeCodeChangeLog
     OutputErrorDetails:
       type: object
       properties:
@@ -777,23 +699,25 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    OutputDomicileCountryChangeLog:
+    OutputDrRatioChangeLog:
       type: object
       properties:
         effectiveDate:
           type: string
-          description: The effective date when the domicile country for the company was changed
+          description: The as of date when the change of par ratio became effective.
           nullable: true
         changeFrom:
-          type: string
-          description: The domicile country that the company changes from
+          type: number
+          description: The conversion ratio value of a security before the change.
+          format: double
           nullable: true
         changeTo:
-          type: string
-          description: The domicile country that the company changes to
+          type: number
+          description: The conversion ratio value of a security after the change.
+          format: double
           nullable: true
       additionalProperties: false
-      title: OutputDomicileCountryChangeLog
+      title: OutputDrRatioChangeLog
     OutputInvalidInvestments:
       type: object
       properties:
@@ -840,6 +764,46 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+    OutputLegalNameChangeLog:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The starting date that an associated data point value is applicable to.
+          nullable: true
+        changeFrom:
+          type: string
+          description: Company Legal Name before the change.
+          nullable: true
+        changeTo:
+          type: string
+          description: Compay Legal Name after the change.
+          nullable: true
+      additionalProperties: false
+      title: OutputLegalNameChangeLog
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -872,13 +836,43 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputEntityReferenceEntityNameChange:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: Effective date is the date on which the company name comes into existence as approved by the firm.
+          nullable: true
+        changeFrom:
+          type: string
+          description: The English translation of the foreign legal name if/when applicable
+          nullable: true
+        changeTo:
+          type: string
+          description: The English translation of the foreign legal name if/when applicable
+          nullable: true
+      additionalProperties: false
+      title: OutputEntityReferenceEntityNameChange
   responses:
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityReferenceChange:
       description: OK
       content:
@@ -908,25 +902,12 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquitySecurityLevelReferenceChange:
-      description: OK
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              conversionRatioChangeLog:
-                $ref: '#/components/schemas/OutputConversionRatioChangeLog'
-              drRatioChangeLog:
-                $ref: '#/components/schemas/OutputDrRatioChangeLog'
-              exchangeCodeChangeLog:
-                $ref: '#/components/schemas/OutputExchangeCodeChangeLog'
-              symbolChangeLog:
-                $ref: '#/components/schemas/OutputSymbolChangeLog'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityCompanyLevelReferenceChange:
       description: OK
       content:
@@ -955,6 +936,25 @@ components:
             properties:
               isinChangeLog:
                 $ref: '#/components/schemas/OutputIsinChangeLog'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquitySecurityLevelReferenceChange:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              conversionRatioChangeLog:
+                $ref: '#/components/schemas/OutputConversionRatioChangeLog'
+              drRatioChangeLog:
+                $ref: '#/components/schemas/OutputDrRatioChangeLog'
+              exchangeCodeChangeLog:
+                $ref: '#/components/schemas/OutputExchangeCodeChangeLog'
+              symbolChangeLog:
+                $ref: '#/components/schemas/OutputSymbolChangeLog'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:

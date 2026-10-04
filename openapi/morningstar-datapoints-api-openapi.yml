@@ -86,34 +86,35 @@ paths:
     - url: https://www.emea-api.morningstar.com
       description: EMEA
 components:
-  schemas:
+  responses:
     ResponseGetDataPoints:
-      title: ResponseGetDataPoints
-      description: List of supported data points and associated metadata.
-      type: array
-      items:
-        $ref: '#/components/schemas/OutputDataPointMetadata'
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseGetDataPoints'
+          examples:
+            ResponseGetDataPointsListExample1:
+              $ref: '#/components/examples/ResponseGetDataPointsExample1'
+    ResponseDataPoints:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseDataPoints'
+          examples:
+            Equities Data Points:
+              $ref: '#/components/examples/DataPointsResponseExample1'
+    ResponseDataPoints_2:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponseDataPoints_2'
+          examples:
+            Managed Investments Data Points (Example Truncated):
+              $ref: '#/components/examples/ResponseDataPointsExample1'
+  schemas:
     OutputDataPointMetadata:
       title: OutputDataPointMetadata
       description: Metadata for an available data point.
@@ -510,6 +511,33 @@ components:
           - decimal
           - int
           - bool
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+    ResponseGetDataPoints:
+      title: ResponseGetDataPoints
+      description: List of supported data points and associated metadata.
+      type: array
+      items:
+        $ref: '#/components/schemas/OutputDataPointMetadata'
     OutputDataPoints:
       description: Data point filter options.
       type: object
@@ -577,6 +605,19 @@ components:
           type: boolean
           nullable: true
       additionalProperties: false
+    ResponseDataPoints:
+      title: ResponseDataPoints
+      description: Data points and operators supported for equities screening.
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/OutputDataPointsMetadata'
+        dataPoints:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputDataPoints'
+          nullable: true
+      additionalProperties: false
     OutputDataPointsMetadata:
       description: Metadata returned in response to requests to `GET /screeners/equities/data-points` endpoint.
       title: OutputDataPointsMetadata
@@ -591,38 +632,6 @@ components:
           example: '2025-10-02T10:54:36.9161062Z'
           type: string
           format: date-time
-      additionalProperties: false
-    ResponseDataPoints:
-      title: ResponseDataPoints
-      description: Data points and operators supported for equities screening.
-      type: object
-      properties:
-        metadata:
-          $ref: '#/components/schemas/OutputDataPointsMetadata'
-        dataPoints:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputDataPoints'
-          nullable: true
-      additionalProperties: false
-    ResponseDataPointsMetadata:
-      title: ResponseDataPointsMetadata
-      description: Request ID and timestamp for use in debugging and troubleshooting.
-      type: object
-      properties:
-        requestId:
-          description: Indicates the request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          type: string
-          nullable: true
-          readOnly: true
-        time:
-          description: Indicates time response was returned.
-          example: '2025-10-02T10:54:36.9161062Z'
-          type: string
-          format: date-time
-          nullable: true
-          readOnly: true
       additionalProperties: false
     ResponseDataPoints_2:
       title: ResponseDataPoints
@@ -702,6 +711,25 @@ components:
           type: boolean
           readOnly: true
           nullable: true
+      additionalProperties: false
+    ResponseDataPointsMetadata:
+      title: ResponseDataPointsMetadata
+      description: Request ID and timestamp for use in debugging and troubleshooting.
+      type: object
+      properties:
+        requestId:
+          description: Indicates the request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          type: string
+          nullable: true
+          readOnly: true
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          type: string
+          format: date-time
+          nullable: true
+          readOnly: true
       additionalProperties: false
   examples:
     ResponseGetDataPointsExample1:
@@ -1272,34 +1300,6 @@ components:
           isLanguageDependent: false
           isSortable: false
           fuzzy: false
-  responses:
-    ResponseGetDataPoints:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseGetDataPoints'
-          examples:
-            ResponseGetDataPointsListExample1:
-              $ref: '#/components/examples/ResponseGetDataPointsExample1'
-    ResponseDataPoints:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseDataPoints'
-          examples:
-            Equities Data Points:
-              $ref: '#/components/examples/DataPointsResponseExample1'
-    ResponseDataPoints_2:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponseDataPoints_2'
-          examples:
-            Managed Investments Data Points (Example Truncated):
-              $ref: '#/components/examples/ResponseDataPointsExample1'
   securitySchemes:
     Bearer:
       type: http

@@ -573,40 +573,52 @@ paths:
       x-cpqId: 927
 components:
   schemas:
-    OutputMetadata:
+    OutputInvalidInvestments:
       type: object
       properties:
-        requestId:
+        id:
           type: string
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
+        idType:
           type: string
           nullable: true
-        portfolioCurrency:
+        status:
           type: string
           nullable: true
-        messages:
+        datapointId:
           type: array
           items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
+            type: string
           nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    CodeMappingString:
-      type: object
-      properties:
-        value:
+        errorCode:
           type: string
           nullable: true
-        code:
+        performanceId:
           type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
           nullable: true
       additionalProperties: false
-      title: CodeMappingString
+      title: OutputInvalidInvestments
     OutputInsiderTradingActivity:
       type: object
       properties:
@@ -813,6 +825,17 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInsiderTradingActivity
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
     OutputInsiderHoldingsDetail:
       type: object
       properties:
@@ -851,104 +874,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInsiderHoldingsDetail
-    CodeMappingBoolean:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: boolean
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingBoolean
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
-      additionalProperties: false
-      title: OutputInvalidInvestments
     OutputInsider:
       type: object
       properties:
@@ -990,6 +915,62 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInsider
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    CodeMappingBoolean:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: boolean
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingBoolean
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -1022,7 +1003,54 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
   responses:
+    ResponseEquityOwnershipInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insiderTradingActivity:
+                $ref: '#/components/schemas/OutputInsiderTradingActivity'
+              insiderHoldingsDetail:
+                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipDetailInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insiderHoldingsDetail:
+                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityOwnershipDetailTenPercentInsiders:
       description: OK
       content:
@@ -1049,42 +1077,14 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
+    ResponseInternalServerError:
+      description: Internal Server
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityOwnershipDetailInsiders:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              insiderHoldingsDetail:
-                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityOwnershipInsiders:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              insiderTradingActivity:
-                $ref: '#/components/schemas/OutputInsiderTradingActivity'
-              insiderHoldingsDetail:
-                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:

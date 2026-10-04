@@ -542,29 +542,81 @@ paths:
       x-cpqId: 930
 components:
   schemas:
-    OutputMetadata:
+    OutputCompanyLevelInsiderTransactionStatistics:
       type: object
       properties:
-        requestId:
+        asOfDate:
           type: string
+          description: This refers to date on which insider shareholding is reported.
           nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
+        buyerCount:
+          type: integer
+          description: The count of buy transactions of the insiders
+          format: int32
           nullable: true
-        portfolioCurrency:
-          type: string
+        buyerShares:
+          type: number
+          description: The number of shares bought by an insider
+          format: double
           nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
+        sellerCount:
+          type: integer
+          description: The count of sell transactions of the insiders
+          format: int32
+          nullable: true
+        sellerShares:
+          type: number
+          description: The number of shares sold by an insider
+          format: double
           nullable: true
       additionalProperties: false
-      title: OutputMetadata
+      title: OutputCompanyLevelInsiderTransactionStatistics
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
     OutputOwnershipDataSummary:
       type: object
       properties:
@@ -638,35 +690,25 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputOwnershipDataSummary
-    OutputCompanyLevelInsiderTransactionStatistics:
+    OutputCompanyLevelInsiderHolding:
       type: object
       properties:
+        amountOwned:
+          type: number
+          description: AmountOwned is calculated on the company level (InsiderAmountOwned of the previous month + current month acquired - current month disposed) and TSO is to be picked on the basis on share class level.
+          format: double
+          nullable: true
         asOfDate:
           type: string
           description: This refers to date on which insider shareholding is reported.
           nullable: true
-        buyerCount:
-          type: integer
-          description: The count of buy transactions of the insiders
-          format: int32
-          nullable: true
-        buyerShares:
+        percentOwned:
           type: number
-          description: The number of shares bought by an insider
-          format: double
-          nullable: true
-        sellerCount:
-          type: integer
-          description: The count of sell transactions of the insiders
-          format: int32
-          nullable: true
-        sellerShares:
-          type: number
-          description: The number of shares sold by an insider
+          description: The percentage of a particular security's shares that are owned by insiders.
           format: double
           nullable: true
       additionalProperties: false
-      title: OutputCompanyLevelInsiderTransactionStatistics
+      title: OutputCompanyLevelInsiderHolding
     OutputErrorDetails:
       type: object
       properties:
@@ -689,90 +731,29 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    OutputMetadataMessages:
+    OutputMetadata:
       type: object
       properties:
-        type:
+        requestId:
           type: string
           nullable: true
-        code:
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
           nullable: true
-        investments:
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
           type: array
           items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputMetadataMessages
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
-      additionalProperties: false
-      title: OutputInvalidInvestments
-    OutputCompanyLevelInsiderHolding:
-      type: object
-      properties:
-        amountOwned:
-          type: number
-          description: AmountOwned is calculated on the company level (InsiderAmountOwned of the previous month + current month acquired - current month disposed) and TSO is to be picked on the basis on share class level.
-          format: double
-          nullable: true
-        asOfDate:
-          type: string
-          description: This refers to date on which insider shareholding is reported.
-          nullable: true
-        percentOwned:
-          type: number
-          description: The percentage of a particular security's shares that are owned by insiders.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputCompanyLevelInsiderHolding
+      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -805,7 +786,39 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
   responses:
+    ResponseEquityOwnershipSummaryFundsAndRegulatoryFilings:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownershipDataSummary:
+                $ref: '#/components/schemas/OutputOwnershipDataSummary'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
     ResponseEquityOwnershipSummaryInsiders:
       description: OK
       content:
@@ -821,25 +834,6 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityOwnershipSummaryFundsAndRegulatoryFilings:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ownershipDataSummary:
-                $ref: '#/components/schemas/OutputOwnershipDataSummary'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityOwnershipSummary:
       description: OK
       content:
@@ -859,6 +853,12 @@ components:
                 $ref: '#/components/schemas/OutputMetadata'
     ResponseInternalServerError:
       description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:

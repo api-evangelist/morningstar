@@ -194,105 +194,33 @@ paths:
         '500':
           $ref: '#/components/responses/ResponseInternalServerError'
 components:
+  responses:
+    ResponseQuantitativeEquityRatingAnalysis:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              quantitativeEquitySmartText:
+                $ref: '#/components/schemas/OutputQuantitativeEquitySmartText'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
   schemas:
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputQuantitativeEquitySmartText:
-      type: object
-      properties:
-        effectiveDate:
-          type: string
-          description: The date of the data or ratings within the SmartText.
-          nullable: true
-        language:
-          $ref: '#/components/schemas/CodeMappingString'
-        quantitativeSmarttext:
-          type: string
-          description: Detailed text providing insights into the company's Economic Moat and valuation.
-          nullable: true
-        quantitativeSmarttextPublishDate:
-          type: string
-          description: Date and time of the SmartText publication
-          nullable: true
-        quantitativeSmarttextType:
-          type: string
-          description: Specifies the focus of the Quantitative SmartText; indicating whether the text primarily provides an analysis of the company's valuation or its Economic Moat
-          nullable: true
-      additionalProperties: false
-      title: OutputQuantitativeEquitySmartText
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -339,6 +267,85 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputQuantitativeEquitySmartText:
+      type: object
+      properties:
+        effectiveDate:
+          type: string
+          description: The date of the data or ratings within the SmartText.
+          nullable: true
+        language:
+          $ref: '#/components/schemas/CodeMappingString'
+        quantitativeSmarttext:
+          type: string
+          description: Detailed text providing insights into the company's Economic Moat and valuation.
+          nullable: true
+        quantitativeSmarttextPublishDate:
+          type: string
+          description: Date and time of the SmartText publication
+          nullable: true
+        quantitativeSmarttextType:
+          type: string
+          description: Specifies the focus of the Quantitative SmartText; indicating whether the text primarily provides an analysis of the company's valuation or its Economic Moat
+          nullable: true
+      additionalProperties: false
+      title: OutputQuantitativeEquitySmartText
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -371,32 +378,25 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-  responses:
-    ResponseQuantitativeEquityRatingAnalysis:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              quantitativeEquitySmartText:
-                $ref: '#/components/schemas/OutputQuantitativeEquitySmartText'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
   securitySchemes:
     Bearer:
       type: http

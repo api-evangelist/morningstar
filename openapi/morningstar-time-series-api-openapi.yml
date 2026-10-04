@@ -254,27 +254,6 @@ paths:
                     example: An error occurred
 components:
   schemas:
-    OutputMetadata:
-      description: Metadata returned in response. Includes information about identifiers for which no results were found.
-      title: OutputMetadata
-      type: object
-      properties:
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvestmentsMessages'
-        requestId:
-          description: Indicates the request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          type: string
-          readOnly: true
-        time:
-          description: Indicates time response was returned.
-          example: '2025-10-02T10:54:36.9161062Z'
-          type: string
-          format: date-time
-          readOnly: true
-      additionalProperties: false
     ResponseAsyncTimeSeries:
       title: ResponseAsyncTimeSeries
       description: Defines the HTTP 202 Accepted response returned when a time series data request is accepted for asynchronous processing. Includes the job identifier, metadata, and links to retrieve the job status or results.
@@ -328,18 +307,55 @@ components:
           example: 404.common.125
           readOnly: true
       additionalProperties: false
-    DataModelUnivariateObservation:
-      title: DataModelUnivariateObservation
-      description: Represents a time series of univariate observations, where each entry contains a date and its corresponding value.
+    OutputResponseLink:
+      type: object
+      title: OutputResponseLink
+      description: A set of hypermedia links providing URLs for polling job status or accessing results when available.
+      properties:
+        href:
+          type: string
+          description: The fully qualified URL to the related resource or endpoint. Used to poll job status or retrieve results.
+          example: https://www.us-api.morningstar.com/dynamic-services-apis/jobs/16bf1a7a-c883-4424-8810-2f4e9d244d40
+        rel:
+          type: string
+          description: Describes the relationship between the current resource and the linked resource.
+          example: status
+        method:
+          type: string
+          description: The HTTP method to use when invoking the `href` endpoint.
+          example: GET
+      additionalProperties: false
+    ErrorResponse:
+      title: ErrorResponse
+      description: Defines the structure of an error response returned when a bad or invalid request is submitted. Includes the HTTP status code, descriptive message, and request identifier for traceability.
       type: object
       properties:
-        date:
+        statusCode:
+          description: Numeric HTTP status code associated with the error.
+          type: integer
+          format: int32
+          example: 400
+          readOnly: true
+        errorCode:
+          description: Identifier for a specific type of error.
           type: string
-          format: date
-          example: '2025-09-06'
-        value:
-          type: number
-          example: 1.108
+          example: 400.timeSeries.009
+          readOnly: true
+        message:
+          description: Descriptive message providing details about the error or validation failure.
+          example: Invalid frequency 'm' for datapoint 'daily-closing-price'.
+          oneOf:
+          - type: 'null'
+          - type: string
+          readOnly: true
+        requestId:
+          description: Indicates unique request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          readOnly: true
+          oneOf:
+          - type: 'null'
+          - type: string
+      additionalProperties: false
     InputDataPointParameters:
       title: InputDataPointParameters
       type: object
@@ -393,598 +409,6 @@ components:
           description: Specifies the length of the rolling window for rolling return calculations.
           example: 6
           maximum: 2147483647
-    OutputCategory:
-      title: OutputCategory
-      type: string
-      description: Identifies the thematic category or functional area a data point belongs to within the Time Series API.
-      enum:
-      - fees-expenses
-      - corporate-actions
-      - fund-sustainability
-      - fund-research
-      - performance
-      - portfolio-analytics
-      - portfolio-holdings
-      - reference
-    Response202Metadata:
-      description: Provides metadata related to the asynchronous request, including a unique request identifier and the timestamp when the response was generated.
-      title: Response202Metadata
-      type: object
-      readOnly: true
-      properties:
-        requestId:
-          description: Indicates unique request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          readOnly: true
-          oneOf:
-          - type: 'null'
-          - type: string
-        time:
-          description: Indicates time response was returned.
-          example: '2025-10-02T10:54:36.9161062Z'
-          format: date-time
-          readOnly: true
-          oneOf:
-          - type: 'null'
-          - type: string
-    InputDataPoints:
-      title: InputDataPoints
-      type: object
-      required:
-      - dataPoint
-      additionalProperties: false
-      properties:
-        dataPoint:
-          type: string
-          example: daily-price
-          enum:
-          - 12-mo-yield
-          - 7-day-gross-yield
-          - 7-day-unsubsidized-yield
-          - 7-day-yield
-          - absolute-carbon-emissions-scope-1-and-2-tonnes
-          - absolute-carbon-emissions-scope-1-and-2-tonnes-category-average
-          - absolute-carbon-intensity-scope-1-and-2-tonnes-per-usd-millions
-          - absolute-carbon-intensity-scope-1-and-2-tonnes-per-usd-millions-category-average
-          - accounting-fee
-          - administrator-fee
-          - advisor-fee
-          - aggregated-12-month-yield
-          - aggregated-sec-yield
-          - annual-ongoing-charge-excluding-performance-fee
-          - annual-ongoing-charge-including-performance-fee
-          - annual-report-adjusted-expense-ratio
-          - annual-report-management-expense-ratio-mer
-          - annual-report-ongoing-charge
-          - borrowing-costs-actual
-          - borrowing-costs-estimated
-          - carbon-footprint-scope-1-and-2-and-3-tonnes-per-usd-millions
-          - carbon-footprint-scope-1-and-2-and-3-tonnes-per-usd-millions-category-average
-          - carbon-footprint-scope-1-and-2-eligible-holding-type
-          - carbon-footprint-scope-1-and-2-number-of-holdings-covered
-          - carbon-footprint-scope-1-and-2-percentage-of-eligible-portfolio-covered
-          - carbon-footprint-scope-1-and-2-percentage-of-eligible-portfolio-not-covered
-          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-covered
-          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-eligible
-          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-eligible-not-covered
-          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-not-covered
-          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-not-eligible
-          - carbon-footprint-scope-1-and-2-tonnes-per-aud-million-category-average
-          - carbon-footprint-scope-1-and-2-tonnes-per-aud-millions
-          - carbon-footprint-scope-1-and-2-tonnes-per-chf-million-category-average
-          - carbon-footprint-scope-1-and-2-tonnes-per-chf-millions
-          - carbon-footprint-scope-1-and-2-tonnes-per-eur-million-category-average
-          - carbon-footprint-scope-1-and-2-tonnes-per-eur-millions
-          - carbon-footprint-scope-1-and-2-tonnes-per-gbp-million-category-average
-          - carbon-footprint-scope-1-and-2-tonnes-per-gbp-millions
-          - carbon-footprint-scope-1-and-2-tonnes-per-hkd-million-category-average
-          - carbon-footprint-scope-1-and-2-tonnes-per-hkd-millions
-          - carbon-footprint-scope-1-and-2-tonnes-per-sgd-million-category-average
-          - carbon-footprint-scope-1-and-2-tonnes-per-sgd-millions
-          - carbon-footprint-scope-1-and-2-tonnes-per-usd-millions
-          - carbon-footprint-scope-1-and-2-tonnes-per-usd-millions-category-average
-          - carbon-risk-level-classification
-          - carbon-risk-score-category-average
-          - carbon-risk-score-percent-rank-in-category
-          - cum-fair-nav-unweighted-dri
-          - cum-fair-nav-weighted-dri
-          - current-yield
-          - cumulative-return
-          - daily-closing-price
-          - daily-estimated-holding-cost
-          - daily-gross-return-index
-          - daily-high-price
-          - daily-load-adj-return-index-restated
-          - daily-low-price
-          - daily-market-impact-cost
-          - daily-market-return-index
-          - daily-net-return-index
-          - daily-ohlcv
-          - daily-portfolio-concentration
-          - daily-price
-          - daily-return-index
-          - daily-return-index-cum-fair
-          - daily-tracking-volatility
-          - daily-volume
-          - daily-yield
-          - distribution-fee-percentage-of-nav-actual
-          - distribution-fee-percentage-of-nav-estimated
-          - dividend-amount-history
-          - dividend-yield-12-month
-          - dividend-yield-long
-          - dividend-yield-short
-          - entry-cost-acquired-actual
-          - equity-mkt-cap-rescaling-factor-long
-          - estimated-quarterly-return
-          - estimated-share-class-net-flow-daily
-          - estimated-share-class-net-flow-monthly
-          - ex-par-nav-unweighted-dri
-          - ex-par-nav-weighted-dri
-          - growth
-          - five-year-five-star-rating-percent
-          - five-year-four-star-rating-percent
-          - five-year-not-star-rated-percent
-          - five-year-not-star-rating-eligible-percent
-          - five-year-one-star-rating-percent
-          - five-year-three-star-rating-percent
-          - five-year-two-star-rating-percent
-          - historical-carbon-risk-score
-          - historical-corporate-esg-risk-score
-          - historical-sovereign-esg-risk-score
-          - income-only-yield-nav-uk
-          - income-only-yield-nav-us
-          - income-only-yield-price-us
-          - indirect-costs-closed-ended-actual-uk
-          - indirect-costs-closed-ended-estimated-uk
-          - indirect-costs-open-ended-actual-uk
-          - indirect-costs-open-ended-estimated-uk
-          - management-fee-ex-distribution-fees-actual
-          - management-fee-ex-distribution-fees-estimated
-          - market-cap-giant-percentage-long-rescaled
-          - market-cap-large-percentage-long-rescaled
-          - market-cap-micro-percentage-long-rescaled
-          - market-cap-mid-percentage-long-rescaled
-          - market-cap-small-percentage-long-rescaled
-          - maximum-entry-cost-acquired
-          - maximum-entry-cost-base-currency
-          - maximum-entry-cost-percentage
-          - maximum-exit-cost-acquired
-          - maximum-exit-fee-base-currency
-          - maximum-exit-fee-percentage
-          - model-representative-cost
-          - monthly-downside-tracking-error
-          - monthly-gross-return
-          - monthly-inflation-adjusted-return
-          - monthly-load-adj-return-restated
-          - monthly-market-return
-          - monthly-net-return
-          - monthly-return
-          - monthly-return-unweighted-nav
-          - monthly-return-unweighted-price
-          - monthly-return-weighted-nav
-          - monthly-return-weighted-price
-          - monthly-tracking-error
-          - monthly-yield
-          - morningstar-esg-risk-rating-for-funds
-          - morningstar-medalist-rating
-          - morningstar-medalist-rating-parent-pillar
-          - morningstar-medalist-rating-parent-pillar-type
-          - morningstar-medalist-rating-people-pillar
-          - morningstar-medalist-rating-people-pillar-type
-          - morningstar-medalist-rating-performance-pillar
-          - morningstar-medalist-rating-performance-pillar-type
-          - morningstar-medalist-rating-price-pillar
-          - morningstar-medalist-rating-price-pillar-type
-          - morningstar-medalist-rating-process-pillar
-          - morningstar-medalist-rating-process-pillar-type
-          - morningstar-medalist-rating-type
-          - morningstar-rating-overall
-          - nav-unweighted-daily-income-and-capital-gain-yield
-          - nav-unweighted-daily-income-only-yield
-          - nav-unweighted-daily-total-distribution-yield
-          - nav-unweighted-dri
-          - nav-weighted-daily-income-and-capital-gain-yield
-          - nav-weighted-daily-income-only-yield
-          - nav-weighted-daily-total-distribution-yield
-          - nav-weighted-dri
-          - ongoing-charge-ex-perf-fee
-          - ongoing-charge-inc-perf-fee
-          - ongoing-cost-actual
-          - ongoing-cost-estimated
-          - other-fee
-          - other-fee-amount-cn
-          - overall-five-star-rating-percent
-          - overall-four-star-rating-percent
-          - overall-not-star-rated-percent
-          - overall-not-star-rating-eligible-percent
-          - overall-one-star-rating-percent
-          - overall-three-star-rating-percent
-          - overall-two-star-rating-percent
-          - performance-fee-actual
-          - performance-fee-estimated
-          - portfolio-carbon-risk-score
-          - portfolio-corporate-esg-risk-rating
-          - portfolio-corporate-esg-risk-score
-          - portfolio-environmental-risk-score
-          - portfolio-governance-risk-score
-          - portfolio-social-risk-score
-          - portfolio-sovereign-esg-risk-rating
-          - portfolio-sovereign-esg-risk-score
-          - portfolio-unallocated-risk-score
-          - price
-          - price-unweighted-daily-income-and-capital-gain-yield
-          - price-unweighted-daily-income-only-yield
-          - price-unweighted-daily-total-distribution-yield
-          - price-unweighted-dri
-          - price-weighted-daily-income-and-capital-gain-yield
-          - price-weighted-daily-income-only-yield
-          - price-weighted-daily-total-distribution-yield
-          - price-weighted-dri
-          - prospective-acquired-fund-expense
-          - prospectus-adjusted-expense-ratio
-          - quarterly-downside-tracking-error
-          - quarterly-gross-return
-          - quarterly-inflation-adjusted-return
-          - quarterly-load-adj-return-restated
-          - quarterly-market-return
-          - quarterly-net-return
-          - quarterly-return
-          - quarterly-tracking-error
-          - quoted-yield-daily
-          - rating-10-yr
-          - rating-3-yr
-          - rating-5-yr
-          - raw-return-cum-fair
-          - raw-return-market-price
-          - raw-return-nav
-          - real-assets-costs-actual-uk
-          - real-assets-costs-estimated-uk
-          - return
-          - rolling-return
-          - sec-yield
-          - sec-yield-rescaling-factor
-          - sitca-yield
-          - sri-value
-          - ten-year-five-star-rating-percent
-          - ten-year-four-star-rating-percent
-          - ten-year-not-star-rated-percent
-          - ten-year-not-star-rating-eligible-percent
-          - ten-year-one-star-rating-percent
-          - ten-year-three-star-rating-percent
-          - ten-year-two-star-rating-percent
-          - three-year-five-star-rating-percent
-          - three-year-four-star-rating-percent
-          - three-year-not-star-rated-percent
-          - three-year-not-star-rating-eligible-percent
-          - three-year-one-star-rating-percent
-          - three-year-three-star-rating-percent
-          - three-year-two-star-rating-percent
-          - total-expense-survey
-          - trading-expense
-          - transaction-costs-actual-uk
-          - transaction-costs-estimated-uk
-          - transaction-fee-actual
-          - transaction-fee-estimated
-          - turnover-ratio-percentage
-          - typical-exit-cost
-          - unannualized
-          - weekly-return
-          - yearly-capital-return
-          - yearly-gross-return
-          - yearly-income-return
-          - yearly-inflation-adjusted-return
-          - yearly-interest-income
-          - yearly-investor-return
-          - yearly-load-adj-return-restated
-          - yearly-market-return
-          - yearly-net-return
-          - yearly-return
-        parameters:
-          $ref: '#/components/schemas/InputDataPointParameters'
-    OutputResponseLink:
-      type: object
-      title: OutputResponseLink
-      description: A set of hypermedia links providing URLs for polling job status or accessing results when available.
-      properties:
-        href:
-          type: string
-          description: The fully qualified URL to the related resource or endpoint. Used to poll job status or retrieve results.
-          example: https://www.us-api.morningstar.com/dynamic-services-apis/jobs/16bf1a7a-c883-4424-8810-2f4e9d244d40
-        rel:
-          type: string
-          description: Describes the relationship between the current resource and the linked resource.
-          example: status
-        method:
-          type: string
-          description: The HTTP method to use when invoking the `href` endpoint.
-          example: GET
-      additionalProperties: false
-    ResponseTimeSeries:
-      title: ResponseTimeSeries
-      readOnly: true
-      description: Defines the structure of a successful (HTTP 200) response from the Results endpoint.
-      type: object
-      additionalProperties: false
-      properties:
-        investments:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/OutputInvestments'
-        metadata:
-          $ref: '#/components/schemas/OutputMetadata'
-    RequestTimeSeries:
-      title: RequestTimeSeries
-      description: Defines the structure of a time series data request, including the investments to query, global request parameters, and the data points to retrieve.
-      type: object
-      required:
-      - investments
-      - parameters
-      - dataPoints
-      additionalProperties: false
-      properties:
-        investments:
-          type: array
-          minItems: 1
-          maxItems: 100
-          description: List of investments to query. Maximum 100 investments per request.
-          items:
-            $ref: '#/components/schemas/InputInvestments'
-        parameters:
-          $ref: '#/components/schemas/InputGlobalParameters'
-        dataPoints:
-          type: array
-          minItems: 1
-          items:
-            $ref: '#/components/schemas/InputDataPoints'
-    OutputIdentifiers:
-      title: OutputIdentifiers
-      description: Specifies the identifier type used to specify the target investment in the request.
-      additionalProperties: false
-      properties:
-        performanceId:
-          type: string
-          example: 0P00002CI5
-        isin:
-          type: string
-          example: US2562191062
-        securityId:
-          type: string
-          example: FCUSA0000P
-        cusip:
-          type: string
-          example: 459200101
-        sedol:
-          type: string
-          example: B4TT7L5
-        tradingSymbol:
-          type: string
-          example: MDLOX
-    OutputInvestmentsMetadata:
-      title: OutputInvestmentsMetadata
-      description: Provides the identifier look up details passed in request.
-      type: object
-      additionalProperties: false
-      properties:
-        baseCurrency:
-          type: string
-          example: GBP
-          default: USD
-          description: Indicates base currency used to look up investment. Represented by  3-character ISO 4217 currency codes.
-          minLength: 3
-          maxLength: 3
-        exchangeCountry:
-          type: string
-          example: GBR
-          default: USA
-          description: Indicates exchange country used to look up investment. Represented by 3-character ISO 3166-1 country codes.
-          minLength: 3
-          maxLength: 3
-        exchangeId:
-          type: string
-          example: EX$$$$XNAS
-          description: Indicates exchange ID used to look up investment.
-        domicile:
-          type: string
-          example: GBR
-          default: USA
-          description: Indicates domicile used to look up investment. Represented by  3-character ISO 3166-1 country codes.
-    DataModelDailyOhlcv:
-      title: DataModelDailyOhlcv
-      description: Represents a time series of daily trading data, including open, high, low, close, and volume values for each date.
-      type: object
-      properties:
-        date:
-          type: string
-          format: date
-          example: '2025-09-06'
-        dailyLowPrice:
-          type: number
-          example: 72.52
-        dailyOpenPrice:
-          type: number
-          example: 72.81
-        dailyHighPrice:
-          type: number
-          example: 73.02
-        dailyClosingPrice:
-          type: number
-          example: 72.79
-        dailyVolume:
-          type: number
-          example: 179267
-    InputGlobalParameters:
-      title: InputGlobalParameters
-      description: Defines global parameters that control the scope, period, currency, and calculation logic applied to a time series data request.
-      type: object
-      properties:
-        startDate:
-          type: string
-          format: date
-          description: Specifies the start date of the time series. Accepted format is `yyyy-MM-dd`.
-          example: '2020-12-31'
-        endDate:
-          type: string
-          format: date
-          description: Specifies the end date of the time series. Accepted format is `yyyy-MM-dd`.
-          example: '2024-12-31'
-        timePeriod:
-          type: integer
-          description: Specifies the size of the time window for the requested data range. Used in combination with `timePeriodUnit` to define a relative time range. When both absolute (`startDate` / `endDate`) and relative (`timePeriod` / `timePeriodUnit`) parameters are provided, the API prioritizes the relative range.
-          format: int32
-          example: 12
-        timePeriodUnit:
-          type: string
-          enum:
-          - days
-          - months
-          - years
-          example: months
-          description: Specifies the unit of time used with `timePeriod` to define a relative time range. When both absolute (`startDate` / `endDate`) and relative (`timePeriod` / `timePeriodUnit`) parameters are provided, the API prioritizes the relative range.
-        sinceInception:
-          type: boolean
-          description: Sets the time range from inception (or the maximum supported lookback) to the end date. Overrides any `timePeriod` / `timePeriodUnit` and `startDate` / `endDate`settings.
-          default: false
-        applyEarliestCommonDate:
-          type: boolean
-          description: Specifies whether to apply the earliest common start date across all investments.
-          default: false
-        applyRestructureDate:
-          type: boolean
-          description: Specifies whether to consider the Morningstar or Custom restructure date when determining the start of the performance period. This option is applicable only when `applyEarliestCommonDate` is enabled.
-          default: false
-        applyTrackRecordExtension:
-          type: boolean
-          description: Specifies whether to apply the Track Record Extension logic in order to extend the performance of an investment by copying the historical performance of another qualified older investment.
-          default: false
-        currencyId:
-          type: string
-          description: Specifies the currency in which to return data.
-          example: BASE
-          enum:
-          - BASE
-          - AUD
-          - BND
-          - BRL
-          - CAD
-          - CHF
-          - CLP
-          - CNH
-          - CNY
-          - CZK
-          - DKK
-          - EUR
-          - GBP
-          - HKD
-          - HUF
-          - IDR
-          - ILS
-          - INR
-          - JPY
-          - KRW
-          - MOP
-          - MXN
-          - MYR
-          - NOK
-          - NZD
-          - PLN
-          - RMB
-          - RUB
-          - SEK
-          - SGD
-          - THB
-          - TWD
-          - USD
-          - ZAR
-        initialInvestment:
-          type: number
-          format: double
-          description: Starting value used as the basis for `growth` calculations. Represents the hypothetical amount invested at the beginning of the period.
-          default: 10000
-    InputInvestments:
-      title: InputInvestments
-      description: Investment to query. Investment look up is supported.
-      type: object
-      required:
-      - id
-      additionalProperties: false
-      properties:
-        id:
-          type: string
-          description: 'Specifies the investment identifier to query. Accepts performance IDs, ISINs, security IDs, CUSIPs, trading symbols, category IDs and Morningstar IDs. Note: When a category ID is used, the corresponding `idType` is `performanceId` or `securityId`.'
-        idType:
-          type: string
-          example: performanceId
-          default: performanceId
-          enum:
-          - performanceId
-          - isin
-          - fundCode
-          - securityId
-          - cusip
-          - msid
-          - tradingSymbol
-        baseCurrency:
-          type: string
-          example: USD
-          description: Specifies base currency used to look up investment. Accepts 3-character ISO 4217 currency codes.
-        exchangeCountry:
-          type: string
-          example: USA
-          description: Specifies exchange country used to look up investment. Accepts 3-character ISO 3166-1 country codes.
-        exchangeId:
-          type: string
-          example: EX$$$$XNAS
-          description: Specifies exchange ID used to look up investment.
-        domicile:
-          type: string
-          example: USA
-          description: Specifies domicile used to look up investment. Accepts 3-character ISO 3166-1 country codes.
-    OutputInvestments:
-      title: OutputInvestments
-      type: object
-      description: Represents the time series data and related metadata for a single investment returned in the response.
-      additionalProperties: false
-      properties:
-        identifiers:
-          $ref: '#/components/schemas/OutputIdentifiers'
-        timeSeries:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputTimeSeries'
-        metadata:
-          $ref: '#/components/schemas/OutputInvestmentsMetadata'
-    ErrorResponse:
-      title: ErrorResponse
-      description: Defines the structure of an error response returned when a bad or invalid request is submitted. Includes the HTTP status code, descriptive message, and request identifier for traceability.
-      type: object
-      properties:
-        statusCode:
-          description: Numeric HTTP status code associated with the error.
-          type: integer
-          format: int32
-          example: 400
-          readOnly: true
-        errorCode:
-          description: Identifier for a specific type of error.
-          type: string
-          example: 400.timeSeries.009
-          readOnly: true
-        message:
-          description: Descriptive message providing details about the error or validation failure.
-          example: Invalid frequency 'm' for datapoint 'daily-closing-price'.
-          oneOf:
-          - type: 'null'
-          - type: string
-          readOnly: true
-        requestId:
-          description: Indicates unique request identifier.
-          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          readOnly: true
-          oneOf:
-          - type: 'null'
-          - type: string
-      additionalProperties: false
     OutputTimeSeries:
       description: A named time series with dated data points.
       title: OutputTimeSeries
@@ -1256,25 +680,598 @@ components:
             oneOf:
             - $ref: '#/components/schemas/DataModelUnivariateObservation'
             - $ref: '#/components/schemas/DataModelDailyOhlcv'
+    OutputCategory:
+      title: OutputCategory
+      type: string
+      description: Identifies the thematic category or functional area a data point belongs to within the Time Series API.
+      enum:
+      - fees-expenses
+      - corporate-actions
+      - fund-sustainability
+      - fund-research
+      - performance
+      - portfolio-analytics
+      - portfolio-holdings
+      - reference
+    InputInvestments:
+      title: InputInvestments
+      description: Investment to query. Investment look up is supported.
+      type: object
+      required:
+      - id
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          description: 'Specifies the investment identifier to query. Accepts performance IDs, ISINs, security IDs, CUSIPs, trading symbols, category IDs and Morningstar IDs. Note: When a category ID is used, the corresponding `idType` is `performanceId` or `securityId`.'
+        idType:
+          type: string
+          example: performanceId
+          default: performanceId
+          enum:
+          - performanceId
+          - isin
+          - fundCode
+          - securityId
+          - cusip
+          - msid
+          - tradingSymbol
+        baseCurrency:
+          type: string
+          example: USD
+          description: Specifies base currency used to look up investment. Accepts 3-character ISO 4217 currency codes.
+        exchangeCountry:
+          type: string
+          example: USA
+          description: Specifies exchange country used to look up investment. Accepts 3-character ISO 3166-1 country codes.
+        exchangeId:
+          type: string
+          example: EX$$$$XNAS
+          description: Specifies exchange ID used to look up investment.
+        domicile:
+          type: string
+          example: USA
+          description: Specifies domicile used to look up investment. Accepts 3-character ISO 3166-1 country codes.
+    InputGlobalParameters:
+      title: InputGlobalParameters
+      description: Defines global parameters that control the scope, period, currency, and calculation logic applied to a time series data request.
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date
+          description: Specifies the start date of the time series. Accepted format is `yyyy-MM-dd`.
+          example: '2020-12-31'
+        endDate:
+          type: string
+          format: date
+          description: Specifies the end date of the time series. Accepted format is `yyyy-MM-dd`.
+          example: '2024-12-31'
+        timePeriod:
+          type: integer
+          description: Specifies the size of the time window for the requested data range. Used in combination with `timePeriodUnit` to define a relative time range. When both absolute (`startDate` / `endDate`) and relative (`timePeriod` / `timePeriodUnit`) parameters are provided, the API prioritizes the relative range.
+          format: int32
+          example: 12
+        timePeriodUnit:
+          type: string
+          enum:
+          - days
+          - months
+          - years
+          example: months
+          description: Specifies the unit of time used with `timePeriod` to define a relative time range. When both absolute (`startDate` / `endDate`) and relative (`timePeriod` / `timePeriodUnit`) parameters are provided, the API prioritizes the relative range.
+        sinceInception:
+          type: boolean
+          description: Sets the time range from inception (or the maximum supported lookback) to the end date. Overrides any `timePeriod` / `timePeriodUnit` and `startDate` / `endDate`settings.
+          default: false
+        applyEarliestCommonDate:
+          type: boolean
+          description: Specifies whether to apply the earliest common start date across all investments.
+          default: false
+        applyRestructureDate:
+          type: boolean
+          description: Specifies whether to consider the Morningstar or Custom restructure date when determining the start of the performance period. This option is applicable only when `applyEarliestCommonDate` is enabled.
+          default: false
+        applyTrackRecordExtension:
+          type: boolean
+          description: Specifies whether to apply the Track Record Extension logic in order to extend the performance of an investment by copying the historical performance of another qualified older investment.
+          default: false
+        currencyId:
+          type: string
+          description: Specifies the currency in which to return data.
+          example: BASE
+          enum:
+          - BASE
+          - AUD
+          - BND
+          - BRL
+          - CAD
+          - CHF
+          - CLP
+          - CNH
+          - CNY
+          - CZK
+          - DKK
+          - EUR
+          - GBP
+          - HKD
+          - HUF
+          - IDR
+          - ILS
+          - INR
+          - JPY
+          - KRW
+          - MOP
+          - MXN
+          - MYR
+          - NOK
+          - NZD
+          - PLN
+          - RMB
+          - RUB
+          - SEK
+          - SGD
+          - THB
+          - TWD
+          - USD
+          - ZAR
+        initialInvestment:
+          type: number
+          format: double
+          description: Starting value used as the basis for `growth` calculations. Represents the hypothetical amount invested at the beginning of the period.
+          default: 10000
+    DataModelUnivariateObservation:
+      title: DataModelUnivariateObservation
+      description: Represents a time series of univariate observations, where each entry contains a date and its corresponding value.
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: '2025-09-06'
+        value:
+          type: number
+          example: 1.108
+    Response202Metadata:
+      description: Provides metadata related to the asynchronous request, including a unique request identifier and the timestamp when the response was generated.
+      title: Response202Metadata
+      type: object
+      readOnly: true
+      properties:
+        requestId:
+          description: Indicates unique request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          readOnly: true
+          oneOf:
+          - type: 'null'
+          - type: string
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          format: date-time
+          readOnly: true
+          oneOf:
+          - type: 'null'
+          - type: string
+    OutputInvestments:
+      title: OutputInvestments
+      type: object
+      description: Represents the time series data and related metadata for a single investment returned in the response.
+      additionalProperties: false
+      properties:
+        identifiers:
+          $ref: '#/components/schemas/OutputIdentifiers'
+        timeSeries:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputTimeSeries'
+        metadata:
+          $ref: '#/components/schemas/OutputInvestmentsMetadata'
+    OutputInvestmentsMetadata:
+      title: OutputInvestmentsMetadata
+      description: Provides the identifier look up details passed in request.
+      type: object
+      additionalProperties: false
+      properties:
+        baseCurrency:
+          type: string
+          example: GBP
+          default: USD
+          description: Indicates base currency used to look up investment. Represented by  3-character ISO 4217 currency codes.
+          minLength: 3
+          maxLength: 3
+        exchangeCountry:
+          type: string
+          example: GBR
+          default: USA
+          description: Indicates exchange country used to look up investment. Represented by 3-character ISO 3166-1 country codes.
+          minLength: 3
+          maxLength: 3
+        exchangeId:
+          type: string
+          example: EX$$$$XNAS
+          description: Indicates exchange ID used to look up investment.
+        domicile:
+          type: string
+          example: GBR
+          default: USA
+          description: Indicates domicile used to look up investment. Represented by  3-character ISO 3166-1 country codes.
+    DataModelDailyOhlcv:
+      title: DataModelDailyOhlcv
+      description: Represents a time series of daily trading data, including open, high, low, close, and volume values for each date.
+      type: object
+      properties:
+        date:
+          type: string
+          format: date
+          example: '2025-09-06'
+        dailyLowPrice:
+          type: number
+          example: 72.52
+        dailyOpenPrice:
+          type: number
+          example: 72.81
+        dailyHighPrice:
+          type: number
+          example: 73.02
+        dailyClosingPrice:
+          type: number
+          example: 72.79
+        dailyVolume:
+          type: number
+          example: 179267
+    OutputMetadata:
+      description: Metadata returned in response. Includes information about identifiers for which no results were found.
+      title: OutputMetadata
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvestmentsMessages'
+        requestId:
+          description: Indicates the request identifier.
+          example: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          type: string
+          readOnly: true
+        time:
+          description: Indicates time response was returned.
+          example: '2025-10-02T10:54:36.9161062Z'
+          type: string
+          format: date-time
+          readOnly: true
+      additionalProperties: false
+    OutputIdentifiers:
+      title: OutputIdentifiers
+      description: Specifies the identifier type used to specify the target investment in the request.
+      additionalProperties: false
+      properties:
+        performanceId:
+          type: string
+          example: 0P00002CI5
+        isin:
+          type: string
+          example: US2562191062
+        securityId:
+          type: string
+          example: FCUSA0000P
+        cusip:
+          type: string
+          example: 459200101
+        sedol:
+          type: string
+          example: B4TT7L5
+        tradingSymbol:
+          type: string
+          example: MDLOX
+    ResponseTimeSeries:
+      title: ResponseTimeSeries
+      readOnly: true
+      description: Defines the structure of a successful (HTTP 200) response from the Results endpoint.
+      type: object
+      additionalProperties: false
+      properties:
+        investments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/OutputInvestments'
+        metadata:
+          $ref: '#/components/schemas/OutputMetadata'
+    RequestTimeSeries:
+      title: RequestTimeSeries
+      description: Defines the structure of a time series data request, including the investments to query, global request parameters, and the data points to retrieve.
+      type: object
+      required:
+      - investments
+      - parameters
+      - dataPoints
+      additionalProperties: false
+      properties:
+        investments:
+          type: array
+          minItems: 1
+          maxItems: 100
+          description: List of investments to query. Maximum 100 investments per request.
+          items:
+            $ref: '#/components/schemas/InputInvestments'
+        parameters:
+          $ref: '#/components/schemas/InputGlobalParameters'
+        dataPoints:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InputDataPoints'
+    InputDataPoints:
+      title: InputDataPoints
+      type: object
+      required:
+      - dataPoint
+      additionalProperties: false
+      properties:
+        dataPoint:
+          type: string
+          example: daily-price
+          enum:
+          - 12-mo-yield
+          - 7-day-gross-yield
+          - 7-day-unsubsidized-yield
+          - 7-day-yield
+          - absolute-carbon-emissions-scope-1-and-2-tonnes
+          - absolute-carbon-emissions-scope-1-and-2-tonnes-category-average
+          - absolute-carbon-intensity-scope-1-and-2-tonnes-per-usd-millions
+          - absolute-carbon-intensity-scope-1-and-2-tonnes-per-usd-millions-category-average
+          - accounting-fee
+          - administrator-fee
+          - advisor-fee
+          - aggregated-12-month-yield
+          - aggregated-sec-yield
+          - annual-ongoing-charge-excluding-performance-fee
+          - annual-ongoing-charge-including-performance-fee
+          - annual-report-adjusted-expense-ratio
+          - annual-report-management-expense-ratio-mer
+          - annual-report-ongoing-charge
+          - borrowing-costs-actual
+          - borrowing-costs-estimated
+          - carbon-footprint-scope-1-and-2-and-3-tonnes-per-usd-millions
+          - carbon-footprint-scope-1-and-2-and-3-tonnes-per-usd-millions-category-average
+          - carbon-footprint-scope-1-and-2-eligible-holding-type
+          - carbon-footprint-scope-1-and-2-number-of-holdings-covered
+          - carbon-footprint-scope-1-and-2-percentage-of-eligible-portfolio-covered
+          - carbon-footprint-scope-1-and-2-percentage-of-eligible-portfolio-not-covered
+          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-covered
+          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-eligible
+          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-eligible-not-covered
+          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-not-covered
+          - carbon-footprint-scope-1-and-2-percentage-of-portfolio-not-eligible
+          - carbon-footprint-scope-1-and-2-tonnes-per-aud-million-category-average
+          - carbon-footprint-scope-1-and-2-tonnes-per-aud-millions
+          - carbon-footprint-scope-1-and-2-tonnes-per-chf-million-category-average
+          - carbon-footprint-scope-1-and-2-tonnes-per-chf-millions
+          - carbon-footprint-scope-1-and-2-tonnes-per-eur-million-category-average
+          - carbon-footprint-scope-1-and-2-tonnes-per-eur-millions
+          - carbon-footprint-scope-1-and-2-tonnes-per-gbp-million-category-average
+          - carbon-footprint-scope-1-and-2-tonnes-per-gbp-millions
+          - carbon-footprint-scope-1-and-2-tonnes-per-hkd-million-category-average
+          - carbon-footprint-scope-1-and-2-tonnes-per-hkd-millions
+          - carbon-footprint-scope-1-and-2-tonnes-per-sgd-million-category-average
+          - carbon-footprint-scope-1-and-2-tonnes-per-sgd-millions
+          - carbon-footprint-scope-1-and-2-tonnes-per-usd-millions
+          - carbon-footprint-scope-1-and-2-tonnes-per-usd-millions-category-average
+          - carbon-risk-level-classification
+          - carbon-risk-score-category-average
+          - carbon-risk-score-percent-rank-in-category
+          - cum-fair-nav-unweighted-dri
+          - cum-fair-nav-weighted-dri
+          - current-yield
+          - cumulative-return
+          - daily-closing-price
+          - daily-estimated-holding-cost
+          - daily-gross-return-index
+          - daily-high-price
+          - daily-load-adj-return-index-restated
+          - daily-low-price
+          - daily-market-impact-cost
+          - daily-market-return-index
+          - daily-net-return-index
+          - daily-ohlcv
+          - daily-portfolio-concentration
+          - daily-price
+          - daily-return-index
+          - daily-return-index-cum-fair
+          - daily-tracking-volatility
+          - daily-volume
+          - daily-yield
+          - distribution-fee-percentage-of-nav-actual
+          - distribution-fee-percentage-of-nav-estimated
+          - dividend-amount-history
+          - dividend-yield-12-month
+          - dividend-yield-long
+          - dividend-yield-short
+          - entry-cost-acquired-actual
+          - equity-mkt-cap-rescaling-factor-long
+          - estimated-quarterly-return
+          - estimated-share-class-net-flow-daily
+          - estimated-share-class-net-flow-monthly
+          - ex-par-nav-unweighted-dri
+          - ex-par-nav-weighted-dri
+          - growth
+          - five-year-five-star-rating-percent
+          - five-year-four-star-rating-percent
+          - five-year-not-star-rated-percent
+          - five-year-not-star-rating-eligible-percent
+          - five-year-one-star-rating-percent
+          - five-year-three-star-rating-percent
+          - five-year-two-star-rating-percent
+          - historical-carbon-risk-score
+          - historical-corporate-esg-risk-score
+          - historical-sovereign-esg-risk-score
+          - income-only-yield-nav-uk
+          - income-only-yield-nav-us
+          - income-only-yield-price-us
+          - indirect-costs-closed-ended-actual-uk
+          - indirect-costs-closed-ended-estimated-uk
+          - indirect-costs-open-ended-actual-uk
+          - indirect-costs-open-ended-estimated-uk
+          - management-fee-ex-distribution-fees-actual
+          - management-fee-ex-distribution-fees-estimated
+          - market-cap-giant-percentage-long-rescaled
+          - market-cap-large-percentage-long-rescaled
+          - market-cap-micro-percentage-long-rescaled
+          - market-cap-mid-percentage-long-rescaled
+          - market-cap-small-percentage-long-rescaled
+          - maximum-entry-cost-acquired
+          - maximum-entry-cost-base-currency
+          - maximum-entry-cost-percentage
+          - maximum-exit-cost-acquired
+          - maximum-exit-fee-base-currency
+          - maximum-exit-fee-percentage
+          - model-representative-cost
+          - monthly-downside-tracking-error
+          - monthly-gross-return
+          - monthly-inflation-adjusted-return
+          - monthly-load-adj-return-restated
+          - monthly-market-return
+          - monthly-net-return
+          - monthly-return
+          - monthly-return-unweighted-nav
+          - monthly-return-unweighted-price
+          - monthly-return-weighted-nav
+          - monthly-return-weighted-price
+          - monthly-tracking-error
+          - monthly-yield
+          - morningstar-esg-risk-rating-for-funds
+          - morningstar-medalist-rating
+          - morningstar-medalist-rating-parent-pillar
+          - morningstar-medalist-rating-parent-pillar-type
+          - morningstar-medalist-rating-people-pillar
+          - morningstar-medalist-rating-people-pillar-type
+          - morningstar-medalist-rating-performance-pillar
+          - morningstar-medalist-rating-performance-pillar-type
+          - morningstar-medalist-rating-price-pillar
+          - morningstar-medalist-rating-price-pillar-type
+          - morningstar-medalist-rating-process-pillar
+          - morningstar-medalist-rating-process-pillar-type
+          - morningstar-medalist-rating-type
+          - morningstar-rating-overall
+          - nav-unweighted-daily-income-and-capital-gain-yield
+          - nav-unweighted-daily-income-only-yield
+          - nav-unweighted-daily-total-distribution-yield
+          - nav-unweighted-dri
+          - nav-weighted-daily-income-and-capital-gain-yield
+          - nav-weighted-daily-income-only-yield
+          - nav-weighted-daily-total-distribution-yield
+          - nav-weighted-dri
+          - ongoing-charge-ex-perf-fee
+          - ongoing-charge-inc-perf-fee
+          - ongoing-cost-actual
+          - ongoing-cost-estimated
+          - other-fee
+          - other-fee-amount-cn
+          - overall-five-star-rating-percent
+          - overall-four-star-rating-percent
+          - overall-not-star-rated-percent
+          - overall-not-star-rating-eligible-percent
+          - overall-one-star-rating-percent
+          - overall-three-star-rating-percent
+          - overall-two-star-rating-percent
+          - performance-fee-actual
+          - performance-fee-estimated
+          - portfolio-carbon-risk-score
+          - portfolio-corporate-esg-risk-rating
+          - portfolio-corporate-esg-risk-score
+          - portfolio-environmental-risk-score
+          - portfolio-governance-risk-score
+          - portfolio-social-risk-score
+          - portfolio-sovereign-esg-risk-rating
+          - portfolio-sovereign-esg-risk-score
+          - portfolio-unallocated-risk-score
+          - price
+          - price-unweighted-daily-income-and-capital-gain-yield
+          - price-unweighted-daily-income-only-yield
+          - price-unweighted-daily-total-distribution-yield
+          - price-unweighted-dri
+          - price-weighted-daily-income-and-capital-gain-yield
+          - price-weighted-daily-income-only-yield
+          - price-weighted-daily-total-distribution-yield
+          - price-weighted-dri
+          - prospective-acquired-fund-expense
+          - prospectus-adjusted-expense-ratio
+          - quarterly-downside-tracking-error
+          - quarterly-gross-return
+          - quarterly-inflation-adjusted-return
+          - quarterly-load-adj-return-restated
+          - quarterly-market-return
+          - quarterly-net-return
+          - quarterly-return
+          - quarterly-tracking-error
+          - quoted-yield-daily
+          - rating-10-yr
+          - rating-3-yr
+          - rating-5-yr
+          - raw-return-cum-fair
+          - raw-return-market-price
+          - raw-return-nav
+          - real-assets-costs-actual-uk
+          - real-assets-costs-estimated-uk
+          - return
+          - rolling-return
+          - sec-yield
+          - sec-yield-rescaling-factor
+          - sitca-yield
+          - sri-value
+          - ten-year-five-star-rating-percent
+          - ten-year-four-star-rating-percent
+          - ten-year-not-star-rated-percent
+          - ten-year-not-star-rating-eligible-percent
+          - ten-year-one-star-rating-percent
+          - ten-year-three-star-rating-percent
+          - ten-year-two-star-rating-percent
+          - three-year-five-star-rating-percent
+          - three-year-four-star-rating-percent
+          - three-year-not-star-rated-percent
+          - three-year-not-star-rating-eligible-percent
+          - three-year-one-star-rating-percent
+          - three-year-three-star-rating-percent
+          - three-year-two-star-rating-percent
+          - total-expense-survey
+          - trading-expense
+          - transaction-costs-actual-uk
+          - transaction-costs-estimated-uk
+          - transaction-fee-actual
+          - transaction-fee-estimated
+          - turnover-ratio-percentage
+          - typical-exit-cost
+          - unannualized
+          - weekly-return
+          - yearly-capital-return
+          - yearly-gross-return
+          - yearly-income-return
+          - yearly-inflation-adjusted-return
+          - yearly-interest-income
+          - yearly-investor-return
+          - yearly-load-adj-return-restated
+          - yearly-market-return
+          - yearly-net-return
+          - yearly-return
+        parameters:
+          $ref: '#/components/schemas/InputDataPointParameters'
   examples:
-    TimeSeriesRequestExample4:
-      summary: Multiple Investments
+    TimeSeriesRequestExample8:
+      summary: 'Identifier Lookup: ISIN'
       value:
         investments:
-        - id: F0GBR04CO9
-          idType: securityId
-        - id: FCUSA04AIX
-          idType: securityId
-        - id: F00000MY89
-          idType: securityId
+        - id: GB0004835483
+          idType: isin
+          baseCurrency: GBP
         parameters:
           startDate: '2020-06-26'
           endDate: '2025-06-26'
-          currencyId: USD
+          currencyId: GBP
         dataPoints:
-        - dataPoint: monthly-return
+        - dataPoint: daily-price
           parameters:
-            frequency: monthly
+            frequency: daily
     TimeSeriesResponseExample4:
       summary: Multiple Investments in Response
       value:
@@ -1324,35 +1321,33 @@ components:
         metadata:
           requestId: d4f83b91-2c17-4e5a-a334-7f92bc104d85
           time: '2025-10-30T14:18:22.445631Z'
-    TimeSeriesRequestExample5:
-      summary: 'Relative Time Range: Last 12 Months'
+    TimeSeriesResponseExample1:
+      summary: 'Standard Data Point: Univariate Observation'
       value:
         investments:
-        - id: F0GBR04CO9
-          idType: securityId
-        parameters:
-          timePeriod: 12
-          timePeriodUnit: months
-          currencyId: USD
-        dataPoints:
-        - dataPoint: daily-price
-          parameters:
-            frequency: daily
-    TimeSeriesRequestExample8:
-      summary: 'Identifier Lookup: ISIN'
-      value:
-        investments:
-        - id: GB0004835483
-          idType: isin
-          baseCurrency: GBP
-        parameters:
-          startDate: '2020-06-26'
-          endDate: '2025-06-26'
-          currencyId: GBP
-        dataPoints:
-        - dataPoint: daily-price
-          parameters:
-            frequency: daily
+        - identifiers:
+            performanceId: 0P00000CSY
+            securityId: F0GBR04CO9
+          timeSeries:
+          - categories:
+            - performance
+            dataPoint: daily-price
+            data:
+            - date: '2020-06-26'
+              value: 0.67328
+            - date: '2020-06-29'
+              value: 0.66284
+            - date: '2020-06-30'
+              value: 0.66908
+            - date: '2020-07-01'
+              value: 0.66413
+            - date: '2020-07-02'
+              value: 0.67865
+            - date: '2020-07-03'
+              value: 0.67312
+        metadata:
+          requestId: a4dc16bf-1c25-4f21-ad11-7efe37d83bf7
+          time: '2025-10-30T12:32:54.931365Z'
     TimeSeriesRequestExample3:
       summary: 'Computed Data Point: Rolling Return'
       value:
@@ -1371,31 +1366,45 @@ components:
             stepSize: 1
             performanceType:
             - total
-    TimeSeriesAsyncResponseExample1:
-      summary: Accepted for Async Processing
-      value:
-        jobId: 16bf1a7a-c883-4424-8810-2f4e9d244d40
-        _links:
-          href: https://www.us-api.morningstar.com/dynamic-services-apis/jobs/16bf1a7a-c883-4424-8810-2f4e9d244d40
-          rel: status
-          method: GET
-        metadata:
-          requestId: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
-          time: '2025-10-02T10:54:36.9161062Z'
-    TimeSeriesRequestExample1:
-      summary: 'Standard Data Point: Univariate Observation'
+    TimeSeriesRequestExample4:
+      summary: Multiple Investments
       value:
         investments:
         - id: F0GBR04CO9
+          idType: securityId
+        - id: FCUSA04AIX
+          idType: securityId
+        - id: F00000MY89
           idType: securityId
         parameters:
           startDate: '2020-06-26'
           endDate: '2025-06-26'
           currencyId: USD
         dataPoints:
-        - dataPoint: daily-price
+        - dataPoint: monthly-return
+          parameters:
+            frequency: monthly
+    TimeSeriesRequestExample2:
+      summary: 'Standard Data Point: Daily OHLCV (Multivariate Observation)'
+      value:
+        investments:
+        - id: FCUSA04AIX
+          idType: securityId
+        parameters:
+          startDate: '2020-06-26'
+          endDate: '2025-06-26'
+          currencyId: USD
+        dataPoints:
+        - dataPoint: daily-ohlcv
           parameters:
             frequency: daily
+    TimeSeriesResponseExample6:
+      summary: '400 Bad Request: Invalid Frequency'
+      value:
+        statusCode: 400
+        errorCode: 400.timeSeries.009
+        message: '''d'' is not a valid value for frequency. Valid values are: daily, weekly, monthly, quarterly, annual.'
+        requestId: e82c70a0-5f58-4e76-95b2-5c925678e6ca
     TimeSeriesResponseExample3:
       summary: 'Computed Data Point: Rolling Return (with performanceType)'
       value:
@@ -1420,15 +1429,22 @@ components:
         metadata:
           requestId: b7e21c3d-9f44-41de-bc12-8d3e5a901f22
           time: '2025-10-30T14:12:03.112847Z'
-    TimeSeriesResponseExample6:
-      summary: '400 Bad Request: Invalid Frequency'
+    TimeSeriesRequestExample5:
+      summary: 'Relative Time Range: Last 12 Months'
       value:
-        statusCode: 400
-        errorCode: 400.timeSeries.009
-        message: '''d'' is not a valid value for frequency. Valid values are: daily, weekly, monthly, quarterly, annual.'
-        requestId: e82c70a0-5f58-4e76-95b2-5c925678e6ca
-    TimeSeriesRequestExample7:
-      summary: Multiple Data Points in One Request
+        investments:
+        - id: F0GBR04CO9
+          idType: securityId
+        parameters:
+          timePeriod: 12
+          timePeriodUnit: months
+          currencyId: USD
+        dataPoints:
+        - dataPoint: daily-price
+          parameters:
+            frequency: daily
+    TimeSeriesRequestExample1:
+      summary: 'Standard Data Point: Univariate Observation'
       value:
         investments:
         - id: F0GBR04CO9
@@ -1441,12 +1457,32 @@ components:
         - dataPoint: daily-price
           parameters:
             frequency: daily
-        - dataPoint: monthly-return
-          parameters:
-            frequency: monthly
-        - dataPoint: daily-ohlcv
-          parameters:
-            frequency: daily
+    TimeSeriesResponseExample5:
+      summary: Matched and Unmatched Investments (Metadata Messages)
+      value:
+        investments:
+        - identifiers:
+            performanceId: 0P00000CSY
+            securityId: F0GBR04CO9
+          timeSeries:
+          - categories:
+            - performance
+            dataPoint: daily-price
+            data:
+            - date: '2025-01-02'
+              value: 0.71234
+            - date: '2025-01-03'
+              value: 0.72108
+        metadata:
+          messages:
+          - investments:
+            - id: 0P000PPP6Q
+              idType: performanceId
+            type: Warning
+            message: 'Lookup : Invalid investments.'
+            code: 404.common.125
+          requestId: f1a94c72-3d08-4b61-9e21-2c85da673f10
+          time: '2025-10-30T14:25:47.883412Z'
     TimeSeriesResponseExample2:
       summary: 'Standard Data Point: Daily OHLCV (Multivariate Observation)'
       value:
@@ -1486,73 +1522,37 @@ components:
         metadata:
           requestId: a03d3b25-4112-40cb-aa7d-eb6d2da22cb1
           time: '2025-10-30T12:38:46.222929Z'
-    TimeSeriesResponseExample1:
-      summary: 'Standard Data Point: Univariate Observation'
+    TimeSeriesRequestExample7:
+      summary: Multiple Data Points in One Request
       value:
         investments:
-        - identifiers:
-            performanceId: 0P00000CSY
-            securityId: F0GBR04CO9
-          timeSeries:
-          - categories:
-            - performance
-            dataPoint: daily-price
-            data:
-            - date: '2020-06-26'
-              value: 0.67328
-            - date: '2020-06-29'
-              value: 0.66284
-            - date: '2020-06-30'
-              value: 0.66908
-            - date: '2020-07-01'
-              value: 0.66413
-            - date: '2020-07-02'
-              value: 0.67865
-            - date: '2020-07-03'
-              value: 0.67312
-        metadata:
-          requestId: a4dc16bf-1c25-4f21-ad11-7efe37d83bf7
-          time: '2025-10-30T12:32:54.931365Z'
-    TimeSeriesRequestExample2:
-      summary: 'Standard Data Point: Daily OHLCV (Multivariate Observation)'
-      value:
-        investments:
-        - id: FCUSA04AIX
+        - id: F0GBR04CO9
           idType: securityId
         parameters:
           startDate: '2020-06-26'
           endDate: '2025-06-26'
           currencyId: USD
         dataPoints:
+        - dataPoint: daily-price
+          parameters:
+            frequency: daily
+        - dataPoint: monthly-return
+          parameters:
+            frequency: monthly
         - dataPoint: daily-ohlcv
           parameters:
             frequency: daily
-    TimeSeriesResponseExample5:
-      summary: Matched and Unmatched Investments (Metadata Messages)
+    TimeSeriesAsyncResponseExample1:
+      summary: Accepted for Async Processing
       value:
-        investments:
-        - identifiers:
-            performanceId: 0P00000CSY
-            securityId: F0GBR04CO9
-          timeSeries:
-          - categories:
-            - performance
-            dataPoint: daily-price
-            data:
-            - date: '2025-01-02'
-              value: 0.71234
-            - date: '2025-01-03'
-              value: 0.72108
+        jobId: 16bf1a7a-c883-4424-8810-2f4e9d244d40
+        _links:
+          href: https://www.us-api.morningstar.com/dynamic-services-apis/jobs/16bf1a7a-c883-4424-8810-2f4e9d244d40
+          rel: status
+          method: GET
         metadata:
-          messages:
-          - investments:
-            - id: 0P000PPP6Q
-              idType: performanceId
-            type: Warning
-            message: 'Lookup : Invalid investments.'
-            code: 404.common.125
-          requestId: f1a94c72-3d08-4b61-9e21-2c85da673f10
-          time: '2025-10-30T14:25:47.883412Z'
+          requestId: c63e7f6c-b52d-42c3-9d1b-4a4b4ac05f3c
+          time: '2025-10-02T10:54:36.9161062Z'
     TimeSeriesRequestExample6:
       summary: Since Inception
       value:
@@ -1566,6 +1566,30 @@ components:
         - dataPoint: monthly-return
           parameters:
             frequency: monthly
+  requestBodies:
+    RequestTimeSeries:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestTimeSeries'
+          examples:
+            TimeSeriesRequestExample1:
+              $ref: '#/components/examples/TimeSeriesRequestExample1'
+            TimeSeriesRequestExample2:
+              $ref: '#/components/examples/TimeSeriesRequestExample2'
+            TimeSeriesRequestExample3:
+              $ref: '#/components/examples/TimeSeriesRequestExample3'
+            TimeSeriesRequestExample4:
+              $ref: '#/components/examples/TimeSeriesRequestExample4'
+            TimeSeriesRequestExample5:
+              $ref: '#/components/examples/TimeSeriesRequestExample5'
+            TimeSeriesRequestExample6:
+              $ref: '#/components/examples/TimeSeriesRequestExample6'
+            TimeSeriesRequestExample7:
+              $ref: '#/components/examples/TimeSeriesRequestExample7'
+            TimeSeriesRequestExample8:
+              $ref: '#/components/examples/TimeSeriesRequestExample8'
   responses:
     ResponseAsyncTimeSeries:
       description: '202: Accepted'
@@ -1602,30 +1626,6 @@ components:
           examples:
             TimeSeriesResponseExample6:
               $ref: '#/components/examples/TimeSeriesResponseExample6'
-  requestBodies:
-    RequestTimeSeries:
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RequestTimeSeries'
-          examples:
-            TimeSeriesRequestExample1:
-              $ref: '#/components/examples/TimeSeriesRequestExample1'
-            TimeSeriesRequestExample2:
-              $ref: '#/components/examples/TimeSeriesRequestExample2'
-            TimeSeriesRequestExample3:
-              $ref: '#/components/examples/TimeSeriesRequestExample3'
-            TimeSeriesRequestExample4:
-              $ref: '#/components/examples/TimeSeriesRequestExample4'
-            TimeSeriesRequestExample5:
-              $ref: '#/components/examples/TimeSeriesRequestExample5'
-            TimeSeriesRequestExample6:
-              $ref: '#/components/examples/TimeSeriesRequestExample6'
-            TimeSeriesRequestExample7:
-              $ref: '#/components/examples/TimeSeriesRequestExample7'
-            TimeSeriesRequestExample8:
-              $ref: '#/components/examples/TimeSeriesRequestExample8'
   securitySchemes:
     Bearer:
       type: http

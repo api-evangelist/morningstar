@@ -162,98 +162,6 @@ paths:
       x-cpqId: 904
 components:
   schemas:
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
-    OutputDilutedMarketCapital:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date when the diluted market capital data points are calculated
-          nullable: true
-        currencyCode:
-          type: string
-          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
-          nullable: true
-        dilutedCompanyLevelMarketCapital:
-          type: integer
-          description: Diluted Market Capitalization represents the summation of the firm's standard company-level market capitalization and the additional market capitalization that would arise from (i) convertible equity on an as-converted basis and (ii) exchangeable equity on an as-exchanged basis.  Diluted Market Capitalization does not include potential dilutive shares that can arise from existing stock options; warrants; rights; convertible debt; etc. if exercised/converted; and; is quoted in the same currency as the trading currency of the share class.
-          format: int64
-          nullable: true
-        dilutedMarketCapitalFromConvertibleSecurities:
-          type: number
-          description: The diluted market capital from convertible securities on as-converted basis. Convertible securities are normally reported in the company's financial report; along with its conversion factor and underlying equity component/stock to which the convertible securities will convert. Convertible securities include preferred stocks.
-          format: double
-          nullable: true
-        dilutedMarketCapitalFromExchangeableSecurities:
-          type: number
-          description: The diluted market capital from exchangeable securities on as-exchanged basis. Exchangeable securities are normally reported in the company's financial report; along with its exchangeable factor and underlying equity component/stock into which the exchangeable securities will exchange. Exchangeable securities include securities disclosed in non-controlling interest/minority interest section of the company's balance sheet and general partnership interest.
-          format: double
-          nullable: true
-        dilutedMarketCapitalFromStockOptionsRestrictedStockUnitsAndWarrants:
-          type: integer
-          description: The diluted market capital from dilutive securities on as-issued/exercised basis. Dilutive securities include stock options; compensation-issued securities such as restricted stock units (RSUs) or performance stock options; and warrants.
-          format: int64
-          nullable: true
-        dilutedSharesFromConvertibleSecurities:
-          type: number
-          description: The additional dilutive shares that could be added to current shares outstanding if all convertible securities are converted to the company's common/ordinary shares. Convertible securities are normally reported in the company's financial report; along with its conversion factor and underlying equity component/stock to which the convertible securities will convert. Convertible securities include preferred stocks.
-          format: double
-          nullable: true
-        dilutedSharesFromExchangeableSecurities:
-          type: number
-          description: The additional dilutive shares that could be added to current shares outstanding if all exchangeable securities are exchanged for the company's common/ordinary shares. Exchangeable securities are normally reported in the company's financial report; along with its exchangeable factor and underlying equity component/stock into which the exchangeable securities can be exchanged. Exchangeable securities include securities disclosed in the non-controlling interest/minority interest section of the company's balance sheet and general partnership interest.
-          format: double
-          nullable: true
-        dilutedSharesFromStockOptionsRestrictedStockUnitsAndWarrants:
-          type: number
-          description: The additional dilutive shares that could be added to current Shares Outstanding if all 'in-the-money' dilutive securities (such as stock options and warrants) were exercised.
-          format: double
-          nullable: true
-        fullyDilutedOverhangPotentialDilution:
-          type: number
-          description: This is a measure of the potential dilution to which common shareholders are exposed due to the possible awards of stock-based compensation and/or warrants. It is normally represented as a percentage and is calculated using dilutive shares from stock-based compensation and/or warrants divided by the sum of total diluted shares outstanding.
-          format: double
-          nullable: true
-        overhangPotentialDilution:
-          type: number
-          description: This is a measure of the potential dilution to which common shareholders are exposed due to the possible awards of stock-based compensation and/or warrants. It is normally represented as a percentage and is calculated using dilutive shares from stock-based compensation and/or warrants divided by the current total basic shares outstanding.
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputDilutedMarketCapital
     OutputEnterpriseValueCalculations:
       type: object
       properties:
@@ -335,68 +243,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputEnterpriseValueCalculations
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputMarketCapital:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date when the market capital datapoints are calculated
-          nullable: true
-        companyLevelMarketCapital:
-          type: integer
-          description: The most current company-level market capital derived by the summation of share-level market capital of the company's primary share classes; Company-level market capital has the same currency as the trading currency of the share class.
-          format: int64
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        shareLevelMarketCapital:
-          type: integer
-          description: The most current share class-level market capital derived by the most recent closing price for a particular share class multiplied by the most recent reported shares outstanding for that particular share class; Share-level market capital has the same currency as the trading currency of the shares class
-          format: int64
-          nullable: true
-      additionalProperties: false
-      title: OutputMarketCapital
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
     OutputInvalidInvestments:
       type: object
       properties:
@@ -443,27 +289,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputFloatMarketCapital:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date when the market price was udpated
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        floatMarketCapitalCompanyLevel:
-          type: integer
-          description: The most current float-adjusted company level market capital derived by the summation of float-adjusted share-level market capital of the company's primary share classes; It has the same currency as the trading currency of the share class.
-          format: int64
-          nullable: true
-        floatMarketCapitalShareLevel:
-          type: integer
-          description: The most current float-adjusted share class-level market capital derived by the most recent closing price for a particular share class multiplied by the most recent float shares for that particular share class; It has the same currency as the trading currency of the share class
-          format: int64
-          nullable: true
-      additionalProperties: false
-      title: OutputFloatMarketCapital
     OutputDilutedEnterpriseValueCalculations:
       type: object
       properties:
@@ -530,6 +355,162 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputDilutedEnterpriseValueCalculations
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputFloatMarketCapital:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the market price was udpated
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        floatMarketCapitalCompanyLevel:
+          type: integer
+          description: The most current float-adjusted company level market capital derived by the summation of float-adjusted share-level market capital of the company's primary share classes; It has the same currency as the trading currency of the share class.
+          format: int64
+          nullable: true
+        floatMarketCapitalShareLevel:
+          type: integer
+          description: The most current float-adjusted share class-level market capital derived by the most recent closing price for a particular share class multiplied by the most recent float shares for that particular share class; It has the same currency as the trading currency of the share class
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: OutputFloatMarketCapital
+    OutputMarketCapital:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the market capital datapoints are calculated
+          nullable: true
+        companyLevelMarketCapital:
+          type: integer
+          description: The most current company-level market capital derived by the summation of share-level market capital of the company's primary share classes; Company-level market capital has the same currency as the trading currency of the share class.
+          format: int64
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        shareLevelMarketCapital:
+          type: integer
+          description: The most current share class-level market capital derived by the most recent closing price for a particular share class multiplied by the most recent reported shares outstanding for that particular share class; Share-level market capital has the same currency as the trading currency of the shares class
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: OutputMarketCapital
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputDilutedMarketCapital:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the diluted market capital data points are calculated
+          nullable: true
+        currencyCode:
+          type: string
+          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
+          nullable: true
+        dilutedCompanyLevelMarketCapital:
+          type: integer
+          description: Diluted Market Capitalization represents the summation of the firm's standard company-level market capitalization and the additional market capitalization that would arise from (i) convertible equity on an as-converted basis and (ii) exchangeable equity on an as-exchanged basis.  Diluted Market Capitalization does not include potential dilutive shares that can arise from existing stock options; warrants; rights; convertible debt; etc. if exercised/converted; and; is quoted in the same currency as the trading currency of the share class.
+          format: int64
+          nullable: true
+        dilutedMarketCapitalFromConvertibleSecurities:
+          type: number
+          description: The diluted market capital from convertible securities on as-converted basis. Convertible securities are normally reported in the company's financial report; along with its conversion factor and underlying equity component/stock to which the convertible securities will convert. Convertible securities include preferred stocks.
+          format: double
+          nullable: true
+        dilutedMarketCapitalFromExchangeableSecurities:
+          type: number
+          description: The diluted market capital from exchangeable securities on as-exchanged basis. Exchangeable securities are normally reported in the company's financial report; along with its exchangeable factor and underlying equity component/stock into which the exchangeable securities will exchange. Exchangeable securities include securities disclosed in non-controlling interest/minority interest section of the company's balance sheet and general partnership interest.
+          format: double
+          nullable: true
+        dilutedMarketCapitalFromStockOptionsRestrictedStockUnitsAndWarrants:
+          type: integer
+          description: The diluted market capital from dilutive securities on as-issued/exercised basis. Dilutive securities include stock options; compensation-issued securities such as restricted stock units (RSUs) or performance stock options; and warrants.
+          format: int64
+          nullable: true
+        dilutedSharesFromConvertibleSecurities:
+          type: number
+          description: The additional dilutive shares that could be added to current shares outstanding if all convertible securities are converted to the company's common/ordinary shares. Convertible securities are normally reported in the company's financial report; along with its conversion factor and underlying equity component/stock to which the convertible securities will convert. Convertible securities include preferred stocks.
+          format: double
+          nullable: true
+        dilutedSharesFromExchangeableSecurities:
+          type: number
+          description: The additional dilutive shares that could be added to current shares outstanding if all exchangeable securities are exchanged for the company's common/ordinary shares. Exchangeable securities are normally reported in the company's financial report; along with its exchangeable factor and underlying equity component/stock into which the exchangeable securities can be exchanged. Exchangeable securities include securities disclosed in the non-controlling interest/minority interest section of the company's balance sheet and general partnership interest.
+          format: double
+          nullable: true
+        dilutedSharesFromStockOptionsRestrictedStockUnitsAndWarrants:
+          type: number
+          description: The additional dilutive shares that could be added to current Shares Outstanding if all 'in-the-money' dilutive securities (such as stock options and warrants) were exercised.
+          format: double
+          nullable: true
+        fullyDilutedOverhangPotentialDilution:
+          type: number
+          description: This is a measure of the potential dilution to which common shareholders are exposed due to the possible awards of stock-based compensation and/or warrants. It is normally represented as a percentage and is calculated using dilutive shares from stock-based compensation and/or warrants divided by the sum of total diluted shares outstanding.
+          format: double
+          nullable: true
+        overhangPotentialDilution:
+          type: number
+          description: This is a measure of the potential dilution to which common shareholders are exposed due to the possible awards of stock-based compensation and/or warrants. It is normally represented as a percentage and is calculated using dilutive shares from stock-based compensation and/or warrants divided by the current total basic shares outstanding.
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputDilutedMarketCapital
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -562,6 +543,25 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
   responses:
     ResponseEquityMarketCapitalizationAndEnterpriseValue:
       description: OK
@@ -584,14 +584,14 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
+    ResponseInternalServerError:
+      description: Internal Server
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseInternalServerError:
-      description: Internal Server
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:

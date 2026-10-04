@@ -70,27 +70,6 @@ paths:
         '400':
           $ref: '#/components/responses/ResponsePortfolioHoldingsDatesBadRequest'
 components:
-  responses:
-    ResponsePortfolioHoldingsDates:
-      description: OK
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ResponsePortfolioHoldingsDates'
-          examples:
-            ResponsePortfolioHoldingsDatesExample1:
-              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample1'
-            ResponsePortfolioHoldingsDatesExample2:
-              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample2'
-    ResponsePortfolioHoldingsDatesBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-          examples:
-            ResponsePortfolioHoldingsDateBadRequestExample1:
-              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesBadRequestExample1'
   examples:
     RequestPortfolioHoldingsDatesExample4:
       summary: 'Date Type: Static Dates'
@@ -106,6 +85,11 @@ components:
         - '2018-12-31'
         - '2019-06-30'
         - '2013-06-30'
+    RequestPortfolioHoldingsDatesExample1:
+      summary: 'Data Type: Most Recent'
+      value:
+        holdingsView: full
+        type: mostRecent
     ResponsePortfolioHoldingsDatesBadRequestExample1:
       summary: Required Parameter Missing
       value:
@@ -124,13 +108,6 @@ components:
         metadata:
           requestId: 3a11f005-394f-4f89-a17f-41d2ffe549f3
           time: '2026-06-17T17:28:34.6382675Z'
-    RequestPortfolioHoldingsDatesExample2:
-      summary: 'Data Type: Time Series'
-      value:
-        holdingsView: '10'
-        type: timeSeries
-        startDate: '2014-06-30'
-        endDate: '2024-06-30'
     ResponsePortfolioHoldingsDatesExample2:
       summary: Top 10 Time Series
       value:
@@ -170,6 +147,13 @@ components:
         metadata:
           requestId: d50bc56a-bf63-440e-b6b1-ffc7d14c0ca3
           time: '2026-06-17T17:36:52.137352Z'
+    RequestPortfolioHoldingsDatesExample2:
+      summary: 'Data Type: Time Series'
+      value:
+        holdingsView: '10'
+        type: timeSeries
+        startDate: '2014-06-30'
+        endDate: '2024-06-30'
     RequestPortfolioHoldingsDatesExample3:
       summary: 'Date Type: Time Series and Frequency'
       value:
@@ -178,92 +162,7 @@ components:
         startDate: '2014-06-30'
         endDate: '2024-06-30'
         frequency: m
-    RequestPortfolioHoldingsDatesExample1:
-      summary: 'Data Type: Most Recent'
-      value:
-        holdingsView: full
-        type: mostRecent
   schemas:
-    OutputPortfolioHoldingsDates:
-      type: object
-      properties:
-        portfolioDate:
-          type: string
-          description: Portfolio date in YYYY-MM-DD format
-          nullable: true
-        holdingsView:
-          type: string
-          description: Holdings view identifier
-          nullable: true
-      additionalProperties: false
-      description: Portfolio date information
-      title: OutputPortfolioHoldingsDates
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-      description: All fields are nullable. Empty or `null` value fields are not returned.
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-      description: All fields are nullable. Empty or `null` value fields are not returned.
     ResponsePortfolioHoldingsDates:
       type: object
       properties:
@@ -326,6 +225,39 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
       description: All fields are nullable. Empty or `null` value fields are not returned.
     RequestPortfolioHoldingsDates:
       type: object
@@ -409,39 +341,107 @@ components:
       - holdingsView
       - type
       title: RequestPortfolioHoldingsDates
-    OutputIdentifiers:
+    OutputPortfolioHoldingsDates:
       type: object
       properties:
-        performanceId:
+        portfolioDate:
+          type: string
+          description: Portfolio date in YYYY-MM-DD format
+          nullable: true
+        holdingsView:
+          type: string
+          description: Holdings view identifier
+          nullable: true
+      additionalProperties: false
+      description: Portfolio date information
+      title: OutputPortfolioHoldingsDates
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
           type: string
           nullable: true
-        securityId:
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
           nullable: true
-        cusip:
+        portfolioCurrency:
           type: string
           nullable: true
-        isin:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+      description: All fields are nullable. Empty or `null` value fields are not returned.
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
           type: string
           nullable: true
-        sedol:
+        code:
           type: string
           nullable: true
-        tradingSymbol:
-          type: string
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
+        message:
           type: string
           nullable: true
       additionalProperties: false
-      title: OutputIdentifiers
+      title: OutputMetadataMessages
       description: All fields are nullable. Empty or `null` value fields are not returned.
+  responses:
+    ResponsePortfolioHoldingsDatesBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+          examples:
+            ResponsePortfolioHoldingsDateBadRequestExample1:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesBadRequestExample1'
+    ResponsePortfolioHoldingsDates:
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ResponsePortfolioHoldingsDates'
+          examples:
+            ResponsePortfolioHoldingsDatesExample1:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample1'
+            ResponsePortfolioHoldingsDatesExample2:
+              $ref: '#/components/examples/ResponsePortfolioHoldingsDatesExample2'
   requestBodies:
     RequestPortfolioHoldingsDates:
       required: true

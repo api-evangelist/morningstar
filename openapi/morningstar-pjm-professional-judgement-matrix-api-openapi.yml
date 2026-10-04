@@ -127,22 +127,6 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse502'
 components:
   schemas:
-    ErrorResponse400:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
     TimeHorizonPayload:
       title: TimeHorizonPayload
       type: object
@@ -236,46 +220,18 @@ components:
           description: More than 20 years
           example: 50
       description: Configurable to set the maximum score depending on the selection provided up a maximum of 22 options
-    PjmRequestPayload:
-      title: PjmRequestPayload
-      type: object
-      properties:
-        timeHorizon:
-          $ref: '#/components/schemas/TimeHorizonPayload'
-        knowledge:
-          $ref: '#/components/schemas/KnowledgePayload'
-        experience:
-          $ref: '#/components/schemas/ExperiencePayload'
-        composure:
-          $ref: '#/components/schemas/ComposurePayload'
-    ErrorResponse502:
+    ErrorResponse400:
       title: ErrorResponse
       type: object
       properties:
         message:
           type: string
           description: Error Message
-          example: Received an invalid response from the upstream server
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
         status:
           type: string
           description: Error Status
-          example: BAD_GATEWAY
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    ErrorResponse500:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Internal Server Error
-        status:
-          type: string
-          description: Error Status
-          example: INTERNAL_SERVER_ERROR
+          example: BAD_REQUEST
         timestamp:
           type: string
           description: Error Timestamp
@@ -305,18 +261,18 @@ components:
           description: Unknown
           example: 100
       description: Configurable to cap the max score based on the 4 possible responses
-    ErrorResponse404:
+    ErrorResponse502:
       title: ErrorResponse
       type: object
       properties:
         message:
           type: string
           description: Error Message
-          example: Server can't find the requested resource
+          example: Received an invalid response from the upstream server
         status:
           type: string
           description: Error Status
-          example: NOT_FOUND
+          example: BAD_GATEWAY
         timestamp:
           type: string
           description: Error Timestamp
@@ -338,18 +294,10 @@ components:
           description: Unknown
           example: 100
       description: Configurable to cap the max score based on the 2 possible responses
-    PjmResponsePayload:
-      title: PjmResponsePayload
+    PjmRequestPayload:
+      title: PjmRequestPayload
       type: object
       properties:
-        pjmId:
-          type: string
-          description: Record unique identifier
-          example: 95000cf-9f72-4au7-811b-35dc66dd95a
-        createdAt:
-          type: string
-          description: Record creation dateTime UTC
-          example: 2020-08-04T20:07:36+0000
         timeHorizon:
           $ref: '#/components/schemas/TimeHorizonPayload'
         knowledge:
@@ -379,3 +327,55 @@ components:
           description: Unknown
           example: 100
       description: Configurable to cap the max score based on the 3 possible responses
+    ErrorResponse404:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
+          type: string
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    PjmResponsePayload:
+      title: PjmResponsePayload
+      type: object
+      properties:
+        pjmId:
+          type: string
+          description: Record unique identifier
+          example: 95000cf-9f72-4au7-811b-35dc66dd95a
+        createdAt:
+          type: string
+          description: Record creation dateTime UTC
+          example: 2020-08-04T20:07:36+0000
+        timeHorizon:
+          $ref: '#/components/schemas/TimeHorizonPayload'
+        knowledge:
+          $ref: '#/components/schemas/KnowledgePayload'
+        experience:
+          $ref: '#/components/schemas/ExperiencePayload'
+        composure:
+          $ref: '#/components/schemas/ComposurePayload'
+    ErrorResponse500:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000

@@ -129,41 +129,20 @@ paths:
           description: Internal Server Error
 components:
   schemas:
-    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
-      required:
-      - Name
-      - Currency
-      - Holdings
+    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
       type: object
       properties:
-        Name:
-          type: string
-        TotalValue:
-          format: double
-          type: number
-        Currency:
+        Type:
           enum:
-          - AUD
-          - CAD
-          - CNY
-          - EUR
-          - GBP
-          - INR
-          - JPY
-          - USD
+          - Standard
+          - AutoAsset
+          - AutoCategory
+          - Custom
           type: string
         Holdings:
           type: array
           items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
-        Benchmark:
-          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
-        IrrFees:
-          format: double
-          type: number
-        RiskFreeProxyId:
-          description: Default is set in the Configuration. This is a portfolio level override.
-          type: string
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
     Morningstar.PortfolioAnalysis.Models.Input.Esg.ESGInputSettings:
       type: object
       properties:
@@ -213,41 +192,6 @@ components:
         Weight:
           format: double
           type: number
-    Morningstar.PortfolioAnalysis.Models.Input.Esg.EsgRequestSettings:
-      type: object
-      properties:
-        OutputCurrency:
-          enum:
-          - AUD
-          - CAD
-          - CNY
-          - EUR
-          - GBP
-          - INR
-          - JPY
-          - USD
-          type: string
-        AnalysisDateTimePeriod:
-          enum:
-          - MonthEnd
-          - QuarterEnd
-          type: string
-        IncludeSecurityLevel:
-          type: boolean
-    Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput:
-      type: object
-      properties:
-        Type:
-          enum:
-          - Standard
-          - AutoAsset
-          - AutoCategory
-          - Custom
-          type: string
-        Holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInputHolding'
     Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding:
       type: object
       properties:
@@ -329,6 +273,62 @@ components:
         TradingSymbol:
           type: string
         FundCode:
+          type: string
+    Morningstar.PortfolioAnalysis.Models.Input.Esg.EsgRequestSettings:
+      type: object
+      properties:
+        OutputCurrency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        AnalysisDateTimePeriod:
+          enum:
+          - MonthEnd
+          - QuarterEnd
+          type: string
+        IncludeSecurityLevel:
+          type: boolean
+    Morningstar.PortfolioAnalysis.Models.Input.PortfolioInput:
+      required:
+      - Name
+      - Currency
+      - Holdings
+      type: object
+      properties:
+        Name:
+          type: string
+        TotalValue:
+          format: double
+          type: number
+        Currency:
+          enum:
+          - AUD
+          - CAD
+          - CNY
+          - EUR
+          - GBP
+          - INR
+          - JPY
+          - USD
+          type: string
+        Holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.PortfolioInputHolding'
+        Benchmark:
+          $ref: '#/components/schemas/Morningstar.PortfolioAnalysis.Models.Input.BenchmarkInput'
+        IrrFees:
+          format: double
+          type: number
+        RiskFreeProxyId:
+          description: Default is set in the Configuration. This is a portfolio level override.
           type: string
   securitySchemes:
     bearerAuth:

@@ -144,22 +144,6 @@ paths:
       variables: {}
 components:
   schemas:
-    ErrorResponse400:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
     MixInvestmentsHeader:
       title: MixInvestmentsHeader
       type: object
@@ -181,6 +165,22 @@ components:
           description: Header of the column for low risk information.
           example: Low Risk/Return %
       description: Mix investments header
+    ErrorResponse400:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
+        status:
+          type: string
+          description: Error Status
+          example: BAD_REQUEST
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
     ErrorResponse502:
       title: ErrorResponse
       type: object
@@ -197,22 +197,43 @@ components:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
-    ErrorResponse500:
+    ErrorResponse404:
       title: ErrorResponse
       type: object
       properties:
         message:
           type: string
           description: Error Message
-          example: Internal Server Error
+          example: Server can't find the requested resource
         status:
           type: string
           description: Error Status
-          example: INTERNAL_SERVER_ERROR
+          example: NOT_FOUND
         timestamp:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
+    InvestmentPortfolio:
+      title: InvestmentPortfolio
+      type: object
+      properties:
+        portfolio:
+          type: string
+          description: portfolio's name
+          example: Portfolio 1
+        highRisk:
+          type: integer
+          description: High risk value
+          example: 1
+        mediumRisk:
+          type: integer
+          description: Medium risk value
+          example: 0
+        lowRisk:
+          type: integer
+          description: Low risk value
+          example: 100
+      description: Investment portfolio object that represents the mix of investments in portfolio.
     MixInvestmentsPayload:
       title: MixInvestmentsPayload
       type: object
@@ -237,39 +258,18 @@ components:
           items:
             $ref: '#/components/schemas/InvestmentPortfolio'
       description: Mix investments payload
-    InvestmentPortfolio:
-      title: InvestmentPortfolio
-      type: object
-      properties:
-        portfolio:
-          type: string
-          description: portfolio's name
-          example: Portfolio 1
-        highRisk:
-          type: integer
-          description: High risk value
-          example: 1
-        mediumRisk:
-          type: integer
-          description: Medium risk value
-          example: 0
-        lowRisk:
-          type: integer
-          description: Low risk value
-          example: 100
-      description: Investment portfolio object that represents the mix of investments in portfolio.
-    ErrorResponse404:
+    ErrorResponse500:
       title: ErrorResponse
       type: object
       properties:
         message:
           type: string
           description: Error Message
-          example: Server can't find the requested resource
+          example: Internal Server Error
         status:
           type: string
           description: Error Status
-          example: NOT_FOUND
+          example: INTERNAL_SERVER_ERROR
         timestamp:
           type: string
           description: Error Timestamp
@@ -294,6 +294,27 @@ components:
           type: string
           description: Header of the column for low risk information.
           example: Low Risk/Return %
+    InvestmentPortfolio_2:
+      type: object
+      title: InvestmentPortfolio
+      description: Investment portfolio object that represents the mix of investments in portfolio
+      properties:
+        portfolio:
+          type: string
+          description: portfolio's name
+          example: Portfolio 1
+        highRisk:
+          type: integer
+          description: High risk value
+          example: 1
+        mediumRisk:
+          type: integer
+          description: Medium risk value
+          example: 0
+        lowRisk:
+          type: integer
+          description: Low risk value
+          example: 100
     MixInvestmentsPayload_2:
       type: object
       title: MixInvestmentsPayload
@@ -317,27 +338,6 @@ components:
             highRisk: 0
             mediumRisk: 30
             lowRisk: 70
-    InvestmentPortfolio_2:
-      type: object
-      title: InvestmentPortfolio
-      description: Investment portfolio object that represents the mix of investments in portfolio
-      properties:
-        portfolio:
-          type: string
-          description: portfolio's name
-          example: Portfolio 1
-        highRisk:
-          type: integer
-          description: High risk value
-          example: 1
-        mediumRisk:
-          type: integer
-          description: Medium risk value
-          example: 0
-        lowRisk:
-          type: integer
-          description: Low risk value
-          example: 100
 x-refined-from:
 - morningstar-dws-risk-profiler-openapi.json
 - morningstar-risk-profiler-us-openapi.json

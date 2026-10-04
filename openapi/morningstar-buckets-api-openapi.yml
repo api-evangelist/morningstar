@@ -85,6 +85,25 @@ paths:
           description: Not found
 components:
   schemas:
+    BucketMetaData:
+      type: object
+      properties:
+        items:
+          type: integer
+          example: 1
+          description: Number of buckets found.
+    BucketList:
+      required:
+      - totalRecords
+      - displayRecords
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/BucketMetaData'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Bucket'
     Bucket:
       required:
       - bucketId
@@ -126,25 +145,6 @@ components:
           type: string
           format: date-time
           example: 2019-01-02T01:59Z
-    BucketMetaData:
-      type: object
-      properties:
-        items:
-          type: integer
-          example: 1
-          description: Number of buckets found.
-    BucketList:
-      required:
-      - totalRecords
-      - displayRecords
-      type: object
-      properties:
-        metadata:
-          $ref: '#/components/schemas/BucketMetaData'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Bucket'
   securitySchemes:
     bearerAuth:
       type: http
