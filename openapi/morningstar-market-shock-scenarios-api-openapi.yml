@@ -131,23 +131,12 @@ paths:
       x-codegen-request-body-name: payload
 components:
   schemas:
-    Holdings:
-      required:
-      - id
+    holding:
       properties:
-        holdings:
-          type: array
-          items:
-            $ref: '#/components/schemas/holding'
-        id:
+        identifier:
           type: string
-      type: object
-    idType:
-      properties:
-        id:
-          type: string
-        type:
-          type: string
+        weight:
+          type: number
       type: object
     ForecastReturnModel:
       required:
@@ -179,12 +168,23 @@ components:
           items:
             $ref: '#/components/schemas/Holdings'
       type: object
-    holding:
+    Holdings:
+      required:
+      - id
       properties:
-        identifier:
+        holdings:
+          type: array
+          items:
+            $ref: '#/components/schemas/holding'
+        id:
           type: string
-        weight:
-          type: number
+      type: object
+    idType:
+      properties:
+        id:
+          type: string
+        type:
+          type: string
       type: object
   securitySchemes:
     bearerAuth:

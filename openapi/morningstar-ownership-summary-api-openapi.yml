@@ -541,6 +541,64 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 930
 components:
+  responses:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityOwnershipSummaryFundsAndRegulatoryFilings:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownershipDataSummary:
+                $ref: '#/components/schemas/OutputOwnershipDataSummary'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipSummary:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              ownershipDataSummary:
+                $ref: '#/components/schemas/OutputOwnershipDataSummary'
+              companyLevelInsiderHolding:
+                $ref: '#/components/schemas/OutputCompanyLevelInsiderHolding'
+              companyLevelInsiderTransactionStatistics:
+                $ref: '#/components/schemas/OutputCompanyLevelInsiderTransactionStatistics'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipSummaryInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              companyLevelInsiderHolding:
+                $ref: '#/components/schemas/OutputCompanyLevelInsiderHolding'
+              companyLevelInsiderTransactionStatistics:
+                $ref: '#/components/schemas/OutputCompanyLevelInsiderTransactionStatistics'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   schemas:
     OutputCompanyLevelInsiderTransactionStatistics:
       type: object
@@ -617,6 +675,29 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputOwnershipDataSummary:
       type: object
       properties:
@@ -690,6 +771,25 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputOwnershipDataSummary
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
     OutputCompanyLevelInsiderHolding:
       type: object
       properties:
@@ -731,29 +831,6 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -786,83 +863,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-  responses:
-    ResponseEquityOwnershipSummaryFundsAndRegulatoryFilings:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ownershipDataSummary:
-                $ref: '#/components/schemas/OutputOwnershipDataSummary'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityOwnershipSummaryInsiders:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              companyLevelInsiderHolding:
-                $ref: '#/components/schemas/OutputCompanyLevelInsiderHolding'
-              companyLevelInsiderTransactionStatistics:
-                $ref: '#/components/schemas/OutputCompanyLevelInsiderTransactionStatistics'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityOwnershipSummary:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              ownershipDataSummary:
-                $ref: '#/components/schemas/OutputOwnershipDataSummary'
-              companyLevelInsiderHolding:
-                $ref: '#/components/schemas/OutputCompanyLevelInsiderHolding'
-              companyLevelInsiderTransactionStatistics:
-                $ref: '#/components/schemas/OutputCompanyLevelInsiderTransactionStatistics'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

@@ -117,20 +117,13 @@ paths:
       tags:
       - macro shock scenarios
 components:
-  requestBodies:
-    ForecastReturnModel:
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ForecastReturnModel'
-      required: true
   schemas:
-    idType:
+    holding:
       properties:
-        id:
+        identifier:
           type: string
-        type:
-          type: string
+        weight:
+          type: number
       type: object
     ForecastReturnModel:
       required:
@@ -173,13 +166,20 @@ components:
         id:
           type: string
       type: object
-    holding:
+    idType:
       properties:
-        identifier:
+        id:
           type: string
-        weight:
-          type: number
+        type:
+          type: string
       type: object
+  requestBodies:
+    ForecastReturnModel:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ForecastReturnModel'
+      required: true
   securitySchemes:
     bearerAuth:
       type: http

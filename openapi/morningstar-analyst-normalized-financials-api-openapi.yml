@@ -1092,15 +1092,27 @@ paths:
       x-cpqId: 944
 components:
   responses:
-    ResponseEquityAnalystNormalizedFinancialStatementsPerShare:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityAnalystNormalizedFinancialStatements:
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              profitabilityPerShare:
-                $ref: '#/components/schemas/OutputProfitabilityPerShare'
+              profitability:
+                $ref: '#/components/schemas/OutputProfitability'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
@@ -1135,32 +1147,77 @@ components:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityAnalystNormalizedFinancialStatements:
+    ResponseEquityAnalystNormalizedFinancialStatementsPerShare:
       description: OK
       content:
         application/json:
           schema:
             type: object
             properties:
-              profitability:
-                $ref: '#/components/schemas/OutputProfitability'
+              profitabilityPerShare:
+                $ref: '#/components/schemas/OutputProfitabilityPerShare'
               identifiers:
                 $ref: '#/components/schemas/OutputIdentifiers'
               metadata:
                 $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   schemas:
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
     OutputEnterpriseValueCalculations:
       type: object
       properties:
@@ -1242,127 +1299,48 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputEnterpriseValueCalculations
-    OutputInvalidInvestments:
+    OutputMetadata:
       type: object
       properties:
-        id:
+        requestId:
           type: string
           nullable: true
-        idType:
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
           type: string
           nullable: true
-        status:
+        portfolioCurrency:
           type: string
           nullable: true
-        datapointId:
+        messages:
           type: array
           items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: OutputInvalidInvestments
-    OutputProfitabilityPerShare:
+      title: OutputMetadata
+    OutputMetadataMessages:
       type: object
       properties:
-        reportPeriodEndDate:
-          type: string
-          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
-          nullable: true
-        analystNormalizedEps:
-          type: number
-          description: The data point represents earnings per share adjusted for income/expenses that are considered irregular; unusual or non-recurring.  The adjustment values are usually reported in the notes to financial statements; management; discussion and analysis or as Non-Gaap metrics.  This is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
-          format: double
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        ebitdaPerShare:
-          type: number
-          description: 'The per share value of earnings before interest; tax; depreciation and amortization expenses (EBITDA). EBITDA: This data point represents the earnings the company generated before interest; tax; depreciation and amortization expenses. This can be used to measure a company''s profitability. This is calculated using EBIT + Depreciation; Amortization and Depletion.'
-          format: double
-          nullable: true
-        ebitdarPerShare:
-          type: number
-          description: 'The per share value of earnings before interest; tax; depreciation; amortization and rent expenses (EBITDAR). EBITDAR: This data point represents the earnings the company generated before interest; tax; depreciation; amortization and rent expenses. This can be used to measure a company''s profitability. This is calculated using EBITDA + Rent Expenses + Rent and Landing Fees.'
-          format: double
-          nullable: true
-        ebitPerShare:
-          type: number
-          description: 'The per share value of earnings before interest and tax (EBIT). EBIT: This data point represents the earnings the company generated before paying the interest and tax expenses. This can be used to measure a company''s profitability. This is calculated by using the summation of Pretax Income and Net Interest Income/Expenses.'
-          format: double
-          nullable: true
-        normalizedEbitdaPerShare:
-          type: number
-          description: 'The per share value of normalized earnings before interest; tax; depreciation and amortization expenses (EBITDA). Normalized EBITDA: This data point represents the earnings the company generated before interest; tax; depreciation and amortization expenses adjusted for items that are irregular or unusual in nature; and/or are non-recurring. This can be used to fairly measure a company''s profitability. This is calculated using Earnings Before Interest; Tax; Depreciation and Amortization plus/minus any unusual Items.'
-          format: double
-          nullable: true
-        normalizedEbitdarPerShare:
-          type: number
-          description: 'The per share value of normalized earnings before interest; tax; depreciation; amortization and rent expenses (EBITDAR). Normalized EBITDAR: This data point represents the earnings the company generated before interest; tax; depreciation; amortization and rent expenses adjusted for items that are irregular or unusual in nature; and/or are non-recurring. This can be used to measure a company''s profitability. This is calculated using Earnings Before Interest; Tax; Depreciation; Amortization and Rent expenses plus/minus any unusual Items.'
-          format: double
-          nullable: true
-        normalizedEbitPerShare:
-          type: number
-          description: 'The per share value of normalized earnings before interest and tax (EBIT). Normalized EBIT: This represents earnings before interest and taxes adjusted for items that are irregular or unusual in nature; and/or are non-recurring. This can be used to measure a company''s profitability. This is calculated by using Earnings before Interest and Tax plus/minus any tax affected unusual items.'
-          format: double
-          nullable: true
-        normalizedEps:
-          type: number
-          description: This data point represents earnings per share adjusted for irregular and/or non-recurring items based on CPMS (Computerized Portfolio Management Services) methodology standards. This is an analyst-screened datapoint.
-          format: double
-          nullable: true
-        numberOfMonths:
-          type: integer
-          description: ''
-          format: int32
-          nullable: true
-        reportPeriod:
-          type: string
-          description: ''
-          nullable: true
-        reportType:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputProfitabilityPerShare
-    CodeMappingString:
-      type: object
-      properties:
-        value:
+        type:
           type: string
           nullable: true
         code:
           type: string
           nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
       additionalProperties: false
-      title: CodeMappingString
+      title: OutputMetadataMessages
     OutputProfitability:
       type: object
       properties:
@@ -1532,6 +1510,70 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputProfitability
+    OutputProfitabilityPerShare:
+      type: object
+      properties:
+        reportPeriodEndDate:
+          type: string
+          description: The standardized report date when the company reports its financial statements. Standardized report date will be either 28 or 29 (February); 30 or 31.
+          nullable: true
+        analystNormalizedEps:
+          type: number
+          description: The data point represents earnings per share adjusted for income/expenses that are considered irregular; unusual or non-recurring.  The adjustment values are usually reported in the notes to financial statements; management; discussion and analysis or as Non-Gaap metrics.  This is an analyst-screened datapoint; meaning an analyst is identifying and taking judgment on what should or should not be adjusted.
+          format: double
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        ebitdaPerShare:
+          type: number
+          description: 'The per share value of earnings before interest; tax; depreciation and amortization expenses (EBITDA). EBITDA: This data point represents the earnings the company generated before interest; tax; depreciation and amortization expenses. This can be used to measure a company''s profitability. This is calculated using EBIT + Depreciation; Amortization and Depletion.'
+          format: double
+          nullable: true
+        ebitdarPerShare:
+          type: number
+          description: 'The per share value of earnings before interest; tax; depreciation; amortization and rent expenses (EBITDAR). EBITDAR: This data point represents the earnings the company generated before interest; tax; depreciation; amortization and rent expenses. This can be used to measure a company''s profitability. This is calculated using EBITDA + Rent Expenses + Rent and Landing Fees.'
+          format: double
+          nullable: true
+        ebitPerShare:
+          type: number
+          description: 'The per share value of earnings before interest and tax (EBIT). EBIT: This data point represents the earnings the company generated before paying the interest and tax expenses. This can be used to measure a company''s profitability. This is calculated by using the summation of Pretax Income and Net Interest Income/Expenses.'
+          format: double
+          nullable: true
+        normalizedEbitdaPerShare:
+          type: number
+          description: 'The per share value of normalized earnings before interest; tax; depreciation and amortization expenses (EBITDA). Normalized EBITDA: This data point represents the earnings the company generated before interest; tax; depreciation and amortization expenses adjusted for items that are irregular or unusual in nature; and/or are non-recurring. This can be used to fairly measure a company''s profitability. This is calculated using Earnings Before Interest; Tax; Depreciation and Amortization plus/minus any unusual Items.'
+          format: double
+          nullable: true
+        normalizedEbitdarPerShare:
+          type: number
+          description: 'The per share value of normalized earnings before interest; tax; depreciation; amortization and rent expenses (EBITDAR). Normalized EBITDAR: This data point represents the earnings the company generated before interest; tax; depreciation; amortization and rent expenses adjusted for items that are irregular or unusual in nature; and/or are non-recurring. This can be used to measure a company''s profitability. This is calculated using Earnings Before Interest; Tax; Depreciation; Amortization and Rent expenses plus/minus any unusual Items.'
+          format: double
+          nullable: true
+        normalizedEbitPerShare:
+          type: number
+          description: 'The per share value of normalized earnings before interest and tax (EBIT). Normalized EBIT: This represents earnings before interest and taxes adjusted for items that are irregular or unusual in nature; and/or are non-recurring. This can be used to measure a company''s profitability. This is calculated by using Earnings before Interest and Tax plus/minus any tax affected unusual items.'
+          format: double
+          nullable: true
+        normalizedEps:
+          type: number
+          description: This data point represents earnings per share adjusted for irregular and/or non-recurring items based on CPMS (Computerized Portfolio Management Services) methodology standards. This is an analyst-screened datapoint.
+          format: double
+          nullable: true
+        numberOfMonths:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        reportPeriod:
+          type: string
+          description: ''
+          nullable: true
+        reportType:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputProfitabilityPerShare
     OutputErrorDetails:
       type: object
       properties:
@@ -1554,29 +1596,6 @@ components:
       additionalProperties: false
       description: Error details
       title: OutputErrorDetails
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -1609,25 +1628,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
   securitySchemes:
     Bearer:
       type: http

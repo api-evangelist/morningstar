@@ -409,6 +409,68 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 912
 components:
+  responses:
+    ResponseEquityResidualRiskAndReturnSensitivity:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputDividendResidualRiskAndReturnSensitivity'
+              nonDividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputNonDividendResidualRiskAndReturnSensitivity'
+              dailyDividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputDailyDividendResidualRiskAndReturnSensitivity'
+              dailyNonDividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputDailyNonDividendResidualRiskAndReturnSensitivity'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityTrailingResidualRiskAndReturnSensitivity:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dailyDividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputDailyDividendResidualRiskAndReturnSensitivity'
+              dailyNonDividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputDailyNonDividendResidualRiskAndReturnSensitivity'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityMonthlyResidualRiskAndReturnSensitivity:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputDividendResidualRiskAndReturnSensitivity'
+              nonDividendResidualRiskAndReturnSensitivity:
+                $ref: '#/components/schemas/OutputNonDividendResidualRiskAndReturnSensitivity'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   schemas:
     OutputInvalidInvestments:
       type: object
@@ -559,6 +621,29 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputNonDividendResidualRiskAndReturnSensitivity
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputMetadataMessages:
       type: object
       properties:
@@ -806,29 +891,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputDailyDividendResidualRiskAndReturnSensitivity
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
     OutputDailyNonDividendResidualRiskAndReturnSensitivity:
       type: object
       properties:
@@ -964,68 +1026,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-  responses:
-    ResponseEquityMonthlyResidualRiskAndReturnSensitivity:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              dividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputDividendResidualRiskAndReturnSensitivity'
-              nonDividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputNonDividendResidualRiskAndReturnSensitivity'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityResidualRiskAndReturnSensitivity:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              dividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputDividendResidualRiskAndReturnSensitivity'
-              nonDividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputNonDividendResidualRiskAndReturnSensitivity'
-              dailyDividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputDailyDividendResidualRiskAndReturnSensitivity'
-              dailyNonDividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputDailyNonDividendResidualRiskAndReturnSensitivity'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseEquityTrailingResidualRiskAndReturnSensitivity:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              dailyDividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputDailyDividendResidualRiskAndReturnSensitivity'
-              dailyNonDividendResidualRiskAndReturnSensitivity:
-                $ref: '#/components/schemas/OutputDailyNonDividendResidualRiskAndReturnSensitivity'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
     Bearer:
       type: http

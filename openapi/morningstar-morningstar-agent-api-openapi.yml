@@ -165,28 +165,6 @@ components:
       - msg
       - type
       title: ValidationError
-    RunResponse:
-      properties:
-        response:
-          type: string
-          title: Response
-        token_usage:
-          anyOf:
-          - $ref: '#/components/schemas/TokenUsage'
-          - type: 'null'
-      type: object
-      required:
-      - response
-      title: RunResponse
-    HTTPValidationError:
-      properties:
-        detail:
-          items:
-            $ref: '#/components/schemas/ValidationError'
-          type: array
-          title: Detail
-      type: object
-      title: HTTPValidationError
     RunRequest:
       properties:
         message:
@@ -199,13 +177,6 @@ components:
       required:
       - message
       title: RunRequest
-    ThinkingMode:
-      type: string
-      enum:
-      - fast
-      - standard
-      - deep
-      title: ThinkingMode
     TokenUsage:
       properties:
         input_tokens:
@@ -228,6 +199,35 @@ components:
           default: []
       type: object
       title: TokenUsage
+    ThinkingMode:
+      type: string
+      enum:
+      - fast
+      - standard
+      - deep
+      title: ThinkingMode
+    RunResponse:
+      properties:
+        response:
+          type: string
+          title: Response
+        token_usage:
+          anyOf:
+          - $ref: '#/components/schemas/TokenUsage'
+          - type: 'null'
+      type: object
+      required:
+      - response
+      title: RunResponse
+    HTTPValidationError:
+      properties:
+        detail:
+          items:
+            $ref: '#/components/schemas/ValidationError'
+          type: array
+          title: Detail
+      type: object
+      title: HTTPValidationError
   securitySchemes:
     BearerAuth:
       type: http

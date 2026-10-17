@@ -161,7 +161,98 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 904
 components:
+  responses:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityMarketCapitalizationAndEnterpriseValue:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              dilutedEnterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputDilutedEnterpriseValueCalculations'
+              dilutedMarketCapital:
+                $ref: '#/components/schemas/OutputDilutedMarketCapital'
+              enterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputEnterpriseValueCalculations'
+              floatMarketCapital:
+                $ref: '#/components/schemas/OutputFloatMarketCapital'
+              marketCapital:
+                $ref: '#/components/schemas/OutputMarketCapital'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   schemas:
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
+    OutputInvalidInvestments:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+        idType:
+          type: string
+          nullable: true
+        status:
+          type: string
+          nullable: true
+        datapointId:
+          type: array
+          items:
+            type: string
+          nullable: true
+        errorCode:
+          type: string
+          nullable: true
+        performanceId:
+          type: string
+          description: Performance ID (if not passed in request).
+          nullable: true
+        companyId:
+          type: string
+          description: Company ID (if not passed in request).
+          nullable: true
+        baseCurrency:
+          type: string
+          description: Input base currency used to look up Investment identifier
+          nullable: true
+        domicile:
+          type: string
+          description: Input domicile used to look up Investment identifier.
+          nullable: true
+        exchangeCountry:
+          type: string
+          description: Input exchange country used to look up Investment identifier.
+          nullable: true
+        exchangeId:
+          type: string
+          description: Input exchange id used to look up Investment identifier.
+          nullable: true
+      additionalProperties: false
+      title: OutputInvalidInvestments
     OutputEnterpriseValueCalculations:
       type: object
       properties:
@@ -243,52 +334,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputEnterpriseValueCalculations
-    OutputInvalidInvestments:
-      type: object
-      properties:
-        id:
-          type: string
-          nullable: true
-        idType:
-          type: string
-          nullable: true
-        status:
-          type: string
-          nullable: true
-        datapointId:
-          type: array
-          items:
-            type: string
-          nullable: true
-        errorCode:
-          type: string
-          nullable: true
-        performanceId:
-          type: string
-          description: Performance ID (if not passed in request).
-          nullable: true
-        companyId:
-          type: string
-          description: Company ID (if not passed in request).
-          nullable: true
-        baseCurrency:
-          type: string
-          description: Input base currency used to look up Investment identifier
-          nullable: true
-        domicile:
-          type: string
-          description: Input domicile used to look up Investment identifier.
-          nullable: true
-        exchangeCountry:
-          type: string
-          description: Input exchange country used to look up Investment identifier.
-          nullable: true
-        exchangeId:
-          type: string
-          description: Input exchange id used to look up Investment identifier.
-          nullable: true
-      additionalProperties: false
-      title: OutputInvalidInvestments
     OutputDilutedEnterpriseValueCalculations:
       type: object
       properties:
@@ -355,38 +400,29 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputDilutedEnterpriseValueCalculations
-    CodeMappingString:
+    OutputMetadata:
       type: object
       properties:
-        value:
+        requestId:
           type: string
           nullable: true
-        code:
+        time:
           type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
           nullable: true
       additionalProperties: false
-      title: CodeMappingString
-    OutputFloatMarketCapital:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date when the market price was udpated
-          nullable: true
-        currencyCode:
-          $ref: '#/components/schemas/CodeMappingString'
-        floatMarketCapitalCompanyLevel:
-          type: integer
-          description: The most current float-adjusted company level market capital derived by the summation of float-adjusted share-level market capital of the company's primary share classes; It has the same currency as the trading currency of the share class.
-          format: int64
-          nullable: true
-        floatMarketCapitalShareLevel:
-          type: integer
-          description: The most current float-adjusted share class-level market capital derived by the most recent closing price for a particular share class multiplied by the most recent float shares for that particular share class; It has the same currency as the trading currency of the share class
-          format: int64
-          nullable: true
-      additionalProperties: false
-      title: OutputFloatMarketCapital
+      title: OutputMetadata
     OutputMarketCapital:
       type: object
       properties:
@@ -408,6 +444,46 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMarketCapital
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputFloatMarketCapital:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date when the market price was udpated
+          nullable: true
+        currencyCode:
+          $ref: '#/components/schemas/CodeMappingString'
+        floatMarketCapitalCompanyLevel:
+          type: integer
+          description: The most current float-adjusted company level market capital derived by the summation of float-adjusted share-level market capital of the company's primary share classes; It has the same currency as the trading currency of the share class.
+          format: int64
+          nullable: true
+        floatMarketCapitalShareLevel:
+          type: integer
+          description: The most current float-adjusted share class-level market capital derived by the most recent closing price for a particular share class multiplied by the most recent float shares for that particular share class; It has the same currency as the trading currency of the share class
+          format: int64
+          nullable: true
+      additionalProperties: false
+      title: OutputFloatMarketCapital
     OutputErrorDetails:
       type: object
       properties:
@@ -488,29 +564,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputDilutedMarketCapital
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -543,59 +596,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-  responses:
-    ResponseEquityMarketCapitalizationAndEnterpriseValue:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              dilutedEnterpriseValueCalculations:
-                $ref: '#/components/schemas/OutputDilutedEnterpriseValueCalculations'
-              dilutedMarketCapital:
-                $ref: '#/components/schemas/OutputDilutedMarketCapital'
-              enterpriseValueCalculations:
-                $ref: '#/components/schemas/OutputEnterpriseValueCalculations'
-              floatMarketCapital:
-                $ref: '#/components/schemas/OutputFloatMarketCapital'
-              marketCapital:
-                $ref: '#/components/schemas/OutputMarketCapital'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

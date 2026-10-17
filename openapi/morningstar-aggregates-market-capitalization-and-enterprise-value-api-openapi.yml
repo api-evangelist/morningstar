@@ -334,6 +334,38 @@ paths:
       x-cpqId: 938
 components:
   schemas:
+    OutputAggregationMarketCapital:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: The calendar date of the industry aggregated value
+          nullable: true
+        companyLevelMarketCapitalNumberOfEligibleCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
+          format: int64
+          nullable: true
+        companyLevelMarketCapitalValue:
+          type: number
+          description: 'The aggregated value of Company Level Market Capital; is derived using all eligible companies who are constituents in the specified Morningstar Index. Company Level Market Capital: The most current company-level market capital derived by the summation of share-level market capital of the company''s primary share classes; Company-level market capital has the same currency as the trading currency of the share class.'
+          format: double
+          nullable: true
+        currencyCode:
+          type: string
+          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
+          nullable: true
+        numberOfCompanies:
+          type: integer
+          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
+          format: int32
+          nullable: true
+        countryCode:
+          type: string
+          description: ''
+          nullable: true
+      additionalProperties: false
+      title: OutputAggregationMarketCapital
     OutputInvalidInvestments:
       type: object
       properties:
@@ -380,115 +412,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputAggregationMarketCapital:
-      type: object
-      properties:
-        asOfDate:
-          type: string
-          description: The calendar date of the industry aggregated value
-          nullable: true
-        companyLevelMarketCapitalNumberOfEligibleCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country that has a qualifying value included in the calculation of the aggregated value; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector with a qualifying value included in the calculation of the aggregated value.
-          format: int64
-          nullable: true
-        companyLevelMarketCapitalValue:
-          type: number
-          description: 'The aggregated value of Company Level Market Capital; is derived using all eligible companies who are constituents in the specified Morningstar Index. Company Level Market Capital: The most current company-level market capital derived by the summation of share-level market capital of the company''s primary share classes; Company-level market capital has the same currency as the trading currency of the share class.'
-          format: double
-          nullable: true
-        currencyCode:
-          type: string
-          description: The standard set ISO 4217 that defines codes for currencies; as well as funds and minor currency units.
-          nullable: true
-        numberOfCompanies:
-          type: integer
-          description: The number of companies assigned to each level of the industry/industry group/sector classification within a particular country; or if 'GBL'; the number of companies across the globe assigned to that industry/industry group/sector
-          format: int32
-          nullable: true
-        countryCode:
-          type: string
-          description: ''
-          nullable: true
-      additionalProperties: false
-      title: OutputAggregationMarketCapital
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
-    OutputIdentifiers:
-      type: object
-      properties:
-        performanceId:
-          type: string
-          nullable: true
-        securityId:
-          type: string
-          nullable: true
-        cusip:
-          type: string
-          nullable: true
-        isin:
-          type: string
-          nullable: true
-        sedol:
-          type: string
-          nullable: true
-        tradingSymbol:
-          type: string
-          nullable: true
-        fundCode:
-          type: string
-          nullable: true
-        msid:
-          type: string
-          nullable: true
-        ticker:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputIdentifiers
     OutputAggregationEnterpriseValueCalculations:
       type: object
       properties:
@@ -607,6 +530,29 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputAggregationEnterpriseValueCalculations
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
     OutputMetadataMessages:
       type: object
       properties:
@@ -626,22 +572,67 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadataMessages
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputIdentifiers:
+      type: object
+      properties:
+        performanceId:
+          type: string
+          nullable: true
+        securityId:
+          type: string
+          nullable: true
+        cusip:
+          type: string
+          nullable: true
+        isin:
+          type: string
+          nullable: true
+        sedol:
+          type: string
+          nullable: true
+        tradingSymbol:
+          type: string
+          nullable: true
+        fundCode:
+          type: string
+          nullable: true
+        msid:
+          type: string
+          nullable: true
+        ticker:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputIdentifiers
   responses:
-    ResponseEquityIndustryAggregatesMarketCapitalizationAndEnterpriseValue:
-      description: OK
+    ResponseBadRequest:
+      description: Bad Request
       content:
         application/json:
           schema:
-            type: object
-            properties:
-              aggregationEnterpriseValueCalculations:
-                $ref: '#/components/schemas/OutputAggregationEnterpriseValueCalculations'
-              aggregationMarketCapital:
-                $ref: '#/components/schemas/OutputAggregationMarketCapital'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
+            $ref: '#/components/schemas/OutputErrorDetails'
     ResponseEquityAggregatesMarketCapitalizationAndEnterpriseValue:
       description: OK
       content:
@@ -663,12 +654,21 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseBadRequest:
-      description: Bad Request
+    ResponseEquityIndustryAggregatesMarketCapitalizationAndEnterpriseValue:
+      description: OK
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
+            type: object
+            properties:
+              aggregationEnterpriseValueCalculations:
+                $ref: '#/components/schemas/OutputAggregationEnterpriseValueCalculations'
+              aggregationMarketCapital:
+                $ref: '#/components/schemas/OutputAggregationMarketCapital'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   securitySchemes:
     Bearer:
       type: http

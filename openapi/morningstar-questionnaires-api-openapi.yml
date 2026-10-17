@@ -464,6 +464,38 @@ paths:
       variables: {}
 components:
   schemas:
+    ErrorResponse404:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Server can't find the requested resource
+        status:
+          type: string
+          description: Error Status
+          example: NOT_FOUND
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    ErrorResponse500:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Internal Server Error
+        status:
+          type: string
+          description: Error Status
+          example: INTERNAL_SERVER_ERROR
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
     Question:
       type: object
       properties:
@@ -519,70 +551,6 @@ components:
           type: string
           description: Image URL
           example: https://www.morningstart.com/finametrica/images/risk.png
-    ErrorResponse400:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server cannot or will not process the request due to something that is perceived to be a client error
-        status:
-          type: string
-          description: Error Status
-          example: BAD_REQUEST
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    Questionnaire:
-      title: Questionnaire
-      type: object
-      properties:
-        title:
-          type: string
-          description: Questionnaire title
-          example: FinaMetrica 10
-        id:
-          type: string
-          description: Questionnaire unique identifier
-          example: FM10S30
-        questions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Question'
-    ErrorResponse502:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Received an invalid response from the upstream server
-        status:
-          type: string
-          description: Error Status
-          example: BAD_GATEWAY
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
-    ErrorResponse404:
-      title: ErrorResponse
-      type: object
-      properties:
-        message:
-          type: string
-          description: Error Message
-          example: Server can't find the requested resource
-        status:
-          type: string
-          description: Error Status
-          example: NOT_FOUND
-        timestamp:
-          type: string
-          description: Error Timestamp
-          example: 2020-08-05T13:40:25+0000
     Paragraph:
       title: Paragraph
       type: object
@@ -603,22 +571,54 @@ components:
           type: string
           description: Image URL
           example: https://www.morningstart.com/finametrica/images/risk.png
-    ErrorResponse500:
+    ErrorResponse400:
       title: ErrorResponse
       type: object
       properties:
         message:
           type: string
           description: Error Message
-          example: Internal Server Error
+          example: Server cannot or will not process the request due to something that is perceived to be a client error
         status:
           type: string
           description: Error Status
-          example: INTERNAL_SERVER_ERROR
+          example: BAD_REQUEST
         timestamp:
           type: string
           description: Error Timestamp
           example: 2020-08-05T13:40:25+0000
+    ErrorResponse502:
+      title: ErrorResponse
+      type: object
+      properties:
+        message:
+          type: string
+          description: Error Message
+          example: Received an invalid response from the upstream server
+        status:
+          type: string
+          description: Error Status
+          example: BAD_GATEWAY
+        timestamp:
+          type: string
+          description: Error Timestamp
+          example: 2020-08-05T13:40:25+0000
+    Questionnaire:
+      title: Questionnaire
+      type: object
+      properties:
+        title:
+          type: string
+          description: Questionnaire title
+          example: FinaMetrica 10
+        id:
+          type: string
+          description: Questionnaire unique identifier
+          example: FM10S30
+        questions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Question'
     Question_2:
       type: object
       properties:

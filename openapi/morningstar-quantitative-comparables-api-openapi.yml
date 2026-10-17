@@ -135,6 +135,32 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 933
 components:
+  responses:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityQuantitativeComparables:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              comparablesRank:
+                $ref: '#/components/schemas/OutputComparablesRank'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   schemas:
     OutputInvalidInvestments:
       type: object
@@ -182,28 +208,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
     OutputMetadata:
       type: object
       properties:
@@ -227,6 +231,75 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputMetadata
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    OutputErrorDetails:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
+        requestId:
+          type: string
+          description: RequestId
+          nullable: true
+      additionalProperties: false
+      description: Error details
+      title: OutputErrorDetails
+    OutputComparablesRank:
+      type: object
+      properties:
+        comparableCompanyId:
+          type: string
+          description: ''
+          nullable: true
+        comparableCompanyRank:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        comparableSimilarityBucket:
+          type: integer
+          description: ''
+          format: int32
+          nullable: true
+        runDate:
+          type: string
+          description: ''
+          nullable: true
+        scaledComparableValue:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputComparablesRank
     OutputIdentifiers:
       type: object
       properties:
@@ -259,79 +332,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputComparablesRank:
-      type: object
-      properties:
-        comparableCompanyId:
-          type: string
-          description: ''
-          nullable: true
-        comparableCompanyRank:
-          type: integer
-          description: ''
-          format: int32
-          nullable: true
-        comparableSimilarityBucket:
-          type: integer
-          description: ''
-          format: int32
-          nullable: true
-        runDate:
-          type: string
-          description: ''
-          nullable: true
-        scaledComparableValue:
-          type: number
-          description: ''
-          format: double
-          nullable: true
-      additionalProperties: false
-      title: OutputComparablesRank
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-  responses:
-    ResponseEquityQuantitativeComparables:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              comparablesRank:
-                $ref: '#/components/schemas/OutputComparablesRank'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

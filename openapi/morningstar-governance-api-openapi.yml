@@ -443,7 +443,70 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 922
 components:
+  responses:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityExecutiveOfficersAndBoardOfDirectors:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              enterpriseValueAverageRates:
+                $ref: '#/components/schemas/OutputExecutiveOfficersAndBoardOfDirectors'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityBoardAndCommitteeAttendance:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              'boardAndCommitteeAttendance:':
+                $ref: '#/components/schemas/OutputBoardAndCommitteeAttendance'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityGovernance:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              'boardAndCommitteeAttendance:':
+                $ref: '#/components/schemas/OutputBoardAndCommitteeAttendance'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   schemas:
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
     OutputInvalidInvestments:
       type: object
       properties:
@@ -490,17 +553,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
-    CodeMappingString:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingString
     OutputBoardAndCommitteeAttendance:
       type: object
       properties:
@@ -585,28 +637,48 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputBoardAndCommitteeAttendance
-    OutputErrorDetails:
+    OutputMetadata:
       type: object
       properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
+        requestId:
           type: string
-          description: Custom error code
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
           nullable: true
         message:
           type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
           nullable: true
       additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
+      title: OutputMetadataMessages
     CodeMappingBoolean:
       type: object
       properties:
@@ -735,29 +807,28 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputExecutiveOfficersAndBoardOfDirectors
-    OutputMetadata:
+    OutputErrorDetails:
       type: object
       properties:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
+          type: string
+          description: Custom error code
+          nullable: true
+        message:
+          type: string
+          description: Message
+          nullable: true
         requestId:
           type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputMetadata
+      description: Error details
+      title: OutputErrorDetails
     OutputIdentifiers:
       type: object
       properties:
@@ -790,77 +861,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-  responses:
-    ResponseEquityExecutiveOfficersAndBoardOfDirectors:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              enterpriseValueAverageRates:
-                $ref: '#/components/schemas/OutputExecutiveOfficersAndBoardOfDirectors'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityGovernance:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              'boardAndCommitteeAttendance:':
-                $ref: '#/components/schemas/OutputBoardAndCommitteeAttendance'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityBoardAndCommitteeAttendance:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              'boardAndCommitteeAttendance:':
-                $ref: '#/components/schemas/OutputBoardAndCommitteeAttendance'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http

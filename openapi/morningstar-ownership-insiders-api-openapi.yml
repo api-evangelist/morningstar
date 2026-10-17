@@ -572,7 +572,85 @@ paths:
           $ref: '#/components/responses/ResponseInternalServerError'
       x-cpqId: 927
 components:
+  responses:
+    ResponseBadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseInternalServerError:
+      description: Internal Server
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OutputErrorDetails'
+    ResponseEquityInsiderTradingActivities:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insiderTradingActivity:
+                $ref: '#/components/schemas/OutputInsiderTradingActivity'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insiderTradingActivity:
+                $ref: '#/components/schemas/OutputInsiderTradingActivity'
+              insiderHoldingsDetail:
+                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipDetailTenPercentInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insider:
+                $ref: '#/components/schemas/OutputInsider'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
+    ResponseEquityOwnershipDetailInsiders:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              insiderHoldingsDetail:
+                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
+              identifiers:
+                $ref: '#/components/schemas/OutputIdentifiers'
+              metadata:
+                $ref: '#/components/schemas/OutputMetadata'
   schemas:
+    CodeMappingString:
+      type: object
+      properties:
+        value:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: CodeMappingString
     OutputInvalidInvestments:
       type: object
       properties:
@@ -619,6 +697,67 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInvalidInvestments
+    OutputMetadata:
+      type: object
+      properties:
+        requestId:
+          type: string
+          nullable: true
+        time:
+          type: string
+          format: date-time
+          readOnly: true
+        portfolioDate:
+          type: string
+          nullable: true
+        portfolioCurrency:
+          type: string
+          nullable: true
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputMetadataMessages'
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadata
+    OutputInsiderHoldingsDetail:
+      type: object
+      properties:
+        asOfDate:
+          type: string
+          description: Date upon which the shares are held by shareholder; or the transaction happens
+          nullable: true
+        holdingDescription:
+          type: string
+          description: If an insider's interest is duplicated with other insiders or major shareholders; such as an insider representing a major shareholder on the board of directors; this is detailed in holding description. The content of this field is entered as 'dup 1'; 'dup A'; 'dup A and B' etc; where dup is abbreviated from duplicate. Related owners can be identified by the content of the field; for instance; where two owners of shares in the same company have reference to dup A in holding description there is a relationship between them that the local reporting regulations require to be disclosed to the market. This item relates only to insiders of LSE-listed companies. See data ID 46003 for the corresponding item in the UK major shareholder transactions file
+          nullable: true
+        isActive:
+          $ref: '#/components/schemas/CodeMappingBoolean'
+        numberOfShares:
+          type: number
+          description: Number of shares of the security owned by the shareholder; or the Number of shares after transaction
+          format: double
+          nullable: true
+        personId:
+          type: string
+          description: The Morningstar identifier for the director nominee
+          nullable: true
+        personName:
+          type: string
+          description: A person's full name; including their first name and surname and often any middle names; Prefix & Suffix
+          nullable: true
+        shareClassLevelPercentage:
+          type: number
+          description: Percentage of share holding  at shareclass level
+          format: double
+          nullable: true
+        sharesPercentage:
+          type: number
+          description: ''
+          format: double
+          nullable: true
+      additionalProperties: false
+      title: OutputInsiderHoldingsDetail
     OutputInsiderTradingActivity:
       type: object
       properties:
@@ -825,55 +964,58 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInsiderTradingActivity
-    CodeMappingString:
+    OutputMetadataMessages:
+      type: object
+      properties:
+        type:
+          type: string
+          nullable: true
+        code:
+          type: string
+          nullable: true
+        investments:
+          type: array
+          items:
+            $ref: '#/components/schemas/OutputInvalidInvestments'
+          nullable: true
+        message:
+          type: string
+          nullable: true
+      additionalProperties: false
+      title: OutputMetadataMessages
+    CodeMappingBoolean:
       type: object
       properties:
         value:
           type: string
           nullable: true
         code:
-          type: string
+          type: boolean
           nullable: true
       additionalProperties: false
-      title: CodeMappingString
-    OutputInsiderHoldingsDetail:
+      title: CodeMappingBoolean
+    OutputErrorDetails:
       type: object
       properties:
-        asOfDate:
+        statusCode:
+          type: integer
+          description: Status Code
+          format: int32
+        errorCode:
           type: string
-          description: Date upon which the shares are held by shareholder; or the transaction happens
+          description: Custom error code
           nullable: true
-        holdingDescription:
+        message:
           type: string
-          description: If an insider's interest is duplicated with other insiders or major shareholders; such as an insider representing a major shareholder on the board of directors; this is detailed in holding description. The content of this field is entered as 'dup 1'; 'dup A'; 'dup A and B' etc; where dup is abbreviated from duplicate. Related owners can be identified by the content of the field; for instance; where two owners of shares in the same company have reference to dup A in holding description there is a relationship between them that the local reporting regulations require to be disclosed to the market. This item relates only to insiders of LSE-listed companies. See data ID 46003 for the corresponding item in the UK major shareholder transactions file
+          description: Message
           nullable: true
-        isActive:
-          $ref: '#/components/schemas/CodeMappingBoolean'
-        numberOfShares:
-          type: number
-          description: Number of shares of the security owned by the shareholder; or the Number of shares after transaction
-          format: double
-          nullable: true
-        personId:
+        requestId:
           type: string
-          description: The Morningstar identifier for the director nominee
-          nullable: true
-        personName:
-          type: string
-          description: A person's full name; including their first name and surname and often any middle names; Prefix & Suffix
-          nullable: true
-        shareClassLevelPercentage:
-          type: number
-          description: Percentage of share holding  at shareclass level
-          format: double
-          nullable: true
-        sharesPercentage:
-          type: number
-          description: ''
-          format: double
+          description: RequestId
           nullable: true
       additionalProperties: false
-      title: OutputInsiderHoldingsDetail
+      description: Error details
+      title: OutputErrorDetails
     OutputInsider:
       type: object
       properties:
@@ -915,62 +1057,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputInsider
-    OutputErrorDetails:
-      type: object
-      properties:
-        statusCode:
-          type: integer
-          description: Status Code
-          format: int32
-        errorCode:
-          type: string
-          description: Custom error code
-          nullable: true
-        message:
-          type: string
-          description: Message
-          nullable: true
-        requestId:
-          type: string
-          description: RequestId
-          nullable: true
-      additionalProperties: false
-      description: Error details
-      title: OutputErrorDetails
-    CodeMappingBoolean:
-      type: object
-      properties:
-        value:
-          type: string
-          nullable: true
-        code:
-          type: boolean
-          nullable: true
-      additionalProperties: false
-      title: CodeMappingBoolean
-    OutputMetadata:
-      type: object
-      properties:
-        requestId:
-          type: string
-          nullable: true
-        time:
-          type: string
-          format: date-time
-          readOnly: true
-        portfolioDate:
-          type: string
-          nullable: true
-        portfolioCurrency:
-          type: string
-          nullable: true
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputMetadataMessages'
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadata
     OutputIdentifiers:
       type: object
       properties:
@@ -1003,92 +1089,6 @@ components:
           nullable: true
       additionalProperties: false
       title: OutputIdentifiers
-    OutputMetadataMessages:
-      type: object
-      properties:
-        type:
-          type: string
-          nullable: true
-        code:
-          type: string
-          nullable: true
-        investments:
-          type: array
-          items:
-            $ref: '#/components/schemas/OutputInvalidInvestments'
-          nullable: true
-        message:
-          type: string
-          nullable: true
-      additionalProperties: false
-      title: OutputMetadataMessages
-  responses:
-    ResponseEquityOwnershipInsiders:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              insiderTradingActivity:
-                $ref: '#/components/schemas/OutputInsiderTradingActivity'
-              insiderHoldingsDetail:
-                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityOwnershipDetailInsiders:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              insiderHoldingsDetail:
-                $ref: '#/components/schemas/OutputInsiderHoldingsDetail'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityOwnershipDetailTenPercentInsiders:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              insider:
-                $ref: '#/components/schemas/OutputInsider'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseEquityInsiderTradingActivities:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              insiderTradingActivity:
-                $ref: '#/components/schemas/OutputInsiderTradingActivity'
-              identifiers:
-                $ref: '#/components/schemas/OutputIdentifiers'
-              metadata:
-                $ref: '#/components/schemas/OutputMetadata'
-    ResponseInternalServerError:
-      description: Internal Server
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
-    ResponseBadRequest:
-      description: Bad Request
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/OutputErrorDetails'
   securitySchemes:
     Bearer:
       type: http
