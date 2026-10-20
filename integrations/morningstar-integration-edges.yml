@@ -1,51 +1,24 @@
 edges:
-- partner_name: FDX (Financial Data Exchange)
-  partner: fdx
-  type: contract
-  channel: standard-directory
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://registry.financialdataexchange.org/
-  contract_reference:
-    register: FDX Registry
-    standard: FDX API
-    spec_file: null
-    register_api: https://registry.financialdataexchange.org/fdxregistryapi/organizations/search/listingTags
-    role: data-access-platform
-    member_type: MEMBER
-    registered_name: Morningstar
-    register_id: 227
-    registered_website: www.morningstar.com
-    country: United States
-    fdx_version: null
-    matched_by: domain:morningstar.com
-    detected_by: sweep-fdx.py
-    detected: '2026-10-14'
-  detected_by: sweep-fdx.py
-  first_seen: '2026-10-14'
-- partner_name: ESMA (EU)
-  partner: null
-  type: contract
-  channel: regulator-register
-  relationship: standard-participant
-  direction: partner-built
-  evidence: https://registers.esma.europa.eu/solr/esma_registers_bench_entities/select
-  source: esma
-  contract_reference:
-    register: 'ESMA Benchmarks Regulation register: administrators (esma_registers_bench_entities)'
-    spec_file: null
-    registered_name: Morningstar Indexes GmbH
-    register_id: DE40031497
-    role: benchmark administrator (Registration under Art. 34)
-    competent_authority: Federal Financial Supervisory Authority (BaFin) - DEBA
-    home_member_state: GERMANY
-    authorised: null
-    matched_domain: morningstar.com
-    matched_by: domain:morningstar.com
-    detected_by: sweep-capital-markets.py
-    detected: '2026-10-15'
-  detected_by: sweep-capital-markets.py
-  first_seen: '2026-10-15'
+- partner_name: Microsoft Teams (own)
+  partner: microsoft-teams
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: own
+  evidence: https://appsource.microsoft.com/en-us/product/office/WA200010657
+  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+  apps:
+  - Morningstar
+  listing_count: 1
+  detected: '2026-10-18'
+  detected_by: mirror-platform-listings.py
+  category: Microsoft Teams app
+  publisher_verified:
+  - Microsoft 365 Certified
+  - Microsoft 365 Publisher Attestation
 - partner_name: SEC (investment adviser registration)
   partner: null
   partner_match: register
@@ -77,34 +50,100 @@ edges:
     detected: '2026-10-18'
   detected_by: sweep-asset-management.py
   first_seen: '2026-10-18'
-- partner_name: Microsoft Teams (own)
-  partner: microsoft-teams
-  partner_match: mirror
-  mirror_match: domain
-  type: marketplace
-  relationship: platform-app
-  direction: third-party
-  channel: partner-built
-  marketplace: own
-  evidence: https://appsource.microsoft.com/en-us/product/office/WA200010657
-  mirror_of: microsoft-teams/integrations/microsoft-teams-integration-edges.yml
-  apps:
-  - Morningstar
-  listing_count: 1
-  detected: '2026-10-18'
-  detected_by: mirror-platform-listings.py
-  category: Microsoft Teams app
-  publisher_verified:
-  - Microsoft 365 Certified
-  - Microsoft 365 Publisher Attestation
+- partner_name: ESMA (EU)
+  partner: null
+  type: contract
+  channel: regulator-register
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://registers.esma.europa.eu/solr/esma_registers_bench_entities/select
+  source: esma
+  contract_reference:
+    register: 'ESMA Benchmarks Regulation register: administrators (esma_registers_bench_entities)'
+    spec_file: null
+    registered_name: Morningstar Indexes GmbH
+    register_id: DE40031497
+    role: benchmark administrator (Registration under Art. 34)
+    competent_authority: Federal Financial Supervisory Authority (BaFin) - DEBA
+    home_member_state: GERMANY
+    authorised: null
+    matched_domain: morningstar.com
+    matched_by: domain:morningstar.com
+    detected_by: sweep-capital-markets.py
+    detected: '2026-10-19'
+  detected_by: sweep-capital-markets.py
+  first_seen: '2026-10-19'
+- partner_name: FDX (Financial Data Exchange)
+  partner: fdx
+  type: contract
+  channel: standard-directory
+  relationship: standard-participant
+  direction: partner-built
+  evidence: https://registry.financialdataexchange.org/
+  contract_reference:
+    register: FDX Registry
+    standard: FDX API
+    spec_file: null
+    register_api: https://registry.financialdataexchange.org/fdxregistryapi/organizations/search/listingTags
+    role: data-access-platform
+    member_type: MEMBER
+    registered_name: Morningstar
+    register_id: 227
+    registered_website: www.morningstar.com
+    country: United States
+    fdx_version: null
+    matched_by: domain:morningstar.com
+    detected_by: sweep-fdx.py
+    detected: '2026-10-19'
+  detected_by: sweep-fdx.py
+  first_seen: '2026-10-19'
+- partner_name: Agent Skills (own GitHub org)
+  partner: null
+  partner_match: register
+  type: register
+  direction: provider-built
+  category: Agent Skills package
+  evidence: https://github.com/Morningstar/morningstar-plugins
+  channel: provider-built
+  relationship: compatible
+  shape: agent-skills
+  evidence_kind: own-repo
+  degree: skill-repo
+  report_only: true
+  agent_skills:
+    org: morningstar
+    current: true
+    repos:
+    - repo: Morningstar/morningstar-plugins
+      archived: false
+      lapsed: false
+      pushed: '2026-07-27'
+  contract_reference:
+    register: 'provider''s own GitHub org (GitHub REST API: repo + git tree holds SKILL.md)'
+    spec_file: null
+    standard: Agent Skills (agentskills.io)
+    role: agent-skills-repo
+    matched_org: morningstar
+    matched_by: org-profile-domain:morningstar.com
+    detected_by: sweep-agent-skills.py
+    detected: '2026-10-20'
+  detected_by: sweep-agent-skills.py
+  first_seen: '2026-10-20'
 generated: '2026-10-14'
 method: searched
 checked:
 - https://registers.esma.europa.eu/solr/esma_registers_bench_entities/select
 - https://registry.financialdataexchange.org/
 - https://reports.adviserinfo.sec.gov/reports/CompilationReports/IA_FIRM_SEC_Feed_10_17_2026.xml.gz
+- https://reports.adviserinfo.sec.gov/reports/CompilationReports/IA_FIRM_SEC_Feed_10_19_2026.xml.gz
 - https://www.wealthbox.com/wp-json/wp/v2/integrations?per_page=100&page=1
 - microsoft-teams/integrations/microsoft-teams-integration-edges.yml
+- https://api.github.com
+- https://claude-plugins.dev/sitemap.xml
+- https://github.com/VoltAgent/awesome-agent-skills
+- https://officialskills.sh/sitemap.xml
+- https://skillsmp.com/sitemap.xml
+- https://www.skills.sh/sitemap.xml
 source:
 - https://reports.adviserinfo.sec.gov/reports/CompilationReports/IA_FIRM_SEC_Feed_10_17_2026.xml.gz
 - https://www.wealthbox.com/wp-json/wp/v2/integrations?per_page=100&page=1
