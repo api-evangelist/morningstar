@@ -1,4 +1,4 @@
-# Morningstar (morningstar)
+# Morningstar
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,178 +66,173 @@
 
 Morningstar, Inc. (Nasdaq MORN) is a Chicago-based investment research and financial market data company selling fund and equity data, analyst research, ratings, indexes, and portfolio analytics to advisors, asset managers, and fintechs. Its developer portal at developer.morningstar.com documents two large API families - Direct Web Services and Dynamic Services APIs - delivered as regional REST bases (us/emea/apac-api.morningstar.com) secured with OAuth 2.0 tokens, plus a Market Data Web Services API for real-time, delayed, and end-of-day pricing, a WebSocket Streaming API for Level 1/Level 2 market data, ByAllAccounts account aggregation, and an emerging MCP/agent surface. Documentation and OpenAPI 3.x specs are fully public, but credentials are sales-gated through Morningstar onboarding - there is no self-serve signup. Morningstar remains an independent public company and owns PitchBook, DBRS (credit ratings), and ByAllAccounts.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/morningstar/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/morningstar/refs/heads/main/apis.yml)
+**Areas:** Finance · Market Data · Investing · Stocks · Fund · Real-Time · Reference Data · Portfolio Analytics · Research · Index · Wealth Management · Financial Data
 
-## Tags
+## Morningstar on APIs.io
 
-- Financial
-- Market Data
-- Investing
-- Stocks
-- Funds
-- Real-Time
-- Reference Data
-- Portfolio Analytics
-- Research
-- Indexes
+Everything profiled for Morningstar is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/morningstar/](https://apis.io/providers/morningstar/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (20)
 
-- **Created:** 2026-07-21
-- **Modified:** 2026-07-21
+- [Morningstar Market Data Web Services API](https://apis.io/apis/morningstar/morningstar-market-data-web-services-api/) — On-demand access to Morningstar's financial market data over HTTP in XML and JSON - real-time, delayed, and end-of-day pricing, price and quote, time and…
+- [Morningstar Authentication API](https://apis.io/apis/morningstar/morningstar-authentication-api/) — OAuth 2.0 token issuance for all Morningstar APIs - POST /token/oauth with Basic credentials returns a bearer token valid for 60 minutes, usable against the…
+- [Morningstar Time Series API](https://apis.io/apis/morningstar/morningstar-time-series-api/) — Direct Web Services time series data - historical prices, cumulative return, growth, dividend, and other calculated series for securities and managed…
+- [Morningstar Screener APIs](https://apis.io/apis/morningstar/morningstar-screener-api/) — Screen global equities and managed investments (funds, ETFs) against Morningstar data points, ratings, and classifications, returning display-ready result…
+- [Morningstar Investment Details APIs](https://apis.io/apis/morningstar/morningstar-investment-details-api/) — Deep security-level data for equities and managed investments - profiles, ratings, performance, holdings, fees, and hundreds of Morningstar data points - in…
+- [Morningstar Investment List API](https://apis.io/apis/morningstar/morningstar-investment-list-api/) — Retrieve curated and client-defined investment lists with associated Morningstar data points for rendering list-driven experiences.
+- [Morningstar Portfolio Analysis APIs](https://apis.io/apis/morningstar/morningstar-portfolio-analysis-api/) — Portfolio calculation engines as APIs - X-Ray decomposition, performance, hypothetical performance, optimizer, and the Morningstar Portfolio Risk Score -…
+- [Morningstar AI Insights API](https://apis.io/apis/morningstar/morningstar-ai-insights-api/) — Asynchronous generative summaries and insights over Morningstar data and research, available in Americas and APAC/EMEA regions.
+- [Morningstar Scenario Analysis API](https://apis.io/apis/morningstar/morningstar-scenario-analysis-api/) — Stress-test portfolios against historical and hypothetical market scenarios using Morningstar risk engines.
+- [Morningstar Risk Profiler API](https://apis.io/apis/morningstar/morningstar-risk-profiler-api/) — Investor risk-tolerance profiling built on the FinaMetrica psychometric methodology, returning risk scores and profiles for suitability workflows.
+- [Morningstar Universe API](https://apis.io/apis/morningstar/morningstar-universe-api/) — Utility API for resolving the investment universes and identifiers available to an account across Direct Web Services.
+- [Morningstar Financial Planning APIs](https://apis.io/apis/morningstar/morningstar-financial-planning-apis/) — US financial-planning building blocks from the Dynamic Services APIs family - households, household members, portfolios, retirement plan lookup and…
+- [Morningstar Investment Analysis APIs](https://apis.io/apis/morningstar/morningstar-investment-analysis-apis/) — Dynamic Services investment-analysis endpoints - securities data (US and global ecint), screening, autocomplete, editorial research, Investor Pulse, risk…
+- [Morningstar ByAllAccounts API](https://apis.io/apis/morningstar/morningstar-byallaccounts-api/) — REST account-aggregation API from Morningstar's ByAllAccounts business, aggregating held-away investment account data for wealth platforms, also reachable…
+- [Morningstar Enterprise Component APIs](https://apis.io/apis/morningstar/morningstar-enterprise-component-apis/) — APIs backing Morningstar's embeddable enterprise components - editorial and news search, security details and comparison, investment screener and…
+- [Morningstar Streaming API](https://apis.io/apis/morningstar/morningstar-streaming-api/) — WebSocket-based real-time market data streaming with Level 1 quote and Level 2 market-by-price subscriptions, documented publicly through Morningstar's…
+- [Morningstar Snapshot API](https://apis.io/apis/morningstar/morningstar-snapshot-api/) — On-demand Level 1 market data snapshots over HTTPS with OAuth 2.0, documented publicly through Morningstar's official .NET snapshot client library;…
+- [Morningstar Agent API](https://apis.io/apis/morningstar/morningstar-agent-api/) — Morningstar's AI integration surface - the Morningstar Agent API at agents.morningstar.com plus an MCP server exposing datapoint lookup and editorial…
+- [Morningstar OAUTH API](https://apis.io/apis/morningstar/morningstar-oauth-api/) — The oauth API from Morningstar — 1 operation(s) for oauth.
+- [Morningstar Datapoints API](https://apis.io/apis/morningstar/morningstar-datapoints-api/) — The Datapoints API from Morningstar — 3 operation(s) for datapoints.
 
-## APIs
+### Published properties
 
-### Morningstar Market Data Web Services API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-On-demand access to Morningstar's financial market data over HTTP in XML and JSON - real-time, delayed, and end-of-day pricing, price and quote, time and sales, price history, OHLCV, corporate actions, index constituents and statistics, exchange information, new and delisted listings, alerts, and search. Authentication is IP-allowlisted username/password on client-specific servers, so no public base URL is documented; streaming is offered as an add-on service.
+#### MCP servers (1)
 
-- **Human URL:** [https://developer.morningstar.com/apis/market-data/overview](https://developer.morningstar.com/apis/market-data/overview)
+Model Context Protocol servers that expose the API to agents.
 
-### Morningstar Authentication API
+- [morningstar](https://apis.io/servers/morningstar/morningstar/)
 
-OAuth 2.0 token issuance for all Morningstar APIs - POST /token/oauth with Basic credentials returns a bearer token valid for 60 minutes, usable against the regional Americas, EMEA, and APAC API bases.
+#### Agentic access (1)
 
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/api-utilities/authentication-api/overview](https://developer.morningstar.com/direct-web-services/documentation/api-utilities/authentication-api/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** [openapi/morningstar-dws-authentication-openapi.json](openapi/morningstar-dws-authentication-openapi.json), [openapi/morningstar-authorization-tokens-openapi.json](openapi/morningstar-authorization-tokens-openapi.json)
+Which operations an agent can call, which act, and which need a human in the loop.
 
-### Morningstar Time Series API
+- [Morningstar Agentic Access](https://apis.io/agentic-access/morningstar/morningstar-agentic-access/)
 
-Direct Web Services time series data - historical prices, cumulative return, growth, dividend, and other calculated series for securities and managed investments, offered in synchronous and asynchronous request styles across regional bases.
+#### Collections (117)
 
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/time-series---sync/overview](https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/time-series---sync/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** [openapi/morningstar-dws-time-series-sync-openapi.json](openapi/morningstar-dws-time-series-sync-openapi.json), [openapi/morningstar-dws-time-series-async-openapi.json](openapi/morningstar-dws-time-series-async-openapi.json)
+Postman and Open Collection request collections.
 
-### Morningstar Screener APIs
+- [Authorization Tokens Accounts API](https://apis.io/collections/morningstar/open-morningstar-accounts-api/)
+- [Authorization Tokens Accounts Activities API](https://apis.io/collections/morningstar/open-morningstar-activities-api/)
+- [Authorization Tokens Accounts Aggregates Financials API](https://apis.io/collections/morningstar/open-morningstar-aggregates-financials-api/)
+- [Authorization Tokens Accounts Aggregates Market Capitalization and Enterprise Value API](https://apis.io/collections/morningstar/open-morningstar-aggregates-market-capitalization-and-enterprise-value-api/)
+- [Authorization Tokens Accounts Aggregates Residual Risk and Return Sensitivity API](https://apis.io/collections/morningstar/open-morningstar-aggregates-residual-risk-and-return-sensitivity-api/)
+- [Authorization Tokens Accounts Aggregates Returns API](https://apis.io/collections/morningstar/open-morningstar-aggregates-returns-api/)
+- [Authorization Tokens Accounts Analyst Highlights API](https://apis.io/collections/morningstar/open-morningstar-analyst-highlights-api/)
+- [Authorization Tokens Accounts Analyst Normalized Financials API](https://apis.io/collections/morningstar/open-morningstar-analyst-normalized-financials-api/)
+- [Authorization Tokens Accounts attribution API](https://apis.io/collections/morningstar/open-morningstar-attribution-api/)
+- [Authorization Tokens Accounts autocomplete API](https://apis.io/collections/morningstar/open-morningstar-autocomplete-api/)
+- [Authorization Tokens Accounts Basic Details API](https://apis.io/collections/morningstar/open-morningstar-basic-details-api/)
+- [Authorization Tokens Accounts Basic Reference API](https://apis.io/collections/morningstar/open-morningstar-basic-reference-api/)
+- [Authorization Tokens Accounts BenchmarkFees API](https://apis.io/collections/morningstar/open-morningstar-benchmarkfees-api/)
+- [Authorization Tokens Accounts buckets API](https://apis.io/collections/morningstar/open-morningstar-buckets-api/)
+- [Authorization Tokens Accounts Clients API](https://apis.io/collections/morningstar/open-morningstar-clients-api/)
+- [Authorization Tokens Accounts company entitlements API](https://apis.io/collections/morningstar/open-morningstar-company-entitlements-api/)
+- [Authorization Tokens Accounts Compensation API](https://apis.io/collections/morningstar/open-morningstar-compensation-api/)
+- [Authorization Tokens Accounts Consensus Estimates API](https://apis.io/collections/morningstar/open-morningstar-consensus-estimates-api/)
+- [Authorization Tokens Accounts Consensus Recommendations API](https://apis.io/collections/morningstar/open-morningstar-consensus-recommendations-api/)
+- [Authorization Tokens Accounts Corporate Actions API](https://apis.io/collections/morningstar/open-morningstar-corporate-actions-api/)
+- [Authorization Tokens Accounts Corporate Actions Price Mergers and Acquisitions API](https://apis.io/collections/morningstar/open-morningstar-corporate-actions-price-mergers-and-acquisitions-api/)
+- [Authorization Tokens Accounts Credentials API](https://apis.io/collections/morningstar/open-morningstar-credentials-api/)
+- [Authorization Tokens Accounts CUSIP API](https://apis.io/collections/morningstar/open-morningstar-cusip-api/)
+- [Authorization Tokens Accounts CUSIP Change API](https://apis.io/collections/morningstar/open-morningstar-cusip-change-api/)
+- [Authorization Tokens Accounts custodians API](https://apis.io/collections/morningstar/open-morningstar-custodians-api/)
+- …and 92 more published on APIs.io
 
-Screen global equities and managed investments (funds, ETFs) against Morningstar data points, ratings, and classifications, returning display-ready result sets for advisor and investor applications.
+#### Overlays (5)
 
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/screener---equities/overview](https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/screener---equities/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** [openapi/morningstar-dws-screener-equities-openapi.json](openapi/morningstar-dws-screener-equities-openapi.json), [openapi/morningstar-dws-screener-managed-investments-openapi.json](openapi/morningstar-dws-screener-managed-investments-openapi.json)
+OpenAPI overlays, including conversational phrasing for each operation.
 
-### Morningstar Investment Details APIs
+- [Morningstar Agent Overlay](https://apis.io/overlays/morningstar/morningstar-agent-overlay/)
+- [Morningstar Screener Overlay](https://apis.io/overlays/morningstar/morningstar-screener-overlay/)
+- [Morningstar Securities Overlay](https://apis.io/overlays/morningstar/morningstar-securities-overlay/)
+- [Morningstar Token Overlay](https://apis.io/overlays/morningstar/morningstar-token-overlay/)
+- [Morningstar X Ray Overlay](https://apis.io/overlays/morningstar/morningstar-x-ray-overlay/)
 
-Deep security-level data for equities and managed investments - profiles, ratings, performance, holdings, fees, and hundreds of Morningstar data points - in synchronous and asynchronous variants with very large published OpenAPI 3.1 contracts.
+#### Security (3)
 
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/investment-details---equities/overview](https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/investment-details---equities/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** four specs under [openapi/](openapi/) (equities and managed investments, sync and async)
+Authentication, trust centre, and vulnerability disclosure.
 
-### Morningstar Investment List API
+- [Morningstar Authentication](https://apis.io/security/morningstar/morningstar-authentication/)
+- [Morningstar Domain Security](https://apis.io/security/morningstar/morningstar-domain-security/)
+- [Morningstar Vulnerability Disclosure](https://apis.io/security/morningstar/morningstar-vulnerability-disclosure/)
 
-Retrieve curated and client-defined investment lists with associated Morningstar data points for rendering list-driven experiences.
+#### OAuth scopes (1)
 
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/investment-list/overview](https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/investment-list/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** [openapi/morningstar-dws-investment-list-openapi.json](openapi/morningstar-dws-investment-list-openapi.json)
+The permissions the API asks for.
 
-### Morningstar Portfolio Analysis APIs
+- [Morningstar Scopes](https://apis.io/scopes/morningstar/morningstar-scopes/)
 
-Portfolio calculation engines as APIs - X-Ray decomposition, performance, hypothetical performance, optimizer, and the Morningstar Portfolio Risk Score - across Direct Web Services and the US Dynamic Services portfolio-analysis endpoints.
+## Where to find this API
 
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/portfolio-x-ray/overview](https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/portfolio-x-ray/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** seven specs under [openapi/](openapi/)
-
-### Morningstar AI Insights API
-
-Asynchronous generative summaries and insights over Morningstar data and research, available in Americas and APAC/EMEA regions.
-
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/ai-insights/overview](https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/ai-insights/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** [openapi/morningstar-dws-ai-insights-openapi.json](openapi/morningstar-dws-ai-insights-openapi.json)
-
-### Morningstar Scenario Analysis API
-
-Stress-test portfolios against historical and hypothetical market scenarios using Morningstar risk engines.
-
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/scenario-analysis/overview](https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/scenario-analysis/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** [openapi/morningstar-dws-scenario-analysis-openapi.json](openapi/morningstar-dws-scenario-analysis-openapi.json)
-
-### Morningstar Risk Profiler API
-
-Investor risk-tolerance profiling built on the FinaMetrica psychometric methodology, returning risk scores and profiles for suitability workflows.
-
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/risk-profiler/overview](https://developer.morningstar.com/direct-web-services/documentation/direct-web-services/risk-profiler/overview)
-- **Base URL:** `https://www.us-api.morningstar.com/risk-profiler`
-- **OpenAPI:** [openapi/morningstar-dws-risk-profiler-openapi.json](openapi/morningstar-dws-risk-profiler-openapi.json), [openapi/morningstar-risk-profiler-us-openapi.json](openapi/morningstar-risk-profiler-us-openapi.json)
-
-### Morningstar Universe API
-
-Utility API for resolving the investment universes and identifiers available to an account across Direct Web Services.
-
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/api-utilities/universe-api/overview](https://developer.morningstar.com/direct-web-services/documentation/api-utilities/universe-api/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** [openapi/morningstar-dws-universe-openapi.json](openapi/morningstar-dws-universe-openapi.json)
-
-### Morningstar Financial Planning APIs
-
-US financial-planning building blocks from the Dynamic Services APIs family - households, household members, portfolios, retirement plan lookup and benchmark fees, statement OCR, and report retrieval/file management.
-
-- **Human URL:** [https://developer.morningstar.com/apis/financial-planning/overview](https://developer.morningstar.com/apis/financial-planning/overview)
-- **Base URL:** `https://www.us-api.morningstar.com`
-- **OpenAPI:** seven specs under [openapi/](openapi/)
-
-### Morningstar Investment Analysis APIs
-
-Dynamic Services investment-analysis endpoints - securities data (US and global ecint), screening, autocomplete, editorial research, Investor Pulse, risk analytics, risk models, and enterprise-components usage statistics.
-
-- **Human URL:** [https://developer.morningstar.com/apis/investment-analysis/overview](https://developer.morningstar.com/apis/investment-analysis/overview)
-- **Base URL:** `https://www.us-api.morningstar.com/ec/v1`
-- **OpenAPI:** ten specs under [openapi/](openapi/)
-
-### Morningstar ByAllAccounts API
-
-REST account-aggregation API from Morningstar's ByAllAccounts business, aggregating held-away investment account data for wealth platforms, also reachable through the us-api.morningstar.com aggapi gateway.
-
-- **Human URL:** [https://developer.morningstar.com/apis/account-aggregation/byallaccounts/overview](https://developer.morningstar.com/apis/account-aggregation/byallaccounts/overview)
-- **Base URL:** `https://www.byallaccounts.net/api/v1`
-- **OpenAPI:** [openapi/morningstar-byallaccounts-openapi.json](openapi/morningstar-byallaccounts-openapi.json)
-
-### Morningstar Enterprise Component APIs
-
-APIs backing Morningstar's embeddable enterprise components - editorial and news search, security details and comparison, investment screener and find-similar, time series (price, dividend, growth, cumulative return), documents, cost calculator, goal analysis, and APAC/EMEA X-Ray.
-
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/enterprise-component-apis/about](https://developer.morningstar.com/direct-web-services/documentation/enterprise-component-apis/about)
-- **Base URL:** `https://www.us-api.morningstar.com/ec/v1`
-
-### Morningstar Streaming API
-
-WebSocket-based real-time market data streaming with Level 1 quote and Level 2 market-by-price subscriptions, documented publicly through Morningstar's official .NET streaming client library; endpoints are account-specific and provided during onboarding.
-
-- **Human URL:** [https://github.com/Morningstar/morningstar-streaming-client](https://github.com/Morningstar/morningstar-streaming-client)
-
-### Morningstar Snapshot API
-
-On-demand Level 1 market data snapshots over HTTPS with OAuth 2.0, documented publicly through Morningstar's official .NET snapshot client library; endpoints are account-specific and provided during onboarding.
-
-- **Human URL:** [https://github.com/Morningstar/morningstar-snapshot-client](https://github.com/Morningstar/morningstar-snapshot-client)
-
-### Morningstar Agent API
-
-Morningstar's AI integration surface - the Morningstar Agent API at agents.morningstar.com plus an MCP server exposing datapoint lookup and editorial research tools to AI agents, with a published agent design playbook.
-
-- **Human URL:** [https://developer.morningstar.com/direct-web-services/documentation/morningstar-ai-integrations/morningstar-agent/overview](https://developer.morningstar.com/direct-web-services/documentation/morningstar-ai-integrations/morningstar-agent/overview)
-- **Base URL:** `https://agents.morningstar.com`
-- **OpenAPI:** [openapi/morningstar-agent-openapi.json](openapi/morningstar-agent-openapi.json)
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://www.morningstar.com/)
-- [Portal](https://developer.morningstar.com)
 - [Documentation](https://developer.morningstar.com/direct-web-services)
-- [GitHub Organization](https://github.com/Morningstar)
-- [LinkedIn](https://www.linkedin.com/company/morningstar)
-- [Terms of Service](https://www.morningstar.com/user-agreement)
-- [Privacy Policy](https://www.morningstar.com/company/privacy-policy)
-- [Status Page](https://status.morningstar.com/)
+- [Getting started](https://developer.morningstar.com/content/documentation/documentation/get-started/authentication/get-started-authentication.md)
+- [API reference](https://developer.morningstar.com/apis)
 - [Support](https://www.morningstar.com/business/products/direct-web-services/contact)
+- [Blog](https://www.morningstar.com/news)
+- [Security](https://www.morningstar.com/company/vulnerability-disclosure)
+- [Terms of service](https://www.morningstar.com/user-agreement)
+- [Privacy policy](https://www.morningstar.com/company/privacy-policy)
+- [GitHub](https://github.com/Morningstar)
+- [Status](https://status.morningstar.com/)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 44.5** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 65.0 |
+| Contract quality | 51.0 |
+| Contract governance | 4.5 |
+| Operational transparency | 28.9 |
+| Developer ergonomics | 73.8 |
+| Access clarity | 10.5 |
+
+**Agent readiness 53.7** — agent-ready (gated down from agent-native)
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | verified |
+| Auth Clarity | served (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | yes |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | served (partial credit) |
+| Protected Resource Metadata | verified |
+| Dynamic Client Registration | yes |
+| Agentic Commerce | — |
+| Pagination Ratio | — |
+| Operation Distinctiveness | — |
+
+**Regulatory alignment 34.3** — Securities & Market Data
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/morningstar/](https://apis.io/providers/morningstar/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Morningstar: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/morningstar/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
